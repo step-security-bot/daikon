@@ -80,9 +80,9 @@ spec:
       }
     }
 
-    stage('Build master release') {
+    stage('Build release') {
       when {
-        expression { params.release && env.BRANCH_NAME == 'master' }
+        expression { params.release }
       }
       steps {
         container('maven') {
