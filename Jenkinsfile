@@ -106,29 +106,9 @@ spec:
       }
     }
 
-    stage('Merge master to branch') {
-      when {
-        expression { false && env.BRANCH_NAME != 'master' }
-      }
-      steps {
-        container('maven') {
-          configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-            sh """
-              git fetch origin master
-              git branch -a
-              git checkout master
-              git pull
-              git checkout -
-              git merge master
-            """
-          }
-        }
-      }
-    }
-
     stage('Build & deploy branch') {
       when {
-        expression { env.BRANCH_NAME != 'master' }
+        expression { !params.release && env.BRANCH_NAME != 'master' }
       }
       steps {
         container('maven') {
@@ -143,7 +123,7 @@ spec:
 
     stage("Release") {
         when {
-            expression { params.release && env.BRANCH_NAME == 'master'}
+            expression { params.release }
         }
         steps {
             withCredentials([gitCredentials]) {
