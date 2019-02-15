@@ -83,9 +83,9 @@ spec:
       }
     }
 
-    stage('Build master release') {
+    stage('Build release') {
       when {
-        expression { params.release && env.BRANCH_NAME == 'master' }
+        expression { params.release }
       }
       steps {
         container('maven') {
@@ -109,29 +109,9 @@ spec:
       }
     }
 
-    stage('Merge master to branch') {
-      when {
-        expression { false && currentBranch != 'master' }
-      }
-      steps {
-        container('maven') {
-          configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-            sh """
-              git fetch origin master
-              git branch -a
-              git checkout master
-              git pull
-              git checkout -
-              git merge master
-            """
-          }
-        }
-      }
-    }
-
     stage('Build & deploy branch') {
       when {
-        expression { env.BRANCH_NAME != 'master' }
+        expression { !params.release && env.BRANCH_NAME != 'master' }
       }
       environment {
         escaped_branch = currentBranch.toLowerCase().replaceAll('/', '_')
@@ -157,7 +137,7 @@ spec:
                 configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                   sh """
                     git config --global push.default current
-                    git checkout ${currentBranch}
+                    git checkout ${env.BRANCH_NAME}
                     mvn -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare
                     cd releases/
                     mvn install -Duser=${JIRA_LOGIN} -Dpassword=${JIRA_PASSWORD} -Dversion=${params.release_version} -Doutput=.
