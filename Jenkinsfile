@@ -145,6 +145,7 @@ spec:
                     git commit -m "Add ${params.release_version} release notes"
                     cat ${params.release_version}.adoc
                     git push
+                    cd ..
                     mvn -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -DlocalCheckout=true -Dusername=${GIT_LOGIN} -Dpassword=${GIT_PASSWORD} release:perform
                   """
                 }
