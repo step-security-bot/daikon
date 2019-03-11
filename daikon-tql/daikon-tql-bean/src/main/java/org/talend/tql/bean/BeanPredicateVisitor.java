@@ -28,6 +28,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
@@ -117,6 +118,13 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
 
     private static <T> Predicate<T> anyMatch(MethodAccessor[] getters, Predicate<T> predicate) {
         return root -> invoke(root, getters).map(o -> (T) o).anyMatch(unchecked(predicate));
+    }
+
+    // Utility method to drain all queue and return a stream to iterate over drained items.
+    private static <T> Stream<T> drainAll(final Queue<T> queue) {
+        final List<T> dest = new ArrayList<>(queue);
+        queue.clear();
+        return dest.stream();
     }
 
     @Override
@@ -212,46 +220,31 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
     @Override
     public Predicate<T> visit(AndExpression andExpression) {
         final Expression[] expressions = andExpression.getExpressions();
-        if (expressions.length > 0) {
-            Predicate<T> predicate = expressions[0].accept(this);
-            for (int i = 1; i < expressions.length; i++) {
-                predicate = predicate.and(expressions[i].accept(this));
-            }
-            return predicate;
-        } else {
-            return m -> true;
-        }
+        return Stream.of(expressions) //
+                .map(e -> e.accept(this)) //
+                .reduce(Predicate::and) //
+                .orElseGet(() -> m -> true);
     }
 
     @Override
     public Predicate<T> visit(OrExpression orExpression) {
         final Expression[] expressions = orExpression.getExpressions();
-        if (expressions.length > 0) {
-            Predicate<T> predicate = expressions[0].accept(this);
-            for (int i = 1; i < expressions.length; i++) {
-                predicate = predicate.or(expressions[i].accept(this));
-            }
-            return predicate;
-        } else {
-            return m -> true;
-        }
+        return Stream.of(expressions) //
+                .map(e -> e.accept(this)) //
+                .reduce(Predicate::or) //
+                .orElseGet(() -> m -> true);
     }
 
     @Override
     public Predicate<T> visit(ComparisonExpression comparisonExpression) {
         comparisonExpression.getValueOrField().accept(this);
         final Object value = literals.pop();
-
         comparisonExpression.getField().accept(this);
-        if (!currentMethods.isEmpty()) {
-            Predicate<T> predicate = getComparisonPredicate(currentMethods.pop(), comparisonExpression, value);
-            while (!currentMethods.isEmpty()) {
-                predicate = predicate.or(getComparisonPredicate(currentMethods.pop(), comparisonExpression, value));
-            }
-            return predicate;
-        } else {
-            return o -> true;
-        }
+
+        return drainAll(currentMethods) //
+                .map(m -> getComparisonPredicate(m, comparisonExpression, value)) //
+                .reduce(Predicate::or) //
+                .orElseGet(() -> o -> true);
     }
 
     private Predicate<T> getComparisonPredicate(MethodAccessor[] getters, ComparisonExpression comparisonExpression,
@@ -306,16 +299,13 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
         final MethodAccessor[] methods = currentMethods.pop();
 
         final LiteralValue[] values = fieldInExpression.getValues();
-        if (values.length > 0) {
-            Predicate<T> predicate = eq(values[0].accept(this), methods);
-            for (LiteralValue value : values) {
-                value.accept(this);
-                predicate = predicate.or(eq(literals.pop(), methods));
-            }
-            return predicate;
-        } else {
-            return m -> true;
-        }
+        return Stream.of(values) //
+                .map(v -> {
+                    v.accept(this);
+                    return eq(literals.pop(), methods);
+                }) //
+                .reduce(Predicate::or) //
+                .orElseGet(() -> m -> true);
     }
 
     @Override
@@ -359,7 +349,8 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
         final MethodAccessor[] methods = currentMethods.pop();
 
         final String pattern = fieldWordCompliesPattern.getPattern();
-        return anyMatch(methods, o -> wordComplies(valueOf(o), pattern));    }
+        return anyMatch(methods, o -> wordComplies(valueOf(o), pattern));
+    }
 
     @Override
     public Predicate<T> visit(FieldBetweenExpression fieldBetweenExpression) {
