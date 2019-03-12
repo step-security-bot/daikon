@@ -37,15 +37,10 @@ spec:
       volumeMounts:
       - name: docker
         mountPath: /var/run/docker.sock
-      - name: m2
-        mountPath: /root/.m2/repository
   volumes:
   - name: docker
     hostPath:
       path: /var/run/docker.sock
-  - name: m2
-    hostPath:
-      path: /tmp/jenkins/daikon/m2
 """
     }
   }
