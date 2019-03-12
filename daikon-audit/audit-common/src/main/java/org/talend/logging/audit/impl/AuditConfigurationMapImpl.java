@@ -60,7 +60,8 @@ public class AuditConfigurationMapImpl extends EnumMap<AuditConfiguration, Objec
         }
 
         if (missingFields != null && !missingFields.isEmpty()) {
-            throw new IllegalArgumentException("These mandatory audit logging properties were not configured: " + missingFields);
+            throw new IllegalArgumentException(
+                    "These mandatory audit logging properties were not configured: " + missingFields);
         }
     }
 
@@ -90,18 +91,21 @@ public class AuditConfigurationMapImpl extends EnumMap<AuditConfiguration, Objec
 
     public <T> T getValue(AuditConfiguration config, Class<T> clz) {
         if (!config.getClz().equals(clz)) {
-            throw new IllegalArgumentException("Wrong class type " + clz.getName() + ", expected " + config.getClz().getName());
+            throw new IllegalArgumentException(
+                    "Wrong class type " + clz.getName() + ", expected " + config.getClz().getName());
         }
         Object value = getValue(config);
         if (value == null && !config.canBeNull()) {
-            throw new IllegalStateException("Value for property " + config.toString() + " is not set and it has no default value");
+            throw new IllegalStateException(
+                    "Value for property " + config.toString() + " is not set and it has no default value");
         }
         return clz.cast(value);
     }
 
     public <T> void setValue(AuditConfiguration config, T value, Class<? extends T> clz) {
         if (!config.getClz().equals(clz)) {
-            throw new IllegalArgumentException("Wrong class type " + clz.getName() + ", expected " + config.getClz().getName());
+            throw new IllegalArgumentException(
+                    "Wrong class type " + clz.getName() + ", expected " + config.getClz().getName());
         }
 
         if (containsKey(config)) {
