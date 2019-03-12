@@ -93,9 +93,9 @@ spec:
       }
     }
 
-    stage('Build & deploy master') {
+    stage('Build & deploy') {
       when {
-        expression { !params.release && env.BRANCH_NAME == 'master' }
+        expression { !params.release && (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith("maintenance")) }
       }
       steps {
         container('maven') {
@@ -108,7 +108,7 @@ spec:
 
     stage('Build & deploy branch') {
       when {
-        expression { !params.release && env.BRANCH_NAME != 'master' }
+        expression { !params.release && env.BRANCH_NAME != 'master' && !env.BRANCH_NAME.startsWith("maintenance") }
       }
       steps {
         container('maven') {
