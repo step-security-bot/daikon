@@ -19,4 +19,4 @@ This module contains the source files for a generic content service with multipl
 
 To use local file system, see [local-content-service](local-content-service) for configuration.
 
-To use S3, see [s3-content-service](s3-content-service) for configuration.
+To use S3, see [s3-content-service](s3-content-service) for configuration details.
