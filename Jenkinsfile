@@ -50,7 +50,7 @@ spec:
       path: /var/run/docker.sock
   - name: m2
     hostPath:
-      path: /tmp/jenkins/all/m2
+      path: /tmp/jenkins/daikon/m2
 """
     }
   }
