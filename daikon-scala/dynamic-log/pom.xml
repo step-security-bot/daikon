@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>scala-parent</artifactId>
-        <version>0.31.4-SNAPSHOT</version>
+        <version>0.31.4</version>
         <relativePath>../scala-parent/pom.xml</relativePath>
     </parent>
     <artifactId>dynamic-log</artifactId>
