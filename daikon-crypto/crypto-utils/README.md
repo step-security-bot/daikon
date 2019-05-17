@@ -14,6 +14,32 @@ $> mvn install
 
 ## Usage
 
+This library offers utilities for both digest and encryption.
+
+## Digest
+
+```java
+public static void main(String[] args) throws Exception {
+    Digester digester = new Digester(KeySources.random(16), '-', DigestSources.pbkDf2());
+    
+    final String digest = digester.digest("tiger");
+    System.out.println("digest = " + digest);
+    
+    System.out.println("Validate 'tiger': " + digester.validate("tiger", digest));
+    System.out.println("Validate 'password': " + digester.validate("password", digest));
+}
+```
+
+The code above produces this example (the randomized KeySource at the beginning make digest change at each execution).
+
+```text
+digest = n/c7e9vGq2v10jlSyHT6Fw==-JVe5Q3cCfDcme16IeRlSwXR6NjbEfXPH4TNP/2Xlid0=
+Validate 'tiger': true
+Validate 'password': false
+```
+
+### Encryption
+
 The main entry point for this module is the class `Encryption`. It needs as input:
 
 * A `KeySource`: the key that will be used to initialize the encryption algorithm. This is a critical piece of configuration: it cannot be a constant but it must be a value application must be able to find again (in case of an application restart, for example).

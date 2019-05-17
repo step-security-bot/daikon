@@ -17,6 +17,14 @@ public class KeySources {
     }
 
     /**
+     * @return A {@link KeySource} implementation that returns a empty key. This can be helpful to disable salt in
+     * {@link org.talend.daikon.crypto.digest.Digester}.
+     */
+    public static KeySource empty() {
+        return () -> new byte[0];
+    }
+
+    /**
      * <p>
      * Returns a {@link KeySource} that generates a random key using {@link SecureRandom#getInstanceStrong()}.
      * </p>
