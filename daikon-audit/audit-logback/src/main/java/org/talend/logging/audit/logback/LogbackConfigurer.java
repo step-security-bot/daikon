@@ -164,9 +164,9 @@ public final class LogbackConfigurer {
     static Encoder<ILoggingEvent> logbackEncoder(AuditConfigurationMap config, Layout<ILoggingEvent> layout) {
         final LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<>();
         encoder.setCharset(Charset.forName(AuditConfiguration.ENCODING.getString(config)));
-        encoder.setImmediateFlush(true);
         encoder.setLayout(layout);
         encoder.setContext(layout.getContext());
+        encoder.setImmediateFlush(true);
 
         encoder.start();
 
