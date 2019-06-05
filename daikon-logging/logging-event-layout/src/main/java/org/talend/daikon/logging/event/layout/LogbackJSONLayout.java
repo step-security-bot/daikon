@@ -26,6 +26,8 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
 
     private boolean locationInfo;
 
+    private boolean hostInfo;
+
     private String customUserFields;
 
     private Map<String, String> metaFields = new HashMap<>();
@@ -33,10 +35,10 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
     private boolean addEventUuid = true;
 
     /**
-     * Print no location info by default.
+     * Print no location info by default, but print host information (for backward compatibility).
      */
     public LogbackJSONLayout() {
-        this(false);
+        this(false, true);
     }
 
     /**
@@ -44,8 +46,9 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
      *
      * @param locationInfo whether or not to include location information in the log messages.
      */
-    public LogbackJSONLayout(boolean locationInfo) {
+    public LogbackJSONLayout(boolean locationInfo, boolean hostInfo) {
         this.locationInfo = locationInfo;
+        this.hostInfo = hostInfo;
     }
 
     @Override
@@ -105,6 +108,14 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
         this.locationInfo = locationInfo;
     }
 
+    public boolean setHostInfo() {
+        return hostInfo;
+    }
+
+    public void setHostInfo(boolean hostInfo) {
+        this.hostInfo = hostInfo;
+    }
+
     public String getUserFields() {
         return customUserFields;
     }
@@ -133,7 +144,7 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
             }
 
             ThrowableProxyConverter converter = new RootCauseFirstThrowableProxyConverter();
-            converter.setOptionList(Arrays.asList("full"));
+            converter.setOptionList(Collections.singletonList("full"));
             converter.start();
             String stackTrace = converter.convert(loggingEvent);
             logstashEvent.put(LayoutFields.STACK_TRACE, stackTrace);
@@ -155,8 +166,10 @@ public class LogbackJSONLayout extends JsonLayout<ILoggingEvent> {
             logSourceEvent.put(LayoutFields.PROCESS_ID, Long.valueOf(jvmName.split("@")[0]));
         }
         logSourceEvent.put(LayoutFields.LOGGER_NAME, loggingEvent.getLoggerName());
-        logSourceEvent.put(LayoutFields.HOST_NAME, host.getHostName());
-        logSourceEvent.put(LayoutFields.HOST_IP, host.getHostAddress());
+        if (hostInfo) {
+            logSourceEvent.put(LayoutFields.HOST_NAME, host.getHostName());
+            logSourceEvent.put(LayoutFields.HOST_IP, host.getHostAddress());
+        }
         return logSourceEvent;
     }
 
