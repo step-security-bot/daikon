@@ -5,6 +5,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -79,7 +81,8 @@ public class HttpEventSender {
 
     /**
      * Should current configuration be overridable with system properties. If <code>true</code>, you can use
-     * <code>org.talend.logging.audit.impl.http.HttpEventSender.&lt;property name&gt;</code> to override a value.
+     * <code>org.talend.logging.audit.impl.http.HttpEventSender.&lt;property name&gt;</code>
+     * to override a value.
      */
     private boolean supportsSystemPropertiesOverride = true;
 
