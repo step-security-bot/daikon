@@ -3,9 +3,8 @@
 
     <parent>
         <groupId>org.talend.daikon</groupId>
-        <artifactId>daikon-parent</artifactId>
+        <artifactId>daikon-crypto</artifactId>
         <version>0.27.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>daikon-signature-verifier</artifactId>
     <name>daikon signature verifier library</name>
