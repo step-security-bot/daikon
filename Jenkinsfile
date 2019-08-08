@@ -66,6 +66,20 @@ spec:
   }
 
   stages {
+    stage('Check git connectivity') {
+      when {
+        expression { params.release }
+      }
+      steps {
+        container('maven') {
+          withCredentials([gitCredentials]) {
+            sh """
+                ./jenkins/configure_git_credentials.sh '${GIT_LOGIN}' '${GIT_PASSWORD}'
+            """
+          }
+        }
+      }
+    }
 
     stage('Build release') {
       when {
