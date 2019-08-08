@@ -15,9 +15,9 @@
     </licenses>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.7</java.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <talend_snapshots>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots>
         <talend_snapshots_deployment>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots_deployment>
         <pushChanges>false</pushChanges>
