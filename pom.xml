@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.talend.daikon</groupId>
     <artifactId>daikon-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Daikon - parent pom</name>
     <url>https://github.com/Talend/daikon</url>
@@ -78,6 +78,7 @@
     </properties>
     <modules>
         <module>daikon</module>
+        <module>daikon-crypto</module>
         <module>daikon-exception</module>
         <module>daikon-spring</module>
         <module>reporting</module>
@@ -87,14 +88,13 @@
         <module>daikon-messages</module>
         <module>daikon-audit</module>
       	<module>daikon-i18n</module>
-      	<module>daikon-signature-verifier</module>
         <module>daikon-scala</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
         <developerConnection>scm:git:https://github.com/Talend/daikon.git</developerConnection>
         <url>https://github.com/Talend/daikon</url>
-        <tag>1.0.0</tag>
+        <tag>1.0.1-SNAPSHOT</tag>
     </scm>
     <repositories>
         <repository>
