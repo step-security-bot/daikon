@@ -1,0 +1,8 @@
+= Daikon Release Notes (1.7.0)
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-259[TDKN-259]: Update Commons Compress
+- link:https://jira.talendforge.org/browse/TDKN-258[TDKN-258]: Update Commons BeanUtils
+- link:https://jira.talendforge.org/browse/TDKN-257[TDKN-257]: Update Commons Codec
+- link:https://jira.talendforge.org/browse/TDKN-256[TDKN-256]: Remove Hard coded keys from Daikon
+- link:https://jira.talendforge.org/browse/TDKN-243[TDKN-243]: Make release note plugin compatible with latest guava version
