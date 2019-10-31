@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -132,4 +134,18 @@ public class LocalDeletableResource implements DeletableResource {
         }
     }
 
+    @Override
+    public boolean isFile() {
+        return resource.isFile();
+    }
+
+    @Override
+    public ReadableByteChannel readableChannel() throws IOException {
+        return resource.readableChannel();
+    }
+
+    @Override
+    public WritableByteChannel writableChannel() throws IOException {
+        return resource.writableChannel();
+    }
 }

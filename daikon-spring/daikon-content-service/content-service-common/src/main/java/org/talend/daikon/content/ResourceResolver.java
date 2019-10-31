@@ -21,7 +21,7 @@ public interface ResourceResolver extends ResourcePatternResolver {
 
     /**
      * Returning the location prefix of the resource
-     * 
+     *
      * @return the location prefix of the resource
      */
     String getLocationPrefix();
