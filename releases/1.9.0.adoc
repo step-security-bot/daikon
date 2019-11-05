@@ -1,1 +1,5 @@
 = Daikon Release Notes (1.9.0)
+
+== Fix
+
+- fix(TPSVC-11976) don't return null as the principal 
