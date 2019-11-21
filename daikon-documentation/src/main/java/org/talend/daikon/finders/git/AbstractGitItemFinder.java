@@ -124,7 +124,18 @@ public abstract class AbstractGitItemFinder {
                     .findFirst() //
                     .map(ref -> getTagCommitId(walk, ref));
 
-            return new GitRange(end.map(ObjectId::toObjectId).orElse(head), start.get());
+            if (start.get() == null) {
+                // Unable to find the version in tags... use the latest created tag as start
+                final Optional<ObjectId> firstTag = refDatabase.getRefsByPrefix(R_TAGS).stream() //
+                        .min((r1, r2) -> getDate(walk, r2).compareTo(getDate(walk, r1))) //
+                        .map(ref -> getTagCommitId(walk, ref));
+                firstTag.ifPresent(start::set);
+            }
+
+            if (start.get() == null) {
+                throw new IllegalStateException("Unable to find range start.");
+            }
+            return new GitRange(start.get(), end.map(ObjectId::toObjectId).orElse(head));
         }
     }
 

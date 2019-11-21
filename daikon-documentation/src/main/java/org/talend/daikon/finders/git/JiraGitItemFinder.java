@@ -2,6 +2,7 @@ package org.talend.daikon.finders.git;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -53,19 +54,26 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
                         .collect(Collectors.toList());
             }) //
                     .thenApply(jiraIds -> { // Get all Jira issues in one call
-                        final String idList = jiraIds.stream() //
-                                .map(s -> "\"" + s.getJiraIdMatcher().group(1) + "\"") //
-                                .collect(Collectors.joining(", "));
-                        final String jql = "id IN (" + idList + ")";
-                        final SearchResult results = client.getSearchClient().searchJql(jql, Integer.MAX_VALUE, 0, null).claim();
-                        for (Issue issue : results.getIssues()) {
-                            issueCache.put(issue.getKey(), issue);
+                        if (!jiraIds.isEmpty()) {
+                            final String idList = jiraIds.stream() //
+                                    .map(s -> "\"" + s.getJiraIdMatcher().group(1) + "\"") //
+                                    .collect(Collectors.joining(", "));
+                            final String jql = "id IN (" + idList + ")";
+                            final SearchResult results = client.getSearchClient().searchJql(jql, jiraIds.size(), 0, null).claim();
+                            for (Issue issue : results.getIssues()) {
+                                issueCache.put(issue.getKey(), issue);
+                            }
                         }
                         return jiraIds;
                     }) //
                     .thenApply(rawGitCommits -> { // Get Jira issue from previous "cache" to speed up Jira operations
                         return rawGitCommits.stream().map(rawGitCommit -> {
-                            final Issue issue = issueCache.get(rawGitCommit.getJiraIdMatcher().group(1));
+                            final String jiraId = rawGitCommit.getJiraIdMatcher().group(1);
+                            Issue issue = issueCache.get(jiraId);
+                            if (issue == null) {
+                                // Issue can move to another id in Jira (issue id changed between git log and Jira)
+                                issue = client.getIssueClient().getIssue(jiraId).claim();
+                            }
                             return new ProcessedJiraTuple(issue, rawGitCommit.getPullRequest());
                         });
                     }) //
