@@ -84,18 +84,18 @@ public class ReleaseNotes extends AbstractMojo {
 
             // Stream all release note items
             final Optional<? extends Stream<? extends ReleaseNoteItem>> streams = Stream.<ItemFinder> of( //
-                    new JiraGitItemFinder("../", server, client, jiraVersion, gitHubRepositoryUrl), //
-                    new MiscGitItemFinder("../", jiraVersion, gitHubRepositoryUrl) //
+                    new JiraGitItemFinder("", server, client, jiraVersion, gitHubRepositoryUrl), //
+                    new MiscGitItemFinder("", jiraVersion, gitHubRepositoryUrl) //
             ) //
                     .map(ItemFinder::find) //
                     .reduce(Stream::concat);
 
             // Stream all authors for release
-            final AuthorFinder gitAuthorFinder = new GitAuthorFinder(jiraVersion, "../", gitHubRepositoryUrl);
+            final AuthorFinder gitAuthorFinder = new GitAuthorFinder(jiraVersion, "", gitHubRepositoryUrl);
             Stream<Author> authors = gitAuthorFinder.findAuthors();
 
             // Find release date
-            final GitReleaseDateFinder releaseDateFinder = new GitReleaseDateFinder(jiraVersion, "../", gitHubRepositoryUrl);
+            final GitReleaseDateFinder releaseDateFinder = new GitReleaseDateFinder(jiraVersion, "", gitHubRepositoryUrl);
             final Date releaseDate = releaseDateFinder.find();
 
             // Create Ascii doc output
