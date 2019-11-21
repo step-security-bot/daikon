@@ -141,9 +141,8 @@ spec:
                   sh """
                     git config --global push.default current
                     git checkout ${env.BRANCH_NAME}
-                    mvn -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare install
+                    mvn -B -s $MAVEN_SETTINGS -Darguments='-P release-notes -DskipTests -Duser=${JIRA_LOGIN} -Dpassword=${JIRA_PASSWORD} -Dversion=${params.release_version} -Doutput=.' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare install
                     cd releases/
-                    mvn install -P release-notes -B -s $MAVEN_SETTINGS -Duser=${JIRA_LOGIN} -Dpassword=${JIRA_PASSWORD} -Dversion=${params.release_version} -Doutput=.
                     git add -A .
                     git commit -m "Add ${params.release_version} release notes"
                     cat ${params.release_version}.adoc
