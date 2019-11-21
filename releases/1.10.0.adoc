@@ -1,0 +1,11 @@
+= Daikon Release Notes (1.10.0) - 11/21/2019
+
+Thanks to @Francois Huaulme, @bhe-talendbj, @Colm O hEigeartaigh
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDKN-265[TDKN-265]: Upgrade to Spring Boot 2.1.10 (link:https://github.com/Talend/daikon/pull/571[#571])
+- link:https://jira.talendforge.org/browse/TDI-43179[TDI-43179]: tcompv0 migration after Remove CryptoHelper to use AES (link:https://github.com/Talend/daikon/pull/568[#568])
+
+== Other
+- Fix useless call in TraceRequestUtil  (link:https://github.com/Talend/daikon/pull/570[#570])
+- Update 1.9.0.adoc
