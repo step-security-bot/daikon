@@ -33,6 +33,7 @@ Consider the following requirements for your system:
 - Talend Studio 7.2.1 must be installed.
 
 ## Installation
+**NOTE**: If the patch is deployed in the apporach **Installing the patch using Talend Studio**, the folder **configuration** under this patch must be replaced manually.
 
 ### Installing the patch using Software update
 
@@ -44,17 +45,9 @@ Consider the following requirements for your system:
 
 ### Installing the patch using Talend Studio
 
-1) Shut down Talend studio if it is opened.
+1) Create a folder named "patches" under your studio installer directory and copy the patch .zip file to this folder.
 
-2) Extract the zip.
-
-3) Merge the folder "plugins" & "configuration" and its content to "{studio}/plugins" & "{studio}/configuration" and overwrite the existing files.
-
-4) remove the folder "{studio}/configuration/org.eclipse.osgi".
-
-5) Start the Talend studio.
-
-6) Rebuild your jobs.
+2) Restart your studio: a window pops up, then click OK to install the patch, or restart the commandline and the patch will be installed automatically.
 
 ### Installing the patch using Commandline
 
@@ -68,5 +61,5 @@ Execute the following commands:
 
 The following files are installed by this patch:
 
-- {Talend\_Studio\_path}/plugins/plugins/org.talend.daikon\_0.31.7.SNAPSHOT.jar
+- {Talend\_Studio\_path}/plugins/plugins/org.talend.daikon\_0.31.7.jar
 - {Talend\_Studio\_path}/configuration/.m2/repository/org/talend/daikon/daikon/0.31.7/daikon-0.31.7.jar
