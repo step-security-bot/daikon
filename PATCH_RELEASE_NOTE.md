@@ -9,8 +9,8 @@ product:
 
 | Info             | Value |
 | ---------------- | ---------------- |
-| Patch Name       | Patch\_20191213\_TPS-3630\_v1-7.2.1 |
-| Release Date     | 2019-12-13 |
+| Patch Name       | Patch\_20191217\_TPS-3630\_v1-7.2.1 |
+| Release Date     | 2019-12-17 |
 | Target Version   | 20190620\_1446-V7.2.1 |
 | Product affected | Talend Studio |
 
