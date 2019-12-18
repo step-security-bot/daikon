@@ -1,0 +1,10 @@
+= Daikon Release Notes (1.13.0) - 12/18/2019
+
+Thanks to @Colm O hEigeartaigh, @Yves Armel CAROF
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-268[TDKN-268]: Update Pax URL (link:https://github.com/Talend/daikon/pull/573[#573])
+- link:https://jira.talendforge.org/browse/TDKN-215[TDKN-215]: Change "SunX509" in SSLContextProvider (link:https://github.com/Talend/daikon/pull/576[#576])
+
+== Other
+- link:https://jira.talendforge.org/browse/TDP-8039[TDP-8039]: Move LogTimed annotation to Daikon (link:https://github.com/Talend/daikon/pull/578[#578])
