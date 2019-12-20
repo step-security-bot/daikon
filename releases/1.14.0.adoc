@@ -1,0 +1,6 @@
+= Daikon Release Notes (1.14.0) - 12/20/2019
+
+Thanks to @Yves Armel CAROF
+
+== Other
+- link:https://jira.talendforge.org/browse/TDP-8039[TDP-8039]: Move LogTimed annotation to Daikon (link:https://github.com/Talend/daikon/pull/579[#579])
