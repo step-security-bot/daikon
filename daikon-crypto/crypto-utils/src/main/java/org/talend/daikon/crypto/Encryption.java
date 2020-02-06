@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 
-
 /**
  * This class provides a helper class to encrypt and decrypt a given string using provided {@link CipherSource} and
  * {@link KeySource}.
