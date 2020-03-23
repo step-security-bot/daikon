@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.1.0) - 03/23/2020
+
+Thanks to @Francois Huaulme
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-280[TDKN-280]: Upgrade Spring Boot to 2.1.13 / Greenwich SR5 (link:https://github.com/Talend/daikon/pull/591[#591])
