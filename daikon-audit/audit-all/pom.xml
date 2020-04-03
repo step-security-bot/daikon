@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.talend.daikon</groupId>
             <artifactId>audit-common</artifactId>
-            <version>${<project></project>.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.talend.daikon</groupId>
