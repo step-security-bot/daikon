@@ -18,4 +18,6 @@ public @interface GenerateAuditLog {
     String eventOperation();
 
     boolean includeBodyResponse() default true;
+
+    Class<? extends AuditContextFilter> filter() default NoOpAuditContextFilter.class;
 }

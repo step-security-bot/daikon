@@ -4,13 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+import org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.impl.DefaultContextImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum.*;
 
 public class AuditLogContextBuilder {
 
@@ -18,9 +25,9 @@ public class AuditLogContextBuilder {
 
     private final Map<String, String> context = new LinkedHashMap<>();
 
-    private final Map<String, String> request = new LinkedHashMap<>();
+    private final Map<String, Object> request = new LinkedHashMap<>();
 
-    private final Map<String, String> response = new LinkedHashMap<>();
+    private final Map<String, Object> response = new LinkedHashMap<>();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -39,120 +46,140 @@ public class AuditLogContextBuilder {
         return with(key, value, context);
     }
 
-    private AuditLogContextBuilder with(String key, String value, Map<String, String> contextMap) {
+    private AuditLogContextBuilder with(String key, Object value, Map contextMap) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         }
-        contextMap.put(key, value);
+        if (value != null) {
+            contextMap.put(key, value);
+        }
         return this;
     }
 
     public AuditLogContextBuilder withTimestamp(String timestamp) {
-        return this.with("timestamp", timestamp);
+        return this.with(TIMESTAMP.getId(), timestamp);
     }
 
     public AuditLogContextBuilder withLogId(UUID logId) {
-        return this.with("log_id", logId.toString());
+        return this.with(LOG_ID.getId(), logId.toString());
     }
 
     public AuditLogContextBuilder withRequestId(UUID requestId) {
-        return this.with("request_id", requestId.toString());
+        return this.with(REQUEST_ID.getId(), requestId.toString());
     }
 
     public AuditLogContextBuilder withAccountId(String accountId) {
-        return this.with("account_id", accountId);
+        return this.with(ACCOUNT_ID.getId(), accountId);
     }
 
     public AuditLogContextBuilder withUserId(String userId) {
-        return this.with("user_id", userId);
+        return this.with(USER_ID.getId(), userId);
     }
 
     public AuditLogContextBuilder withUsername(String username) {
-        return this.with("username", username);
+        return this.with(USERNAME.getId(), username);
     }
 
     public AuditLogContextBuilder withEmail(String email) {
-        return this.with("email", email);
+        return this.with(EMAIL.getId(), email);
     }
 
     public AuditLogContextBuilder withApplicationId(String applicationId) {
-        return this.with("application_id", applicationId);
+        return this.with(APPLICATION_ID.getId(), applicationId);
     }
 
     public AuditLogContextBuilder withEventType(String eventType) {
-        return this.with("event_type", eventType);
+        return this.with(EVENT_TYPE.getId(), eventType);
     }
 
     public AuditLogContextBuilder withEventCategory(String eventCategory) {
-        return this.with("event_category", eventCategory);
+        return this.with(EVENT_CATEGORY.getId(), eventCategory);
     }
 
     public AuditLogContextBuilder withEventOperation(String eventOperation) {
-        return this.with("event_operation", eventOperation);
+        return this.with(EVENT_OPERATION.getId(), eventOperation);
     }
 
     public AuditLogContextBuilder withClientIp(String clientIp) {
-        return this.with("client_ip", clientIp);
+        return this.with(CLIENT_IP.getId(), clientIp);
     }
 
     public AuditLogContextBuilder withRequestUrl(String requestUrl) {
-        return this.with("url", requestUrl, request);
+        return this.with(URL.getId(), requestUrl, request);
     }
 
     public AuditLogContextBuilder withRequestMethod(String requestMethod) {
-        return this.with("method", requestMethod, request);
+        return this.with(METHOD.getId(), requestMethod, request);
     }
 
     public AuditLogContextBuilder withRequestUserAgent(String requestUserAgent) {
-        return this.with("user_agent", requestUserAgent, request);
+        return this.with(USER_AGENT.getId(), requestUserAgent, request);
     }
 
-    public AuditLogContextBuilder withRequestBody(String requestBody) {
-        return this.with("body", requestBody, request);
+    public AuditLogContextBuilder withRequestBody(Object requestBody) {
+        return this.with(REQUEST_BODY.getId(), requestBody, request);
     }
 
     public AuditLogContextBuilder withResponseCode(int httpStatus) {
-        return this.with("code", String.valueOf(httpStatus), response);
+        return this.with(RESPONSE_CODE.getId(), String.valueOf(httpStatus), response);
     }
 
-    public AuditLogContextBuilder withResponseBody(Object body) {
-        return this.with("body", getJsonValue(body), response);
-    }
-
-    private String getJsonValue(Object body) {
-        try {
-            return objectMapper.writeValueAsString(body);
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("audit log response body could not be built, from {}", body);
-            return "";
-        }
+    public AuditLogContextBuilder withResponseBody(Object responseBody) {
+        return this.with(RESPONSE_BODY.getId(), responseBody, response);
     }
 
     public Context build() {
         try {
             if (!request.isEmpty()) {
-                context.put("request", objectMapper.writeValueAsString(request));
+                context.put(REQUEST.getId(), objectMapper.writeValueAsString(request));
             }
             if (!response.isEmpty()) {
-                context.put("response", objectMapper.writeValueAsString(response));
+                context.put(RESPONSE.getId(), objectMapper.writeValueAsString(response));
             }
+            checkAuditContextIsValid();
             return new DefaultContextImpl(context);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public AuditLogContextBuilder withRequest(HttpServletRequest request) {
+    public AuditLogContextBuilder withRequest(HttpServletRequest request, Object requestBody) {
         String userAgent = request.getHeader("User-Agent");
         return withClientIp(request.getRemoteAddr()).withRequestUrl(request.getRequestURL().toString())
-                .withRequestMethod(request.getMethod()).withRequestUserAgent(userAgent);
+                .withRequestMethod(request.getMethod()).withRequestUserAgent(userAgent).withRequestBody(requestBody);
     }
 
     public AuditLogContextBuilder withResponse(int httpStatus, Object body) {
-        AuditLogContextBuilder builder = withResponseCode(httpStatus);
-        if (body != null) {
-            return builder.withResponseBody(body);
+        return withResponseCode(httpStatus).withResponseBody(body);
+    }
+
+    public void checkAuditContextIsValid() {
+        // check elements of the context
+        List<AuditLogFieldEnum> notFound = new ArrayList<>();
+        for (AuditLogFieldEnum auditLogFieldEnum : AuditLogFieldEnum.values()) {
+            if (auditLogFieldEnum.isMandatory() && !auditLogFieldEnum.hasParent()) {
+                if (!context.containsKey(auditLogFieldEnum.getId())
+                        || StringUtils.isEmpty(context.get(auditLogFieldEnum.getId()))) {
+                    notFound.add(auditLogFieldEnum);
+                }
+            }
         }
-        return builder;
+        // then check request and response
+        for (AuditLogFieldEnum requestChild : REQUEST.getChildren()) {
+            if (requestChild.isMandatory()
+                    && (!request.containsKey(requestChild.getId()) || StringUtils.isEmpty(request.get(requestChild.getId())))) {
+                notFound.add(requestChild);
+            }
+        }
+        for (AuditLogFieldEnum responseChild : RESPONSE.getChildren()) {
+            if (responseChild.isMandatory() && (!response.containsKey(responseChild.getId())
+                    || StringUtils.isEmpty(response.get(responseChild.getId())))) {
+                notFound.add(responseChild);
+            }
+        }
+
+        if (!notFound.isEmpty()) {
+            throw new RuntimeException("audit log context is incomplete, missing information: " + notFound);
+        }
     }
 }
