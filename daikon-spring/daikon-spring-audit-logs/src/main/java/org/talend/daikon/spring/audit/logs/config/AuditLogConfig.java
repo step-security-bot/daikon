@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
-import org.talend.daikon.spring.audit.logs.service.GenerateAuditLogAspect;
+import org.talend.daikon.spring.audit.logs.service.AuditLogGenerationFilter;
 
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -17,8 +17,8 @@ import org.talend.daikon.spring.audit.logs.service.GenerateAuditLogAspect;
 public class AuditLogConfig {
 
     @Bean
-    public GenerateAuditLogAspect auditLogAspect(ObjectMapper objectMapper, AuditUserProvider auditUserProvider,
+    public AuditLogGenerationFilter auditLogAspect(ObjectMapper objectMapper, AuditUserProvider auditUserProvider,
             AuditKafkaProperties auditKafkaProperties, @Value("${spring.application.name}") String applicationName) {
-        return new GenerateAuditLogAspect(objectMapper, auditUserProvider, auditKafkaProperties, applicationName);
+        return new AuditLogGenerationFilter(objectMapper, auditUserProvider, auditKafkaProperties, applicationName);
     }
 }

@@ -18,7 +18,6 @@ import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
 import org.talend.daikon.spring.audit.logs.config.AuditKafkaProperties;
 import org.talend.logging.audit.AuditLoggerFactory;
-import org.talend.logging.audit.Context;
 import org.talend.logging.audit.LogAppenders;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;
@@ -38,9 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Aspect
-public class GenerateAuditLogAspect {
+public class AuditLogGenerationFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateAuditLogAspect.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuditLogGenerationFilter.class);
 
     private final ObjectMapper objectMapper;
 
@@ -50,7 +49,7 @@ public class GenerateAuditLogAspect {
 
     private final AuditKafkaProperties auditKafkaProperties;
 
-    public GenerateAuditLogAspect(ObjectMapper objectMapper, AuditUserProvider auditUserProvider,
+    public AuditLogGenerationFilter(ObjectMapper objectMapper, AuditUserProvider auditUserProvider,
             AuditKafkaProperties auditKafkaProperties, String applicationName) {
         this.objectMapper = objectMapper;
         this.auditUserProvider = auditUserProvider;
@@ -138,5 +137,9 @@ public class GenerateAuditLogAspect {
         auditLogger.sendAuditLog(auditLogContextBuilder.build());
 
         LOGGER.info("audit log generated with metadata {}", auditLogAnnotation);
+    }
+
+    public AuditLogger getAuditLogger() {
+        return auditLogger;
     }
 }
