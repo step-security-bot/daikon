@@ -142,4 +142,33 @@ public class AuditLogContextBuilderTest {
         AuditLogContextBuilder.create().build();
     }
 
+    @Test
+    public void testBuildNullValuesAreRemoved() {
+        AuditLogContextBuilder builder = AuditLogContextBuilder.create();
+        try {
+            builder.withEmail("email").withUsername(null).withRequestMethod("PUT").withRequestBody(null).withResponseCode(200)
+                    .build();
+        } catch (RuntimeException e) {
+            // do nothing
+        }
+        assertEquals(3, builder.getContext().size());
+        assertEquals("email", builder.getContext().get("email"));
+        assertEquals("{\"method\":\"PUT\"}", builder.getContext().get("request"));
+        assertEquals("{\"code\":\"200\"}", builder.getContext().get("response"));
+    }
+
+    @Test
+    public void testBuildValuesCanBeOverriden() {
+        AuditLogContextBuilder builder = AuditLogContextBuilder.create();
+        try {
+            builder.withResponseCode(200);
+            // override
+            builder.withResponseCode(500).build();
+        } catch (RuntimeException e) {
+            // do nothing
+        }
+        assertEquals(1, builder.getContext().size());
+        assertEquals("{\"code\":\"500\"}", builder.getContext().get("response"));
+    }
+
 }

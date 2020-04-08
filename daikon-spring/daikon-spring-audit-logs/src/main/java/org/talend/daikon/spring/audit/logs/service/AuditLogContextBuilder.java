@@ -11,6 +11,7 @@ import org.talend.logging.audit.impl.DefaultContextImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -50,9 +51,7 @@ public class AuditLogContextBuilder {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         }
-        if (value != null) {
-            contextMap.put(key, value);
-        }
+        contextMap.put(key, value);
         return this;
     }
 
@@ -130,6 +129,9 @@ public class AuditLogContextBuilder {
 
     public Context build() {
         try {
+            context.values().removeAll(Collections.singletonList(null));
+            request.values().removeAll(Collections.singletonList(null));
+            response.values().removeAll(Collections.singletonList(null));
             if (!request.isEmpty()) {
                 context.put(REQUEST.getId(), objectMapper.writeValueAsString(request));
             }
@@ -181,5 +183,9 @@ public class AuditLogContextBuilder {
         if (!notFound.isEmpty()) {
             throw new RuntimeException("audit log context is incomplete, missing information: " + notFound);
         }
+    }
+
+    Map<String, String> getContext() {
+        return context;
     }
 }

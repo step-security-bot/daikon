@@ -9,6 +9,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -95,12 +96,17 @@ public class GenerateAuditLogAspect {
         if (argumentIndex.get() != null) {
             requestBody = proceedingJoinPoint.getArgs()[argumentIndex.get()];
         }
+        int responseCode = response != null ? response.getStatus() : 0;
 
         // Run original method
-        Object responseObject;
         try {
-            responseObject = proceedingJoinPoint.proceed();
-            sendAuditLog(request, requestBody, response != null ? response.getStatus() : 0, responseObject, auditLogAnnotation);
+            Object responseObject = proceedingJoinPoint.proceed();
+            Object auditLogResponseObject = responseObject;
+            if (responseObject instanceof ResponseEntity) {
+                responseCode = ((ResponseEntity) responseObject).getStatusCode().value();
+                auditLogResponseObject = ((ResponseEntity) responseObject).getBody();
+            }
+            sendAuditLog(request, requestBody, responseCode, auditLogResponseObject, auditLogAnnotation);
             return responseObject;
         } catch (Throwable throwable) {
             sendAuditLog(request, requestBody, HttpStatus.INTERNAL_SERVER_ERROR.value(), null, auditLogAnnotation);
