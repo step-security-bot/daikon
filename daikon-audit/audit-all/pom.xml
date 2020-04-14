@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>audit-parent</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>daikon-audit</artifactId>
 
@@ -27,6 +27,11 @@
         <dependency>
             <groupId>org.talend.daikon</groupId>
             <artifactId>audit-logback</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>audit-kafka</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
