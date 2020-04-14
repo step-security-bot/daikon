@@ -1,5 +1,6 @@
 package org.talend.logging.audit.log4j2;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -49,15 +50,15 @@ public class Log4j2Backend extends AbstractBackend {
 
     @Override
     @SuppressWarnings({ "unchecked" })
-    public Map<String, String> getCopyOfContextMap() {
-        return ThreadContext.getContext();
+    public Map<String, Object> getCopyOfContextMap() {
+        return new HashMap<>(ThreadContext.getContext());
     }
 
     @Override
-    public void setContextMap(Map<String, String> newContext) {
+    public void setContextMap(Map<String, Object> newContext) {
         ThreadContext.clearMap();
-        for (Map.Entry<String, String> e : newContext.entrySet()) {
-            ThreadContext.put(e.getKey(), e.getValue());
+        for (Map.Entry<String, Object> e : newContext.entrySet()) {
+            ThreadContext.put(e.getKey(), String.valueOf(e.getValue()));
         }
     }
 }

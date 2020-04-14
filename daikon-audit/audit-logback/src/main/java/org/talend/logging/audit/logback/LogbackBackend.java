@@ -10,7 +10,9 @@ import org.talend.logging.audit.impl.AbstractBackend;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Backend for Logback.
@@ -59,12 +61,14 @@ public class LogbackBackend extends AbstractBackend {
     }
 
     @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return MDC.getCopyOfContextMap();
+    public Map<String, Object> getCopyOfContextMap() {
+        return new HashMap<>(MDC.getCopyOfContextMap());
     }
 
     @Override
-    public void setContextMap(Map<String, String> newContext) {
-        MDC.setContextMap(newContext);
+    public void setContextMap(Map<String, Object> newContext) {
+        MDC.setContextMap(
+            newContext.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue())))
+        );
     }
 }

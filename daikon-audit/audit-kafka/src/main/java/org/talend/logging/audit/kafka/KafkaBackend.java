@@ -1,6 +1,7 @@
 package org.talend.logging.audit.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -17,10 +18,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 public class KafkaBackend extends AbstractBackend {
 
-    private final KafkaProducer<String, String> kafkaProducer;
+    private final KafkaProducer<String, Object> kafkaProducer;
 
     private final String kafkaTopic;
 
@@ -34,17 +36,18 @@ public class KafkaBackend extends AbstractBackend {
 
     public KafkaBackend(AuditConfigurationMap config) {
         super(null);
-        StringSerializer keyValueSerializer = new StringSerializer();
         this.bootstrapServers = config.getString(AuditConfiguration.KAFKA_BOOTSTRAP_SERVERS);
         Map<String, Object> producerConfig = new HashMap<>();
         producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        this.kafkaProducer = new KafkaProducer<>(producerConfig, keyValueSerializer, keyValueSerializer);
+        producerConfig.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        producerConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        this.kafkaProducer = new KafkaProducer<>(producerConfig);
         this.kafkaTopic = config.getString(AuditConfiguration.KAFKA_TOPIC);
         this.partitionKeyName = config.getString(AuditConfiguration.KAFKA_PARTITION_KEY_NAME);
         this.kafkaSendTimeoutSeconds = config.getInteger(AuditConfiguration.KAFKA_SEND_TIMEOUT_SECONDS);
     }
 
-    public KafkaBackend(KafkaProducer<String, String> kafkaProducer, String kafkaTopic, String partitionKeyName,
+    public KafkaBackend(KafkaProducer<String, Object> kafkaProducer, String kafkaTopic, String partitionKeyName,
             String bootstrapServers, Integer kafkaSendTimeoutSeconds) {
         super(null);
         this.kafkaProducer = kafkaProducer;
@@ -63,8 +66,8 @@ public class KafkaBackend extends AbstractBackend {
         }
     }
 
-    private ProducerRecord<String, String> createRecordFromContext(Map<String, String> context) {
-        String key = context != null ? context.getOrDefault(this.partitionKeyName, null) : null;
+    private ProducerRecord<String, Object> createRecordFromContext(Map<String, Object> context) {
+        String key = context != null ? (String) context.getOrDefault(this.partitionKeyName, null) : null;
         String value;
         try {
             value = this.objectMapper.writeValueAsString(context);
@@ -75,13 +78,15 @@ public class KafkaBackend extends AbstractBackend {
     }
 
     @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return MDC.getCopyOfContextMap();
+    public Map<String, Object> getCopyOfContextMap() {
+        return MDC.getCopyOfContextMap() != null ? new HashMap<>(MDC.getCopyOfContextMap()) : null;
     }
 
     @Override
-    public void setContextMap(Map<String, String> newContext) {
-        MDC.setContextMap(newContext);
+    public void setContextMap(Map<String, Object> newContext) {
+        MDC.setContextMap(
+            newContext.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue())))
+        );
     }
 
     String getKafkaTopic() {

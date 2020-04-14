@@ -48,14 +48,14 @@ public class Log4j1Backend extends AbstractBackend {
 
     @Override
     @SuppressWarnings({ "unchecked" })
-    public Map<String, String> getCopyOfContextMap() {
+    public Map<String, Object> getCopyOfContextMap() {
         return MDC.getContext();
     }
 
     @Override
-    public void setContextMap(Map<String, String> newContext) {
+    public void setContextMap(Map<String, Object> newContext) {
         MDC.clear();
-        for (Map.Entry<String, String> e : newContext.entrySet()) {
+        for (Map.Entry<String, Object> e : newContext.entrySet()) {
             MDC.put(e.getKey(), e.getValue());
         }
     }

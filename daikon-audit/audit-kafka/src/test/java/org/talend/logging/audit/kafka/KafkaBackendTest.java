@@ -45,15 +45,15 @@ public class KafkaBackendTest {
 
     @Test
     public void testLogEmptyMap() {
-        KafkaProducer<String, String> kafkaProducerMock = mock(KafkaProducer.class);
+        KafkaProducer<String, Object> kafkaProducerMock = mock(KafkaProducer.class);
         Future futureMock = mock(Future.class);
         kafkaBackend = new KafkaBackend(kafkaProducerMock, "testTopic", "partitionKey", "localhost", 30);
 
-        ArgumentCaptor<ProducerRecord<String, String>> captor = ArgumentCaptor.forClass(ProducerRecord.class);
+        ArgumentCaptor<ProducerRecord<String, Object>> captor = ArgumentCaptor.forClass(ProducerRecord.class);
         when(kafkaProducerMock.send(captor.capture())).thenReturn(futureMock);
         kafkaBackend.log("application security", LogLevel.INFO, "message", new Throwable());
 
-        ProducerRecord<String, String> record = captor.getValue();
+        ProducerRecord<String, Object> record = captor.getValue();
         assertNotNull(record);
         assertNull(record.key());
         assertEquals("null", record.value());
@@ -61,21 +61,21 @@ public class KafkaBackendTest {
 
     @Test
     public void testLogEventMap() {
-        KafkaProducer<String, String> kafkaProducerMock = mock(KafkaProducer.class);
+        KafkaProducer<String, Object> kafkaProducerMock = mock(KafkaProducer.class);
         Future futureMock = mock(Future.class);
         kafkaBackend = new KafkaBackend(kafkaProducerMock, "testTopic", "partitionKey", "localhost", 30);
 
-        Map<String, String> eventMap = new HashMap<>();
+        Map<String, Object> eventMap = new HashMap<>();
         eventMap.put("partitionKey", "ID1234");
         eventMap.put("type", "audit");
         eventMap.put("operation", "read");
         kafkaBackend.setContextMap(eventMap);
 
-        ArgumentCaptor<ProducerRecord<String, String>> captor = ArgumentCaptor.forClass(ProducerRecord.class);
+        ArgumentCaptor<ProducerRecord<String, Object>> captor = ArgumentCaptor.forClass(ProducerRecord.class);
         when(kafkaProducerMock.send(captor.capture())).thenReturn(futureMock);
         kafkaBackend.log("application security", LogLevel.INFO, "message", new Throwable());
 
-        ProducerRecord<String, String> record = captor.getValue();
+        ProducerRecord<String, Object> record = captor.getValue();
         assertNotNull(record);
         assertEquals("ID1234", record.key());
         assertEquals("{\"partitionKey\":\"ID1234\",\"type\":\"audit\",\"operation\":\"read\"}", record.value());
@@ -85,12 +85,12 @@ public class KafkaBackendTest {
     public void testGetAndSetContextMap() {
         kafkaBackend = new KafkaBackend(AuditConfiguration.loadFromClasspath("/audit.minimal.properties"));
 
-        Map<String, String> eventMap = new HashMap<>();
+        Map<String, Object> eventMap = new HashMap<>();
         eventMap.put("partitionKey", "ID1234");
 
         kafkaBackend.setContextMap(eventMap);
 
-        Map<String, String> copyOfContextMap = kafkaBackend.getCopyOfContextMap();
+        Map<String, Object> copyOfContextMap = kafkaBackend.getCopyOfContextMap();
 
         assertEquals(1, copyOfContextMap.size());
         assertEquals("ID1234", eventMap.get("partitionKey"));
