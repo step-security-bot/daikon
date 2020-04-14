@@ -10,15 +10,15 @@ import java.util.Map;
  *
  * <p>
  * For example:
- * 
+ *
  * <pre>
- * 
+ *
  * Context ctx = ContextBuilder.create("user", "testuser").build();
  * </pre>
  */
 public final class ContextBuilder {
 
-    private final Map<String, String> context = new LinkedHashMap<>();
+    private final Map<String, Object> context = new LinkedHashMap<>();
 
     private ContextBuilder() {
     }
@@ -42,7 +42,7 @@ public final class ContextBuilder {
      * @param value to be added
      * @return an instance of context builder with given key-value pair in it.
      */
-    public static ContextBuilder create(String key, String value) {
+    public static ContextBuilder create(String key, Object value) {
         return new ContextBuilder().with(key, value);
     }
 
@@ -50,7 +50,7 @@ public final class ContextBuilder {
      * @param context to be used as base for the new one
      * @return an instance of context builder with copy of given context map in it.
      */
-    public static ContextBuilder create(Map<String, String> context) {
+    public static ContextBuilder create(Map<String, Object> context) {
         return new ContextBuilder().with(context);
     }
 
@@ -61,7 +61,7 @@ public final class ContextBuilder {
      * @param value value of the pair.
      * @return this context builder.
      */
-    public ContextBuilder with(String key, String value) {
+    public ContextBuilder with(String key, Object value) {
         if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         }
@@ -78,7 +78,7 @@ public final class ContextBuilder {
      * @param map map to add to the context.
      * @return this context builder.
      */
-    public ContextBuilder with(Map<String, String> map) {
+    public ContextBuilder with(Map<String, Object> map) {
         if (map == null) {
             throw new IllegalArgumentException("map cannot be null");
         }

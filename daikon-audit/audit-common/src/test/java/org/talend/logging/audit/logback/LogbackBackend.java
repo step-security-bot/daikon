@@ -1,8 +1,10 @@
 package org.talend.logging.audit.logback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.MDC;
 import org.talend.logging.audit.LogLevel;
@@ -39,13 +41,15 @@ public class LogbackBackend extends AbstractBackend {
     }
 
     @Override
-    public synchronized Map<String, String> getCopyOfContextMap() {
-        return MDC.getCopyOfContextMap();
+    public synchronized Map<String, Object> getCopyOfContextMap() {
+        return new HashMap<>(MDC.getCopyOfContextMap());
     }
 
     @Override
-    public synchronized void setContextMap(Map<String, String> newContext) {
-        MDC.setContextMap(newContext);
+    public synchronized void setContextMap(Map<String, Object> newContext) {
+        MDC.setContextMap(
+            newContext.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> String.valueOf(e.getValue())))
+        );
     }
 
     public static class LogEntry {

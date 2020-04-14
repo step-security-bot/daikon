@@ -32,7 +32,7 @@ public class AbstractAuditLoggerBaseTest {
 
         AbstractBackend logger = mock(AbstractBackend.class);
         logger.log(category.toLowerCase(), LogLevel.INFO, thr.getMessage(), thr);
-        expect(logger.getCopyOfContextMap()).andReturn(new LinkedHashMap<String, String>());
+        expect(logger.getCopyOfContextMap()).andReturn(new LinkedHashMap<>());
         expect(logger.setNewContext(anyObject(Map.class), anyObject(Map.class))).andReturn(ctx);
         logger.resetContext(anyObject(Map.class));
         expectLastCall();

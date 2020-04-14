@@ -8,7 +8,7 @@ import java.util.Map;
  * The context is read-only.
  * <p>
  * An instance should be obtained using {@link ContextBuilder} factory. For example:
- * 
+ *
  * <pre>
  * Context ctx = ContextBuilder.create("user", "testuser").build();
  * AuditLoggerFactory.getAuditLogger().securityInfo(ctx, "User {user} has logged in");
@@ -16,6 +16,6 @@ import java.util.Map;
  *
  * @see ContextBuilder
  */
-public interface Context extends Map<String, String> {
+public interface Context extends Map<String, Object> {
 
 }

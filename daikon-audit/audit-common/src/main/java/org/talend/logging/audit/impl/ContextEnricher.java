@@ -15,8 +15,8 @@ public class ContextEnricher {
         this.config = config;
     }
 
-    public Map<String, String> enrich(String category, Map<String, String> logData) {
-        Map<String, String> answer = new LinkedHashMap<>(logData);
+    public Map<String, Object> enrich(String category, Map<String, Object> logData) {
+        Map<String, Object> answer = new LinkedHashMap<>(logData);
 
         answer.put(EventFields.MDC_ID, UUID.randomUUID().toString());
         answer.put(EventFields.MDC_CATEGORY, category);

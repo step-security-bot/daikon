@@ -2,6 +2,7 @@ package org.talend.logging.audit.impl;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.ContextBuilder;
@@ -22,11 +23,11 @@ public abstract class AbstractBackend {
 
     public abstract void log(String category, LogLevel level, String message, Throwable throwable);
 
-    public abstract Map<String, String> getCopyOfContextMap();
+    public abstract Map<String, Object> getCopyOfContextMap();
 
-    public abstract void setContextMap(Map<String, String> newContext);
+    public abstract void setContextMap(Map<String, Object> newContext);
 
-    public Map<String, String> setNewContext(Map<String, String> oldContext, Map<String, String> newContext) {
+    public Map<String, Object> setNewContext(Map<String, Object> oldContext, Map<String, Object> newContext) {
         ContextBuilder builder = ContextBuilder.create();
         if (oldContext != null) {
             builder.with(oldContext);
@@ -40,7 +41,7 @@ public abstract class AbstractBackend {
         return completeContext;
     }
 
-    public Map<String, String> setNewContext(Map<String, String> oldContext) {
+    public Map<String, Object> setNewContext(Map<String, Object> oldContext) {
         ContextBuilder builder = ContextBuilder.create();
         if (oldContext != null) {
             builder.with(oldContext);
@@ -51,7 +52,7 @@ public abstract class AbstractBackend {
         return completeContext;
     }
 
-    public void resetContext(Map<String, String> oldContext) {
+    public void resetContext(Map<String, Object> oldContext) {
         this.setContextMap(oldContext == null ? new LinkedHashMap<>() : oldContext);
     }
 

@@ -11,14 +11,14 @@ import java.util.Map;
  */
 public abstract class AbstractAuditLoggerBase implements AuditLoggerBase {
 
-    private static String formatMessage(String message, Map<String, String> mdcContext) {
+    private static String formatMessage(String message, Map<String, Object> mdcContext) {
         if (mdcContext == null) {
             return message;
         }
 
         String formattedMessage = message;
-        for (Map.Entry<String, String> entry : mdcContext.entrySet()) {
-            formattedMessage = formattedMessage.replace('{' + entry.getKey() + '}', entry.getValue());
+        for (Map.Entry<String, Object> entry : mdcContext.entrySet()) {
+            formattedMessage = formattedMessage.replace('{' + entry.getKey() + '}', String.valueOf(entry.getValue()));
         }
         return formattedMessage;
     }
@@ -44,11 +44,11 @@ public abstract class AbstractAuditLoggerBase implements AuditLoggerBase {
     private void logInternal(LogLevel level, String category, Context context, Throwable throwable, String message) {
         // creating copy of passed context to be able to modify it
         Context actualContext = context == null ? ContextBuilder.emptyContext() : ContextBuilder.create(context).build();
-        Map<String, String> enrichedContext = getEnricher().enrich(category, actualContext);
+        Map<String, Object> enrichedContext = getEnricher().enrich(category, actualContext);
 
         final AbstractBackend logger = getLogger();
-        final Map<String, String> oldContext = logger.getCopyOfContextMap();
-        final Map<String, String> completeContext = logger.setNewContext(oldContext, enrichedContext);
+        final Map<String, Object> oldContext = logger.getCopyOfContextMap();
+        final Map<String, Object> completeContext = logger.setNewContext(oldContext, enrichedContext);
         try {
             final String formattedMessage = formatMessage(message, completeContext);
 

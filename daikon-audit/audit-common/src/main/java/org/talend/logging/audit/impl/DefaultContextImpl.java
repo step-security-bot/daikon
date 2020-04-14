@@ -6,18 +6,18 @@ import java.util.Map;
 
 import org.talend.logging.audit.Context;
 
-public class DefaultContextImpl extends LinkedHashMap<String, String> implements Context {
+public class DefaultContextImpl extends LinkedHashMap<String, Object> implements Context {
 
     public DefaultContextImpl() {
         super(Collections.<String, String> emptyMap());
     }
 
-    public DefaultContextImpl(Map<String, String> context) {
+    public DefaultContextImpl(Map<String, Object> context) {
         super(context);
     }
 
     @Override
-    public String put(String key, String value) {
+    public String put(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
@@ -27,7 +27,7 @@ public class DefaultContextImpl extends LinkedHashMap<String, String> implements
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends String> m) {
+    public void putAll(Map<? extends String, ? extends Object> m) {
         throw new UnsupportedOperationException();
     }
 
