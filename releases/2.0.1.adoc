@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.1) - 04/14/2020
+
+Thanks to @Jérémy Hervy
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-13814[TPSVC-13814]: [AUDIT LOGS] Integrate Dev framework in SCIM (audit logs generation) (link:https://github.com/Talend/daikon/pull/596[#596])
