@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.3) - 04/23/2020
+
+Thanks to @Jérémy Hervy
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-14118[TPSVC-14118]: Move to camel case the Audit logs body of the response (link:https://github.com/Talend/daikon/pull/601[#601])
