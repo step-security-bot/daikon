@@ -1,0 +1,10 @@
+= Daikon Release Notes (2.0.4) - 05/15/2020
+
+Thanks to @Jérémy Hervy, @Colm O hEigeartaigh
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-14037[TPSVC-14037]: Have audit logs for negative events (link:https://github.com/Talend/daikon/pull/606[#606])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-284[TDKN-284]: Update Log4j 2 to 2.13.2 (link:https://github.com/Talend/daikon/pull/603[#603])
+- link:https://jira.talendforge.org/browse/TDKN-283[TDKN-283]: Update BouncyCastle to 1.65 (link:https://github.com/Talend/daikon/pull/604[#604])
