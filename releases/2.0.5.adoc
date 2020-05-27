@@ -1,0 +1,17 @@
+= Daikon Release Notes (2.0.5) - 05/27/2020
+
+Thanks to @Jérémy Hervy, @Colm O hEigeartaigh, @Aurélien F
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-14487[TPSVC-14487]: negative events not capture when manually generating audit logs (link:https://github.com/Talend/daikon/pull/613[#613])
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-14037[TPSVC-14037]: Have audit logs for negative events (link:https://github.com/Talend/daikon/pull/606[#606])
+- link:https://jira.talendforge.org/browse/TPSVC-14118[TPSVC-14118]: Move to camel case the Audit logs body of the response (link:https://github.com/Talend/daikon/pull/601[#601])
+- link:https://jira.talendforge.org/browse/TPSVC-13814[TPSVC-13814]: [AUDIT LOGS] Integrate Dev framework in iam-proxy (audit logs generation) (link:https://github.com/Talend/daikon/pull/598[#598])
+- link:https://jira.talendforge.org/browse/TPSVC-13814[TPSVC-13814]: [AUDIT LOGS] Integrate Dev framework in iam-proxy (audit logs generation) (link:https://github.com/Talend/daikon/pull/596[#596])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-285[TDKN-285]: Update SLF4J to 1.7.26 (link:https://github.com/Talend/daikon/pull/611[#611])
+- link:https://jira.talendforge.org/browse/TDKN-284[TDKN-284]: Update Log4j 2 to 2.13.2 (link:https://github.com/Talend/daikon/pull/603[#603])
+- link:https://jira.talendforge.org/browse/TDKN-283[TDKN-283]: Update BouncyCastle to 1.65 (link:https://github.com/Talend/daikon/pull/604[#604])
