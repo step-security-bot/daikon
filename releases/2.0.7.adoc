@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.7) - 05/29/2020
+
+Thanks to @Jérémy Hervy
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-14487[TPSVC-14487]: negative events not capture when manually generating audit logs (link:https://github.com/Talend/daikon/pull/618[#618])
