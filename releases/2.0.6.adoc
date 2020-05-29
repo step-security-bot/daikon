@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.6) - 05/29/2020
+
+Thanks to @Aurélien Leboulanger
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-8780[TDP-8780]: Zipkin don't have any TDP- related requests (link:https://github.com/Talend/daikon/pull/617[#617])
