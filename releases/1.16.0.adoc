@@ -1,0 +1,10 @@
+= Daikon Release Notes (1.16.0) - 06/04/2020
+
+Thanks to @Aurélien Leboulanger, @wang wei, @Antoine Nicolas
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDI-44172[TDI-44172]: Observability: Create new "component execution" event and emit it frequently (link:https://github.com/Talend/daikon/pull/619[#619])
+
+== Other
+- link:https://jira.talendforge.org/browse/TDKN-288[TDKN-288]: Add "custom backend" feature for daikon-audit 1.x (link:https://github.com/Talend/daikon/pull/610[#610])
+- fix: set the S3 bucket as a URL path for MINIO configuration (#622)  (link:https://github.com/Talend/daikon/pull/623[#623])
