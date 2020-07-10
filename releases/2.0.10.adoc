@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.10) - 07/10/2020
+
+Thanks to @Jérémy Hervy
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-15007[TPSVC-15007]: [AUDIT LOGS] Extract IPs from x-forwarded-for header & filter WAF IPs (link:https://github.com/Talend/daikon/pull/634[#634])
