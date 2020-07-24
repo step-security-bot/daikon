@@ -1,0 +1,10 @@
+= Daikon Release Notes (2.0.11) - 07/24/2020
+
+Thanks to @Francois Huaulme, @Aurélien Leboulanger
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDKN-294[TDKN-294]: Add monitoring to content service (link:https://github.com/Talend/daikon/pull/635[#635])
+
+== Other
+- feat(s3) S3 configuration improvement  (link:https://github.com/Talend/daikon/pull/624[#624])
+- fix: set the S3 bucket as a URL path for MINIO configuration  (link:https://github.com/Talend/daikon/pull/622[#622])
