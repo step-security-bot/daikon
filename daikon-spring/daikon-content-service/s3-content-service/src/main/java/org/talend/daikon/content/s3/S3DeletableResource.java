@@ -22,7 +22,7 @@ import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.CopyObjectResult;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 
-class S3DeletableResource implements DeletableResource {
+public class S3DeletableResource implements DeletableResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(S3DeletableResource.class);
 

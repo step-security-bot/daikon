@@ -15,7 +15,7 @@ import org.talend.daikon.content.s3.provider.S3BucketProvider;
 
 import com.amazonaws.services.s3.AmazonS3;
 
-class S3ResourceResolver extends AbstractResourceResolver {
+public class S3ResourceResolver extends AbstractResourceResolver {
 
     private final AmazonS3 amazonS3;
 
