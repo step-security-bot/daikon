@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.13) - 07/28/2020
+
+Thanks to @Francois Huaulme
+
+== Other
+- fix(content-service) Fix getUrl/getUri when using custom authentication mode  (link:https://github.com/Talend/daikon/pull/637[#637])
