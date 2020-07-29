@@ -1,0 +1,6 @@
+= Daikon Release Notes (2.0.14) - 07/29/2020
+
+Thanks to @Francois Huaulme
+
+== Other
+- chore(journal): Performance improvement for content journal (2.0)  (link:https://github.com/Talend/daikon/pull/638[#638])
