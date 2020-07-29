@@ -36,7 +36,8 @@ public class JournalizedResourceResolver implements ResourceResolver {
         }
 
         if (resourceJournal.ready()) {
-            return resourceJournal.matches(locationPattern) //
+            return resourceJournal
+                    .matches(locationPattern) //
                     .map(location -> new LazyDeletableResource(location, this)) //
                     .toArray(DeletableResource[]::new);
         } else {
