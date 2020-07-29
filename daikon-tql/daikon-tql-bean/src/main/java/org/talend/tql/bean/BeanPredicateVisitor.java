@@ -166,8 +166,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
     @Override
     public Predicate<T> visit(AndExpression andExpression) {
         final Expression[] expressions = andExpression.getExpressions();
-        return Stream
-                .of(expressions) //
+        return Stream.of(expressions) //
                 .map(e -> e.accept(this)) //
                 .reduce(Predicate::and) //
                 .orElseGet(() -> m -> true);
@@ -176,8 +175,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
     @Override
     public Predicate<T> visit(OrExpression orExpression) {
         final Expression[] expressions = orExpression.getExpressions();
-        return Stream
-                .of(expressions) //
+        return Stream.of(expressions) //
                 .map(e -> e.accept(this)) //
                 .reduce(Predicate::or) //
                 .orElseGet(() -> m -> true);
@@ -240,7 +238,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
     private Predicate<T> eq(Object value, MethodAccessor[] accessors) {
         // Check if accessor type is numeric (if numeric, use parseDouble or use string equals for others)
         Class<?> returnType = value.getClass();
-        if(accessors.length > 0) {
+        if (accessors.length > 0) {
             returnType = accessors[0].getReturnType();
             if (returnType.isPrimitive()) {
                 // Handle case where return type is primitive (e.g. "int" not "Integer")
@@ -261,8 +259,7 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
         final MethodAccessor[] methods = currentMethods.pop();
 
         final LiteralValue[] values = fieldInExpression.getValues();
-        return Stream
-                .of(values) //
+        return Stream.of(values) //
                 .map(v -> {
                     v.accept(this);
                     return eq(literals.pop(), methods);
@@ -375,8 +372,8 @@ public class BeanPredicateVisitor<T> implements IASTVisitor<Predicate<T>> {
             if (Map.class.isAssignableFrom(targetClass)
                     && (method.getName().startsWith("get") || method.getName().startsWith("is"))) {
                 final MethodAccessor methodAccessor = build(method);
-                final MethodAccessor[] path =
-                        concat(previousMethods.stream(), Stream.of(methodAccessor)).toArray(MethodAccessor[]::new);
+                final MethodAccessor[] path = concat(previousMethods.stream(), Stream.of(methodAccessor))
+                        .toArray(MethodAccessor[]::new);
                 currentMethods.push(path);
 
                 // Recursively get methods to nested classes (and prevent infinite recursions).
