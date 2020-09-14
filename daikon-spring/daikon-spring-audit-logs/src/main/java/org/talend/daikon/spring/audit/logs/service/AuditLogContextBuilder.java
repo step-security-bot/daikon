@@ -231,9 +231,7 @@ public class AuditLogContextBuilder {
         if (!StringUtils.isEmpty(httpServletRequest.getHeader("X-Forwarded-Host"))) {
             return UriComponentsBuilder.fromPath(httpServletRequest.getRequestURI())
                     .scheme(Optional.ofNullable(httpServletRequest.getHeader("X-Forwarded-Proto")).orElse("https"))
-                    .host(retrieveHost(httpServletRequest))
-                    .query(httpServletRequest.getQueryString())
-                    .build().toUri().toString();
+                    .host(retrieveHost(httpServletRequest)).query(httpServletRequest.getQueryString()).build().toUri().toString();
         } else {
             return httpServletRequest.getRequestURL().toString();
         }
