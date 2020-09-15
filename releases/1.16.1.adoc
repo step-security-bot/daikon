@@ -1,0 +1,11 @@
+= Daikon Release Notes (1.16.1) - 09/15/2020
+
+Thanks to @Antoine Nicolas, @Aurélien Leboulanger, @wang wei
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDKN-297[TDKN-297]: Add the ability to disable message output in daikon-audit (link:https://github.com/Talend/daikon/pull/650[#650])
+- link:https://jira.talendforge.org/browse/TDI-44172[TDI-44172]: Observability: Create new "component execution" event and emit it frequently (link:https://github.com/Talend/daikon/pull/619[#619])
+
+== Other
+- link:https://jira.talendforge.org/browse/TDKN-288[TDKN-288]: Add "custom backend" feature for daikon-audit 1.x (link:https://github.com/Talend/daikon/pull/610[#610])
+- fix: set the S3 bucket as a URL path for MINIO configuration (#622)  (link:https://github.com/Talend/daikon/pull/623[#623])
