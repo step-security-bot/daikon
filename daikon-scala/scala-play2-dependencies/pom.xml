@@ -11,10 +11,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <play2-version>2.6.6</play2-version>
-        <silhouette-version>5.0.0</silhouette-version>
-        <akka-version>2.5.12</akka-version>
-        <slick-version>3.0.0</slick-version>
+        <silhouette-version>6.1.0</silhouette-version>
     </properties>
 
     <dependencyManagement>
