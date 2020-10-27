@@ -34,7 +34,7 @@ public interface AuditLogSender {
      * @param responseObject response body object
      * @param auditLogAnnotation generate audit log annotation containing basic properties
      */
-    void sendAuditLog(HttpServletRequest request, Object requestBody, int responseCode, Object responseObject,
+    void sendAuditLog(HttpServletRequest request, Object requestBody, int responseCode, Object responseObject, Object location,
             GenerateAuditLog auditLogAnnotation);
 
     /**

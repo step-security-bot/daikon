@@ -132,6 +132,10 @@ public class AuditLogContextBuilder {
         return this.with(RESPONSE_BODY.getId(), responseBody, response);
     }
 
+    public AuditLogContextBuilder withResponseLocation(Object responseLocation) {
+        return this.with(RESPONSE_LOCATION.getId(), responseLocation, response);
+    }
+
     public Context build() throws AuditLogException {
         try {
             // Compute request fields only at build step to leverage ip extractor
@@ -161,8 +165,8 @@ public class AuditLogContextBuilder {
         return withRequestBody(requestBody);
     }
 
-    public AuditLogContextBuilder withResponse(int httpStatus, Object body) {
-        return withResponseCode(httpStatus).withResponseBody(body);
+    public AuditLogContextBuilder withResponse(int httpStatus, Object body, Object location) {
+        return withResponseCode(httpStatus).withResponseBody(body).withResponseLocation(location);
     }
 
     public void checkAuditContextIsValid() throws AuditLogException {

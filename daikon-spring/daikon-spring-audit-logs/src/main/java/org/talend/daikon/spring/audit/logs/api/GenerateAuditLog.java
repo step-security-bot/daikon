@@ -48,6 +48,13 @@ public @interface GenerateAuditLog {
     boolean includeBodyResponse() default true;
 
     /**
+     * Should include or not the HTTP location header in the generated audit log
+     *
+     * @return boolean indicating if the HTTP location header is included or not
+     */
+    boolean includeLocationHeader() default false;
+
+    /**
      * Filter whose purpose is to filter HTTP request/response before generation
      *
      * @return Filter class

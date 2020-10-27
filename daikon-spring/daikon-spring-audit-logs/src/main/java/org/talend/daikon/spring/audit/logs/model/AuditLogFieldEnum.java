@@ -28,7 +28,8 @@ public enum AuditLogFieldEnum {
     REQUEST("request", Arrays.asList(URL, METHOD, USER_AGENT, REQUEST_BODY)),
     RESPONSE_BODY("body", false),
     RESPONSE_CODE("code"),
-    RESPONSE("response", Arrays.asList(RESPONSE_BODY, RESPONSE_CODE));
+    RESPONSE_LOCATION("location", false),
+    RESPONSE("response", Arrays.asList(RESPONSE_BODY, RESPONSE_CODE, RESPONSE_LOCATION));
 
     private String id;
 

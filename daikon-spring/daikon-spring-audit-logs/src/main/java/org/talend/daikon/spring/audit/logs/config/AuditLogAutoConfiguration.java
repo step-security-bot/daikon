@@ -1,5 +1,6 @@
 package org.talend.daikon.spring.audit.logs.config;
 
+import java.net.URI;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -112,6 +113,17 @@ public class AuditLogAutoConfiguration implements WebMvcConfigurer {
             @Override
             public Object getResponseBody(Object responseObject) {
                 return responseObject instanceof ResponseEntity ? ((ResponseEntity) responseObject).getBody() : null;
+            }
+
+            @Override
+            public String getLocation(Object responseObject) {
+                if (responseObject instanceof ResponseEntity) {
+                    URI location = ((ResponseEntity) responseObject).getHeaders().getLocation();
+                    if (location != null) {
+                        return location.getPath();
+                    }
+                }
+                return null;
             }
         };
     }
