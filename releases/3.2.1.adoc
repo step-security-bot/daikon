@@ -1,0 +1,11 @@
+= Daikon Release Notes (3.2.1) - 10/28/2020
+
+Thanks to @vgagara-talend, @Oleksii Zatsepin, @dependabot[bot]
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-15325[TPSVC-15325]: Kibana logs: customInfo (MDC) does not match logMessage (link:https://github.com/Talend/daikon/pull/668[#668])
+- link:https://jira.talendforge.org/browse/TMC-23122[TMC-23122]: [Audit Log] Response body is null for CREATE operation (link:https://github.com/Talend/daikon/pull/667[#667])
+
+== Other
+- chore(deps): bump junit from 4.12 to 4.13.1  (link:https://github.com/Talend/daikon/pull/665[#665])
+- chore(deps-dev): bump junit from 4.12 to 4.13.1 in /daikon-i18n  (link:https://github.com/Talend/daikon/pull/666[#666])
