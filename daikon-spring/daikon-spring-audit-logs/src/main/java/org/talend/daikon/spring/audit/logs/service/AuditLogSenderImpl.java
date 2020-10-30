@@ -36,7 +36,7 @@ public class AuditLogSenderImpl implements AuditLogSender {
      */
     @Override
     public void sendAuditLog(HttpServletRequest request, Object requestBody, int responseCode, Object responseObject,
-            Object location, GenerateAuditLog auditLogAnnotation) {
+            GenerateAuditLog auditLogAnnotation) {
         try {
             // Build context from request, response & annotation info
             AuditLogContextBuilder auditLogContextBuilder = AuditLogContextBuilder.create() //
@@ -52,8 +52,7 @@ public class AuditLogSenderImpl implements AuditLogSender {
                     .withEmail(auditUserProvider.getUserEmail()) //
                     .withAccountId(auditUserProvider.getAccountId()) //
                     .withRequest(request, requestBody) //
-                    .withResponse(responseCode, auditLogAnnotation.includeBodyResponse() ? responseObject : null,
-                            auditLogAnnotation.includeLocationHeader() ? location : null)
+                    .withResponse(responseCode, auditLogAnnotation.includeBodyResponse() ? responseObject : null)
                     .withIpExtractor(this.auditLogIpExtractor);
 
             // Filter the context if needed

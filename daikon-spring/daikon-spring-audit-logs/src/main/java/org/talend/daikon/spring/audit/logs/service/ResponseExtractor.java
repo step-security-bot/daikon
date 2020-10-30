@@ -18,11 +18,4 @@ public interface ResponseExtractor {
      * @return extracted response body
      */
     Object getResponseBody(Object responseObject);
-
-    /**
-     *
-     * @param responseObject object returned by endpoint
-     * @return extracted location header for HATEOAS architectures
-     */
-    String getLocation(Object responseObject);
 }

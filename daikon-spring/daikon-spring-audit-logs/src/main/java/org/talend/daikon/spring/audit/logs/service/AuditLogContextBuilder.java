@@ -132,8 +132,8 @@ public class AuditLogContextBuilder {
         return this.with(RESPONSE_BODY.getId(), responseBody, response);
     }
 
-    public AuditLogContextBuilder withResponseLocation(Object responseLocation) {
-        return this.with(RESPONSE_LOCATION.getId(), responseLocation, response);
+    public AuditLogContextBuilder withCustomResponseField(String fieldName, Object value) {
+        return this.with(fieldName, value, response);
     }
 
     public Context build() throws AuditLogException {
@@ -162,11 +162,11 @@ public class AuditLogContextBuilder {
 
     public AuditLogContextBuilder withRequest(HttpServletRequest request, Object requestBody) {
         this.httpServletRequest = request;
-        return withRequestBody(requestBody);
+        return withRequestBody(requestBody).withRequestMethod(httpServletRequest.getMethod());
     }
 
-    public AuditLogContextBuilder withResponse(int httpStatus, Object body, Object location) {
-        return withResponseCode(httpStatus).withResponseBody(body).withResponseLocation(location);
+    public AuditLogContextBuilder withResponse(int httpStatus, Object body) {
+        return withResponseCode(httpStatus).withResponseBody(body);
     }
 
     public void checkAuditContextIsValid() throws AuditLogException {

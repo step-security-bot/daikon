@@ -72,12 +72,11 @@ public class AuditLogGeneratorAspect {
                 // for some responses such 204|302 we should have empty body and retrieve it from response
                 auditLogResponseObject = responseExtractor.getResponseBody(responseObject);
             }
-            String locationHeader = responseExtractor.getLocation(responseObject);
             // Send logs only in case of success or if responseCode can't be defined
             if (responseCode == 0 || !HttpStatus.valueOf(responseCode).isError()) {
                 // Finally send the audit log
                 auditLogSender.sendAuditLog(request, extractRequestBody(proceedingJoinPoint), responseCode,
-                        auditLogResponseObject, locationHeader, auditLogAnnotation);
+                        auditLogResponseObject, auditLogAnnotation);
             }
         }
         return responseObject;
