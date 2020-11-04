@@ -24,6 +24,7 @@
         <module>dynamic-log</module>
         <module>scala-parent</module>
         <module>scala-play2-dependencies</module>
+        <module>daikon-tql-slick</module>
     </modules>
 
 </project>

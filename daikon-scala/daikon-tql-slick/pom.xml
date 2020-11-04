@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.talend.daikon</groupId>
+        <artifactId>scala-parent</artifactId>
+        <version>3.2.1-SNAPSHOT</version>
+        <relativePath>../scala-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>daikon-tql-slick</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>daikon-tql-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.slick</groupId>
+            <artifactId>slick_${scala-binary-version}</artifactId>
+            <version>${slick-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala-binary-version}</artifactId>
+            <version>3.2.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
