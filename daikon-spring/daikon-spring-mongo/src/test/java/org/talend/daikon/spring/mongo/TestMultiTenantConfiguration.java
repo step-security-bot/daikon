@@ -1,15 +1,18 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +39,10 @@ public class TestMultiTenantConfiguration {
     }
 
     @Bean
-    public MongoDbFactory defaultMongoDbFactory() {
+    public MongoDatabaseFactory defaultMongoDbFactory() {
         MongoServer server = mongoServer();
-
-        return new SimpleMongoDbFactory(new MongoClient(new ServerAddress(server.getLocalAddress())), "standard");
+        return new SimpleMongoClientDatabaseFactory(
+                new ConnectionString("mongodb:/" + server.getLocalAddress().toString() + "/default"));
     }
 
     @Bean
@@ -58,7 +61,7 @@ public class TestMultiTenantConfiguration {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate(final MongoDbFactory factory) {
+    public MongoTemplate mongoTemplate(final MongoDatabaseFactory factory) {
         // Used in tests
         return new MongoTemplate(factory);
     }
@@ -67,7 +70,7 @@ public class TestMultiTenantConfiguration {
      * @return A {@link TenantInformationProvider} that gets the database name from {@link #dataBaseName}.
      */
     @Bean
-    public TenantInformationProvider tenantProvider() {
+    public TenantInformationProvider tenantProvider(MongoServer mongoServer) {
         return new TenantInformationProvider() {
 
             @Override
@@ -79,9 +82,9 @@ public class TestMultiTenantConfiguration {
             }
 
             @Override
-            public MongoClientURI getDatabaseURI() {
-                String uri = "mongodb://fake_host:27017/" + dataBaseName.get();
-                return new MongoClientURI(uri);
+            public ConnectionString getDatabaseURI() {
+                String uri = "mongodb://127.0.0.1:" + mongoServer.getLocalAddress().getPort() + "/" + dataBaseName.get();
+                return new ConnectionString(uri);
             }
         };
     }
@@ -100,16 +103,16 @@ public class TestMultiTenantConfiguration {
 
             @Override
             public MongoClient get(TenantInformationProvider provider) {
-                final String name = provider.getDatabaseURI().getURI();
+                final String name = provider.getDatabaseURI().getConnectionString();
                 if (!mongoInstances.containsKey(name)) {
                     mongoInstances.put(name, initNewServer());
                 }
-                return new MongoClient(new ServerAddress(mongoInstances.get(name).getLocalAddress()));
+                return MongoClients.create(provider.getDatabaseURI());
             }
 
             @Override
             public void close(TenantInformationProvider provider) {
-                final String uri = provider.getDatabaseURI().getURI();
+                final String uri = provider.getDatabaseURI().getConnectionString();
                 final MongoServer server = mongoInstances.get(uri);
                 if (server != null) {
                     server.shutdown();

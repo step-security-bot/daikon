@@ -7,27 +7,27 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.test.context.TestPropertySource;
 
 @TestPropertySource(properties = "multi-tenancy.mongodb.active=false")
 public class DisabledMultiTenantMongoDbTest extends AbstractMultiTenantMongoDbTest {
 
     @Autowired
-    private MongoDbFactory mongoDbFactory;
+    private MongoDatabaseFactory mongoDbFactory;
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Test
-    public void shouldHaveMultiTenantFactory() throws Exception {
-        assertEquals(SimpleMongoDbFactory.class, mongoDbFactory.getClass());
+    public void shouldHaveMultiTenantFactory() {
+        assertEquals(SimpleMongoClientDatabaseFactory.class, mongoDbFactory.getClass());
     }
 
     @Test
-    public void shouldWriteInSameDatabase() throws Exception {
+    public void shouldWriteInSameDatabase() {
         // Given
         final TestData tenant1 = new TestData();
         tenant1.setId("1");
