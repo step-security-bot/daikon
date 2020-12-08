@@ -7,7 +7,10 @@ def jiraCredentials = usernamePassword(
     credentialsId: 'jira-credentials',
     passwordVariable: 'JIRA_PASSWORD',
     usernameVariable: 'JIRA_LOGIN')
-def currentBranch = env.CHANGE_BRANCH == null ? env.BRANCH_NAME : env.CHANGE_BRANCH
+def currentBranch = env.BRANCH_NAME
+if (BRANCH_NAME.startsWith("PR-")) {
+    currentBranch = env.CHANGE_BRANCH
+}
 
 pipeline {
 
@@ -28,14 +31,14 @@ pipeline {
 
   agent {
     kubernetes {
-      label 'all_daikon'
+      label "all_daikon" + UUID.randomUUID().toString()
       yaml """
 apiVersion: v1
 kind: Pod
 spec:
   containers:
     - name: maven
-      image: jenkinsxio/builder-maven:0.1.211
+      image: artifactory.datapwn.com/tlnd-docker-prod/talend/common/tsbi/jdk8-builder-base:2.0.0-20200414174049
       command:
       - cat
       tty: true
@@ -44,13 +47,15 @@ spec:
         mountPath: /var/run/docker.sock
       - name: m2
         mountPath: /root/daikon/.m2/repository
+  imagePullSecrets:
+    - talend-registry
   volumes:
   - name: docker
     hostPath:
       path: /var/run/docker.sock
   - name: m2
-    hostPath:
-      path: /tmp/jenkins/daikon/m2
+    persistentVolumeClaim:
+      claimName: efs-jenkins-common-m2
 """
     }
   }
@@ -75,6 +80,8 @@ spec:
           withCredentials([gitCredentials]) {
             sh """
                 ./jenkins/configure_git_credentials.sh '${GIT_LOGIN}' '${GIT_PASSWORD}'
+                git tag ci-kuke-test && git push --tags
+                git push --delete origin ci-kuke-test && git tag --delete ci-kuke-test
             """
           }
         }
@@ -118,7 +125,7 @@ spec:
         container('maven') {
           configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
             sh """
-              mvn deploy -B -s $MAVEN_SETTINGS -Dtalend_snapshots=https://nexus-smart-branch.datapwn.com/nexus/content/repositories/dev_branch_snapshots/branch_${escaped_branch}
+              mvn deploy -B -s $MAVEN_SETTINGS -Dtalend_snapshots=https://nexus-smart-branch.datapwn.com/nexus/content/repositories/dev_branch_snapshots/branch_${escaped_branch} -Dtalend_snapshots_deployment=https://artifacts-oss.talend.com/nexus/content/repositories/dev_branch_snapshots/branch_${escaped_branch}
             """
           }
         }
@@ -136,9 +143,15 @@ spec:
                   sh """
                     git config --global push.default current
                     git checkout ${env.BRANCH_NAME}
-                    mvn -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare
+                    git pull --tags
+                    mvn -B -s $MAVEN_SETTINGS -Darguments='-P release-notes -DskipTests -Duser=${JIRA_LOGIN} -Dpassword=${JIRA_PASSWORD} -Dversion=${params.release_version} -Doutput=.' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare install
+                    cd releases/
+                    git add -A .
+                    git commit -m "chore(release) Add ${params.release_version} release notes"
+                    cat ${params.release_version}.adoc
                     git push
                     git push --tags
+                    cd ..
                     mvn -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -DlocalCheckout=true -Dusername=${GIT_LOGIN} -Dpassword=${GIT_PASSWORD} release:perform
                   """
                 }
@@ -147,7 +160,7 @@ spec:
             slackSend(
               color: "GREEN",
               channel: "eng-daikon",
-              message: "Daikon version ${params.release_version} released (next version: ${params.next_version}) <https://github.com/Talend/daikon/blob/master/releases/${params.release_version}.adoc|${params.release_version} release notes>"
+              message: "Daikon version ${params.release_version} released. (next version: ${params.next_version}) <https://github.com/Talend/daikon/blob/${env.BRANCH_NAME}/releases/${params.release_version}.adoc|${params.release_version} release notes>"
             )
         }
     }
