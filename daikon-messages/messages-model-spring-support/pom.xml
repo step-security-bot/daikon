@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-messages</artifactId>
-        <version>0.26.4-SNAPSHOT</version>
+        <version>0.26.4</version>
     </parent>
     <artifactId>messages-model-spring-support</artifactId>
 
