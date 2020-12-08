@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.talend.daikon</groupId>
 	<artifactId>daikon-spring-mongo</artifactId>
-	<version>0.26.2</version>
+	<version>0.26.3-SNAPSHOT</version>
 	<name>daikon-spring-mongo</name>
 	<properties>
 		<java.version>1.8</java.version>
@@ -133,6 +133,6 @@
 	</build>
 
   <scm>
-    <tag>0.26.2</tag>
+    <tag>maintenance/0.26</tag>
   </scm>
 </project>
