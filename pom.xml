@@ -220,7 +220,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+                <version>3.0.1</version>
                 <configuration>
                     <failOnError>false</failOnError>
                 </configuration>
@@ -230,6 +230,10 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <doclint>none</doclint>
+                            <javadocVersion>8</javadocVersion>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
