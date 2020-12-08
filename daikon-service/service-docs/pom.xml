@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-service</artifactId>
-        <version>0.26.6-SNAPSHOT</version>
+        <version>0.26.6</version>
     </parent>
     <artifactId>service-docs</artifactId>
     <name>service-docs</name>
