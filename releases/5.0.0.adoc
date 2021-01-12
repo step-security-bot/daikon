@@ -1,0 +1,13 @@
+= Daikon Release Notes (5.0.0) - 01/12/2021
+
+Thanks to @Jérémy Hervy, @Francois Huaulme, @dependabot[bot]
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-16764[TPSVC-16764]: [LOGGING] Make daikon-logging compatible with ECS base fields (link:https://github.com/Talend/daikon/pull/696[#696])
+- link:https://jira.talendforge.org/browse/TPSVC-16642[TPSVC-16642]: [LOGGING] [DESIGN] Design ECS format integration in Daikon Logging (link:https://github.com/Talend/daikon/pull/684[#684])
+
+== Other
+- chore(cve) Fix for CVEs  (link:https://github.com/Talend/daikon/pull/698[#698])
+- chore(deps): bump ini from 1.3.5 to 1.3.8 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/694[#694])
+- chore(deps): bump ini from 1.3.4 to 1.3.7 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/692[#692])
+- chore(deps): bump ini in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/693[#693])
