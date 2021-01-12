@@ -1,44 +1,39 @@
 package org.talend.daikon.logging.event.layout;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Layout;
-import org.apache.log4j.pattern.ThrowableInformationPatternConverter;
 import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
+import org.talend.daikon.logging.ecs.EcsSerializer;
 import org.talend.daikon.logging.event.field.HostData;
-import org.talend.daikon.logging.event.field.LayoutFields;
 
-import net.minidev.json.JSONObject;
+import co.elastic.logging.AdditionalField;
+import co.elastic.logging.EcsJsonSerializer;
 
 /**
- * Log4j JSON Layout
- * 
- * @author sdiallo
- *
+ * Log4j ECS JSON layout
  */
+@Deprecated
 public class Log4jJSONLayout extends Layout {
 
     private boolean locationInfo;
 
     private boolean hostInfo;
 
-    private String customUserFields;
+    private boolean addEventUuid;
 
-    private boolean ignoreThrowable;
+    private String serviceName;
 
-    private Map<String, String> metaFields = new HashMap<>();
+    private List<AdditionalField> additionalFields = new ArrayList<AdditionalField>();
 
     /**
      * Print no location info by default, but print host information (for backward compatibility).
      */
     public Log4jJSONLayout() {
-        this(false, true);
+        this(false, true, true);
     }
 
     /**
@@ -47,72 +42,44 @@ public class Log4jJSONLayout extends Layout {
      * @param locationInfo whether or not to include location information in the log messages.
      * @param hostInfo whether or not to include host information (host name and IP address) in the log messages.
      */
-    public Log4jJSONLayout(boolean locationInfo, boolean hostInfo) {
+    public Log4jJSONLayout(boolean locationInfo, boolean hostInfo, boolean addEventUuid) {
         this.locationInfo = locationInfo;
         this.hostInfo = hostInfo;
+        this.addEventUuid = addEventUuid;
     }
 
-    public void setMetaFields(Map<String, String> metaFields) {
-        this.metaFields = new HashMap<>(metaFields);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public String format(LoggingEvent loggingEvent) {
-        JSONObject logstashEvent = new JSONObject();
-        JSONObject userFieldsEvent = new JSONObject();
-        HostData host = new HostData();
-        String ndc = loggingEvent.getNDC();
-
-        // Extract and add fields from log4j config, if defined
-        if (getUserFields() != null) {
-            String userFlds = getUserFields();
-            LayoutUtils.addUserFields(userFlds, userFieldsEvent);
-        }
-
-        Map<String, String> mdc = LayoutUtils.processMDCMetaFields(loggingEvent.getProperties(), logstashEvent, metaFields);
-
-        // Now we start injecting our own stuff
-        logstashEvent.put(LayoutFields.VERSION, LayoutFields.VERSION_VALUE);
-        logstashEvent.put(LayoutFields.TIME_STAMP, LayoutUtils.dateFormat(loggingEvent.getTimeStamp()));
-        logstashEvent.put(LayoutFields.AGENT_TIME_STAMP, LayoutUtils.dateFormat(new Date().getTime()));
-        if (ndc != null) {
-            logstashEvent.put(LayoutFields.NDC, ndc);
-        }
-        logstashEvent.put(LayoutFields.SEVERITY, loggingEvent.getLevel().toString());
-        logstashEvent.put(LayoutFields.THREAD_NAME, loggingEvent.getThreadName());
-        logstashEvent.put(LayoutFields.LOG_MESSAGE, loggingEvent.getRenderedMessage());
-        handleThrown(logstashEvent, loggingEvent);
-        JSONObject logSourceEvent = createLogSourceEvent(loggingEvent, host);
-        logstashEvent.put(LayoutFields.LOG_SOURCE, logSourceEvent);
-        LayoutUtils.addMDC(mdc, userFieldsEvent, logstashEvent);
-
-        if (!userFieldsEvent.isEmpty()) {
-            logstashEvent.put(LayoutFields.CUSTOM_INFO, userFieldsEvent);
-        }
-
-        return logstashEvent.toString() + "\n";
-    }
-
-    @Override
-    public boolean ignoresThrowable() {
-        return ignoreThrowable;
-    }
-
-    /**
-     * Query whether log messages include location information.
-     *
-     * @return true if location information is included in log messages, false otherwise.
-     */
-    public boolean getLocationInfo() {
+    public boolean isLocationInfo() {
         return locationInfo;
     }
 
-    /**
-     * Set whether log messages should include location information.
-     *
-     * @param locationInfo true if location information should be included, false otherwise.
-     */
+    public boolean isHostInfo() {
+        return hostInfo;
+    }
+
+    public boolean isAddEventUuid() {
+        return addEventUuid;
+    }
+
+    public void setAddEventUuid(boolean addEventUuid) {
+        this.addEventUuid = addEventUuid;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public List<AdditionalField> getAdditionalFields() {
+        return additionalFields;
+    }
+
+    public void setAdditionalFields(List<AdditionalField> additionalFields) {
+        this.additionalFields = additionalFields;
+    }
+
     public void setLocationInfo(boolean locationInfo) {
         this.locationInfo = locationInfo;
     }
@@ -121,68 +88,70 @@ public class Log4jJSONLayout extends Layout {
         this.hostInfo = hostInfo;
     }
 
-    public boolean getHostInfo() {
-        return hostInfo;
+    public void setMetaFields(Map<String, String> metaFields) {
+        setAdditionalFields(metaFields.entrySet().stream().map(e -> new AdditionalField(e.getKey(), e.getValue()))
+                .collect(Collectors.toList()));
     }
 
-    public String getUserFields() {
-        return customUserFields;
+    @SuppressWarnings("unchecked")
+    @Override
+    public String format(LoggingEvent event) {
+        StringBuilder builder = new StringBuilder();
+        EcsJsonSerializer.serializeObjectStart(builder, event.getTimeStamp());
+        EcsJsonSerializer.serializeLogLevel(builder, event.getLevel().toString());
+        EcsJsonSerializer.serializeFormattedMessage(builder, event.getRenderedMessage());
+        EcsSerializer.serializeEcsVersion(builder);
+        EcsJsonSerializer.serializeServiceName(builder, serviceName);
+        EcsJsonSerializer.serializeThreadName(builder, event.getThreadName());
+        EcsJsonSerializer.serializeLoggerName(builder, event.getLoggerName());
+
+        // Call custom serializer for additional fields & MDC (for mapping and filtering)
+        EcsSerializer.serializeAdditionalFields(builder, additionalFields);
+        EcsSerializer.serializeMDC(builder, event.getProperties());
+
+        if (this.hostInfo) {
+            EcsSerializer.serializeHostInfo(builder, new HostData());
+        }
+
+        if (this.addEventUuid) {
+            EcsSerializer.serializeEventId(builder, UUID.randomUUID());
+        }
+
+        if (this.locationInfo) {
+            LocationInfo locationInformation = event.getLocationInformation();
+            if (locationInformation != null) {
+                EcsJsonSerializer.serializeOrigin(builder, locationInformation.getFileName(), locationInformation.getMethodName(),
+                        getLineNumber(locationInformation));
+            }
+        }
+        ThrowableInformation throwableInformation = event.getThrowableInformation();
+        if (throwableInformation != null) {
+            EcsJsonSerializer.serializeException(builder, throwableInformation.getThrowable(), false);
+        }
+        EcsJsonSerializer.serializeObjectEnd(builder);
+        return builder.toString();
     }
 
-    public void setUserFields(String userFields) {
-        this.customUserFields = userFields;
+    private static int getLineNumber(LocationInfo locationInformation) {
+        int lineNumber = -1;
+        String lineNumberString = locationInformation.getLineNumber();
+        if (!LocationInfo.NA.equals(lineNumberString)) {
+            try {
+                lineNumber = Integer.parseInt(lineNumberString);
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
+        return lineNumber;
+    }
+
+    @Override
+    public boolean ignoresThrowable() {
+        return false;
     }
 
     @Override
     public void activateOptions() {
-        // Not used
+
     }
-
-    private JSONObject createLogSourceEvent(LoggingEvent loggingEvent, HostData host) {
-        JSONObject logSourceEvent = new JSONObject();
-        if (locationInfo) {
-            LocationInfo info = loggingEvent.getLocationInformation();
-            logSourceEvent.put(LayoutFields.FILE_NAME, info.getFileName());
-            logSourceEvent.put(LayoutFields.LINE_NUMBER, info.getLineNumber());
-            logSourceEvent.put(LayoutFields.CLASS_NAME, info.getClassName());
-            logSourceEvent.put(LayoutFields.METHOD_NAME, info.getMethodName());
-            RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
-            String jvmName = runtimeBean.getName();
-            logSourceEvent.put(LayoutFields.PROCESS_ID, Long.valueOf(jvmName.split("@")[0]));
-        }
-        logSourceEvent.put(LayoutFields.LOGGER_NAME, loggingEvent.getLoggerName());
-        if (hostInfo) {
-            logSourceEvent.put(LayoutFields.HOST_NAME, host.getHostName());
-            logSourceEvent.put(LayoutFields.HOST_IP, host.getHostAddress());
-        }
-        return logSourceEvent;
-    }
-
-    private void handleThrown(JSONObject logstashEvent, LoggingEvent loggingEvent) {
-        if (loggingEvent.getThrowableInformation() != null) {
-            final ThrowableInformation throwableInformation = loggingEvent.getThrowableInformation();
-            if (throwableInformation.getThrowable().getClass().getCanonicalName() != null) {
-                logstashEvent.put(LayoutFields.EXCEPTION_CLASS,
-                        throwableInformation.getThrowable().getClass().getCanonicalName());
-            }
-
-            if (throwableInformation.getThrowable().getMessage() != null) {
-                logstashEvent.put(LayoutFields.EXCEPTION_MESSAGE, throwableInformation.getThrowable().getMessage());
-            }
-            createStackTraceEvent(logstashEvent, loggingEvent, throwableInformation);
-        }
-    }
-
-    private void createStackTraceEvent(JSONObject logstashEvent, LoggingEvent loggingEvent,
-            final ThrowableInformation throwableInformation) {
-        if (throwableInformation.getThrowableStrRep() != null) {
-            final String[] options = { "full" };
-            final ThrowableInformationPatternConverter converter = ThrowableInformationPatternConverter.newInstance(options);
-            final StringBuffer sb = new StringBuffer();
-            converter.format(loggingEvent, sb);
-            final String stackTrace = sb.toString();
-            logstashEvent.put(LayoutFields.STACK_TRACE, stackTrace);
-        }
-    }
-
 }
