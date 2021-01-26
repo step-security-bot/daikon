@@ -26,7 +26,8 @@
         <talend_snapshots_deployment>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots_deployment>
         <pushChanges>false</pushChanges>
 
-        <jackson.version>2.10.4</jackson.version>
+        <jackson.version>2.10.5</jackson.version>
+        <jackson.databind.version>2.10.5.1</jackson.databind.version>
         <jackson.version.annotations>2.10.4</jackson.version.annotations>
         <slf4j.version>1.7.26</slf4j.version>
         <log4j1.version>1.2.17</log4j1.version>
@@ -199,6 +200,11 @@
                 <artifactId>json-io</artifactId>
                 <!-- using a specific Talend artifact version until the next official release, the PR has been merge into master but not yet release. -->
                 <version>4.9.9-TALEND</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.databind.version}</version>
             </dependency>
             <!-- include fasterxml jackson's bom -->
             <dependency>
