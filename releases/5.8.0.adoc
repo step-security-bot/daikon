@@ -1,0 +1,17 @@
+= Daikon Release Notes (5.8.0) - 05/12/2021
+
+Thanks to @dependabot[bot], @fuzmah, @Thierry Boileau, @rudyjdira
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-13666[TPSVC-13666]: Implement the coverage SLO for audit logs (link:https://github.com/Talend/daikon/pull/737[#737])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TFD-12988[TFD-12988]: Move TPD to Scala 2.13 (link:https://github.com/Talend/daikon/pull/733[#733])
+
+== Other
+- chore(deps): bump handlebars in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/739[#739])
+- chore(deps): bump handlebars from 4.5.3 to 4.7.7 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/740[#740])
+- chore(deps): bump merge in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/743[#743])
+- chore(deps): bump hosted-git-info from 2.5.0 to 2.8.9 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/742[#742])
+- chore(deps): bump ua-parser-js in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/738[#738])
+- Added Troubleshooting section  (link:https://github.com/Talend/daikon/pull/734[#734])
