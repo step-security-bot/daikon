@@ -46,10 +46,13 @@ public class HistogramUnit<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         HistogramUnit<?> that = (HistogramUnit<?>) o;
-        return occurrences == that.occurrences && Objects.equals(lowerBound, that.lowerBound) && Objects.equals(upperBound, that.upperBound);
+        return occurrences == that.occurrences && Objects.equals(lowerBound, that.lowerBound)
+                && Objects.equals(upperBound, that.upperBound);
     }
 
     @Override
