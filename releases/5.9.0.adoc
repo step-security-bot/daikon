@@ -1,0 +1,10 @@
+= Daikon Release Notes (5.9.0) - 05/19/2021
+
+Thanks to @Fabien Abballe, @fuzmah, @Francois Huaulme
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPSVC-13666[TPSVC-13666]: Implement the coverage SLO for audit logs (link:https://github.com/Talend/daikon/pull/744[#744])
+
+== Other
+- chore(): Jackson deserializer for Talend statistics schema  (link:https://github.com/Talend/daikon/pull/745[#745])
+- chore(doc) Version table update
