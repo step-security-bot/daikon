@@ -1,0 +1,17 @@
+= Daikon Release Notes (5.10.0) - 06/21/2021
+
+Thanks to @Gabriel Marquet, @Colm O hEigeartaigh, @Francois Huaulme, @Fabien Abballe
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-314[TDKN-314]: Update Kafka version to 2.5.1 (link:https://github.com/Talend/daikon/pull/754[#754])
+- link:https://jira.talendforge.org/browse/TDKN-314[TDKN-314]: Update Kafka version to 2.5.1 (link:https://github.com/Talend/daikon/pull/753[#753])
+- link:https://jira.talendforge.org/browse/TDKN-313[TDKN-313]: Support argon2id and bcrypt as a password digester (link:https://github.com/Talend/daikon/pull/752[#752])
+- link:https://jira.talendforge.org/browse/TDKN-312[TDKN-312]: Make iteration count for pbkdf2 configurable (link:https://github.com/Talend/daikon/pull/751[#751])
+- link:https://jira.talendforge.org/browse/TDKN-311[TDKN-311]: Update JSON Smart to 2.4.7 (link:https://github.com/Talend/daikon/pull/750[#750])
+- link:https://jira.talendforge.org/browse/TDKN-310[TDKN-310]: Don't use CryptoHelper to encrypt properties in StringProperty (link:https://github.com/Talend/daikon/pull/747[#747])
+- link:https://jira.talendforge.org/browse/TDKN-309[TDKN-309]: Make CryptoHelper base64 methods private (link:https://github.com/Talend/daikon/pull/746[#746])
+
+== Other
+- chore(): Create SCA scan Jenkins job  (link:https://github.com/Talend/daikon/pull/755[#755])
+- chores(upgrades) Upgrade to Spring Boot 2.3.11  (link:https://github.com/Talend/daikon/pull/749[#749])
+- Set statistics Serializable  (link:https://github.com/Talend/daikon/pull/748[#748])
