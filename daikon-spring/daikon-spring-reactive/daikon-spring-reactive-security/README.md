@@ -43,27 +43,44 @@ So, this is an example to authenticate a call (`SharingWebClient`) :
 
 ## ReactiveTenancyContextHolder
 
-If you need to access tenancy context inside a reactive chain of call you need to define a filter bean like:
+If you need to access tenancy context inside a reactive chain of call you need to add the JwtTenancyContextWebFilter on your `SecurityWebFilterChain`
 
 ```java
-    @Bean
-    public TenancyContextWebFilter tenancyContextWebFilter() {
-        return new JwtTenancyContextWebFilter();
-    }
-```
 
-And add it on your `SecurityWebFilterChain`
+    private static final ServerWebExchangeMatcher AUTH_ALLOW_LIST =
+            ServerWebExchangeMatchers.pathMatchers(            
+                // -- swagger ui
+                    "/swagger-resources/**",
+                    "/swagger-ui/**",
+                    "/v2/api-docs",
+                // -- actuators
+                    "/info/**",
+                    "/health/**",
+                    "/metrics/**"
+            );
 
-```java
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
-            TenancyContextWebFilter tenancyContextWebFilter) {
+    public SecurityWebFilterChain publicApiSecurityWebFilterChain(ServerHttpSecurity http) {
         http
-                // Tenancy Context Filter need to be add after Security Context Server because it will used Authentication to get the tenantId
-                .addFilterAfter(tenancyContextWebFilter, SecurityWebFiltersOrder.AUTHORIZATION)
-                .authorizeExchange() //
-                .pathMatchers(AUTH_WHITELIST)
-                .permitAll()
+                .securityMatcher(AUTH_ALLOW_LIST)
+                .csrf()
+                .disable() // we can disable CSRF because this service only use JWT token through Authorization header
+                .authorizeExchange()
+                .anyExchange()
+                .permitAll();
+        return http.build();
+    }
+
+    @Bean
+    public SecurityWebFilterChain privateApiSecurityWebFilterChain(ServerHttpSecurity http) {
+        http
+                .securityMatcher(new NegatedServerWebExchangeMatcher(AUTH_ALLOW_LIST))
+                // Tenancy Context Filter need to be add after Security Context Server because it will used
+                // Authentication to get the tenantId
+                .addFilterAfter(new JwtTenancyContextWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
+                .csrf()
+                .disable() // we can disable CSRF because this service only use JWT token through Authorization header
+                .authorizeExchange()
                 .anyExchange()
                 .authenticated()
                 .and()
