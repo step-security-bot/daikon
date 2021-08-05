@@ -1,0 +1,17 @@
+= Daikon Release Notes (5.11.0) - 08/05/2021
+
+Thanks to @Francois Huaulme, @dependabot[bot], @Colm O hEigeartaigh, @Damien Rubio, @Gabriel Marquet
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-315[TDKN-315]: Update Maven and BouncyCastle (link:https://github.com/Talend/daikon/pull/762[#762])
+
+== Other
+- chore(sb): Upgrade to Spring Boot 2.3.12  (link:https://github.com/Talend/daikon/pull/764[#764])
+- chore(deps): bump tar in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/763[#763])
+- chore(doc) Update reactive utils README.md  (link:https://github.com/Talend/daikon/pull/761[#761])
+- chore(deps): bump commons-compress from 1.20 to 1.21  (link:https://github.com/Talend/daikon/pull/760[#760])
+- chore(build): Update TSBI builder to newer version.  (link:https://github.com/Talend/daikon/pull/759[#759])
+- chore(clean-up): Clean up leftover file
+- Fix(): Switch srcclr jenkins image to jdk8-svc-springboot-builder  (link:https://github.com/Talend/daikon/pull/758[#758])
+- Remove useless git clone stage from Jenkinsfile-srcclr  (link:https://github.com/Talend/daikon/pull/757[#757])
+- chore(versions) Inherits from daikon SB versions  (link:https://github.com/Talend/daikon/pull/756[#756])
