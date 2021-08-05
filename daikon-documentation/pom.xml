@@ -21,7 +21,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.version>3.8.1</maven.version>
+        <maven.version>3.6.3</maven.version> <!-- latest available maven version in builders -->
     </properties>
 
     <dependencies>
