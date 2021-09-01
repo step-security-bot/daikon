@@ -16,8 +16,10 @@ import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.S3ResponseMetadata;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.services.s3.model.analytics.AnalyticsConfiguration;
+import com.amazonaws.services.s3.model.intelligenttiering.IntelligentTieringConfiguration;
 import com.amazonaws.services.s3.model.inventory.InventoryConfiguration;
 import com.amazonaws.services.s3.model.metrics.MetricsConfiguration;
+import com.amazonaws.services.s3.model.ownership.OwnershipControls;
 import com.amazonaws.services.s3.waiters.AmazonS3Waiters;
 
 public class AmazonS3TestWrapper implements AmazonS3 {
@@ -682,6 +684,11 @@ public class AmazonS3TestWrapper implements AmazonS3 {
     }
 
     @Override
+    public void setRequestPaymentConfiguration(SetRequestPaymentConfigurationRequest setRequestPaymentConfigurationRequest) {
+        delegate.setRequestPaymentConfiguration(setRequestPaymentConfigurationRequest);
+    }
+
+    @Override
     public void setBucketReplicationConfiguration(String bucketName, BucketReplicationConfiguration configuration)
             throws AmazonClientException {
         delegate.setBucketReplicationConfiguration(bucketName, configuration);
@@ -785,6 +792,33 @@ public class AmazonS3TestWrapper implements AmazonS3 {
     }
 
     @Override
+    public DeleteBucketOwnershipControlsResult deleteBucketOwnershipControls(
+            DeleteBucketOwnershipControlsRequest deleteBucketOwnershipControlsRequest)
+            throws AmazonServiceException, SdkClientException {
+        return null;
+    }
+
+    @Override
+    public GetBucketOwnershipControlsResult getBucketOwnershipControls(
+            GetBucketOwnershipControlsRequest getBucketOwnershipControlsRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.getBucketOwnershipControls(getBucketOwnershipControlsRequest);
+    }
+
+    @Override
+    public SetBucketOwnershipControlsResult setBucketOwnershipControls(String s, OwnershipControls ownershipControls)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.setBucketOwnershipControls(s, ownershipControls);
+    }
+
+    @Override
+    public SetBucketOwnershipControlsResult setBucketOwnershipControls(
+            SetBucketOwnershipControlsRequest setBucketOwnershipControlsRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.setBucketOwnershipControls(setBucketOwnershipControlsRequest);
+    }
+
+    @Override
     public DeleteBucketAnalyticsConfigurationResult deleteBucketAnalyticsConfiguration(String s, String s1)
             throws SdkClientException {
         return delegate.deleteBucketAnalyticsConfiguration(s, s1);
@@ -823,6 +857,52 @@ public class AmazonS3TestWrapper implements AmazonS3 {
     public ListBucketAnalyticsConfigurationsResult listBucketAnalyticsConfigurations(
             ListBucketAnalyticsConfigurationsRequest listBucketAnalyticsConfigurationsRequest) throws SdkClientException {
         return delegate.listBucketAnalyticsConfigurations(listBucketAnalyticsConfigurationsRequest);
+    }
+
+    @Override
+    public DeleteBucketIntelligentTieringConfigurationResult deleteBucketIntelligentTieringConfiguration(String s, String s1)
+            throws AmazonServiceException, SdkClientException {
+        return deleteBucketIntelligentTieringConfiguration(s, s1);
+    }
+
+    @Override
+    public DeleteBucketIntelligentTieringConfigurationResult deleteBucketIntelligentTieringConfiguration(
+            DeleteBucketIntelligentTieringConfigurationRequest deleteBucketIntelligentTieringConfigurationRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.deleteBucketIntelligentTieringConfiguration(deleteBucketIntelligentTieringConfigurationRequest);
+    }
+
+    @Override
+    public GetBucketIntelligentTieringConfigurationResult getBucketIntelligentTieringConfiguration(String s, String s1)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.getBucketIntelligentTieringConfiguration(s, s1);
+    }
+
+    @Override
+    public GetBucketIntelligentTieringConfigurationResult getBucketIntelligentTieringConfiguration(
+            GetBucketIntelligentTieringConfigurationRequest getBucketIntelligentTieringConfigurationRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.getBucketIntelligentTieringConfiguration(getBucketIntelligentTieringConfigurationRequest);
+    }
+
+    @Override
+    public SetBucketIntelligentTieringConfigurationResult setBucketIntelligentTieringConfiguration(String s,
+            IntelligentTieringConfiguration intelligentTieringConfiguration) throws AmazonServiceException, SdkClientException {
+        return delegate.setBucketIntelligentTieringConfiguration(s, intelligentTieringConfiguration);
+    }
+
+    @Override
+    public SetBucketIntelligentTieringConfigurationResult setBucketIntelligentTieringConfiguration(
+            SetBucketIntelligentTieringConfigurationRequest setBucketIntelligentTieringConfigurationRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.setBucketIntelligentTieringConfiguration(setBucketIntelligentTieringConfigurationRequest);
+    }
+
+    @Override
+    public ListBucketIntelligentTieringConfigurationsResult listBucketIntelligentTieringConfigurations(
+            ListBucketIntelligentTieringConfigurationsRequest listBucketIntelligentTieringConfigurationsRequest)
+            throws AmazonServiceException, SdkClientException {
+        return delegate.listBucketIntelligentTieringConfigurations(listBucketIntelligentTieringConfigurationsRequest);
     }
 
     @Override
