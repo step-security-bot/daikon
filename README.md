@@ -82,3 +82,15 @@ Licensed under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2
 ## Name origin
 
 The Daikon is a root vegetable and since this project is supposed to be the root of many projects we thought it was a fun and appropriate name.
+
+## Releasing
+
+To release a new version of Daikon, you can simply:
+* Go to [Jenkins](https://jenkins-common.datapwn.com/job/daikon/job/master/).
+* Launch a build with parameters.
+* Check the "release" check box.
+* Input the release version you want to make from current `master` (you may check the version in `pom.xml` to determine this and release changes).
+* Input the next version (the version for `pom.xml` after release is done, this usually ends with "-SNAPSHOT").
+* Run the build
+
+Notifications for release are sent on `eng-daikon` Slack channel.
