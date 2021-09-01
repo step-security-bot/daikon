@@ -21,6 +21,16 @@ public class Argon2PasswordDigesterTest {
     }
 
     @Test
+    public void shouldHaveDifferentDigestOnRepeatedCalls() throws Exception {
+        PasswordDigester digester = new Argon2PasswordDigester();
+
+        final String digest = digester.digest("tiger");
+        final String digest2 = digester.digest("tiger");
+
+        assertFalse(digest.equals(digest2));
+    }
+
+    @Test
     public void shouldUseArgon2IdAsAlgorithm() throws Exception {
         PasswordDigester digester = new Argon2PasswordDigester();
 

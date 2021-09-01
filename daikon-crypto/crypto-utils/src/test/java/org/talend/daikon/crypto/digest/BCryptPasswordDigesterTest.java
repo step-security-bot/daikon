@@ -1,6 +1,7 @@
 package org.talend.daikon.crypto.digest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,6 +18,16 @@ public class BCryptPasswordDigesterTest {
 
         assertTrue(digester.validate("tiger", digest));
         assertFalse(digester.validate("password", digest));
+    }
+
+    @Test
+    public void shouldHaveDifferentDigestOnRepeatedCalls() throws Exception {
+        PasswordDigester digester = new BCryptPasswordDigester();
+
+        final String digest = digester.digest("tiger");
+        final String digest2 = digester.digest("tiger");
+
+        assertFalse(digest.equals(digest2));
     }
 
     @Test

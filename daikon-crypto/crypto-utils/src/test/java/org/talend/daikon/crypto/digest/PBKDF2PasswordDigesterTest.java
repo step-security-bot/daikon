@@ -27,6 +27,16 @@ public class PBKDF2PasswordDigesterTest {
     }
 
     @Test
+    public void shouldHaveDifferentDigestOnRepeatedCalls() throws Exception {
+        PasswordDigester digester = new PBKDF2PasswordDigester();
+
+        final String digest = digester.digest("tiger");
+        final String digest2 = digester.digest("tiger");
+
+        assertFalse(digest.equals(digest2));
+    }
+
+    @Test
     public void shouldHave16ByteSaltByDefault() throws Exception {
         // given
         String value = "myPassword";
@@ -44,10 +54,9 @@ public class PBKDF2PasswordDigesterTest {
     public void shouldHave12SaltLengthWhenSpecified() throws Exception {
         // given
         String value = "myPassword";
-        KeySource keySource = KeySources.random(12);
 
         // when
-        PasswordDigester digester = new PBKDF2PasswordDigester(keySource, 256, 310000);
+        PasswordDigester digester = new PBKDF2PasswordDigester(12, 256, 310000);
         final String digest = digester.digest(value);
 
         // then
@@ -87,14 +96,29 @@ public class PBKDF2PasswordDigesterTest {
     }
 
     @Test
+    public void shouldHaveDifferentSaltsSameDigester() throws Exception {
+        // given
+        String value = "myPassword";
+
+        // when
+        PasswordDigester digester1 = new PBKDF2PasswordDigester(256, 310000);
+        final String digest1 = digester1.digest(value);
+        final String digest2 = digester1.digest(value);
+
+        // then
+        final byte[] salt1 = StringUtils.substringBefore(digest1, String.valueOf('-')).getBytes(EncodingUtils.ENCODING);
+        final byte[] salt2 = StringUtils.substringBefore(digest2, String.valueOf('-')).getBytes(EncodingUtils.ENCODING);
+        assertFalse(Arrays.equals(salt1, salt2));
+    }
+
+    @Test
     public void shouldHaveDifferentOutputsWithDifferentIterationCount() throws Exception {
         // given
         String value = "myPassword";
-        KeySource keySource = KeySources.random(16);
 
         // when
-        PasswordDigester digester1 = new PBKDF2PasswordDigester(keySource, 256, 200000);
-        PasswordDigester digester2 = new PBKDF2PasswordDigester(keySource, 256, 310000);
+        PasswordDigester digester1 = new PBKDF2PasswordDigester(256, 200000);
+        PasswordDigester digester2 = new PBKDF2PasswordDigester(256, 310000);
         final String digest1 = digester1.digest(value);
         final String digest2 = digester2.digest(value);
 
@@ -129,7 +153,7 @@ public class PBKDF2PasswordDigesterTest {
         KeySource keySource = KeySources.random(16);
 
         // when
-        PasswordDigester digester1 = new PBKDF2PasswordDigester(keySource, 256, 310000, '_');
+        PasswordDigester digester1 = new PBKDF2PasswordDigester(16, 256, 310000, '_');
         final String digest1 = digester1.digest(value);
 
         // then

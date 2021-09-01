@@ -19,7 +19,13 @@ import static java.util.Arrays.stream;
  */
 public class PBKDF2PasswordDigester implements PasswordDigester {
 
-    private final KeySource keySource;
+    private static final int[] FORBIDDEN_DELIMITERS = { '/', '=' };
+
+    private static final int DEFAULT_SALT_LENGTH = 16;
+
+    private static final int DEFAULT_ITERATIONS = 310000;
+
+    private final int saltLength;
 
     private final int keyLength;
 
@@ -27,23 +33,19 @@ public class PBKDF2PasswordDigester implements PasswordDigester {
 
     private final char delimiter;
 
-    private static final int[] FORBIDDEN_DELIMITERS = { '/', '=' };
-
-    private static final int DEFAULT_ITERATIONS = 310000;
-
     public PBKDF2PasswordDigester() {
-        this(KeySources.random(16), 256, 310000);
+        this(256, DEFAULT_ITERATIONS);
     }
 
     public PBKDF2PasswordDigester(int keyLength, int iterations) {
-        this(KeySources.random(16), keyLength, iterations);
+        this(DEFAULT_SALT_LENGTH, keyLength, iterations);
     }
 
-    public PBKDF2PasswordDigester(KeySource keySource, int keyLength, int iterations) {
-        this(keySource, keyLength, iterations, '-');
+    public PBKDF2PasswordDigester(int saltLength, int keyLength, int iterations) {
+        this(saltLength, keyLength, iterations, '-');
     }
 
-    public PBKDF2PasswordDigester(KeySource keySource, int keyLength, int iterations, char delimiter) {
+    public PBKDF2PasswordDigester(int saltLength, int keyLength, int iterations, char delimiter) {
         if (Character.isLetterOrDigit(delimiter) || stream(FORBIDDEN_DELIMITERS).anyMatch(c -> c == delimiter)) {
             final String forbiddenDelimiters = stream(FORBIDDEN_DELIMITERS) //
                     .mapToObj(i -> valueOf((char) i)) //
@@ -51,14 +53,14 @@ public class PBKDF2PasswordDigester implements PasswordDigester {
             throw new IllegalArgumentException("Delimiter cannot be number, letter or '" + forbiddenDelimiters + "'.");
         }
 
-        this.keySource = keySource;
+        this.saltLength = saltLength;
         this.keyLength = keyLength;
         this.iterations = iterations;
         this.delimiter = delimiter;
     }
 
     public String digest(String value) throws Exception {
-        return digest(keySource.getKey(), value);
+        return digest(KeySources.random(saltLength).getKey(), value);
     }
 
     private String digest(byte[] salt, String value) {
