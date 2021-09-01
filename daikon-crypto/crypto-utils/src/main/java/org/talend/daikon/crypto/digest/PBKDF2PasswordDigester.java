@@ -1,6 +1,8 @@
 package org.talend.daikon.crypto.digest;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -91,7 +93,9 @@ public class PBKDF2PasswordDigester implements PasswordDigester {
             }
             final String saltBase64 = StringUtils.substringBefore(digest, valueOf(delimiter));
             final byte[] salt = decode(saltBase64.getBytes(EncodingUtils.ENCODING));
-            return digest(salt, value).equals(digest);
+            String constructedDigest = digest(salt, value);
+            return MessageDigest.isEqual(constructedDigest.getBytes(StandardCharsets.UTF_8),
+                    digest.getBytes(StandardCharsets.UTF_8));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
