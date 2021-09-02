@@ -1,0 +1,11 @@
+= Daikon Release Notes (5.12.0) - 09/01/2021
+
+Thanks to @Colm O hEigeartaigh, @Francois Huaulme, @dependabot[bot]
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-318[TDKN-318]: PBKDF2PasswordDigester re-uses the same salt (link:https://github.com/Talend/daikon/pull/768[#768])
+
+== Other
+- Use a constant-time method of comparing pbkdf2 digests  (link:https://github.com/Talend/daikon/pull/769[#769])
+- chore(sb): Upgrade to Spring Boot 2.4.9  (link:https://github.com/Talend/daikon/pull/765[#765])
+- chore(deps): bump path-parse in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/766[#766])
