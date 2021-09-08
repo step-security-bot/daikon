@@ -15,12 +15,7 @@ package org.talend.daikon.messages.spring.consumer;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
-import org.talend.daikon.messages.header.consumer.ExecutionContextUpdater;
-import org.talend.daikon.messages.header.consumer.ExecutionContextUpdaterImpl;
-import org.talend.daikon.messages.header.consumer.SecurityTokenSetter;
-import org.talend.daikon.messages.header.consumer.TenantIdSetter;
-import org.talend.daikon.messages.header.consumer.UserIdSetter;
+import org.talend.daikon.messages.header.consumer.*;
 
 @Configuration
 @AutoConfigureBefore({ DefaultConsumerSettersConfiguration.class })
@@ -28,8 +23,9 @@ public class ExecutionContextUpdaterConfiguration {
 
     @Bean
     public ExecutionContextUpdater executionContextUpdater(CorrelationIdSetter correlationIdSetter, TenantIdSetter tenantIdSetter,
-            SecurityTokenSetter securityTokenSetter, UserIdSetter userIdSetter) {
-        return new ExecutionContextUpdaterImpl(correlationIdSetter, tenantIdSetter, userIdSetter, securityTokenSetter);
+            SecurityTokenSetter securityTokenSetter, UserIdSetter userIdSetter, ServiceAccountIdSetter serviceAccountIdSetter) {
+        return new ExecutionContextUpdaterImpl(correlationIdSetter, tenantIdSetter, userIdSetter, securityTokenSetter,
+                serviceAccountIdSetter);
     }
 
 }

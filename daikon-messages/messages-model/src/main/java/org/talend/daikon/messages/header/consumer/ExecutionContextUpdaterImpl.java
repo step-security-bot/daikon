@@ -23,16 +23,19 @@ public class ExecutionContextUpdaterImpl implements ExecutionContextUpdater {
 
     private final UserIdSetter userIdSetter;
 
+    private final ServiceAccountIdSetter serviceAccountIdSetter;
+
     private final SecurityTokenSetter securityTokenSetter;
 
     private final MessageHeaderExtractor messageHeaderExtractor = new MessageHeaderExtractor();
 
     public ExecutionContextUpdaterImpl(CorrelationIdSetter correlationIdSetter, TenantIdSetter tenantIdSetter,
-            UserIdSetter userIdSetter, SecurityTokenSetter securityTokenSetter) {
+            UserIdSetter userIdSetter, SecurityTokenSetter securityTokenSetter, ServiceAccountIdSetter serviceAccountIdSetter) {
         this.correlationIdSetter = correlationIdSetter;
         this.tenantIdSetter = tenantIdSetter;
         this.userIdSetter = userIdSetter;
         this.securityTokenSetter = securityTokenSetter;
+        this.serviceAccountIdSetter = serviceAccountIdSetter;
     }
 
     @Override
@@ -49,6 +52,9 @@ public class ExecutionContextUpdaterImpl implements ExecutionContextUpdater {
         }
         if (this.securityTokenSetter != null) {
             this.securityTokenSetter.setCurrentSecurityToken(messageHeader.getSecurityToken());
+        }
+        if (this.serviceAccountIdSetter != null) {
+            this.serviceAccountIdSetter.setCurrentServiceAccountId(messageHeader.getServiceAccountId());
         }
     }
 }

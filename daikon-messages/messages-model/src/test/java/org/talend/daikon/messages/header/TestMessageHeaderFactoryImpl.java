@@ -37,6 +37,8 @@ public class TestMessageHeaderFactoryImpl {
 
     private String tenantIdMock = "tenantIdMock";
 
+    private String serviceAccountIdMock = "serviceAccountIdMock";
+
     private String correlationIdMock = "correlationIdMock";
 
     private String securityTokenMock = "securityTokenMock";
@@ -86,7 +88,7 @@ public class TestMessageHeaderFactoryImpl {
 
     private MessageHeaderFactory createFactory() {
         return new MessageHeaderFactoryImpl(idGenerator(), serviceInfoProvider(), timestampProvider(), userProvider(),
-                tenantIdProvider(), correlationIdProvider(), securityTokenProvider());
+                tenantIdProvider(), correlationIdProvider(), securityTokenProvider(), serviceAccountIdProvider());
     }
 
     private IdGenerator idGenerator() {
@@ -119,6 +121,12 @@ public class TestMessageHeaderFactoryImpl {
         TenantIdProvider tenantIdProvider = Mockito.mock(TenantIdProvider.class);
         Mockito.when(tenantIdProvider.getTenantId()).thenReturn(tenantIdMock);
         return tenantIdProvider;
+    }
+
+    private ServiceAccountIdProvider serviceAccountIdProvider() {
+        ServiceAccountIdProvider serviceAccountIdProvider = Mockito.mock(ServiceAccountIdProvider.class);
+        Mockito.when(serviceAccountIdProvider.getServiceAccountId()).thenReturn(serviceAccountIdMock);
+        return serviceAccountIdProvider;
     }
 
     private CorrelationIdProvider correlationIdProvider() {

@@ -15,10 +15,7 @@ package org.talend.daikon.messages.spring.consumer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
-import org.talend.daikon.messages.header.consumer.SecurityTokenSetter;
-import org.talend.daikon.messages.header.consumer.TenantIdSetter;
-import org.talend.daikon.messages.header.consumer.UserIdSetter;
+import org.talend.daikon.messages.header.consumer.*;
 
 @Configuration
 public class DefaultConsumerSettersConfiguration {
@@ -51,6 +48,14 @@ public class DefaultConsumerSettersConfiguration {
     @ConditionalOnMissingBean(SecurityTokenSetter.class)
     public SecurityTokenSetter noopSecurityTokenSetter() {
         return securityToken -> {
+            // mocked bean: do nothing
+        };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ServiceAccountIdSetter.class)
+    public ServiceAccountIdSetter noopServiceAccountIdSetter() {
+        return serviceAccountId -> {
             // mocked bean: do nothing
         };
     }

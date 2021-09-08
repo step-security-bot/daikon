@@ -20,12 +20,7 @@ import org.mockito.Mockito;
 import org.talend.daikon.messages.MessageEnvelope;
 import org.talend.daikon.messages.MessageHeader;
 import org.talend.daikon.messages.MessagePayload;
-import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
-import org.talend.daikon.messages.header.consumer.ExecutionContextUpdater;
-import org.talend.daikon.messages.header.consumer.ExecutionContextUpdaterImpl;
-import org.talend.daikon.messages.header.consumer.SecurityTokenSetter;
-import org.talend.daikon.messages.header.consumer.TenantIdSetter;
-import org.talend.daikon.messages.header.consumer.UserIdSetter;
+import org.talend.daikon.messages.header.consumer.*;
 
 public class TestExecutionContextUpdaterImpl {
 
@@ -37,12 +32,15 @@ public class TestExecutionContextUpdaterImpl {
 
     private CorrelationIdSetter correlationIdSetter;
 
+    private ServiceAccountIdSetter serviceAccountIdSetter;
+
     @Before
     public void initMock() {
         securityTokenSetter = Mockito.mock(SecurityTokenSetter.class);
         userIdSetter = Mockito.mock(UserIdSetter.class);
         tenantIdSetter = Mockito.mock(TenantIdSetter.class);
         correlationIdSetter = Mockito.mock(CorrelationIdSetter.class);
+        serviceAccountIdSetter = Mockito.mock(ServiceAccountIdSetter.class);
     }
 
     @Test
@@ -56,6 +54,7 @@ public class TestExecutionContextUpdaterImpl {
         Mockito.verify(securityTokenSetter, Mockito.times(1)).setCurrentSecurityToken(any());
         Mockito.verify(userIdSetter, Mockito.times(1)).setCurrentUserId(any());
         Mockito.verify(tenantIdSetter, Mockito.times(1)).setCurrentTenantId(any());
+        Mockito.verify(serviceAccountIdSetter, Mockito.times(1)).setCurrentServiceAccountId(any());
     }
 
     @Test
@@ -69,14 +68,16 @@ public class TestExecutionContextUpdaterImpl {
         Mockito.verify(securityTokenSetter, Mockito.times(0)).setCurrentSecurityToken(any());
         Mockito.verify(userIdSetter, Mockito.times(0)).setCurrentUserId(any());
         Mockito.verify(tenantIdSetter, Mockito.times(0)).setCurrentTenantId(any());
+        Mockito.verify(serviceAccountIdSetter, Mockito.times(0)).setCurrentServiceAccountId(any());
     }
 
     private ExecutionContextUpdater createExecutionContextUpdater() {
-        return new ExecutionContextUpdaterImpl(correlationIdSetter, tenantIdSetter, userIdSetter, securityTokenSetter);
+        return new ExecutionContextUpdaterImpl(correlationIdSetter, tenantIdSetter, userIdSetter, securityTokenSetter,
+                serviceAccountIdSetter);
     }
 
     private ExecutionContextUpdater createEmptyExecutionContextUpdater() {
-        return new ExecutionContextUpdaterImpl(null, null, null, null);
+        return new ExecutionContextUpdaterImpl(null, null, null, null, null);
     }
 
 }

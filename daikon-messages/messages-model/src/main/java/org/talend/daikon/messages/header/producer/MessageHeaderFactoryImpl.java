@@ -34,13 +34,16 @@ public class MessageHeaderFactoryImpl implements MessageHeaderFactory {
 
     private final TenantIdProvider tenantIdProvider;
 
+    private final ServiceAccountIdProvider serviceAccountIdProvider;
+
     private final CorrelationIdProvider correlationIdProvider;
 
     private final SecurityTokenProvider securityTokenProvider;
 
     public MessageHeaderFactoryImpl(IdGenerator idGenerator, ServiceInfoProvider serviceInfoProvider,
             TimestampProvider timestampProvider, UserProvider userProvider, TenantIdProvider tenantIdProvider,
-            CorrelationIdProvider correlationIdProvider, SecurityTokenProvider securityTokenProvider) {
+            CorrelationIdProvider correlationIdProvider, SecurityTokenProvider securityTokenProvider,
+            ServiceAccountIdProvider serviceAccountIdProvider) {
         this.idGenerator = idGenerator;
         this.serviceInfoProvider = serviceInfoProvider;
         this.timestampProvider = timestampProvider;
@@ -48,6 +51,7 @@ public class MessageHeaderFactoryImpl implements MessageHeaderFactory {
         this.tenantIdProvider = tenantIdProvider;
         this.correlationIdProvider = correlationIdProvider;
         this.securityTokenProvider = securityTokenProvider;
+        this.serviceAccountIdProvider = serviceAccountIdProvider;
     }
 
     @Override
@@ -56,7 +60,8 @@ public class MessageHeaderFactoryImpl implements MessageHeaderFactory {
                 .setTimestamp(timestampProvider.getCurrentTimestamp()).setIssuer(createMessageIssuer()).setType(type)
                 .setName(name).setTenantId(tenantIdProvider.getTenantId()).setUserId(userProvider.getUserId())
                 .setCorrelationId(correlationIdProvider.getCorrelationId())
-                .setSecurityToken(securityTokenProvider.getSecurityToken()).build();
+                .setSecurityToken(securityTokenProvider.getSecurityToken())
+                .setServiceAccountId(serviceAccountIdProvider.getServiceAccountId()).build();
     }
 
     private MessageIssuer createMessageIssuer() {

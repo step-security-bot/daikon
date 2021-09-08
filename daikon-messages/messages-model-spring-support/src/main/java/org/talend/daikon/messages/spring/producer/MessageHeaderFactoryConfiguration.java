@@ -25,15 +25,7 @@ import org.talend.daikon.messages.envelope.MessageConverterRegistry;
 import org.talend.daikon.messages.envelope.MessageConverterRegistryImpl;
 import org.talend.daikon.messages.envelope.MessageEnvelopeHandler;
 import org.talend.daikon.messages.envelope.MessageEnvelopeHandlerImpl;
-import org.talend.daikon.messages.header.producer.CorrelationIdProvider;
-import org.talend.daikon.messages.header.producer.IdGenerator;
-import org.talend.daikon.messages.header.producer.MessageHeaderFactory;
-import org.talend.daikon.messages.header.producer.MessageHeaderFactoryImpl;
-import org.talend.daikon.messages.header.producer.SecurityTokenProvider;
-import org.talend.daikon.messages.header.producer.ServiceInfoProvider;
-import org.talend.daikon.messages.header.producer.TenantIdProvider;
-import org.talend.daikon.messages.header.producer.TimestampProvider;
-import org.talend.daikon.messages.header.producer.UserProvider;
+import org.talend.daikon.messages.header.producer.*;
 
 @Configuration
 @AutoConfigureBefore({ DefaultProducerProvidersConfiguration.class })
@@ -60,10 +52,13 @@ public class MessageHeaderFactoryConfiguration {
     @Autowired
     private SecurityTokenProvider securityTokenProvider;
 
+    @Autowired
+    private ServiceAccountIdProvider serviceAccountIdProvider;
+
     @Bean
     public MessageHeaderFactory messageHeaderFactory() {
         return new MessageHeaderFactoryImpl(idGenerator, serviceInfoProvider, timestampProvider, userProvider, tenantIdProvider,
-                correlationIdProvider, securityTokenProvider);
+                correlationIdProvider, securityTokenProvider, serviceAccountIdProvider);
     }
 
     @Bean

@@ -70,6 +70,12 @@
       "type": ["null", "string"]
     },
     {
+      "name": "serviceAccountId",
+      "doc": "Id of the service account who initiated this message.",
+      "type": ["null", "string"],
+      "default" : null
+    },
+    {
       "name" : "securityToken",
       "doc" : "User's security token",
       "type" : ["null", "string"],

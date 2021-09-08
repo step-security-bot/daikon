@@ -40,7 +40,8 @@ public class TestMessageHeaderExtractor {
                 .setTimestamp(123L) //
                 .setIssuer(MessageIssuer.newBuilder().setApplication("Application1").setService("Service1").setVersion("ABC")
                         .build()) //
-                .setType(MessageTypes.COMMAND).setName("name").setTenantId("tenantId").setUserId("userId") //
+                .setType(MessageTypes.COMMAND).setName("name").setTenantId("tenantId").setUserId("userId")
+                .setServiceAccountId("serviceAccountId") //
                 .setSecurityToken("securityToken").build();
 
         Assert.assertNotNull(messageHeader.toString());
@@ -58,7 +59,7 @@ public class TestMessageHeaderExtractor {
                 .setIssuer(MessageIssuer.newBuilder().setApplication("Application1").setService("Service1").setVersion("ABC")
                         .build())
                 .setType(MessageTypes.COMMAND).setName("name").setTenantId("tenantId").setUserId("userId")
-                .setSecurityToken("securityToken").build();
+                .setServiceAccountId("serviceAccountId").setSecurityToken("securityToken").build();
 
         IndexedRecord message = new GenericRecordBuilder(messageSchema).set("header", messageHeader).set("customField", "ABC")
                 .build();
@@ -80,7 +81,7 @@ public class TestMessageHeaderExtractor {
         IndexedRecord messageHeader = new GenericRecordBuilder(headerSchema).set("id", "My id")
                 .set("correlationId", "Correlation id").set("timestamp", 123L).set("issuer", issuer).set("type", "COMMAND")
                 .set("name", "name").set("tenantId", "tenantId").set("userId", "userId").set("securityToken", "securityToken")
-                .build();
+                .set("serviceAccountId", "serviceAccountId").build();
 
         IndexedRecord message = new GenericRecordBuilder(messageSchema).set("header", messageHeader).set("customField", "ABC")
                 .build();
