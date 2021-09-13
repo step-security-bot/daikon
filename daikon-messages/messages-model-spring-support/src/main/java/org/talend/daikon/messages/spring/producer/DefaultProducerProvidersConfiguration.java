@@ -36,6 +36,9 @@ public class DefaultProducerProvidersConfiguration {
     @Value("${org.talend.daikon.messages.defaultUserId:}")
     private String defaultUserId;
 
+    @Value("${org.talend.daikon.messages.defaultServiceAccountId:}")
+    private String defaultServiceAccountId;
+
     @Bean
     @ConditionalOnMissingBean(ServiceInfoProvider.class)
     public ServiceInfoProvider defaultServiceInfoProvider() {
@@ -90,6 +93,18 @@ public class DefaultProducerProvidersConfiguration {
             @Override
             public String getTenantId() {
                 return defaultTenantId;
+            }
+        };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ServiceAccountIdProvider.class)
+    public ServiceAccountIdProvider defaultServiceAccountIdProvider() {
+        return new ServiceAccountIdProvider() {
+
+            @Override
+            public String getServiceAccountId() {
+                return defaultServiceAccountId;
             }
         };
     }
