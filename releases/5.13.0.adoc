@@ -1,0 +1,8 @@
+= Daikon Release Notes (5.13.0) - 09/13/2021
+
+Thanks to @Jérémy Hervy, @Colm O hEigeartaigh
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-17706[TPSVC-17706]: Notify TPOPS when a service account is deleted (link:https://github.com/Talend/daikon/pull/771[#771])
+- link:https://jira.talendforge.org/browse/TDKN-317[TDKN-317]: Update Maven version to 3.8.2 to fix a CVE (link:https://github.com/Talend/daikon/pull/767[#767])
+- link:https://jira.talendforge.org/browse/TPSVC-17706[TPSVC-17706]: Notify TPOPS when a service account is deleted (link:https://github.com/Talend/daikon/pull/770[#770])
