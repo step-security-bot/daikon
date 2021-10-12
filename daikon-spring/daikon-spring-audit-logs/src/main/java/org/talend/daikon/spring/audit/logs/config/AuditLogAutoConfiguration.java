@@ -82,10 +82,11 @@ public class AuditLogAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
     public AuditLogSender auditLogSender(Optional<AuditUserProvider> auditUserProvider, AuditLoggerBase auditLoggerBase,
-            AuditLogIpExtractor AuditLogIpExtractor, Counter auditLogsGeneratedCounter) {
+            AuditLogIpExtractor auditLogIpExtractor, AuditLogUrlExtractor auditLogUrlExtractor,
+            Counter auditLogsGeneratedCounter) {
         AuditLogger auditLogger = AuditLoggerFactory.getEventAuditLogger(AuditLogger.class, auditLoggerBase);
-        return new AuditLogSenderImpl(auditUserProvider.orElse(new NoOpAuditUserProvider()), auditLogger, AuditLogIpExtractor,
-                auditLogsGeneratedCounter);
+        return new AuditLogSenderImpl(auditUserProvider.orElse(new NoOpAuditUserProvider()), auditLogger, auditLogIpExtractor,
+                auditLogUrlExtractor, auditLogsGeneratedCounter);
     }
 
     @Bean
@@ -101,6 +102,11 @@ public class AuditLogAutoConfiguration implements WebMvcConfigurer {
     @Bean
     public AuditLogIpExtractor auditLogIpExtractor(AuditProperties auditProperties) {
         return new AuditLogIpExtractorImpl(auditProperties);
+    }
+
+    @Bean
+    public AuditLogUrlExtractor auditLogUrlExtractor() {
+        return new AuditLogUrlExtractorImpl();
     }
 
     @Bean

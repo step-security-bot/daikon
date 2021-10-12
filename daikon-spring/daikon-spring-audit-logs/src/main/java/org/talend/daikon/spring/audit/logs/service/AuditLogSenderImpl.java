@@ -30,13 +30,17 @@ public class AuditLogSenderImpl implements AuditLogSender {
 
     private final AuditLogIpExtractor auditLogIpExtractor;
 
+    private final AuditLogUrlExtractor auditLogUrlExtractor;
+
     private final Counter auditLogsGeneratedCounter;
 
     public AuditLogSenderImpl(AuditUserProvider auditUserProvider, AuditLogger auditLogger,
-            AuditLogIpExtractor auditLogIpExtractor, Counter auditLogsGeneratedCounter) {
+            AuditLogIpExtractor auditLogIpExtractor, AuditLogUrlExtractor auditLogUrlExtractor,
+            Counter auditLogsGeneratedCounter) {
         this.auditUserProvider = auditUserProvider;
         this.auditLogger = auditLogger;
         this.auditLogIpExtractor = auditLogIpExtractor;
+        this.auditLogUrlExtractor = auditLogUrlExtractor;
         this.auditLogsGeneratedCounter = auditLogsGeneratedCounter;
     }
 
@@ -62,8 +66,9 @@ public class AuditLogSenderImpl implements AuditLogSender {
                     .withEmail(auditUserProvider.getUserEmail()) //
                     .withAccountId(auditUserProvider.getAccountId()) //
                     .withRequest(request, requestBody) //
-                    .withResponse(responseCode, auditLogAnnotation.includeBodyResponse() ? responseObject : null)
-                    .withIpExtractor(this.auditLogIpExtractor);
+                    .withResponse(responseCode, auditLogAnnotation.includeBodyResponse() ? responseObject : null) //
+                    .withIpExtractor(this.auditLogIpExtractor) //
+                    .withUrlExtractor(this.auditLogUrlExtractor);
 
             // Filter the context if needed
             AuditContextFilter filter = auditLogAnnotation.filter().getDeclaredConstructor().newInstance();

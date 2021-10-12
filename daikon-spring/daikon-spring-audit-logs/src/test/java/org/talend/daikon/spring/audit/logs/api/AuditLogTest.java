@@ -63,6 +63,8 @@ public class AuditLogTest {
 
     private static final String X_FORWARDED_HOST = "X-Forwarded-Host";
 
+    private static final String ENVOY_ORIGINAL_PATH_HEADER = "x-envoy-original-path";
+
     private static final String MY_IP = "35.74.154.242";
 
     private static final String MY_IP_WITH_INVALID_IP = "35.74.154.242, ImAWrongIp";
@@ -262,6 +264,21 @@ public class AuditLogTest {
 
         verifyContext(basicContextCheck());
         verifyContext(httpRequestContextCheckWithLBHost(AuditLogTestApp.GET_200_WITH_BODY, HttpMethod.GET, null));
+        verifyContext(httpResponseContextCheck(HttpStatus.OK, AuditLogTestApp.BODY_RESPONSE));
+    }
+
+    @Test
+    @WithUserDetails
+    public void testGet200BodyWithXfhAndOriginalPath() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(AuditLogTestApp.GET_200_WITH_BODY).header(REMOTE_IP_HEADER, MY_IP)
+                // simulate the application is running behind the LB that adds port to X-Forwarded-Host header
+                .header(X_FORWARDED_HOST, "iam.qa.cloud.talend.com:443")
+                // simulate the application is running behind a envoy reverse proxy adding x-envoy-original-path header
+                .header(ENVOY_ORIGINAL_PATH_HEADER, "/customer/facing/path")) //
+                .andExpect(status().isOk());
+
+        verifyContext(basicContextCheck());
+        verifyContext(httpRequestContextCheckWithLBHost("/customer/facing/path", HttpMethod.GET, null));
         verifyContext(httpResponseContextCheck(HttpStatus.OK, AuditLogTestApp.BODY_RESPONSE));
     }
 
