@@ -61,6 +61,8 @@ public class AuditLogTest {
 
     private static final String REMOTE_IP_HEADER = "X-Forwarded-For";
 
+    private static final String HOST = "host";
+
     private static final String X_FORWARDED_HOST = "X-Forwarded-Host";
 
     private static final String ENVOY_ORIGINAL_PATH_HEADER = "x-envoy-original-path";
@@ -245,10 +247,23 @@ public class AuditLogTest {
 
     @Test
     @WithUserDetails
+    public void testGet200BodyWithHost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(AuditLogTestApp.GET_200_WITH_BODY).header(REMOTE_IP_HEADER, MY_IP)
+                // simulate the application is running behind the LB
+                .header(HOST, "iam.qa.cloud.talend.com")).andExpect(status().isOk());
+
+        verifyContext(basicContextCheck());
+        verifyContext(httpRequestContextCheckWithLBHost(AuditLogTestApp.GET_200_WITH_BODY, HttpMethod.GET, null));
+        verifyContext(httpResponseContextCheck(HttpStatus.OK, AuditLogTestApp.BODY_RESPONSE));
+    }
+
+    @Test
+    @WithUserDetails
     public void testGet200BodyWithXFH() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(AuditLogTestApp.GET_200_WITH_BODY).header(REMOTE_IP_HEADER, MY_IP)
                 // simulate the application is running behind the LB
-                .header(X_FORWARDED_HOST, "iam.qa.cloud.talend.com")).andExpect(status().isOk());
+                .header(HOST, "iam.other.cloud.talend.com").header(X_FORWARDED_HOST, "iam.qa.cloud.talend.com"))
+                .andExpect(status().isOk());
 
         verifyContext(basicContextCheck());
         verifyContext(httpRequestContextCheckWithLBHost(AuditLogTestApp.GET_200_WITH_BODY, HttpMethod.GET, null));
@@ -463,7 +478,7 @@ public class AuditLogTest {
     }
 
     private Object[] httpRequestContextCheckWithLBHost(String url, HttpMethod method, String body) {
-        return httpRequestContextCheck("https", "iam.qa.cloud.talend.com", url, method, body);
+        return httpRequestContextCheck("http", "iam.qa.cloud.talend.com", url, method, body);
     }
 
     private Object[] httpRequestContextCheck(String expectedProto, String expectedHost, String url, HttpMethod method,
