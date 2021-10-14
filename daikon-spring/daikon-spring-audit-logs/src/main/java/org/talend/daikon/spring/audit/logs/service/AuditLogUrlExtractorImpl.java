@@ -29,7 +29,7 @@ public class AuditLogUrlExtractorImpl implements AuditLogUrlExtractor {
                 // Use x-forwarded-host or host header for host if possible
                 .host(extractHost(Optional.ofNullable(httpServletRequest.getHeader(FORWARDED_HOST_HEADER)) //
                         .orElse(Optional.ofNullable(httpServletRequest.getHeader(HOST_HEADER)) //
-                        .orElse(httpServletRequest.getServerName())))) //
+                                .orElse(httpServletRequest.getServerName())))) //
                 // Add query strings
                 .query(httpServletRequest.getQueryString()).build().toUri().toString();
     }
