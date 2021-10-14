@@ -1,0 +1,12 @@
+= Daikon Release Notes (5.14.0) - 10/14/2021
+
+Thanks to @Jérémy Hervy, @Gabriel Marquet, @dependabot[bot]
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/776[#776])
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/775[#775])
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/774[#774])
+
+== Other
+- Fix container image for SAST scan  (link:https://github.com/Talend/daikon/pull/773[#773])
+- chore(deps): bump tmpl in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/772[#772])
