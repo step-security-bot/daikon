@@ -131,7 +131,7 @@ public class LogbackConfigurerTest {
         assertEquals("UTF-16", appender.getEncoding());
 
         assertTrue(appender.getLayout() instanceof LogbackJSONLayout);
-        assertFalse(((LogbackJSONLayout) appender.getLayout()).isStrictEcsMode());
+        assertTrue(((LogbackJSONLayout) appender.getLayout()).isLegacyMode());
     }
 
     private static <T extends Layout<ILoggingEvent>> T getLayout(Encoder<ILoggingEvent> encoder, Class<T> clz) {

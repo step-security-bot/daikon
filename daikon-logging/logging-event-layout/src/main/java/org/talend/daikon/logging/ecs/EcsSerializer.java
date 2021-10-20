@@ -3,11 +3,7 @@ package org.talend.daikon.logging.ecs;
 import co.elastic.logging.AdditionalField;
 import co.elastic.logging.EcsJsonSerializer;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -21,6 +17,8 @@ public class EcsSerializer {
 
     private static final String ECS_VERSION = LoggingProperties.get("ecs.version");
 
+    private static final String LEGACY_MDC_PREFIX = "customInfo.";
+
     /**
      * Serialize the additional fields (mapped and filtered)
      *
@@ -28,22 +26,11 @@ public class EcsSerializer {
      * @param additionalFields the additional fields to serialize
      */
     public static void serializeAdditionalFields(StringBuilder builder, List<AdditionalField> additionalFields) {
-        serializeAdditionalFields(builder, additionalFields, true);
-    }
-
-    /**
-     * Serialize the additional fields (mapped and filtered)
-     *
-     * @param builder the builder to serialize in
-     * @param additionalFields the additional fields to serialize
-     * @param strict if non-ECS fields should be filtered out
-     */
-    public static void serializeAdditionalFields(StringBuilder builder, List<AdditionalField> additionalFields, boolean strict) {
         EcsJsonSerializer.serializeAdditionalFields(builder, additionalFields.stream()
                 // Map additional field keys with corresponding ECS field
                 .map(f -> new AdditionalField(MdcEcsMapper.map(f.getKey()), f.getValue()))
                 // Filter out non ECS fields if in strict mode
-                .filter(f -> !strict || EcsFieldsChecker.isECSField(f.getKey())).collect(Collectors.toList()));
+                .filter(f -> EcsFieldsChecker.isECSField(f.getKey())).collect(Collectors.toList()));
     }
 
     /**
@@ -53,7 +40,7 @@ public class EcsSerializer {
      * @param mdcPropertyMap the MDC to serialize
      */
     public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap) {
-        serializeMDC(builder, mdcPropertyMap, true);
+        serializeMDC(builder, mdcPropertyMap, Collections.emptyMap(), false);
     }
 
     /**
@@ -61,14 +48,17 @@ public class EcsSerializer {
      *
      * @param builder the builder to serialize in
      * @param mdcPropertyMap the MDC to serialize
-     * @param strict if non-ECS fields should be filtered out
+     * @param legacyMode if true it will allow non-ECS fields + it will add a prefix to non-standard MDC values
      */
-    public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap, boolean strict) {
+    public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap, Map<String, String> metaFields,
+            boolean legacyMode) {
         EcsJsonSerializer.serializeMDC(builder, mdcPropertyMap.entrySet().stream()
                 // Map additional field keys with corresponding ECS field
-                .map(f -> new AbstractMap.SimpleEntry<String, String>(MdcEcsMapper.map(f.getKey()), f.getValue()))
+                .map(f -> new AbstractMap.SimpleEntry<>(MdcEcsMapper.map(f.getKey()), f.getValue()))
                 // Filter out non ECS fields if in strict mode
-                .filter(f -> !strict || EcsFieldsChecker.isECSField(f.getKey()))
+                .filter(f -> legacyMode || EcsFieldsChecker.isECSField(f.getKey()))
+                .map(f -> new AbstractMap.SimpleEntry<>(
+                        metaFields.getOrDefault(f.getKey(), (legacyMode ? LEGACY_MDC_PREFIX : "") + f.getKey()), f.getValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 

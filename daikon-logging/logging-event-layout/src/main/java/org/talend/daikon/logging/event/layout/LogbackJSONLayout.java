@@ -27,14 +27,25 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
     private boolean addEventUuid;
 
     /**
-     * If true then non-ECS fields are removed from the log context (default behavior).
-     * Non-strict mode is added primarily for on-prem deployments.
+     * Legacy mode allows non-ECS fields (used for daikon-audit).
      */
-    private boolean strictEcsMode = true;
+    private boolean legacyMode;
 
     private ThrowableProxyConverter throwableProxyConverter;
 
     private String serviceName;
+
+    /**
+     * (Legacy-Audit)
+     * A map between MDC keys and field names in the output json.
+     *
+     * For example,
+     * metaFields.put("talend.meta.application", "application");
+     *
+     * Then if MDC contains an entry with "talend.meta.application=some-app",
+     * it will put "application": "some-app" in the resulting json.
+     */
+    private final Map<String, String> metaFields = new LinkedHashMap<>();
 
     private final List<AdditionalField> additionalFields = new ArrayList<>();
 
@@ -80,12 +91,12 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         this.addEventUuid = addEventUuid;
     }
 
-    public boolean isStrictEcsMode() {
-        return strictEcsMode;
+    public boolean isLegacyMode() {
+        return legacyMode;
     }
 
-    public void setStrictEcsMode(boolean strictEcsMode) {
-        this.strictEcsMode = strictEcsMode;
+    public void setLegacyMode(boolean legacyMode) {
+        this.legacyMode = legacyMode;
     }
 
     public String getServiceName() {
@@ -101,7 +112,10 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
     }
 
     public void setMetaFields(Map<String, String> metaFields) {
-        metaFields.forEach((k, v) -> this.addAdditionalField(new AdditionalField(k, v)));
+        this.metaFields.clear();
+        if (metaFields != null) {
+            this.metaFields.putAll(metaFields);
+        }
     }
 
     @Override
@@ -127,8 +141,8 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         serializeCustomMarkers(builder, event);
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
-        EcsSerializer.serializeAdditionalFields(builder, additionalFields, strictEcsMode);
-        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap(), strictEcsMode);
+        EcsSerializer.serializeAdditionalFields(builder, additionalFields);
+        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap(), metaFields, legacyMode);
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());

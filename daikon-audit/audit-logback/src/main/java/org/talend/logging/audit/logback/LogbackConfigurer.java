@@ -249,7 +249,7 @@ public final class LogbackConfigurer {
         layout.setContext(loggerContext);
 
         // Ensure that non-ECS compliant fields preserved, see TDKN-319
-        layout.setStrictEcsMode(false);
+        layout.setLegacyMode(true);
 
         layout.start();
 
