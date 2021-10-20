@@ -86,7 +86,7 @@
         <module>daikon</module>
         <module>daikon-exception</module>
         <module>daikon-spring</module>
-        <module>reporting</module>
+<!--        <module>reporting</module>-->
         <module>daikon-logging</module>
         <module>daikon-multitenant</module>
         <module>daikon-tql</module>
