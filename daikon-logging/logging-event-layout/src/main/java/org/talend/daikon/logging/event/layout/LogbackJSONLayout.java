@@ -26,6 +26,12 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
 
     private boolean addEventUuid;
 
+    /**
+     * If true then non-ECS fields are removed from the log context (default behavior).
+     * Non-strict mode is added primarily for on-prem deployments.
+     */
+    private boolean strictEcsMode = true;
+
     private ThrowableProxyConverter throwableProxyConverter;
 
     private String serviceName;
@@ -74,6 +80,14 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         this.addEventUuid = addEventUuid;
     }
 
+    public boolean isStrictEcsMode() {
+        return strictEcsMode;
+    }
+
+    public void setStrictEcsMode(boolean strictEcsMode) {
+        this.strictEcsMode = strictEcsMode;
+    }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -113,8 +127,8 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         serializeCustomMarkers(builder, event);
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
-        EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap());
+        EcsSerializer.serializeAdditionalFields(builder, additionalFields, strictEcsMode);
+        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap(), strictEcsMode);
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());

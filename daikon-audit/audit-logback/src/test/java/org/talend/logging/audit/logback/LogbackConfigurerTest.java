@@ -1,16 +1,9 @@
 package org.talend.logging.audit.logback;
 
-import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -138,6 +131,7 @@ public class LogbackConfigurerTest {
         assertEquals("UTF-16", appender.getEncoding());
 
         assertTrue(appender.getLayout() instanceof LogbackJSONLayout);
+        assertFalse(((LogbackJSONLayout) appender.getLayout()).isStrictEcsMode());
     }
 
     private static <T extends Layout<ILoggingEvent>> T getLayout(Encoder<ILoggingEvent> encoder, Class<T> clz) {

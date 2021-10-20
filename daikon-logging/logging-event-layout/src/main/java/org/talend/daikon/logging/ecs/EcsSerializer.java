@@ -28,11 +28,22 @@ public class EcsSerializer {
      * @param additionalFields the additional fields to serialize
      */
     public static void serializeAdditionalFields(StringBuilder builder, List<AdditionalField> additionalFields) {
+        serializeAdditionalFields(builder, additionalFields, true);
+    }
+
+    /**
+     * Serialize the additional fields (mapped and filtered)
+     *
+     * @param builder the builder to serialize in
+     * @param additionalFields the additional fields to serialize
+     * @param strict if non-ECS fields should be filtered out
+     */
+    public static void serializeAdditionalFields(StringBuilder builder, List<AdditionalField> additionalFields, boolean strict) {
         EcsJsonSerializer.serializeAdditionalFields(builder, additionalFields.stream()
                 // Map additional field keys with corresponding ECS field
                 .map(f -> new AdditionalField(MdcEcsMapper.map(f.getKey()), f.getValue()))
-                // Filter out non ECS fields
-                .filter(f -> EcsFieldsChecker.isECSField(f.getKey())).collect(Collectors.toList()));
+                // Filter out non ECS fields if in strict mode
+                .filter(f -> !strict || EcsFieldsChecker.isECSField(f.getKey())).collect(Collectors.toList()));
     }
 
     /**
@@ -42,11 +53,22 @@ public class EcsSerializer {
      * @param mdcPropertyMap the MDC to serialize
      */
     public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap) {
+        serializeMDC(builder, mdcPropertyMap, true);
+    }
+
+    /**
+     * Serialize the MDC (mapped and filtered)
+     *
+     * @param builder the builder to serialize in
+     * @param mdcPropertyMap the MDC to serialize
+     * @param strict if non-ECS fields should be filtered out
+     */
+    public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap, boolean strict) {
         EcsJsonSerializer.serializeMDC(builder, mdcPropertyMap.entrySet().stream()
                 // Map additional field keys with corresponding ECS field
                 .map(f -> new AbstractMap.SimpleEntry<String, String>(MdcEcsMapper.map(f.getKey()), f.getValue()))
-                // Filter out non ECS fields
-                .filter(f -> EcsFieldsChecker.isECSField(f.getKey()))
+                // Filter out non ECS fields if in strict mode
+                .filter(f -> !strict || EcsFieldsChecker.isECSField(f.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
@@ -183,7 +205,7 @@ public class EcsSerializer {
 
     /**
      * Serialize the event duration in nanoseconds.
-     * 
+     *
      * @param builder
      * @param duration
      */
@@ -231,7 +253,7 @@ public class EcsSerializer {
 
     /**
      * Serialize the request uri path.
-     * 
+     *
      * @param builder
      * @param path
      */
@@ -241,7 +263,7 @@ public class EcsSerializer {
 
     /**
      * Serialize the request username if any.
-     * 
+     *
      * @param builder
      * @param username
      */
