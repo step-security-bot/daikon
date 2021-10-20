@@ -102,7 +102,7 @@ spec:
 
     stage('Build & deploy master') {
       when {
-        expression { !params.release && env.BRANCH_NAME == 'patch/5.11.1/tdkn-319' }
+        expression { !params.release && env.BRANCH_NAME == 'master' }
       }
       steps {
         container('maven') {
