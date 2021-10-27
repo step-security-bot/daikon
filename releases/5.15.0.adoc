@@ -1,0 +1,6 @@
+= Daikon Release Notes (5.15.0) - 10/27/2021
+
+Thanks to @mbutko
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-17973[TPSVC-17973]: Review the SLO for audit logs to avoid unnecessary noise (link:https://github.com/Talend/daikon/pull/777[#777])
