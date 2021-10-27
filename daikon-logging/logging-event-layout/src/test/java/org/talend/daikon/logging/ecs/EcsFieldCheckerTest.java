@@ -12,7 +12,8 @@ public class EcsFieldCheckerTest {
 
     public static final String UNKNOWN_FIELD = "unknown_field";
 
-    public static final List<String> ECS_FIELDS = Arrays.asList("ecs.field.first", "ecs.field.second");
+    public static final List<String> ECS_FIELDS = Arrays.asList("ecs.field.first", "ecs.field.second", "event.duration",
+            "event.risk_score", "log.origin.file.line");
 
     public static final List<String> ECS_LABELS = Arrays.asList("labels.my_awesome_label", "container.labels.blabla");
 
@@ -21,7 +22,7 @@ public class EcsFieldCheckerTest {
 
     @Test
     public void test() {
-        assertThat(EcsFields.values().length, is(7));
+        assertThat(EcsFields.values().length, is(10));
         // Check ECS fields are well recognized
         ECS_FIELDS.forEach(f -> assertThat(EcsFieldsChecker.isECSField(f), is(true)));
         ECS_FIELDS.forEach(f -> assertThat(EcsFieldsChecker.isECSLabel(f), is(false)));

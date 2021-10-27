@@ -114,7 +114,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap());
+        EcsSerializer.serializeMdc(builder, event.getMDCPropertyMap());
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());

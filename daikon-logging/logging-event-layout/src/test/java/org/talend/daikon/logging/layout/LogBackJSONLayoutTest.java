@@ -4,6 +4,7 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasNoJsonPath;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
@@ -49,6 +50,15 @@ public class LogBackJSONLayoutTest extends AbstractLayoutTest {
         // Children of the parent marker are used to populate the customInfo node of the logging event
         assertThat(result, hasJsonPath("$.['labels.accountId']", equalTo("foo")));
         assertThat(result, hasJsonPath("$.['labels.userId']", equalTo("bar")));
+    }
+
+    @Test
+    public void testNumericFields() {
+        LogDetails logDetails = new LogDetails(this.getClass());
+        logDetails.getMdc().put("event.duration", "123");
+        String result = log(newEvent(logDetails), logDetails);
+        assertThat(result, hasJsonPath("$.['event.duration']", equalTo(123)));
+        assertThat(result, hasJsonPath("$.['event.duration']", not(equalTo("123"))));
     }
 
     @Override

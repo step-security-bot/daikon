@@ -89,7 +89,7 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        EcsSerializer.serializeMDC(builder, event.getContextData().toMap());
+        EcsSerializer.serializeMdc(builder, event.getContextData().toMap());
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());

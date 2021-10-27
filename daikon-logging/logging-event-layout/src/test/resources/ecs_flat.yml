@@ -26,3 +26,15 @@ ecs.field.second:
   dashed_name: ecs-field-second
   short: Second ECS field.
   type: keyword
+event.duration:
+  dashed_name: event-duration
+  short: Event duration.
+  type: long
+event.risk_score:
+  dashed_name: event-risk-score
+  short: Risk score or priority of the event.
+  type: float
+log.origin.file.line:
+  dashed_name: log-origin-file-line
+  short: The line number.
+  type: long

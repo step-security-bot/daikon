@@ -1,5 +1,10 @@
 package org.talend.daikon.logging.layout;
 
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,10 +16,9 @@ import org.apache.logging.log4j.core.util.KeyValuePair;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.apache.logging.log4j.util.StringMap;
+import org.junit.Test;
 import org.talend.daikon.logging.event.layout.Log4j2JSONLayout;
 
-import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +54,15 @@ public class Log4j2JSONLayoutTest extends AbstractLayoutTest {
         additionalFields.put("labels.my_awesome_label", "my value 3");
         additionalFields.put("unknown_field", "my value 4");
         return additionalFields;
+    }
+
+    @Test
+    public void testNumericFields() {
+        LogDetails logDetails = new LogDetails(this.getClass());
+        logDetails.getMdc().put("event.duration", "123");
+        String result = log(newEvent(logDetails), logDetails);
+        assertThat(result, hasJsonPath("$.['event.duration']", equalTo(123)));
+        assertThat(result, hasJsonPath("$.['event.duration']", not(equalTo("123"))));
     }
 
     @Override

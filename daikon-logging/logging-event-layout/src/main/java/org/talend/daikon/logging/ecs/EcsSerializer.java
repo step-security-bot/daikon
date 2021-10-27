@@ -2,15 +2,13 @@ package org.talend.daikon.logging.ecs;
 
 import co.elastic.logging.AdditionalField;
 import co.elastic.logging.EcsJsonSerializer;
+
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.talend.daikon.logging.config.LoggingProperties;
 import org.talend.daikon.logging.event.field.HostData;
 
@@ -36,18 +34,38 @@ public class EcsSerializer {
     }
 
     /**
-     * Serialize the MDC (mapped and filtered)
+     * Serialize the MDC (mapped and filtered) with numeric fields formatted as numbers
+     * Field type is defined by https://github.com/elastic/ecs/blob/master/generated/ecs/ecs_flat.yml
      *
      * @param builder the builder to serialize in
      * @param mdcPropertyMap the MDC to serialize
      */
-    public static void serializeMDC(StringBuilder builder, Map<String, String> mdcPropertyMap) {
-        EcsJsonSerializer.serializeMDC(builder, mdcPropertyMap.entrySet().stream()
+    public static void serializeMdc(StringBuilder builder, Map<String, String> mdcPropertyMap) {
+        if (null == builder || null == mdcPropertyMap || mdcPropertyMap.isEmpty()) {
+            return;
+        }
+
+        Map<String, String> filteredMdc = mdcPropertyMap.entrySet().stream()
                 // Map additional field keys with corresponding ECS field
-                .map(f -> new AbstractMap.SimpleEntry<String, String>(MdcEcsMapper.map(f.getKey()), f.getValue()))
+                .map(mdcEntry -> new AbstractMap.SimpleEntry<>(MdcEcsMapper.map(mdcEntry.getKey()), mdcEntry.getValue()))
                 // Filter out non ECS fields
-                .filter(f -> EcsFieldsChecker.isECSField(f.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                .filter(mdcEntry -> EcsFieldsChecker.isECSField(mdcEntry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        List<String> mdcNumericFields = filteredMdc.keySet().stream().filter(EcsFields::isNumber).collect(Collectors.toList());
+
+        // serialize numeric values
+        if (!mdcNumericFields.isEmpty() && !filteredMdc.isEmpty()) {
+            mdcNumericFields.stream().map(MdcEcsMapper::map)
+                    .map(mappedFieldName -> new AbstractMap.SimpleEntry<>(mappedFieldName, filteredMdc.get(mappedFieldName)))
+                    .peek(entry -> filteredMdc.remove(entry.getKey()))
+                    .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
+                    .filter(entry -> NumberUtils.isParsable(entry.getValue()))
+                    .forEach(e -> builder.append("\"").append(e.getKey()).append("\":").append(e.getValue()).append(","));
+        }
+
+        // serialize string values
+        EcsJsonSerializer.serializeMDC(builder, filteredMdc);
     }
 
     /**

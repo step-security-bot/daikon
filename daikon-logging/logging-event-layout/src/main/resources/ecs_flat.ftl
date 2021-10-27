@@ -27,7 +27,9 @@ public enum ${className} {
         </#if>
     </#if>
     */
-    ${fields[key].dashed_name?replace('-', '_')?upper_case}("${key}")<#if key?is_last>;<#else>,</#if>
+    <#assign numericTypes = ["byte", "short", "integer", "float", "double", "long"]>
+    <#assign isNumber = numericTypes?seq_contains(fields[key].type)?string("true", "false")>
+    ${fields[key].dashed_name?replace('-', '_')?upper_case}("${key}", ${isNumber})<#if key?is_last>;<#else>,</#if>
 </#list>
 
     private static final Map<String, ${className}> FIELDS = Arrays.stream(${className}.values())
@@ -35,8 +37,11 @@ public enum ${className} {
 
     public final String fieldName;
 
-    private ${className}(String fieldName) {
+    public final boolean isNumber;
+
+    private ${className}(String fieldName, boolean isNumber) {
         this.fieldName = fieldName;
+        this.isNumber = isNumber;
     }
 
     public static boolean containsName(String fieldName) {
@@ -45,5 +50,10 @@ public enum ${className} {
 
     public static ${className} getByName(String fieldName) {
         return FIELDS.get(fieldName.toLowerCase(Locale.ROOT));
+    }
+
+    public static boolean isNumber(String fieldName) {
+        return FIELDS.containsKey(fieldName.toLowerCase(Locale.ROOT))
+            && FIELDS.get(fieldName.toLowerCase(Locale.ROOT)).isNumber;
     }
 }

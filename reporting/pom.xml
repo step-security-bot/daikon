@@ -13,16 +13,6 @@
 
 	<name>Aggregation of jacoco reports</name>
 	<url>https://github.com/Talend/daikon</url>
-<!--
-     This module is used to consolidate jacoco reports into on single report.
-     This final report will be used by Codacy to analyze code coverage and
-     notify any regression.
-	 Whenever a new module is added to daikon, please add it as a dependency in this pom
-	 to be added to the consolidated report.
-	 this module should only be launched from the root agreggator, otherwise the generated 
-	 report will be empty.
--->
-
     <properties>
         <!-- skip the deployment for this pom, not necessary -->
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -54,25 +44,6 @@
 		            <goals>
 		              <goal>report-aggregate</goal>
 		            </goals>
-		          </execution>
-		        </executions>
-	      </plugin>
-			<plugin>
-		        <groupId>com.gavinmogan</groupId>
-		        <artifactId>codacy-maven-plugin</artifactId>
-                <version>1.0.3</version>
-		        <executions>
-		          <execution>
-		            <id>send-coverage-to-cadacy </id>
-		            <phase>deploy</phase>
-		            <goals>
-		              <goal>coverage</goal>
-		            </goals>
-		            <configuration>
-			            <coverageReportFile>target/site/jacoco-aggregate/jacoco.xml</coverageReportFile>
-			            <projectToken>26f79b20a87f4a249ea702fc549ead64</projectToken>
-			            <apiToken>CvJqLFUWMO29N1oiNOjm</apiToken>
-		            </configuration>
 		          </execution>
 		        </executions>
 	      </plugin>

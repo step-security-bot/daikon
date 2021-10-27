@@ -107,7 +107,7 @@ public class Log4jJSONLayout extends Layout {
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        EcsSerializer.serializeMDC(builder, event.getProperties());
+        EcsSerializer.serializeMdc(builder, event.getProperties());
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());

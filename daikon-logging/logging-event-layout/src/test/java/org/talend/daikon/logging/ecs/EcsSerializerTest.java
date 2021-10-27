@@ -19,12 +19,15 @@ public class EcsSerializerTest {
         additionalFields.add(new AdditionalField("ecs.field.second", "my value 2"));
         additionalFields.add(new AdditionalField("labels.my_awesome_label", "my value 3"));
         additionalFields.add(new AdditionalField("unknown_field", "my value 4"));
+
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        assertThat(builder.toString(), containsString("\"ecs.field.first\":\"my value 1\""));
-        assertThat(builder.toString(), containsString("\"ecs.field.second\":\"my value 2\""));
-        assertThat(builder.toString(), containsString("\"labels.my_awesome_label\":\"my value 3\""));
-        assertThat(builder.toString(), not(containsString("unknown_field")));
-        assertThat(builder.toString(), not(containsString("my value 4")));
+        String actual = builder.toString();
+
+        assertThat(actual, containsString("\"ecs.field.first\":\"my value 1\""));
+        assertThat(actual, containsString("\"ecs.field.second\":\"my value 2\""));
+        assertThat(actual, containsString("\"labels.my_awesome_label\":\"my value 3\""));
+        assertThat(actual, not(containsString("unknown_field")));
+        assertThat(actual, not(containsString("my value 4")));
     }
 
     @Test
@@ -35,12 +38,47 @@ public class EcsSerializerTest {
         mdc.put("ecs.field.second", "my value 2");
         mdc.put("labels.my_awesome_label", "my value 3");
         mdc.put("unknown_field", "my value 4");
-        EcsSerializer.serializeMDC(builder, mdc);
-        assertThat(builder.toString(), containsString("\"ecs.field.first\":\"my value 1\""));
-        assertThat(builder.toString(), containsString("\"ecs.field.second\":\"my value 2\""));
-        assertThat(builder.toString(), containsString("\"labels.my_awesome_label\":\"my value 3\""));
-        assertThat(builder.toString(), not(containsString("unknown_field")));
-        assertThat(builder.toString(), not(containsString("my value 4")));
+
+        EcsSerializer.serializeMdc(builder, mdc);
+        String actual = builder.toString();
+
+        assertThat(actual, containsString("\"ecs.field.first\":\"my value 1\""));
+        assertThat(actual, containsString("\"ecs.field.second\":\"my value 2\""));
+        assertThat(actual, containsString("\"labels.my_awesome_label\":\"my value 3\""));
+        assertThat(actual, not(containsString("unknown_field")));
+        assertThat(actual, not(containsString("my value 4")));
+    }
+
+    @Test
+    public void testSerializeMdcWithNumbers() {
+        StringBuilder builder = new StringBuilder();
+        Map<String, String> mdc = new HashMap<>();
+
+        // strings
+        mdc.put("mdc_field_1", "string value");
+        mdc.put("labels.my_awesome_label", "label value");
+
+        // numbers
+        mdc.put("event.duration", "12345"); // long
+        mdc.put("event.risk_score", "23.9"); // float
+        mdc.put("log.origin.file.line", "not a number"); // unparsable
+
+        EcsSerializer.serializeMdc(builder, mdc);
+        String actual = builder.toString();
+
+        // strings
+        assertThat(actual, containsString("\"ecs.field.first\":\"string value\","));
+        assertThat(actual, containsString("\"labels.my_awesome_label\":\"label value\","));
+
+        // numbers
+        assertThat(actual, containsString("\"event.duration\":12345,"));
+        assertThat(actual, containsString("\"event.risk_score\":23.9,"));
+        assertThat(actual, not(containsString("\"event.duration\":\"12345\"")));
+        assertThat(actual, not(containsString("\"event.risk_score\":\"23.9\"")));
+
+        // not a number skipped
+        assertThat(actual, not(containsString("log.origin.file.line")));
+        assertThat(actual, not(containsString("not a number")));
     }
 
     @Test
@@ -67,10 +105,12 @@ public class EcsSerializerTest {
         EcsSerializer.serializeCustomMarker(builder, "custom_marker_without_value");
         EcsSerializer.serializeCustomMarker(builder, "labels.custom_marker_2:my_value_2");
         EcsSerializer.serializeCustomMarker(builder, "ecs.field.first:my_value_3");
-        assertThat(builder.toString(), containsString("\"labels.custom_marker\":\"my_value\""));
-        assertThat(builder.toString(), containsString("\"labels.custom_marker_2\":\"my_value_2\""));
-        assertThat(builder.toString(), containsString("\"ecs.field.first\":\"my_value_3\""));
-        assertThat(builder.toString(), not(containsString("custom_marker_without_value")));
+        String actual = builder.toString();
+
+        assertThat(actual, containsString("\"labels.custom_marker\":\"my_value\""));
+        assertThat(actual, containsString("\"labels.custom_marker_2\":\"my_value_2\""));
+        assertThat(actual, containsString("\"ecs.field.first\":\"my_value_3\""));
+        assertThat(actual, not(containsString("custom_marker_without_value")));
     }
 
     @Test
