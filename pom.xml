@@ -178,7 +178,7 @@
                 <groupId>com.cedarsoftware</groupId>
                 <artifactId>json-io</artifactId>
                 <!-- using a specific Talend artifact version until the next official release, the PR has been merge into master but not yet release. -->
-                <version>4.9.9-TALEND</version>
+                <version>4.13.0</version>
             </dependency>
             <!-- include fasterxml jackson's bom -->
             <dependency>
@@ -246,7 +246,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.8</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
