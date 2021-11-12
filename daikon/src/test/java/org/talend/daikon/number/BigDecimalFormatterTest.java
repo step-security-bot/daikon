@@ -37,7 +37,6 @@ public class BigDecimalFormatterTest {
     public void testToBigDecimalGroupingEU() throws Exception {
         // see https://kirillbelyaev.com/s/
         // seems jdk use unicode 8239 instead of 160 now for whitespace for the format action below
-        System.out.println(BigDecimalFormatter.format(new BigDecimal("4512.50"), BigDecimalParser.EU_DECIMAL_PATTERN));
         assertTrue(BigDecimalFormatter.format(new BigDecimal("4512.50"), BigDecimalParser.EU_DECIMAL_PATTERN).matches("4.512,5"));
     }
 
