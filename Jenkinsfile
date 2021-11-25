@@ -114,7 +114,9 @@ spec:
         container('maven') {
           configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
             sh """
-              mvn deploy -B -s $MAVEN_SETTINGS -Dtalend_snapshots=https://nexus-smart-branch.datapwn.com/nexus/content/repositories/branch_${escaped_branch}
+              mvn --version
+              mvn deploy -B -s $MAVEN_SETTINGS -Dtalend_snapshots=https://nexus-smart-branch.datapwn.com/nexus/content/repositories/branch_${escaped_branch} -Dtalend_snapshots_deployment=https://artifacts-oss.talend.com/nexus/content/repositories/dev_branch_snapshots/branch_${escaped_branch}
+              
             """
           }
         }
