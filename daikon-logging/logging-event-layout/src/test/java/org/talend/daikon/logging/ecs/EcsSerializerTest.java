@@ -39,7 +39,7 @@ public class EcsSerializerTest {
         mdc.put("labels.my_awesome_label", "my value 3");
         mdc.put("unknown_field", "my value 4");
 
-        EcsSerializer.serializeMdc(builder, mdc);
+        EcsSerializer.serializeMDC(builder, mdc);
         String actual = builder.toString();
 
         assertThat(actual, containsString("\"ecs.field.first\":\"my value 1\""));
@@ -63,7 +63,7 @@ public class EcsSerializerTest {
         mdc.put("event.risk_score", "23.9"); // float
         mdc.put("log.origin.file.line", "not a number"); // unparsable
 
-        EcsSerializer.serializeMdc(builder, mdc);
+        EcsSerializer.serializeMDC(builder, mdc);
         String actual = builder.toString();
 
         // strings

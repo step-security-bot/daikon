@@ -4,11 +4,15 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasNoJsonPath;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Test;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
@@ -18,8 +22,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.LoggingEvent;
 
 public class LogBackJSONLayoutTest extends AbstractLayoutTest {
-
-    static final Logger LOGGER = LoggerFactory.getLogger(LogBackJSONLayoutTest.class);
 
     @Test
     public void testDefaultLocationInfo() {
@@ -61,6 +63,32 @@ public class LogBackJSONLayoutTest extends AbstractLayoutTest {
         assertThat(result, hasJsonPath("$.['event.duration']", not(equalTo("123"))));
     }
 
+    @Test
+    public void testLegacyMode() {
+        Map<String, String> meta = Collections.singletonMap("test.meta.non_ecs_meta_field", "non_ecs_meta_field");
+
+        LogDetails logDetails = new LogDetails(this.getClass());
+
+        Map<String, String> mdc = new LinkedHashMap<>();
+        mdc.put("non_ecs_mdc_field", "mdc");
+        mdc.put("test.meta.non_ecs_meta_field", "meta");
+        logDetails.setMdc(mdc);
+
+        String strictResult = log(newEvent(logDetails), logDetails, meta, false);
+        String nonStrictResult = log(newEvent(logDetails), logDetails, meta, true);
+
+        assertThat(strictResult, hasNoJsonPath("$.['non_ecs_mdc_field']"));
+        assertThat(strictResult, hasNoJsonPath("$.['non_ecs_meta_field']"));
+
+        assertThat(nonStrictResult, hasJsonPath("$.['customInfo.non_ecs_mdc_field']", is("mdc")));
+        assertThat(nonStrictResult, hasJsonPath("$.['non_ecs_meta_field']", is("meta")));
+    }
+
+    @Test
+    public void testStrictModeIsDefault() {
+        assertFalse(new LogbackJSONLayout().isLegacyMode());
+    }
+
     @Override
     protected Object newEvent(LogDetails logDetails) {
         ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(logDetails.getClassName());
@@ -78,8 +106,14 @@ public class LogBackJSONLayoutTest extends AbstractLayoutTest {
 
     @Override
     protected String log(Object event, LogDetails logDetails) {
+        return log(event, logDetails, Collections.emptyMap(), false);
+    }
+
+    protected String log(Object event, LogDetails logDetails, Map<String, String> metaFields, boolean legacyMode) {
         LogbackJSONLayout layout = new LogbackJSONLayout();
         layout.setLocationInfo(logDetails.isLocationInfo());
+        layout.setLegacyMode(legacyMode);
+        layout.setMetaFields(metaFields);
         layout.start();
         try {
             return layout.doLayout((LoggingEvent) event);

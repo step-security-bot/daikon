@@ -26,9 +26,26 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
 
     private boolean addEventUuid;
 
+    /**
+     * Legacy mode allows non-ECS fields (used for daikon-audit).
+     */
+    private boolean legacyMode;
+
     private ThrowableProxyConverter throwableProxyConverter;
 
     private String serviceName;
+
+    /**
+     * (Legacy-Audit)
+     * A map between MDC keys and field names in the output json.
+     *
+     * For example,
+     * metaFields.put("talend.meta.application", "application");
+     *
+     * Then if MDC contains an entry with "talend.meta.application=some-app",
+     * it will put "application": "some-app" in the resulting json.
+     */
+    private final Map<String, String> metaFields = new LinkedHashMap<>();
 
     private final List<AdditionalField> additionalFields = new ArrayList<>();
 
@@ -74,6 +91,14 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         this.addEventUuid = addEventUuid;
     }
 
+    public boolean isLegacyMode() {
+        return legacyMode;
+    }
+
+    public void setLegacyMode(boolean legacyMode) {
+        this.legacyMode = legacyMode;
+    }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -87,7 +112,10 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
     }
 
     public void setMetaFields(Map<String, String> metaFields) {
-        metaFields.forEach((k, v) -> this.addAdditionalField(new AdditionalField(k, v)));
+        this.metaFields.clear();
+        if (metaFields != null) {
+            this.metaFields.putAll(metaFields);
+        }
     }
 
     @Override
@@ -114,7 +142,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
 
         // Call custom serializer for additional fields & MDC (for mapping and filtering)
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        EcsSerializer.serializeMdc(builder, event.getMDCPropertyMap());
+        EcsSerializer.serializeMDC(builder, event.getMDCPropertyMap(), metaFields, legacyMode);
 
         if (this.hostInfo) {
             EcsSerializer.serializeHostInfo(builder, new HostData());
