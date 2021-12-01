@@ -1,4 +1,4 @@
-import { GreaterThan } from '../';
+import { GreaterThan } from '..';
 
 describe('greater than', () => {
 	it('should create a new greater than operator', () => {

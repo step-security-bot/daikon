@@ -2,6 +2,7 @@ import ISerializable from './operators/iserializable';
 
 export default class Compositor extends ISerializable {
 	static and = 'and';
+
 	static or = 'or';
 
 	constructor(type) {

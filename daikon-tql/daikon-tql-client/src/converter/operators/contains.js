@@ -6,6 +6,8 @@ import Operator from './operator';
  */
 export default class Contains extends Operator {
 	static value = 'contains';
+
 	static hasOperand = true;
+
 	static allowEmpty = true;
 }

@@ -7,5 +7,6 @@ import Operator from './operator';
  */
 export default class Unequal extends Operator {
 	static value = '!=';
+
 	static hasOperand = true;
 }

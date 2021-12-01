@@ -6,6 +6,8 @@ import Operator from './operator';
  */
 export default class ContainsIgnoreCase extends Operator {
 	static value = 'containsIgnoreCase';
+
 	static hasOperand = true;
+
 	static allowEmpty = true;
 }

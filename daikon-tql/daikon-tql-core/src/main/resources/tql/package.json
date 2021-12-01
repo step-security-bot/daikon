@@ -11,6 +11,12 @@
   "bugs": {
     "url": "https://github.com/Talend/daikon/issues"
   },
+  "scripts": {
+    "build": "echo nothing to build it is generated",
+    "lint": "echo nothing to lint it is generated",
+    "pre-release": "echo nothing to pre-release it is generated",
+    "test": "echo nothing to test it is generated"
+  },
   "dependencies": {
     "antlr4": "^4.9.0"
   },

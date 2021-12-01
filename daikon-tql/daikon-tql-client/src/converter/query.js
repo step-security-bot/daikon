@@ -9,7 +9,7 @@ export default class Query extends ISerializable {
 		super();
 		this.stack = [];
 
-		Object.keys(operators).forEach((k) => {
+		Object.keys(operators).forEach(k => {
 			const key = k.charAt(0).toLowerCase() + k.slice(1);
 			this[key] = (...args) => this.add(new operators[k](...args));
 		});
@@ -45,7 +45,7 @@ export default class Query extends ISerializable {
 
 	serialize() {
 		return this.stack
-			.map((o) => {
+			.map(o => {
 				if (o instanceof Query) {
 					return `(${o.serialize()})`;
 				}

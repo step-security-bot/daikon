@@ -6,6 +6,8 @@ import Operator from './operator';
  */
 export default class Complies extends Operator {
 	static value = 'complies';
+
 	static hasOperand = true;
+
 	static allowEmpty = true;
 }

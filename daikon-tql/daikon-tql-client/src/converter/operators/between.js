@@ -6,6 +6,7 @@ import Operator from './operator';
  */
 export default class Between extends Operator {
 	static value = 'between';
+
 	static hasOperand = true;
 
 	serialize() {

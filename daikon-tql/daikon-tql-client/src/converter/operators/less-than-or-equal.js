@@ -6,5 +6,6 @@ import Operator from './operator';
  */
 export default class LessThanOrEqual extends Operator {
 	static value = '<=';
+
 	static hasOperand = true;
 }

@@ -1,4 +1,4 @@
-import { Valid } from '../';
+import { Valid } from '..';
 
 describe('valid', () => {
 	it('should create a new valid operator', () => {

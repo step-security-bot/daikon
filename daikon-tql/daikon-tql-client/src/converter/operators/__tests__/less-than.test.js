@@ -1,4 +1,4 @@
-import { LessThan } from '../';
+import { LessThan } from '..';
 
 describe('less than', () => {
 	it('should create a new less than operator', () => {

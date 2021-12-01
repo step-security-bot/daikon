@@ -1,7 +1,5 @@
-import Empty from './empty';
 import ISerializable from './iserializable';
-
-const WILDCARD = '*';
+import { EMPTY_VALUE, WILDCARD } from './constants';
 
 function isString(value) {
 	return typeof value === 'string';
@@ -49,7 +47,7 @@ export default class Operator extends ISerializable {
 		} else if (this.constructor.hasOperand === false) {
 			return `(${this.field} ${this.constructor.value})`;
 		} else if (this.constructor.allowEmpty === true) {
-			return `(${this.field} ${Empty.value})`;
+			return `(${this.field} ${EMPTY_VALUE})`;
 		}
 
 		throw new Error(`${this.constructor.value} does not allow empty.`);

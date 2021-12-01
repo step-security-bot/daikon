@@ -6,6 +6,8 @@ import Operator from './operator';
  */
 export default class WordComplies extends Operator {
 	static value = 'wordComplies';
+
 	static hasOperand = true;
+
 	static allowEmpty = true;
 }

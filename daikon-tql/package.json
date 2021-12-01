@@ -3,12 +3,22 @@
   "description": "Private parent Daikon TQL",
   "license": "Apache-2.0",
   "scripts": {
-    "postinstall": "lerna clean --yes && lerna exec -- yarn --pure-lockfile --no-progress --mutex network",
-    "test": "lerna exec --scope=@talend/daikon-tql-client -- yarn test",
-    "publish": "lerna publish --skip-git --force-publish=*"
+    "postinstall": "yarn workspaces run build",
+    "lint": "cross-env TZ=Europe/Paris yarn workspaces run lint",
+    "test": "yarn workspaces run test",
+    "publish": "yarn changeset version && yarn changeset publish"
   },
+  "workspaces": [
+    "daikon-tql-client",
+    "daikon-tql-core/target/generated-modules/*"
+  ],
   "devDependencies": {
-    "lerna": "^2.9.1"
+    "@changesets/cli": "^2.17.0",
+    "cross-env": "^7.0.3"
+  },
+  "resolutions": {
+    "antlr4": "4.9.2",
+    "glob-parent": "^5.1.2"
   },
   "private": true
 }

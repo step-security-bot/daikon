@@ -1,4 +1,4 @@
-import { Contains } from '../';
+import { Contains } from '..';
 
 describe('contains', () => {
 	it('should create a new contains operator', () => {

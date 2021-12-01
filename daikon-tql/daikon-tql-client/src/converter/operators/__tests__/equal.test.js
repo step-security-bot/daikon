@@ -1,4 +1,4 @@
-import { Equal } from '../';
+import { Equal } from '..';
 
 describe('equal', () => {
 	it('should create a new equal operator', () => {

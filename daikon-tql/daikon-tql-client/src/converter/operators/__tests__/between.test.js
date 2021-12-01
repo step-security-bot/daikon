@@ -1,4 +1,4 @@
-import { Between } from '../';
+import { Between } from '..';
 
 describe('between', () => {
 	it('should create a new between operator', () => {

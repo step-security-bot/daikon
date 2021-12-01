@@ -9,6 +9,7 @@ import Operator, {
  */
 export default class In extends Operator {
 	static value = 'in';
+
 	static hasOperand = true;
 
 	serialize() {

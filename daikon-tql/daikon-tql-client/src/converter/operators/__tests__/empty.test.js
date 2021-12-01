@@ -1,4 +1,4 @@
-import { Empty } from '../';
+import { Empty } from '..';
 
 describe('empty', () => {
 	it('should create a new empty operator', () => {

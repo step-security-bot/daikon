@@ -1,4 +1,4 @@
-import { ContainsIgnoreCase } from '../';
+import { ContainsIgnoreCase } from '..';
 
 describe('containsIgnoreCase', () => {
 	it('should create a new containsIgnoreCase operator', () => {

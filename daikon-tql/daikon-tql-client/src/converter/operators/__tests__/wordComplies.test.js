@@ -1,4 +1,4 @@
-import { WordComplies } from '../';
+import { WordComplies } from '..';
 
 describe('wordComplies', () => {
 	it('should create a new wordComplies operator', () => {

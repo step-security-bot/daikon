@@ -31,8 +31,10 @@ $> mvn install -Pjavascript
 To publish on npm repository the TQL client and generated grammar, you must be authorized.
 
 ```bash
-$> yarn  publish
+$> yarn run publish
 ```
+
+Don't forget to commit the result of this command which remove all changeset files, update the changelog and package.json.
 
 ## Support
 

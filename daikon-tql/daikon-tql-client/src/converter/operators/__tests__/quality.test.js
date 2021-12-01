@@ -1,4 +1,4 @@
-import { Quality } from '../';
+import { Quality } from '..';
 
 describe('quality', () => {
 	it('should be convertible to a valid TQL query', () => {

@@ -1,5 +1,7 @@
 import Operator from './operator';
-import { Empty, Invalid, Valid } from './';
+import Empty from './empty';
+import Invalid from './invalid';
+import Valid from './valid';
 import Compositor from '../compositor';
 
 /**

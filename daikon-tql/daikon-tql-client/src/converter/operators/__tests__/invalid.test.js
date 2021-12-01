@@ -1,4 +1,4 @@
-import { Invalid } from '../';
+import { Invalid } from '..';
 
 describe('invalid', () => {
 	it('should create a new invalid operator', () => {

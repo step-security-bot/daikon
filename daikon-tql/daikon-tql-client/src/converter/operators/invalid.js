@@ -6,5 +6,6 @@ import Operator from './operator';
  */
 export default class Invalid extends Operator {
 	static value = 'is invalid';
+
 	static hasOperand = false;
 }
