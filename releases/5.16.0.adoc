@@ -1,0 +1,15 @@
+= Daikon Release Notes (5.16.0) - 12/01/2021
+
+Thanks to @Nicolas Comont, @Ievgen Tarasov, @Colm O hEigeartaigh, @dependabot[bot]
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDKN-319[TDKN-319]: Audit messages sent to LogServer contain no MDC values (link:https://github.com/Talend/daikon/pull/790[#790])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-322[TDKN-322]: Update Jackson to 1.9.16-TALEND (link:https://github.com/Talend/daikon/pull/789[#789])
+
+== Other
+- chore: replace lerna by yarn workspace and use talend-scripts  (link:https://github.com/Talend/daikon/pull/791[#791])
+- chore(deps): bump lodash.template from 4.4.0 to 4.5.0 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/788[#788])
+- chore(deps): bump yargs-parser from 5.0.0 to 5.0.1 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/787[#787])
+- Switch repo to https  (link:https://github.com/Talend/daikon/pull/779[#779])
