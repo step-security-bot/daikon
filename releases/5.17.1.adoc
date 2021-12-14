@@ -1,0 +1,6 @@
+= Daikon Release Notes (5.17.1) - 12/14/2021
+
+Thanks to @Colm O hEigeartaigh
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-324[TDKN-324]: Update Log4J to 2.16.0 (link:https://github.com/Talend/daikon/pull/796[#796])
