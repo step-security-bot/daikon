@@ -13,12 +13,9 @@
 package org.talend.daikon.logging.spring;
 
 import org.slf4j.MDC;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.async.CallableProcessingInterceptor;
-import org.springframework.web.context.request.async.CallableProcessingInterceptorAdapter;
 import org.springframework.web.context.request.async.WebAsyncManager;
 import org.springframework.web.context.request.async.WebAsyncUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +26,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.Callable;
 
 /**
@@ -41,17 +37,27 @@ class UserIdLoggingFilter extends OncePerRequestFilter {
 
     private static final Object CALLABLE_INTERCEPTOR_KEY = new Object();
 
+    private UserIdExtractor userIdExtractor = new UserIdExtractorImpl();
+
+    public UserIdLoggingFilter() {
+    }
+
+    public UserIdLoggingFilter(UserIdExtractor userIdExtractor) {
+        this.userIdExtractor = userIdExtractor;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             FilterChain filterChain) throws ServletException, IOException {
-        setMdc();
+        setMdc(userIdExtractor);
 
         WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(httpServletRequest);
 
         UserIdLoggingFilter tenancyProcessingInterceptor = (UserIdLoggingFilter) asyncManager
                 .getCallableInterceptor(CALLABLE_INTERCEPTOR_KEY);
         if (tenancyProcessingInterceptor == null) {
-            asyncManager.registerCallableInterceptor(CALLABLE_INTERCEPTOR_KEY, new UserIdCallableProcessingInterceptorAdapter());
+            asyncManager.registerCallableInterceptor(CALLABLE_INTERCEPTOR_KEY,
+                    new UserIdCallableProcessingInterceptorAdapter(userIdExtractor));
         }
         try {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
@@ -63,9 +69,15 @@ class UserIdLoggingFilter extends OncePerRequestFilter {
 
     private static class UserIdCallableProcessingInterceptorAdapter implements CallableProcessingInterceptor {
 
+        private UserIdExtractor userIdExtractor;
+
+        public UserIdCallableProcessingInterceptorAdapter(UserIdExtractor userIdExtractor) {
+            this.userIdExtractor = userIdExtractor;
+        }
+
         @Override
         public <T> void preProcess(NativeWebRequest request, Callable<T> task) throws Exception {
-            setMdc();
+            setMdc(userIdExtractor);
         }
 
         @Override
@@ -74,22 +86,11 @@ class UserIdLoggingFilter extends OncePerRequestFilter {
         }
     }
 
-    private static void setMdc() {
-        getUserId().ifPresent(userId -> MDC.put(MdcKeys.USER_ID, userId));
+    private static void setMdc(UserIdExtractor userIdExtractor) {
+        userIdExtractor.extract().ifPresent(userId -> MDC.put(MdcKeys.USER_ID, userId));
     }
 
     private static void removeMdc() {
         MDC.remove(MdcKeys.USER_ID);
-    }
-
-    private static Optional<String> getUserId() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        if (context != null) {
-            Authentication authentication = context.getAuthentication();
-            if (authentication != null) {
-                return Optional.of(authentication.getName());
-            }
-        }
-        return Optional.empty();
     }
 }

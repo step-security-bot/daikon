@@ -13,6 +13,7 @@
 package org.talend.daikon.logging.spring;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -32,9 +33,15 @@ public class UserIdLoggingAutoConfiguration {
     public int USER_ID_LOGS_FILTER_ORDER = SecurityProperties.DEFAULT_FILTER_ORDER + 1;
 
     @Bean
-    public FilterRegistrationBean userIdLoggingFilter() {
+    @ConditionalOnMissingBean(UserIdExtractor.class)
+    public UserIdExtractor userIdExtractor() {
+        return new UserIdExtractorImpl();
+    }
+
+    @Bean
+    public FilterRegistrationBean userIdLoggingFilter(UserIdExtractor userIdExtractor) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        UserIdLoggingFilter filter = new UserIdLoggingFilter();
+        UserIdLoggingFilter filter = new UserIdLoggingFilter(userIdExtractor);
         registration.setFilter(filter);
         registration.setOrder(USER_ID_LOGS_FILTER_ORDER);
         return registration;
