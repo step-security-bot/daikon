@@ -1,0 +1,6 @@
+= Daikon Release Notes (5.17.2) - 12/15/2021
+
+Thanks to @Jérémy Hervy
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-17974[TPSVC-17974]: Populate userId and accountId in the log context for scim (link:https://github.com/Talend/daikon/pull/797[#797])
