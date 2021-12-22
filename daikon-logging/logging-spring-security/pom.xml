@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-logging</artifactId>
-        <version>5.17.3-SNAPSHOT</version>
+        <version>5.18.0</version>
     </parent>
     <artifactId>logging-spring-security</artifactId>
     <name>logging-spring-security</name>
