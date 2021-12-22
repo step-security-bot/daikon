@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
  * Enables Service Account Token authentication
  */
 @Configuration
-@ConditionalOnClass(value = {Jwt.class, OAuth2ResourceServerProperties.class})
+@ConditionalOnClass(value = { Jwt.class, OAuth2ResourceServerProperties.class })
 public class SatAutoConfiguration {
 
     @Bean

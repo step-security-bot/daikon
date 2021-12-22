@@ -84,6 +84,7 @@ The Daikon is a root vegetable and since this project is supposed to be the root
 ## Releasing
 
 To release a new version of Daikon, you can simply:
+* Run 'mvn formatter:format' and commit changes, otherwise release will fail
 * Go to [Jenkins](https://jenkins-common.datapwn.com/job/daikon/job/master/).
 * Launch a build with parameters.
 * Check the "release" check box.

@@ -87,6 +87,25 @@ spec:
       }
     }
 
+    stage('Check format for PR') {
+      when { changeRequest target: 'master' }
+      steps {
+        container('maven') {
+          configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+            sh 'mvn formatter:format -B -s $MAVEN_SETTINGS'
+            script {
+              int changedLines = sh (script: 'git status --porcelain | wc -l', returnStdout: true)
+              echo "Git status reports ${changedLines} changed lines after maven format run."
+              if (changedLines != 0) {
+                  echo 'Some files are formatted incorrectly. Please run `mvn formatter:format` and commit changes.'
+                  sh 'exit 1'
+              }
+            }
+          }
+        }
+      }
+    }
+
     stage('Build release') {
       when {
         expression { params.release }
