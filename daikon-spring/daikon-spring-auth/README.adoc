@@ -29,5 +29,5 @@ To start supporting SAT it’s necessary to add the next dependency:
 
 == Configuration
 
-In case of using oidc-client lib no config is needed
+In case of using oidc-client lib no config is needed +
 Otherwise Auth0AuthenticationManager must be declared as Spring Component manually (see SatAutoConfiguration)
