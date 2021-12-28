@@ -18,7 +18,9 @@
     </properties>
     <modules>
         <module>daikon-spring-utils</module>
+        <!-- Commenting this out as the Spring repo doesn't allow unauthenticatedownloads any more
         <module>daikon-spring-mongo</module>
+        -->
         <module>daikon-spring-security</module>
         <module>daikon-spring-tenancy</module>
         <module>daikon-spring-zipkin</module>
