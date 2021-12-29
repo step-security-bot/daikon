@@ -41,7 +41,8 @@ public class RuntimeUtil {
         @Override
         public URLConnection openConnection(URL url) throws IOException {
             MavenResolver resolver = MavenResolvers.createMavenResolver(null, ServiceConstants.PID);
-            Connection conn = new Connection(url, resolver);
+            // java11 adds #runtime spec for (classloader) resource loading and breaks pax
+            Connection conn = new Connection(new URL(url.toExternalForm().replace("#runtime", "")), resolver);
             conn.setUseCaches(false);// to avoid concurent thread to have an IllegalStateException.
             return conn;
         }
@@ -91,33 +92,23 @@ public class RuntimeUtil {
         // If the URL above failed, the mvn protocol needs to be installed.
         // not advice create a wrap URLStreamHandlerFactory class now
         try {
-            final Field factoryField = URL.class.getDeclaredField("factory");
-            factoryField.setAccessible(true);
-            final Field lockField = URL.class.getDeclaredField("streamHandlerLock");
-            lockField.setAccessible(true);
+            URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory() {
 
-            synchronized (lockField.get(null)) {
-                final URLStreamHandlerFactory factory = (URLStreamHandlerFactory) factoryField.get(null);
-                // avoid the factory already defined error
-                if (factory != null) {
-                    return;
+                @Override
+                public URLStreamHandler createURLStreamHandler(String protocol) {
+                    if (ServiceConstants.PROTOCOL.equals(protocol)) {
+                        return new MavenUrlStreamHandler();
+                    } else {
+                        return null;
+                    }
                 }
 
-                URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory() {
-
-                    @Override
-                    public URLStreamHandler createURLStreamHandler(String protocol) {
-                        if (ServiceConstants.PROTOCOL.equals(protocol)) {
-                            return new MavenUrlStreamHandler();
-                        } else {
-                            return null;
-                        }
-                    }
-
-                });
-            }
+            });
         } catch (Exception exception) {
             LOG.warn(exception.getMessage());
+        } catch (Error err) {
+            // avoid the factory already defined error
+            LOG.warn(err.getMessage());
         }
     }
 

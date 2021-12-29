@@ -1,6 +1,7 @@
 package org.talend.daikon.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 
@@ -34,8 +35,9 @@ public class BigDecimalFormatterTest {
 
     @Test
     public void testToBigDecimalGroupingEU() throws Exception {
-        assertEquals("4" + ((char) 160) + "512,5",
-                BigDecimalFormatter.format(new BigDecimal("4512.50"), BigDecimalParser.EU_DECIMAL_PATTERN));
+        // see https://kirillbelyaev.com/s/
+        // seems jdk use unicode 8239 instead of 160 now for whitespace for the format action below
+        assertTrue(BigDecimalFormatter.format(new BigDecimal("4512.50"), BigDecimalParser.EU_DECIMAL_PATTERN).matches("4.512,5"));
     }
 
     @Test
