@@ -1,0 +1,11 @@
+= Daikon Release Notes (5.18.1) - 01/06/2022
+
+Thanks to @Mark Butko, @Colm O hEigeartaigh, @wang wei
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-325[TDKN-325]: Update Log4J to 2.17.1 (link:https://github.com/Talend/daikon/pull/805[#805])
+- link:https://jira.talendforge.org/browse/TPSVC-18193[TPSVC-18193]: Move SAT authentication manager to Daikon (link:https://github.com/Talend/daikon/pull/803[#803])
+
+== Other
+- fix: register java time module since Jackson 12 requires it  (link:https://github.com/Talend/daikon/pull/806[#806])
+- fix daikon for java 17, now only miss javascript engine  (link:https://github.com/Talend/daikon/pull/780[#780])
