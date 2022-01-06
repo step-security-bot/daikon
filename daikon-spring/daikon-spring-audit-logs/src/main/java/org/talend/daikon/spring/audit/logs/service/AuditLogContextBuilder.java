@@ -16,6 +16,7 @@ import org.talend.logging.audit.impl.DefaultContextImpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class AuditLogContextBuilder {
 
@@ -31,7 +32,10 @@ public class AuditLogContextBuilder {
 
     private HttpServletRequest httpServletRequest;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
+    static {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     private AuditLogContextBuilder() {
     }
