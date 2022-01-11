@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.talend.daikon</groupId>
     <artifactId>daikon-parent</artifactId>
-    <version>5.18.2-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Daikon - parent pom</name>
     <url>https://github.com/Talend/daikon</url>
@@ -41,9 +41,9 @@
         <de.flapdoodle.embed.mongo.version>2.2.0</de.flapdoodle.embed.mongo.version>
         <mongo-java-server.version>1.11.1</mongo-java-server.version>
 
-        <spring-boot.version>2.4.9</spring-boot.version>
-        <spring-cloud-dependencies.version>2020.0.3</spring-cloud-dependencies.version>
-        <spring-cloud-aws.version>2.3.1</spring-cloud-aws.version>
+        <spring-boot.version>2.6.2</spring-boot.version>
+        <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
+        <spring-cloud-aws.version>2.3.2</spring-cloud-aws.version>
 
         <s3mock.version>0.1.6</s3mock.version>
         <aws-java-sdk-s3.version>1.11.18</aws-java-sdk-s3.version>

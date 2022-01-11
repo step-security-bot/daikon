@@ -57,6 +57,14 @@ _Modules_                                                     |_Description_
 | Spring Cloud | Hoxton SR9   | Hoxton SR9   | Hoxton SR10      | Hoxton SR10  | Hoxton SR11   | Hoxton SR11      | Hoxton SR1    |
 | Jackson      | 2.11.3       | 2.11.3       | 2.11.4           | 2.11.4       | 2.11.4        | 2.11.4           | 2.11.4        |
 
+### Daikon 6.x
+
+|              | *Daikon 6.0.x* |
+|--------------|----------------|
+| Spring Boot  | 2.6.2          |
+| Spring Cloud | 2021.0.0       |
+| Jackson      | 2.11.4         |
+
 ## Support
 
 You can ask for help on our [forum](https://community.talend.com/).
