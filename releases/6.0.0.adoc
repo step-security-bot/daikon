@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.0.0) - 01/11/2022
+
+Thanks to @Fabien Abballe
+
+== Other
+- chore(): upgrade daikon to spring boot 2.6  (link:https://github.com/Talend/daikon/pull/807[#807])
