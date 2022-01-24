@@ -2,7 +2,7 @@
 
 [Please use Github discussion to engage with us :) ](https://github.com/Talend/daikon/discussions)
 
-http://www.talend.com
+https://www.talend.com
 
 
 ![Talend](https://www.talend.com/wp-content/uploads/2016/07/talend-logo.png "Talend")
