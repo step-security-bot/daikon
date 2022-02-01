@@ -1,27 +1,36 @@
 package org.talend.daikon.logging.ecs;
 
-import co.elastic.logging.AdditionalField;
-import java.util.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.talend.daikon.logging.event.field.HostData;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import co.elastic.logging.AdditionalField;
 
 public class EcsSerializerTest {
 
     @Test
     public void testSerializeAdditionalFields() {
-        StringBuilder builder = new StringBuilder();
-        List<AdditionalField> additionalFields = new ArrayList<>();
+        final StringBuilder builder = new StringBuilder();
+        final List<AdditionalField> additionalFields = new ArrayList<>();
         additionalFields.add(new AdditionalField("mdc_field_1", "my value 1"));
         additionalFields.add(new AdditionalField("ecs.field.second", "my value 2"));
         additionalFields.add(new AdditionalField("labels.my_awesome_label", "my value 3"));
         additionalFields.add(new AdditionalField("unknown_field", "my value 4"));
 
         EcsSerializer.serializeAdditionalFields(builder, additionalFields);
-        String actual = builder.toString();
+        final String actual = builder.toString();
 
         assertThat(actual, containsString("\"ecs.field.first\":\"my value 1\""));
         assertThat(actual, containsString("\"ecs.field.second\":\"my value 2\""));
@@ -32,15 +41,15 @@ public class EcsSerializerTest {
 
     @Test
     public void testSerializeMDC() {
-        StringBuilder builder = new StringBuilder();
-        Map<String, String> mdc = new HashMap<>();
+        final StringBuilder builder = new StringBuilder();
+        final Map<String, String> mdc = new HashMap<>();
         mdc.put("mdc_field_1", "my value 1");
         mdc.put("ecs.field.second", "my value 2");
         mdc.put("labels.my_awesome_label", "my value 3");
         mdc.put("unknown_field", "my value 4");
 
         EcsSerializer.serializeMDC(builder, mdc);
-        String actual = builder.toString();
+        final String actual = builder.toString();
 
         assertThat(actual, containsString("\"ecs.field.first\":\"my value 1\""));
         assertThat(actual, containsString("\"ecs.field.second\":\"my value 2\""));
@@ -51,8 +60,8 @@ public class EcsSerializerTest {
 
     @Test
     public void testSerializeMdcWithNumbers() {
-        StringBuilder builder = new StringBuilder();
-        Map<String, String> mdc = new HashMap<>();
+        final StringBuilder builder = new StringBuilder();
+        final Map<String, String> mdc = new HashMap<>();
 
         // strings
         mdc.put("mdc_field_1", "string value");
@@ -64,7 +73,7 @@ public class EcsSerializerTest {
         mdc.put("log.origin.file.line", "not a number"); // unparsable
 
         EcsSerializer.serializeMDC(builder, mdc);
-        String actual = builder.toString();
+        final String actual = builder.toString();
 
         // strings
         assertThat(actual, containsString("\"ecs.field.first\":\"string value\","));
@@ -83,8 +92,8 @@ public class EcsSerializerTest {
 
     @Test
     public void testSerializeHostInfo() {
-        StringBuilder builder = new StringBuilder();
-        HostData hostData = new HostData();
+        final StringBuilder builder = new StringBuilder();
+        final HostData hostData = new HostData();
         hostData.setHostAddress("8.8.8.8");
         hostData.setHostName("AWESOME_HOST");
         EcsSerializer.serializeHostInfo(builder, hostData);
@@ -93,19 +102,19 @@ public class EcsSerializerTest {
 
     @Test
     public void testSerializeEventId() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         EcsSerializer.serializeEventId(builder, UUID.fromString("b75e9427-8679-4064-8251-02ff0de61d91"));
         assertThat(builder.toString(), is("\"event.id\":\"b75e9427-8679-4064-8251-02ff0de61d91\","));
     }
 
     @Test
     public void testSerializeCustomMarkers() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         EcsSerializer.serializeCustomMarker(builder, "custom_marker:my_value");
         EcsSerializer.serializeCustomMarker(builder, "custom_marker_without_value");
         EcsSerializer.serializeCustomMarker(builder, "labels.custom_marker_2:my_value_2");
         EcsSerializer.serializeCustomMarker(builder, "ecs.field.first:my_value_3");
-        String actual = builder.toString();
+        final String actual = builder.toString();
 
         assertThat(actual, containsString("\"labels.custom_marker\":\"my_value\""));
         assertThat(actual, containsString("\"labels.custom_marker_2\":\"my_value_2\""));
@@ -115,9 +124,39 @@ public class EcsSerializerTest {
 
     @Test
     public void testSerializeEcsVersion() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         EcsSerializer.serializeEcsVersion(builder);
         assertThat(builder.toString(), containsString("\"ecs.version\":\"4.2.0\""));
+    }
+
+    @Test
+    public void testSerializeEcsFieldItem() {
+        // given a builder
+        final StringBuilder builder = new StringBuilder();
+
+        // when serializing a String
+        EcsSerializer.serializeEcsFieldItem(builder, EcsFields.EVENT_ACTION, "string-example");
+        // when serializing a Date
+        EcsSerializer.serializeEcsFieldItem(builder, EcsFields.EVENT_CREATED,
+                Date.from(Instant.parse("2016-05-23T08:05:35.101Z")));
+        // when serializing a Long
+        EcsSerializer.serializeEcsFieldItem(builder, EcsFields.EVENT_DURATION, 2L);
+        // when serializing a Float
+        EcsSerializer.serializeEcsFieldItem(builder, EcsFields.EVENT_RISK_SCORE, 3.0F);
+        // when serializing a map<String, String> for labels
+        final Map<String, String> mapLabels = new HashMap<>();
+        mapLabels.put("labels.key-1", "value-1");
+        mapLabels.put("labels.key-2", "value-2");
+        EcsSerializer.serializeEcsFieldItem(builder, EcsFields.LABELS, mapLabels);
+
+        // then all the fields should be well serialized with quotes (or not)
+        final String result = builder.toString();
+        assertThat(result, containsString("\"" + EcsFields.EVENT_ACTION.fieldName + "\":\"string-example\""));
+        assertThat(result, containsString("\"" + EcsFields.EVENT_CREATED.fieldName + "\":\"2016-05-23T08:05:35.101Z\""));
+        assertThat(result, containsString("\"" + EcsFields.EVENT_DURATION.fieldName + "\":" + 2L));
+        assertThat(result, containsString("\"" + EcsFields.EVENT_RISK_SCORE.fieldName + "\":" + 3.0F));
+        assertThat(result, containsString("\"labels.key-1\":\"value-1\""));
+        assertThat(result, containsString("\"labels.key-2\":\"value-2\""));
     }
 
 }

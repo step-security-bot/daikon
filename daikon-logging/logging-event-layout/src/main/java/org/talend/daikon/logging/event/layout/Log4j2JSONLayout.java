@@ -1,7 +1,12 @@
 package org.talend.daikon.logging.event.layout;
 
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,11 +16,16 @@ import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.Node;
-import org.apache.logging.log4j.core.config.plugins.*;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
+import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
+import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
+import org.apache.logging.log4j.core.config.plugins.PluginConfiguration;
+import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.layout.AbstractStringLayout;
 import org.apache.logging.log4j.core.layout.ByteBufferDestination;
 import org.apache.logging.log4j.core.layout.Encoder;
 import org.apache.logging.log4j.core.util.KeyValuePair;
+import org.talend.daikon.logging.ecs.EcsFieldsMarker;
 import org.talend.daikon.logging.ecs.EcsSerializer;
 import org.talend.daikon.logging.event.field.HostData;
 
@@ -35,14 +45,14 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
 
     private final String serviceName;
 
-    private boolean locationInfo;
+    private final boolean locationInfo;
 
-    private boolean hostInfo;
+    private final boolean hostInfo;
 
-    private boolean addEventUuid;
+    private final boolean addEventUuid;
 
-    private Log4j2JSONLayout(Configuration config, String serviceName, boolean locationInfo, boolean hostInfo,
-            boolean addEventUuid, KeyValuePair[] additionalFields) {
+    private Log4j2JSONLayout(final Configuration config, final String serviceName, final boolean locationInfo,
+            final boolean hostInfo, final boolean addEventUuid, final KeyValuePair[] additionalFields) {
         super(config, UTF_8, null, null);
         this.serviceName = serviceName;
         this.locationInfo = locationInfo;
@@ -58,13 +68,13 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
     }
 
     @Override
-    public String toSerializable(LogEvent event) {
+    public String toSerializable(final LogEvent event) {
         final StringBuilder text = toText(event, getStringBuilder());
         return text.toString();
     }
 
     @Override
-    public void encode(LogEvent event, ByteBufferDestination destination) {
+    public void encode(final LogEvent event, final ByteBufferDestination destination) {
         final StringBuilder text = toText(event, getStringBuilder());
         final Encoder<StringBuilder> helper = getStringBuilderEncoder();
         helper.encode(text, destination);
@@ -75,7 +85,7 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
         return "application/json";
     }
 
-    private StringBuilder toText(LogEvent event, StringBuilder builder) {
+    private StringBuilder toText(final LogEvent event, final StringBuilder builder) {
         EcsJsonSerializer.serializeObjectStart(builder, event.getTimeMillis());
         EcsJsonSerializer.serializeLogLevel(builder, event.getLevel().toString());
         EcsJsonSerializer.serializeFormattedMessage(builder, event.getMessage().getFormattedMessage());
@@ -83,6 +93,8 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
         EcsJsonSerializer.serializeServiceName(builder, serviceName);
         EcsJsonSerializer.serializeThreadName(builder, event.getThreadName());
         EcsJsonSerializer.serializeLoggerName(builder, event.getLoggerName());
+
+        serializeMarkers(builder, event);
 
         // Serialize custom markers with format key:value
         serializeCustomMarkers(builder, event.getMarker());
@@ -99,7 +111,6 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
             EcsSerializer.serializeEventId(builder, UUID.randomUUID());
         }
 
-        serializeTags(event, builder);
         if (locationInfo) {
             EcsJsonSerializer.serializeOrigin(builder, event.getSource());
         }
@@ -108,53 +119,72 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
         return builder;
     }
 
-    private void serializeTags(LogEvent event, StringBuilder builder) {
-        ThreadContext.ContextStack stack = event.getContextStack();
-        List<String> contextStack;
+    private void serializeMarkers(final StringBuilder builder, final LogEvent event) {
+        if (event != null) {
+            serializeMarkerEcsFields(event.getMarker(), builder);
+            serializeMarkerTags(event, builder);
+        }
+    }
+
+    private void serializeMarkerEcsFields(final Marker marker, final StringBuilder builder) {
+        if (marker != null) {
+            if (EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName())) {
+                EcsSerializer.serializeEcsFieldsMarker(builder, (EcsFieldsMarker) marker);
+            } else {
+                final Marker[] parents = marker.getParents();
+                final Optional<Marker> ecsFieldsMarker = Arrays.stream(parents)
+                        .filter(parent -> EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(parent.getName())).findFirst();
+                ecsFieldsMarker.ifPresent(value -> EcsSerializer.serializeEcsFieldsMarker(builder, (EcsFieldsMarker) value));
+            }
+        }
+    }
+
+    private void serializeMarkerTags(final LogEvent event, final StringBuilder builder) {
+        final ThreadContext.ContextStack stack = event.getContextStack();
+        final List<String> contextStack;
         if (stack == null) {
             contextStack = Collections.emptyList();
         } else {
             contextStack = stack.asList();
         }
-        Marker marker = event.getMarker();
-        boolean hasTags = !contextStack.isEmpty() || marker != null;
-        if (hasTags) {
+        final boolean contextStackContainsTags = !contextStack.isEmpty();
+        final Marker marker = event.getMarker();
+        final boolean isEcsFieldsMarker = marker != null && EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName());
+        final boolean markerContainsTags = marker != null && (!isEcsFieldsMarker || marker.hasParents());
+        if (contextStackContainsTags || markerContainsTags) {
             EcsJsonSerializer.serializeTagStart(builder);
-        }
-
-        if (!contextStack.isEmpty()) {
-            final int len = contextStack.size();
-            for (int i = 0; i < len; i++) {
-                builder.append('\"');
-                JsonUtils.quoteAsString(contextStack.get(i), builder);
-                builder.append("\",");
+            if (contextStackContainsTags) {
+                final int len = contextStack.size();
+                for (int i = 0; i < len; i++) {
+                    builder.append('\"');
+                    JsonUtils.quoteAsString(contextStack.get(i), builder);
+                    builder.append("\",");
+                }
             }
-        }
-
-        if (marker != null) {
-            serializeMarker(builder, marker);
-        }
-
-        if (hasTags) {
+            if (markerContainsTags) {
+                serializeMarkerTag(builder, marker);
+            }
             EcsJsonSerializer.serializeTagEnd(builder);
         }
     }
 
-    private void serializeMarker(StringBuilder builder, Marker marker) {
-        EcsJsonSerializer.serializeSingleTag(builder, marker.getName());
+    private void serializeMarkerTag(final StringBuilder builder, final Marker marker) {
+        if (marker != null && !EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName())) {
+            EcsJsonSerializer.serializeSingleTag(builder, marker.getName());
+        }
         if (marker.hasParents()) {
-            Marker[] parents = marker.getParents();
+            final Marker[] parents = marker.getParents();
             for (int i = 0; i < parents.length; i++) {
-                serializeMarker(builder, parents[i]);
+                serializeMarkerTag(builder, parents[i]);
             }
         }
     }
 
-    private void serializeCustomMarkers(StringBuilder builder, Marker marker) {
+    private void serializeCustomMarkers(final StringBuilder builder, final Marker marker) {
         if (marker != null) {
             EcsSerializer.serializeCustomMarker(builder, marker.getName());
             if (marker.hasParents()) {
-                Marker[] parents = marker.getParents();
+                final Marker[] parents = marker.getParents();
                 for (int i = 0; i < parents.length; i++) {
                     serializeCustomMarkers(builder, parents[i]);
                 }
@@ -162,7 +192,7 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
         }
     }
 
-    public void setMetaFields(Map<String, String> metaFields) {
+    public void setMetaFields(final Map<String, String> metaFields) {
         additionalFields.addAll(metaFields.entrySet().stream().map(e -> new AdditionalField(e.getKey(), e.getValue()))
                 .collect(Collectors.toList()));
     }
@@ -234,17 +264,17 @@ public class Log4j2JSONLayout extends AbstractStringLayout {
             return this;
         }
 
-        public Builder setLocationInfo(boolean locationInfo) {
+        public Builder setLocationInfo(final boolean locationInfo) {
             this.locationInfo = locationInfo;
             return this;
         }
 
-        public Builder setHostInfo(boolean hostInfo) {
+        public Builder setHostInfo(final boolean hostInfo) {
             this.hostInfo = hostInfo;
             return this;
         }
 
-        public Builder setAddEventUuid(boolean addEventUuid) {
+        public Builder setAddEventUuid(final boolean addEventUuid) {
             this.addEventUuid = addEventUuid;
             return this;
         }

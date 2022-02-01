@@ -1,6 +1,9 @@
 package org.talend.daikon.logging.event.layout;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Layout;

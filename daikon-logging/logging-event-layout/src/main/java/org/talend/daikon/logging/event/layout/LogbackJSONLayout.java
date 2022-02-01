@@ -1,8 +1,14 @@
 package org.talend.daikon.logging.event.layout;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Marker;
+import org.talend.daikon.logging.ecs.EcsFieldsMarker;
 import org.talend.daikon.logging.ecs.EcsSerializer;
 import org.talend.daikon.logging.event.field.HostData;
 
@@ -11,9 +17,8 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 import ch.qos.logback.core.LayoutBase;
-
-import co.elastic.logging.EcsJsonSerializer;
 import co.elastic.logging.AdditionalField;
+import co.elastic.logging.EcsJsonSerializer;
 
 /**
  * Logback ECS JSON layout
@@ -61,7 +66,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
      *
      * @param locationInfo whether or not to include location information in the log messages.
      */
-    public LogbackJSONLayout(boolean locationInfo, boolean hostInfo, boolean addEventUuid) {
+    public LogbackJSONLayout(final boolean locationInfo, final boolean hostInfo, final boolean addEventUuid) {
         this.locationInfo = locationInfo;
         this.hostInfo = hostInfo;
         this.addEventUuid = addEventUuid;
@@ -71,7 +76,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return locationInfo;
     }
 
-    public void setLocationInfo(boolean locationInfo) {
+    public void setLocationInfo(final boolean locationInfo) {
         this.locationInfo = locationInfo;
     }
 
@@ -79,7 +84,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return hostInfo;
     }
 
-    public void setHostInfo(boolean hostInfo) {
+    public void setHostInfo(final boolean hostInfo) {
         this.hostInfo = hostInfo;
     }
 
@@ -87,7 +92,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return addEventUuid;
     }
 
-    public void setAddEventUuid(boolean addEventUuid) {
+    public void setAddEventUuid(final boolean addEventUuid) {
         this.addEventUuid = addEventUuid;
     }
 
@@ -95,7 +100,7 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return legacyMode;
     }
 
-    public void setLegacyMode(boolean legacyMode) {
+    public void setLegacyMode(final boolean legacyMode) {
         this.legacyMode = legacyMode;
     }
 
@@ -103,15 +108,15 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return serviceName;
     }
 
-    public void setServiceName(String serviceName) {
+    public void setServiceName(final String serviceName) {
         this.serviceName = serviceName;
     }
 
-    public void addAdditionalField(AdditionalField pair) {
+    public void addAdditionalField(final AdditionalField pair) {
         this.additionalFields.add(pair);
     }
 
-    public void setMetaFields(Map<String, String> metaFields) {
+    public void setMetaFields(final Map<String, String> metaFields) {
         this.metaFields.clear();
         if (metaFields != null) {
             this.metaFields.putAll(metaFields);
@@ -126,8 +131,8 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
     }
 
     @Override
-    public String doLayout(ILoggingEvent event) {
-        StringBuilder builder = new StringBuilder();
+    public String doLayout(final ILoggingEvent event) {
+        final StringBuilder builder = new StringBuilder();
         EcsJsonSerializer.serializeObjectStart(builder, event.getTimeStamp());
         EcsJsonSerializer.serializeLogLevel(builder, event.getLevel().toString());
         EcsJsonSerializer.serializeFormattedMessage(builder, event.getFormattedMessage());
@@ -153,12 +158,12 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         }
 
         if (this.locationInfo) {
-            StackTraceElement[] callerData = event.getCallerData();
+            final StackTraceElement[] callerData = event.getCallerData();
             if (callerData != null && callerData.length > 0) {
                 EcsJsonSerializer.serializeOrigin(builder, callerData[0]);
             }
         }
-        IThrowableProxy throwableProxy = event.getThrowableProxy();
+        final IThrowableProxy throwableProxy = event.getThrowableProxy();
         if (throwableProxy instanceof ThrowableProxy) {
             EcsJsonSerializer.serializeException(builder, ((ThrowableProxy) throwableProxy).getThrowable(), false);
         } else if (throwableProxy != null) {
@@ -169,36 +174,62 @@ public class LogbackJSONLayout extends LayoutBase<ILoggingEvent> {
         return builder.toString();
     }
 
-    private void serializeMarkers(StringBuilder builder, ILoggingEvent event) {
-        Marker marker = event.getMarker();
+    private void serializeMarkers(final StringBuilder builder, final ILoggingEvent event) {
+        final Marker marker = event.getMarker();
         if (marker != null) {
-            EcsJsonSerializer.serializeTagStart(builder);
-            serializeMarker(marker, builder);
-            EcsJsonSerializer.serializeTagEnd(builder);
+            serializeMarkerEcsFields(builder, marker);
+            serializeMarkerTags(builder, marker);
         }
     }
 
-    private void serializeMarker(Marker marker, StringBuilder builder) {
+    private void serializeMarkerEcsFields(final StringBuilder builder, final Marker marker) {
         if (marker != null) {
-            EcsJsonSerializer.serializeSingleTag(builder, marker.getName());
-            Iterator<Marker> it = marker.iterator();
-            while (it.hasNext()) {
-                serializeMarker(it.next(), builder);
+            if (EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName())) {
+                EcsSerializer.serializeEcsFieldsMarker(builder, (EcsFieldsMarker) marker);
+            } else {
+                final Iterator<Marker> it = marker.iterator();
+                while (it.hasNext()) {
+                    final Marker currentMarker = it.next();
+                    if (EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(currentMarker.getName())) {
+                        EcsSerializer.serializeEcsFieldsMarker(builder, (EcsFieldsMarker) currentMarker);
+                    }
+                }
             }
         }
     }
 
-    private void serializeCustomMarkers(StringBuilder builder, ILoggingEvent event) {
-        Marker marker = event.getMarker();
+    private void serializeMarkerTags(final StringBuilder builder, final Marker marker) {
+        if (marker != null) {
+            final boolean hasTags = !EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName()) || marker.hasReferences();
+            if (hasTags) {
+                EcsJsonSerializer.serializeTagStart(builder);
+                serializeMarkerTag(marker, builder);
+                EcsJsonSerializer.serializeTagEnd(builder);
+            }
+        }
+    }
+
+    private void serializeMarkerTag(final Marker marker, final StringBuilder builder) {
+        if (marker != null && !EcsFieldsMarker.ECS_FIELDS_MARKER_NAME.equals(marker.getName())) {
+            EcsJsonSerializer.serializeSingleTag(builder, marker.getName());
+            final Iterator<Marker> it = marker.iterator();
+            while (it.hasNext()) {
+                serializeMarkerTag(it.next(), builder);
+            }
+        }
+    }
+
+    private void serializeCustomMarkers(final StringBuilder builder, final ILoggingEvent event) {
+        final Marker marker = event.getMarker();
         if (marker != null) {
             serializeCustomMarker(marker, builder);
         }
     }
 
-    private void serializeCustomMarker(Marker marker, StringBuilder builder) {
+    private void serializeCustomMarker(final Marker marker, final StringBuilder builder) {
         if (marker != null) {
             EcsSerializer.serializeCustomMarker(builder, marker.getName());
-            Iterator<Marker> it = marker.iterator();
+            final Iterator<Marker> it = marker.iterator();
             while (it.hasNext()) {
                 serializeCustomMarker(it.next(), builder);
             }

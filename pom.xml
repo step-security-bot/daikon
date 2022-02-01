@@ -25,7 +25,7 @@
         </talend_releases>
         <talend_snapshots_deployment>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots_deployment>
         <pushChanges>false</pushChanges>
-
+        <lombok.version>1.18.10</lombok.version>
         <jackson.version>2.11.4</jackson.version>
         <jackson.version.annotations>2.11.4</jackson.version.annotations>
         <slf4j.version>1.7.26</slf4j.version>
@@ -46,6 +46,7 @@
         <spring-cloud-aws.version>2.3.2</spring-cloud-aws.version>
 
         <s3mock.version>0.1.6</s3mock.version>
+        <jsr305.version>3.0.2</jsr305.version>
         <aws-java-sdk-s3.version>1.11.18</aws-java-sdk-s3.version>
         <junit.version>4.13.1</junit.version>
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>

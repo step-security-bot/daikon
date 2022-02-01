@@ -1,9 +1,5 @@
 package org.talend.daikon.logging.event.layout;
 
-import ch.qos.logback.access.spi.IAccessEvent;
-import ch.qos.logback.core.LayoutBase;
-import co.elastic.logging.AdditionalField;
-import co.elastic.logging.EcsJsonSerializer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +9,11 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.talend.daikon.logging.ecs.EcsSerializer;
 import org.talend.daikon.logging.event.field.HostData;
+
+import ch.qos.logback.access.spi.IAccessEvent;
+import ch.qos.logback.core.LayoutBase;
+import co.elastic.logging.AdditionalField;
+import co.elastic.logging.EcsJsonSerializer;
 
 public class LogbackJSONAccessEventLayout extends LayoutBase<IAccessEvent> {
 
