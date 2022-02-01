@@ -1,0 +1,9 @@
+= Daikon Release Notes (6.1.0) - 02/01/2022
+
+Thanks to @ngrange-talend, @gmarquet
+
+== Feature
+- link:https://jira.talendforge.org/browse/APIC-774[APIC-774]: Logging ECS field sets in Daikon (link:https://github.com/Talend/daikon/pull/808[#808])
+
+== Other
+- Add TLS to Talend url
