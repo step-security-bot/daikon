@@ -48,5 +48,6 @@
         <module>daikon-spring-audit-logs</module>
         <module>daikon-spring-reactive</module>
         <module>daikon-spring-auth</module>
+        <module>daikon-spring-auth-common</module>
     </modules>
 </project>

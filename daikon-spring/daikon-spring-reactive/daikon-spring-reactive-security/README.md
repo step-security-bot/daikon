@@ -5,7 +5,7 @@ This module contains a reactive WebClient which overrides the existing one from 
 ## Authenticated Call
 
 Authenticated calls are needed to call API like dataset, sharing, rating, ...
-Those API are waiting a JWT token from a header `Authorization`.
+Those API are waiting an OAuth2 (JWT or Opaque) token from a header `Authorization`.
 
 In order to use reactive with non-blocking request, we need to pass through each request the token.
 Otherwise, we lose the token between calls (example: `flatMap()`)
@@ -21,7 +21,7 @@ In order to use it add a `WebClient.Builder` bean like this one on your project:
     public WebClient.Builder webClientBuilder() {
         return WebClient
                 .builder()
-                .filter(new JwtBearerExchangeFilterFunction());
+                .filter(new OAuth2ExchangeFilterFunction());
     }
 ```
 
@@ -77,7 +77,7 @@ If you need to access tenancy context inside a reactive chain of call you need t
                 .securityMatcher(new NegatedServerWebExchangeMatcher(AUTH_ALLOW_LIST))
                 // Tenancy Context Filter need to be add after Security Context Server because it will used
                 // Authentication to get the tenantId
-                .addFilterAfter(new JwtTenancyContextWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
+                .addFilterAfter(new TenancyContextWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
                 .csrf()
                 .disable() // we can disable CSRF because this service only use JWT token through Authorization header
                 .authorizeExchange()

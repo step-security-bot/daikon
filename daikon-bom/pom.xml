@@ -141,7 +141,7 @@
                 <version>${project.version}</version>
             </dependency>
 
-<!-- spring -->
+            <!-- spring -->
             <dependency>
                 <groupId>org.talend.daikon</groupId>
                 <artifactId>content-service-common</artifactId>
@@ -179,6 +179,16 @@
             </dependency>
             <dependency>
                 <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-spring-auth-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-spring-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
                 <artifactId>daikon-spring-security</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -197,7 +207,16 @@
                 <artifactId>daikon-spring-zipkin</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-spring-reactive-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-spring-reactive-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- tql -->
             <dependency>

@@ -1,0 +1,80 @@
+= Daikon Spring Auth
+:toc:
+
+This module provides support for Service Accounts authentication in a reactive application. +
+It introduces `Auth0ReactiveAuthenticationManager` which will validate headers populated by passthrough-auth service (Gloo) or parse Auth0 JWT itself issued for service account.
+
+In case not all headers are found and token is not SAT, authentication is done by other managers through the `TalendReactiveAuthenticationManagerResolver`: Talend JWT or Opaque token. +
+`AuthUserDetails` will be populated into SecurityContext in case of successful authentication, usages of old class `UserDetails` have to be renamed.
+
+== Usage
+
+- *Authentication:* set correct `Authentication` context for the session depending on the token type
+- *Exchange Filter:* forward SAT headers to the next request
+
+
+== Adding dependency
+
+- `oidc-client` is not compatible with reactive application, so remove it if you have it in your path
+- add `daikon-spring-reactive-auth` dependency
+
+To start supporting SAT it’s necessary to add the following dependency:
+
+```xml
+<dependency>
+    <groupId>org.talend.daikon</groupId>
+    <artifactId>daikon-spring-reactive-auth</artifactId>
+    <version>${daikon.version}</version>
+</dependency>
+```
+
+== Authentication
+
+Add Authentication to your context by using the default `ReactiveAuthenticationManagerResolver` bean `talendAuthenticationManagerResolver` in your security chain to get the correct authentication manager for the session, dependending on the request (see implementation).
+
+_example_:
+```java
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+public class SecurityConfiguration {
+
+    private final ReactiveAuthenticationManagerResolver<ServerWebExchange> talendAuthenticationManagerResolver;
+
+    public SecurityConfiguration(ReactiveAuthenticationManagerResolver<ServerWebExchange> talendAuthenticationManagerResolver)
+    {
+        this.talendAuthenticationManagerResolver = talendAuthenticationManagerResolver;
+    }
+
+    @Bean
+    public SecurityWebFilterChain privateApiSecurityWebFilterChain(ServerHttpSecurity http) {
+        return http
+            .authorizeExchange()
+            .anyExchange()
+            .authenticated()
+            .and()
+            .oauth2ResourceServer()
+            .authenticationManagerResolver(talendAuthenticationManagerResolver)
+            .and()
+            .build();
+    }
+
+}
+```
+
+In order to handle an Auth0 token, you must add an the Auth0 url to `spring.security.oauth2.resourceserver.jwt.issuer-uri` value in your `application.[yaml|yml|properties]` file.
+
+== Exchange Filter
+
+Forward the SAT headers to the next request by adding the `Auth0ExchangeFilterFunction` to your `WebClient` definition.
+
+_example:_
+```java
+    @Bean
+    public WebClient webClient() {
+        return WebClient
+            .builder()
+            .filter(new Auth0ExchangeFilterFunction())
+            [...]
+            .build();
+    }
+```
