@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.2.0) - 02/03/2022
+
+Thanks to @Damien Rubio
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPRUN-2858[TPRUN-2858]: engine-info api documentation is missing (link:https://github.com/Talend/daikon/pull/809[#809])
