@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.talend.daikon.spring.sat.model.userdetails.AuthUserDetails;
+import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 
 public class SatAuthenticationToken extends AuthenticationToken {
 
