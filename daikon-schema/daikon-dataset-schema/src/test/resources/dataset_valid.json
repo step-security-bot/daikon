@@ -1,0 +1,441 @@
+{
+  "type": "record",
+  "name": "Person",
+  "namespace": "org.talend.dq.processors",
+  "fields": [
+    {
+      "name": "title",
+      "type": [
+        {
+          "type": "string",
+          "dqType": "Title",
+          "dqTypeId": "TITLE",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80.0,
+                "total": 8,
+                "name": "Title",
+                "id": "TITLE"
+              },
+              {
+                "score": 60.0,
+                "total": 6,
+                "name": "Language Code ISO2",
+                "id": "LANGUAGE_CODE_ISO2"
+              },
+              {
+                "score": 40.0,
+                "total": 4,
+                "name": "Civility",
+                "id": "CIVILITY"
+              },
+              {
+                "score": 40.0,
+                "total": 4,
+                "name": "Country Code ISO2",
+                "id": "COUNTRY_CODE_ISO2"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 100.0,
+                "total": 10,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 8,
+            "total": 10,
+            "-1": 2
+          }
+        },
+        "null"
+      ]
+    },
+    {
+      "name": "name",
+      "type": {
+        "type": "record",
+        "name": "FullName",
+        "namespace": "org.talend.dq.processors.a",
+        "fields": [
+          {
+            "name": "first",
+            "type": {
+              "type": "string",
+              "dqType": "First Name",
+              "dqTypeId": "FIRST_NAME",
+              "isForced": false,
+              "dqNativeType": "STRING",
+              "isNativeForced": false,
+              "dqSemanticTypeDistribution": {
+                "total": 10,
+                "matchings": [
+                  {
+                    "score": 60.0,
+                    "total": 6,
+                    "name": "First Name",
+                    "id": "FIRST_NAME"
+                  }
+                ]
+              },
+              "dqNativeTypeDistribution": {
+                "total": 10,
+                "matchings": [
+                  {
+                    "score": 100.0,
+                    "total": 10,
+                    "id": "STRING"
+                  }
+                ]
+              },
+              "dqQualityAggregate": {
+                "0": 0,
+                "1": 10,
+                "total": 10,
+                "-1": 0
+              }
+            }
+          },
+          {
+            "name": "last",
+            "type": {
+              "type": "string",
+              "dqType": "Last Name",
+              "dqTypeId": "LAST_NAME",
+              "isForced": false,
+              "dqNativeType": "STRING",
+              "isNativeForced": false,
+              "dqSemanticTypeDistribution": {
+                "total": 10,
+                "matchings": [
+                  {
+                    "score": 60.0,
+                    "total": 6,
+                    "name": "Last Name",
+                    "id": "LAST_NAME"
+                  }
+                ]
+              },
+              "dqNativeTypeDistribution": {
+                "total": 10,
+                "matchings": [
+                  {
+                    "score": 100.0,
+                    "total": 10,
+                    "id": "STRING"
+                  }
+                ]
+              },
+              "dqQualityAggregate": {
+                "0": 0,
+                "1": 10,
+                "total": 10,
+                "-1": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "age",
+      "type":
+        {
+          "type": "int",
+          "dqType": "",
+          "dqTypeId": "",
+          "isForced": false,
+          "dqNativeType": "INTEGER",
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 8,
+            "matchings": [
+
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 8,
+            "matchings": [
+              {
+                "score": 100.0,
+                "total": 8,
+                "id": "INTEGER"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 8,
+            "total": 8,
+            "-1": 0
+          }
+        }
+
+    },
+    {
+      "name": "days",
+      "type": {
+        "type": "map",
+        "values": {
+          "dqNativeType": "STRING",
+          "dqType": "Weekday",
+          "dqTypeId": "WEEKDAY",
+          "dqTypeLabel": "Weekday",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqNativeTypeDistribution": {
+            "matchings": [
+              {
+                "dataType": "STRING",
+                "score": 100.0,
+                "total": 220
+              }
+            ],
+            "total": 220
+          },
+          "dqSemanticTypeDistribution": {
+            "matchings": [
+              {
+                "id": "WEEKDAY",
+                "name": "Weekday",
+                "score": 72.7300033569336,
+                "total": 160
+              },
+              {
+                "id": "EN_WEEKDAY",
+                "name": "EN Weekday",
+                "score": 72.7300033569336,
+                "total": 160
+              },
+              {
+                "id": "FIRST_NAME",
+                "name": "First Name",
+                "score": 36.36000061035156,
+                "total": 80
+              },
+              {
+                "id": "LAST_NAME",
+                "name": "Last Name",
+                "score": 36.36000061035156,
+                "total": 80
+              }
+            ],
+            "total": 220
+          },
+          "type": "string"
+        }
+      }
+    },
+    {
+      "name": "emails",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "dqType": "Email",
+          "dqTypeId": "EMAIL",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 20,
+            "matchings": [
+              {
+                "score": 70.0,
+                "total": 14,
+                "name": "Email",
+                "id": "EMAIL"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 20,
+            "matchings": [
+              {
+                "score": 100.0,
+                "total": 20,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 14,
+            "total": 20,
+            "-1": 6
+          }
+        }
+      }
+    },
+    {
+      "name": "answer",
+      "type": {
+        "type": "enum",
+        "name": "answer",
+        "namespace": "org.talend.dq.processors.a",
+        "symbols": [
+          "Y",
+          "N"
+        ],
+        "dqType": "Answer",
+        "dqTypeId": "ANSWER",
+        "isForced": false,
+        "dqNativeType": "STRING",
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100.0,
+              "total": 10,
+              "name": "Answer",
+              "id": "ANSWER"
+            },
+            {
+              "score": 40.0,
+              "total": 4,
+              "name": "FR Commune",
+              "id": "FR_COMMUNE"
+            }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100.0,
+              "total": 10,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "0": 0,
+          "1": 10,
+          "total": 10,
+          "-1": 0
+        }
+      }
+    },
+    {
+      "name": "height",
+      "type": {
+        "type": "string",
+        "dqType": "",
+        "dqTypeId": "",
+        "isForced": false,
+        "dqNativeType": "DOUBLE",
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 80.0,
+              "total": 8,
+              "id": "DOUBLE"
+            },
+            {
+              "score": 20.0,
+              "total": 2,
+              "id": "INTEGER"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "0": 0,
+          "1": 10,
+          "total": 10,
+          "-1": 0
+        }
+      }
+    },
+    {
+      "name": "birthdate",
+      "type": {
+        "type": "string",
+        "dqType": "",
+        "dqTypeId": "",
+        "isForced": false,
+        "dqNativeType": "DATE",
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 80.0,
+              "total": 8,
+              "id": "DATE"
+            },
+            {
+              "score": 20.0,
+              "total": 2,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "0": 0,
+          "1": 8,
+          "total": 10,
+          "-1": 2
+        }
+      }
+    },
+    {
+      "name": "empty",
+      "type": {
+        "type": "string",
+        "dqType": "",
+        "dqTypeId": "",
+        "isForced": false,
+        "dqNativeType": "EMPTY",
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100.0,
+              "total": 10,
+              "id": "EMPTY"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "0": 10,
+          "1": 0,
+          "total": 10,
+          "-1": 0
+        }
+      }
+    }
+  ]
+}

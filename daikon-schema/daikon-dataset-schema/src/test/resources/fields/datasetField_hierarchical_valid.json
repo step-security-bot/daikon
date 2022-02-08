@@ -1,0 +1,33 @@
+{
+  "name": "person",
+  "type": [{
+    "type": "record",
+    "dqTypeId": "TITLE",
+    "isForced": true,
+    "dqNativeType": "STRING",
+    "isNativeForced": true,
+    "namespace": "org.talend.dq.processors.a",
+    "fields": [
+      {
+        "name": "firstname",
+        "type": [{
+          "type": "string",
+          "dqTypeId": "TITLE",
+          "isForced": true,
+          "dqNativeType": "STRING",
+          "isNativeForced": true
+        }]
+      },
+      {
+        "name": "lastname",
+        "type": [{
+          "type": "string",
+          "dqTypeId": "TITLE",
+          "isForced": true,
+          "dqNativeType": "STRING",
+          "isNativeForced": true
+        }]
+      }
+    ]
+  }]
+}

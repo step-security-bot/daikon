@@ -1,0 +1,58 @@
+{
+  "name": "title",
+  "type": ["null",{
+      "type": "string",
+      "dqType": "Title",
+      "dqTypeLabel": "Title",
+      "dqTypeId": "TITLE",
+      "isForced": true,
+      "dqNativeType": "STRING",
+      "isNativeForced": true,
+      "dqSemanticTypeDistribution": {
+        "total": 10,
+        "matchings": [
+          {
+            "score": 80,
+            "total": 8,
+            "name": "Title",
+            "id": "TITLE"
+          },
+          {
+            "score": 60,
+            "total": 6,
+            "name": "Language Code ISO2",
+            "id": "LANGUAGE_CODE_ISO2"
+          },
+          {
+            "score": 40,
+            "total": 4,
+            "name": "Civility",
+            "id": "CIVILITY"
+          },
+          {
+            "score": 40,
+            "total": 4,
+            "name": "Country Code ISO2",
+            "id": "COUNTRY_CODE_ISO2"
+          }
+        ]
+      },
+      "dqNativeTypeDistribution": {
+        "total": 10,
+        "matchings": [
+          {
+            "score": 100,
+            "total": 10,
+            "id": "STRING"
+          }
+        ]
+      },
+      "dqQualityAggregate": {
+        "0": 0,
+        "1": 8,
+        "total": 10,
+        "-1": 2
+      }
+    }],
+  "originalFieldName": "my real title"
+}

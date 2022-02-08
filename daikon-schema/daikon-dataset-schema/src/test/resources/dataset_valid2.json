@@ -1,0 +1,435 @@
+{
+  "type": "record",
+  "name": "Record_7_3148434565807459313",
+  "namespace": "org.talend.sdk.component.schema.generated",
+  "fields": [
+    {
+      "name": "id",
+      "type":
+        {
+          "type": "int",
+          "dqNativeType": "INTEGER",
+          "dqType": "Integer",
+          "dqTypeLabel": "Integer",
+          "dqTypeId": "INT",
+          "isForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "INTEGER"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+
+    },
+    {
+      "name": "Firstname",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqType": "First Name",
+          "dqTypeLabel": "First Name",
+          "dqTypeId": "FIRST_NAME",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 98,
+                "total": 49,
+                "name": "First Name",
+                "id": "FIRST_NAME"
+              },
+              {
+                "score": 84,
+                "total": 42,
+                "name": "Last Name",
+                "id": "LAST_NAME"
+              },
+              {
+                "score": 40,
+                "total": 20,
+                "name": "US County",
+                "id": "US_COUNTY"
+              },
+              {
+                "score": 24,
+                "total": 12,
+                "name": "Airport",
+                "id": "AIRPORT"
+              },
+              {
+                "score": 16,
+                "total": 8,
+                "name": "Company",
+                "id": "COMPANY"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lastname",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqType": "Last Name",
+          "dqTypeLabel": "Last Name",
+          "dqTypeId": "LAST_NAME",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 86,
+                "total": 43,
+                "name": "Last Name",
+                "id": "LAST_NAME"
+              },
+              {
+                "score": 80,
+                "total": 40,
+                "name": "US County",
+                "id": "US_COUNTY"
+              },
+              {
+                "score": 58,
+                "total": 29,
+                "name": "First Name",
+                "id": "FIRST_NAME"
+              },
+              {
+                "score": 42,
+                "total": 21,
+                "name": "Airport",
+                "id": "AIRPORT"
+              },
+              {
+                "score": 18,
+                "total": 9,
+                "name": "Company",
+                "id": "COMPANY"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "FR Commune",
+                "id": "FR_COMMUNE"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "US State",
+                "id": "US_STATE"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "North American state",
+                "id": "NA_STATE"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Address",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqNativeType": "STRING",
+          "dqType": "Text",
+          "dqTypeLabel": "Text",
+          "dqTypeId": "STRING",
+          "isForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 46,
+                "total": 23,
+                "name": "Address Line",
+                "id": "ADDRESS_LINE"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "RegistrationDate",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqNativeType": "DATE",
+          "dqType": "Text",
+          "dqTypeLabel": "Text",
+          "dqTypeId": "STRING",
+          "isForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "DATE"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "Revenue",
+      "type": [
+        "null",
+        {
+          "type": "int",
+          "dqType": "FR Postal Code",
+          "dqTypeLabel": "FR Postal Code",
+          "dqTypeId": "FR_POSTAL_CODE",
+          "isForced": false,
+          "dqNativeType": "INTEGER",
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "name": "FR Postal Code",
+                "id": "FR_POSTAL_CODE"
+              },
+              {
+                "score": 100,
+                "total": 50,
+                "name": "FR Insee Code",
+                "id": "FR_CODE_COMMUNE_INSEE"
+              },
+              {
+                "score": 100,
+                "total": 50,
+                "name": "US Postal Code",
+                "id": "US_POSTAL_CODE"
+              },
+              {
+                "score": 100,
+                "total": 50,
+                "name": "DE Postal Code",
+                "id": "DE_POSTAL_CODE"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "INTEGER"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "States",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqType": "US State Code",
+          "dqTypeLabel": "US State Code",
+          "dqTypeId": "US_STATE_CODE",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "dqSemanticTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 96,
+                "total": 48,
+                "name": "US State Code",
+                "id": "US_STATE_CODE"
+              },
+              {
+                "score": 96,
+                "total": 48,
+                "name": "North American state code",
+                "id": "NA_STATE_CODE"
+              },
+              {
+                "score": 52,
+                "total": 26,
+                "name": "Country Code ISO2",
+                "id": "COUNTRY_CODE_ISO2"
+              },
+              {
+                "score": 52,
+                "total": 26,
+                "name": "Language Code ISO2",
+                "id": "LANGUAGE_CODE_ISO2"
+              },
+              {
+                "score": 10,
+                "total": 5,
+                "name": "Company",
+                "id": "COMPANY"
+              },
+              {
+                "score": 6,
+                "total": 3,
+                "name": "Academic and professional suffix",
+                "id": "ACADEMIC_PROFESSIONAL_SUFFIX"
+              },
+              {
+                "score": 6,
+                "total": 3,
+                "name": "Title",
+                "id": "TITLE"
+              },
+              {
+                "score": 6,
+                "total": 3,
+                "name": "Name suffix",
+                "id": "NAME_SUFFIX"
+              },
+              {
+                "score": 4,
+                "total": 2,
+                "name": "Civility",
+                "id": "CIVILITY"
+              },
+              {
+                "score": 4,
+                "total": 2,
+                "name": "Last Name",
+                "id": "LAST_NAME"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "Academic and professional title",
+                "id": "ACADEMIC_PROFESSIONAL_TITLE"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "First Name",
+                "id": "FIRST_NAME"
+              },
+              {
+                "score": 2,
+                "total": 1,
+                "name": "FR Commune",
+                "id": "FR_COMMUNE"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 50,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 50,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 50,
+            "total": 50,
+            "-1": 0
+          }
+        }
+      ]
+    }
+  ]
+}

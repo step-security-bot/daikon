@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/dataset.schema.json",
+  "title": "Dataset schema",
+  "description": "A dataset on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Avro type of the dataset",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name of the dataset",
+      "type": "string"
+    },
+    "namespace": {
+      "description": "Avro namespace field. See https://avro.apache.org/docs/current/spec.html for more details",
+      "type": "string"
+    },
+    "fields": {
+      "description": "list of fields inside the dataset",
+      "items": {
+        "$ref": "https://org.talend.daikon/dataset.field.schema.json"
+      }
+    }
+  },
+  "required" : ["name", "type", "fields"]
+}

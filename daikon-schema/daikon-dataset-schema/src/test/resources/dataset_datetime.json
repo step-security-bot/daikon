@@ -1,0 +1,497 @@
+{
+  "type": "record",
+  "name": "Record",
+  "fields": [
+    {
+      "name": "TITLE",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "TITLE",
+          "dqNativeType": "STRING",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80.1,
+                "total": 8,
+                "name": "TITLE",
+                "id": "TITLE"
+              },
+              {
+                "score": 40,
+                "total": 4,
+                "name": "CIVILITY",
+                "id": "CIVILITY"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80,
+                "total": 8,
+                "id": "STRING"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "id": "EMPTY"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 2,
+            "1": 8,
+            "total": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "first_name",
+      "type": {
+        "type": "string",
+        "dqTypeId": "FIRST_NAME",
+        "dqNativeType": "STRING",
+        "isForced": false,
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 80,
+              "total": 8,
+              "name": "FIRST_NAME",
+              "id": "FIRST_NAME"
+            },
+            {
+              "score": 40,
+              "total": 4,
+              "name": "LAST_NAME",
+              "id": "LAST_NAME"
+            },
+            {
+              "score": 20,
+              "total": 2,
+              "name": "AIRPORT",
+              "id": "AIRPORT"
+            },
+            {
+              "score": 10,
+              "total": 1,
+              "name": "AIRPORT_CODE",
+              "id": "AIRPORT_CODE"
+            },
+            {
+              "score": 10,
+              "total": 1,
+              "name": "CURRENCY_CODE",
+              "id": "CURRENCY_CODE"
+            },
+            {
+              "score": 10,
+              "total": 1,
+              "name": "FR_COMMUNE",
+              "id": "FR_COMMUNE"
+            }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100,
+              "total": 10,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "1": 10,
+          "total": 10
+        }
+      }
+    },
+    {
+      "name": "last_name",
+      "type": {
+        "type": "string",
+        "dqTypeId": "LAST_NAME",
+        "dqNativeType": "STRING",
+        "isForced": false,
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 60,
+              "total": 6,
+              "name": "LAST_NAME",
+              "id": "LAST_NAME"
+            },
+            {
+              "score": 30,
+              "total": 3,
+              "name": "US_COUNTY",
+              "id": "US_COUNTY"
+            },
+            {
+              "score": 20,
+              "total": 2,
+              "name": "AIRPORT_CODE",
+              "id": "AIRPORT_CODE"
+            },
+            {
+              "score": 20,
+              "total": 2,
+              "name": "FIRST_NAME",
+              "id": "FIRST_NAME"
+            },
+            {
+              "score": 20,
+              "total": 2,
+              "name": "BEVERAGE",
+              "id": "BEVERAGE"
+            }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100,
+              "total": 10,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "1": 10,
+          "total": 10
+        }
+      }
+    },
+    {
+      "name": "AGE",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "",
+          "dqNativeType": "INTEGER",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 90,
+                "total": 9,
+                "id": "INTEGER"
+              },
+              {
+                "score": 10,
+                "total": 1,
+                "id": "EMPTY"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 1,
+            "1": 9,
+            "total": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "DAY",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "WEEKDAY",
+          "dqNativeType": "STRING",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 50,
+                "total": 5,
+                "name": "WEEKDAY",
+                "id": "WEEKDAY"
+              },
+              {
+                "score": 40,
+                "total": 4,
+                "name": "EN_WEEKDAY",
+                "id": "EN_WEEKDAY"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "name": "FIRST_NAME",
+                "id": "FIRST_NAME"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "name": "LAST_NAME",
+                "id": "LAST_NAME"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 70,
+                "total": 7,
+                "id": "STRING"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "id": "EMPTY"
+              },
+              {
+                "score": 10,
+                "total": 1,
+                "id": "DOUBLE"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 2,
+            "1": 4,
+            "total": 10,
+            "-1": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "EMAIL",
+      "type": {
+        "type": "string",
+        "dqTypeId": "EMAIL",
+        "dqNativeType": "STRING",
+        "isForced": false,
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 60.1,
+              "total": 6,
+              "name": "EMAIL",
+              "id": "EMAIL"
+            }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100,
+              "total": 10,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "1": 6,
+          "total": 10,
+          "-1": 4
+        }
+      }
+    },
+    {
+      "name": "ANSWER",
+      "type": {
+        "type": "string",
+        "dqTypeId": "ANSWER",
+        "dqNativeType": "STRING",
+        "isForced": false,
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100,
+              "total": 10,
+              "name": "ANSWER",
+              "id": "ANSWER"
+            },
+            {
+              "score": 40,
+              "total": 4,
+              "name": "FR_COMMUNE",
+              "id": "FR_COMMUNE"
+            }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 10,
+          "matchings": [
+            {
+              "score": 100,
+              "total": 10,
+              "id": "STRING"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "1": 10,
+          "total": 10
+        }
+      }
+    },
+    {
+      "name": "HEIGHT",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "",
+          "dqNativeType": "DOUBLE",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 70,
+                "total": 7,
+                "id": "DOUBLE"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "id": "INTEGER"
+              },
+              {
+                "score": 10,
+                "total": 1,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "1": 9,
+            "total": 10,
+            "-1": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "BIRTHDATE",
+      "type": [
+        "null",
+        {
+          "type": "long",
+          "logicalType": "date",
+          "isDatetime": true,
+          "dqTypeId": "",
+          "dqNativeType": "DATE",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80,
+                "total": 8,
+                "id": "DATE"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "id": "EMPTY"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "EMPTY",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "",
+          "dqNativeType": "EMPTY",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 100,
+                "total": 10,
+                "id": "EMPTY"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "CAR",
+      "type": [
+        "null",
+        {
+          "type": "string",
+          "dqTypeId": "",
+          "dqNativeType": "STRING",
+          "isForced": false,
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": []
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80,
+                "total": 8,
+                "id": "STRING"
+              },
+              {
+                "score": 20,
+                "total": 2,
+                "id": "INTEGER"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

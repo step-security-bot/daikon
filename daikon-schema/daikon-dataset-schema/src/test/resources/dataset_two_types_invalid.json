@@ -1,0 +1,100 @@
+{
+  "type": "record",
+  "name": "Person",
+  "namespace": "org.talend.dq.processors",
+  "fields": [
+    {
+      "name": "title",
+      "type": [
+        {
+          "type": "string",
+          "dqType": "Title",
+          "dqTypeId": "TITLE",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80.0,
+                "total": 8,
+                "name": "Title",
+                "id": "TITLE"
+              },
+              {
+                "score": 60.0,
+                "total": 6,
+                "name": "Language Code ISO2",
+                "id": "LANGUAGE_CODE_ISO2"
+              },
+              {
+                "score": 40.0,
+                "total": 4,
+                "name": "Civility",
+                "id": "CIVILITY"
+              },
+              {
+                "score": 40.0,
+                "total": 4,
+                "name": "Country Code ISO2",
+                "id": "COUNTRY_CODE_ISO2"
+              }
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 100.0,
+                "total": 10,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 8,
+            "total": 10,
+            "-1": 2
+          }
+        },
+        {
+          "type": "integer",
+          "dqType": "",
+          "dqTypeId": "",
+          "isForced": false,
+          "dqNativeType": "DATE",
+          "isNativeForced": false,
+          "dqSemanticTypeDistribution": {
+            "total": 10,
+            "matchings": [
+
+            ]
+          },
+          "dqNativeTypeDistribution": {
+            "total": 10,
+            "matchings": [
+              {
+                "score": 80.0,
+                "total": 8,
+                "id": "DATE"
+              },
+              {
+                "score": 20.0,
+                "total": 2,
+                "id": "STRING"
+              }
+            ]
+          },
+          "dqQualityAggregate": {
+            "0": 0,
+            "1": 8,
+            "total": 10,
+            "-1": 2
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/dataset.field.type.schema.json",
+  "title": "Dataset field Type",
+  "description": "A type of field of a dataset on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "namespace": {
+      "description": "Avro namespace field. See https://avro.apache.org/docs/current/spec.html for more details",
+      "type": "string"
+    },
+    "fields": {
+      "description": "children fields",
+      "type": "array",
+      "items": {
+        "$ref": "https://org.talend.daikon/dataset.field.schema.json"
+      }
+    },
+    "type": {
+      "description": "Avro type of the field.  See https://avro.apache.org/docs/current/spec.html for more details",
+      "type": "string",
+      "enum": ["boolean", "int", "long", "float", "double", "bytes", "string", "record", "enum", "array", "map", "fixed", "null", null]
+    },
+    "logicalType": {
+      "description": "Avro logical type of the field. See https://avro.apache.org/docs/current/spec.html for more details",
+      "type": "string",
+      "enum": ["decimal", "uuid", "date", "time-millis", "time-micros", "timestamp-millis", "timestamp-micros", "local-timestamp-millis", "local-timestamp-micros", "duration"]
+    },
+    "isDatetime": {
+      "description": "Is the data a datetime",
+      "type": "boolean",
+      "default": false
+    },
+    "dqType": {
+      "description": "DQ semantic type",
+      "type": "string"
+    },
+    "dqTypeId": {
+      "description": "DQ semantic type ID",
+      "type": "string"
+    },
+    "dqNativeType": {
+      "description": "DQ native type",
+      "type": "string"
+    },
+    "isForced": {
+      "description": "Is DQ semantic type force on this field",
+      "type": "boolean",
+      "default": false
+    },
+    "isNativeForced": {
+      "description": "Is DQ Native type forced on this field",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required" : ["type"]
+}

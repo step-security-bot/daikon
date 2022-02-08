@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/dataset.field.schema.json",
+  "title": "Dataset field",
+  "description": "A field of a dataset on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "name of the field. Should be unique for a set of field inside a dataset",
+      "type": "string"
+    },
+    "type": {
+      "description": "type of the field",
+      "oneOf": [
+        { "$ref": "https://org.talend.daikon/dataset.field.type.schema.json" },
+        {
+          "type": "array",
+          "items": [
+            { "enum": ["null", null] },
+            { "$ref": "https://org.talend.daikon/dataset.field.type.schema.json" }
+          ],
+          "additionalItems": false
+        },
+        {
+          "type": "array",
+          "items": [
+            { "$ref": "https://org.talend.daikon/dataset.field.type.schema.json" },
+            { "enum": ["null", null] }
+          ],
+          "additionalItems": false
+        }
+      ]
+    },
+    "originalFieldName": {
+      "description": "Original field name as defined in the original file or database",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of the field",
+      "type": "string"
+    }
+  },
+  "required" : ["name", "type"]
+}
