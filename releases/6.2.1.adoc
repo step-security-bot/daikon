@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.2.1) - 02/08/2022
+
+Thanks to @vgagara-talend
+
+== Other
+- fix(): remove redundant model classes (they were migrated to common lib)  (link:https://github.com/Talend/daikon/pull/812[#812])
