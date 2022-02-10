@@ -1,0 +1,10 @@
+= Daikon Release Notes (6.3.0) - 02/10/2022
+
+Thanks to @Fabien Abballe, @Colm O hEigeartaigh
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-327[TDKN-327]: Update Logback to 1.2.9 and Maven to 3.3.4 (link:https://github.com/Talend/daikon/pull/811[#811])
+
+== Other
+- chore(): update TSBI jenkinsfile  (link:https://github.com/Talend/daikon/pull/814[#814])
+- chore(): common dataset schema json schema  (link:https://github.com/Talend/daikon/pull/804[#804])
