@@ -72,7 +72,7 @@
         <nimbusds.version>9.22.2</nimbusds.version>
         <okhttp.version>4.2.2</okhttp.version>
         <openfeign.version>10.6.0</openfeign.version>
-        <pax-url-aether.version>2.6.2</pax-url-aether.version>
+        <pax-url-aether.version>2.6.11</pax-url-aether.version>
         <properties.maven.plugin.version>1.0.0</properties.maven.plugin.version>
         <reactor-core.version>3.1.6.RELEASE</reactor-core.version>
         <rest-assured.version>2.9.0</rest-assured.version>
