@@ -1,0 +1,12 @@
+= Daikon Release Notes (6.3.1) - 02/28/2022
+
+Thanks to @Michael Tallet, @Colm O hEigeartaigh, @Gabriel Marquet
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-330[TDKN-330]: Make daikon-logging compatible with traceId, spanId field names (link:https://github.com/Talend/daikon/pull/820[#820])
+- link:https://jira.talendforge.org/browse/TDKN-329[TDKN-329]: Update Pax Url to 2.6.11 (link:https://github.com/Talend/daikon/pull/818[#818])
+
+== Other
+- Fix if condition  (link:https://github.com/Talend/daikon/pull/817[#817])
+- Add semgrep SARIF upload to Github code scanning findings  (link:https://github.com/Talend/daikon/pull/816[#816])
+- [Security] Create semgrep github action on self-hosted github runner  (link:https://github.com/Talend/daikon/pull/815[#815])
