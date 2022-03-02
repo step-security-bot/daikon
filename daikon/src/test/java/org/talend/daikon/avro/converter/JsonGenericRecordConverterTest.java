@@ -281,18 +281,8 @@ public class JsonGenericRecordConverterTest {
 
     @Test
     public void testConvertFieldsOrderInsensitive() {
-        Schema schema = SchemaBuilder
-                .record("OuterRecord")
-                .fields()
-                .name("comment")
-                .type()
-                .record("InnerRecord")
-                .fields()
-                .requiredString("content")
-                .requiredInt("stars")
-                .endRecord()
-                .noDefault()
-                .endRecord();
+        Schema schema = SchemaBuilder.record("OuterRecord").fields().name("comment").type().record("InnerRecord").fields()
+                .requiredString("content").requiredInt("stars").endRecord().noDefault().endRecord();
 
         jsonGenericRecordConverter = new JsonGenericRecordConverter(schema);
 
@@ -312,7 +302,7 @@ public class JsonGenericRecordConverterTest {
     private static byte[] serializeGenericRecord(GenericRecord record, Schema schema) {
         DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
         try (ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-             DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
+                DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
             dataFileWriter.create(schema, buffer);
             dataFileWriter.append(record);
             dataFileWriter.close();
