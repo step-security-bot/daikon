@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
-import org.talend.daikon.avro.inferrer.JsonSchemaInferrer;
 import org.talend.daikon.exception.TalendRuntimeException;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,10 +38,12 @@ import com.fasterxml.jackson.databind.node.ValueNode;
 
 /**
  * Converts Json String to Avro Generic Record and vice-versa.
+ * <p>
+ * <b>ATTENTION:</b> This class doesn't handle the MAP Avro type.
  */
 public class JsonGenericRecordConverter implements AvroConverter<String, GenericRecord> {
 
-    private JsonSchemaInferrer jsonSchemaInferrer;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private Schema schema;
 
@@ -49,16 +51,14 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
      * Constructor
      */
     public JsonGenericRecordConverter() {
-        this.jsonSchemaInferrer = JsonSchemaInferrer.createJsonSchemaInferrer();
     }
 
     /**
      * Constructor
      * 
-     * @param schema
+     * @param schema the reference Avro schema used when converting to Avro record
      */
     public JsonGenericRecordConverter(Schema schema) {
-        this.jsonSchemaInferrer = JsonSchemaInferrer.createJsonSchemaInferrer();
         this.schema = schema;
     }
 
@@ -78,59 +78,56 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
     }
 
     /**
-     * Convert Json String to Avro Generic Record.
+     * Converts Json String to Avro Generic Record.
      *
      * TalendRuntimeException thrown when an IOException or RuntimeException occurred.
      *
-     * @param json string to convert
+     * @param avroRecordAsJsonString string to convert
      * @return Avro Generic Record.
      */
     @Override
-    public GenericRecord convertToAvro(String json) {
+    public GenericRecord convertToAvro(String avroRecordAsJsonString) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(json);
-            return getOutputRecord(jsonNode, schema);
+            Objects.requireNonNull(schema, "Schema should be provided when converting to Avro");
+            JsonNode jsonNode = OBJECT_MAPPER.readTree(avroRecordAsJsonString);
+            return convertJsonToAvroRecord(jsonNode, schema);
         } catch (IOException | TalendRuntimeException e) {
             throw TalendRuntimeException.createUnexpectedException(e.getCause());
         }
     }
 
     /**
-     * Generate Avro Generic Record from Json Node.
-     *
-     * Iterate Json Node fields and construct the Avro Generic Record.
+     * Generates Avro Generic Record from a Json Node and a Schema.
      *
      * @param jsonNode to convert to Avro Generic Record
      * @param schema of jsonNode
      * @return Avro Generic Record
      */
-    private GenericRecord getOutputRecord(final JsonNode jsonNode, Schema schema) {
-        GenericRecordBuilder outputRecord = new GenericRecordBuilder(schema);
+    private GenericRecord convertJsonToAvroRecord(final JsonNode jsonNode, final Schema schema) {
+        final GenericRecordBuilder outputRecord = new GenericRecordBuilder(schema);
         final Iterator<Map.Entry<String, JsonNode>> elements = jsonNode.fields();
-        Map.Entry<String, JsonNode> mapEntry;
 
         while (elements.hasNext()) {
-            mapEntry = elements.next();
+            final Map.Entry<String, JsonNode> mapEntry = elements.next();
             final JsonNode nextNode = mapEntry.getValue();
 
             if (!(nextNode instanceof NullNode)) {
                 if (nextNode instanceof ValueNode) {
                     outputRecord.set(mapEntry.getKey(), getValue(nextNode));
                 } else if (nextNode instanceof ObjectNode) {
-                    Schema schemaTo = jsonSchemaInferrer.inferSchema(nextNode.toString());
-                    GenericRecord record = getOutputRecord(nextNode, schemaTo);
+                    Schema fieldSchema = schema.getField(mapEntry.getKey()).schema();
+                    GenericRecord record = convertJsonToAvroRecord(nextNode, fieldSchema);
                     outputRecord.set(mapEntry.getKey(), record);
                 } else if (nextNode instanceof ArrayNode) {
-                    List<Object> listRecords = new ArrayList<Object>();
-                    Iterator<JsonNode> elementsIterator = ((ArrayNode) nextNode).elements();
+                    List<Object> listRecords = new ArrayList<>();
+                    Iterator<JsonNode> elementsIterator = nextNode.elements();
                     while (elementsIterator.hasNext()) {
                         JsonNode nodeTo = elementsIterator.next();
                         if (nodeTo instanceof ValueNode) {
                             listRecords.add(getValue(nodeTo));
                         } else {
-                            Schema schemaTo = jsonSchemaInferrer.inferSchema(nodeTo.toString());
-                            listRecords.add(getOutputRecord(nodeTo, schemaTo));
+                            Schema elementSchema = schema.getField(mapEntry.getKey()).schema().getElementType();
+                            listRecords.add(convertJsonToAvroRecord(nodeTo, elementSchema));
                         }
                     }
                     outputRecord.set(mapEntry.getKey(), listRecords);
@@ -143,10 +140,7 @@ public class JsonGenericRecordConverter implements AvroConverter<String, Generic
     }
 
     /**
-     * Get value from Json Node.
-     * 
-     * @param node
-     * @return value from Json Node
+     * Gets the inner value of a Json Node.
      */
     private Object getValue(JsonNode node) {
         if (node instanceof TextNode) {

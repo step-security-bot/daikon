@@ -15,13 +15,21 @@ package org.talend.daikon.avro.converter;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.DatumWriter;
 import org.junit.Test;
 import org.talend.daikon.avro.AvroUtils;
 
@@ -110,8 +118,6 @@ public class JsonGenericRecordConverterTest {
      * Get Avro Generic Record and check its nested fields values.
      *
      * Input record: {@link JsonGenericRecordConverterTest#jsonComplexRecordWithStrFields}
-     *
-     * @throws Exception
      */
     @Test
     public void testConvertComplexRecordWithStrFieldsToAvro() {
@@ -177,8 +183,6 @@ public class JsonGenericRecordConverterTest {
      * Get Avro Generic Record and check its nested fields values.
      *
      * Input record: {@link JsonGenericRecordConverterTest#jsonArrayOfComplexStringRecords}
-     *
-     * @throws Exception
      */
     @Test
     public void testConvertArrayOfComplexStringRecordsToAvro() {
@@ -206,8 +210,6 @@ public class JsonGenericRecordConverterTest {
      * Get Avro Generic Record and check its nested fields values.
      *
      * Input record: {@link JsonGenericRecordConverterTest#jsonComplexRecordWithIntegerFields}
-     *
-     * @throws Exception
      */
     @Test
     public void testConvertComplexRecordWithIntegerFieldsToAvro() {
@@ -232,8 +234,6 @@ public class JsonGenericRecordConverterTest {
      * Get Avro Generic Record and check its nested fields values.
      *
      * Input record: {@link JsonGenericRecordConverterTest#jsonComplexRecordWithBooleanFields}
-     *
-     * @throws Exception
      */
     @Test
     public void testConvertComplexRecordWithBooleanFieldsToAvro() {
@@ -258,8 +258,6 @@ public class JsonGenericRecordConverterTest {
      * Get Avro Generic Record and check its nested fields values.
      *
      * Input record: {@link JsonGenericRecordConverterTest#jsonArrayOfComplexBooleanRecords}
-     *
-     * @throws Exception
      */
     @Test
     public void testConvertArrayOfComplexBooleanRecordsToAvro() {
@@ -279,5 +277,48 @@ public class JsonGenericRecordConverterTest {
         GenericRecord recordB2 = arrayRecordA.get(1);
         assertThat((boolean) recordB1.get("b"), is(equalTo(true)));
         assertThat((boolean) recordB2.get("b"), is(equalTo(false)));
+    }
+
+    @Test
+    public void testConvertFieldsOrderInsensitive() {
+        Schema schema = SchemaBuilder
+                .record("OuterRecord")
+                .fields()
+                .name("comment")
+                .type()
+                .record("InnerRecord")
+                .fields()
+                .requiredString("content")
+                .requiredInt("stars")
+                .endRecord()
+                .noDefault()
+                .endRecord();
+
+        jsonGenericRecordConverter = new JsonGenericRecordConverter(schema);
+
+        Consumer<String> checker = jsonRecord -> {
+            GenericRecord genericRecord = jsonGenericRecordConverter.convertToAvro(jsonRecord);
+            GenericRecord comments = (GenericRecord) genericRecord.get("comment");
+            assertThat(comments.get("stars"), is(equalTo(5)));
+            assertThat(comments.get("content"), is(equalTo("Super!")));
+            // Ensuring that the serialization succeed is essential to guarantee sound conversion
+            assertThat(serializeGenericRecord(genericRecord, schema), is(notNullValue()));
+        };
+
+        checker.accept("{\"comment\": {\"stars\": 5, \"content\": \"Super!\"}}");
+        checker.accept("{\"comment\": {\"content\": \"Super!\", \"stars\": 5}}");
+    }
+
+    private static byte[] serializeGenericRecord(GenericRecord record, Schema schema) {
+        DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
+        try (ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+             DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
+            dataFileWriter.create(schema, buffer);
+            dataFileWriter.append(record);
+            dataFileWriter.close();
+            return buffer.toByteArray();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
