@@ -1,11 +1,11 @@
-package org.talend.daikon.spring.sat.provider;
+package org.talend.daikon.spring.auth.provider;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.talend.daikon.spring.sat.model.token.AuthenticationToken;
-import org.talend.daikon.spring.sat.model.token.SatAuthenticationToken;
+import org.talend.daikon.spring.auth.model.token.AuthenticationToken;
+import org.talend.daikon.spring.auth.model.token.SatAuthenticationToken;
 
 /**
  * Authentication Provider for Service Accounts authentication handling

@@ -1,23 +1,68 @@
 = Daikon Spring Auth
 :toc:
 
-This module provides support for Service Accounts authentication. +
-It introduces `Auth0AuthenticationManager` which will validate headers populated by passthrough-auth service (Gloo) or parse Auth0 JWT itself issued for service account.
-In case not all headers found and token is not SAT authentication is delegated to legacy OAuth2 authentication manager (Talend JWT or Opaque token). +
-`AuthUserDetails` will be populated into SecurityContext in case of successful authentication, usages of old class `UserDetails` have to be renamed.
+This module provides support for authentication with Bearer token of types: SAT(Service Account Token), PAT(Personal Access Token) and IAM JWT. +
+It introduces `TalendAuthenticationManagerResolver` which is responsible for determining the type of the Bearer token provided in the
+`Authorization` header. +
+`AuthUserDetails` will be populated as principal into SecurityContext in case of successful authentication, usages of old oidc class `UserDetails` have to be removed.
 
-== Usage
+== Authentication Managers
 
-. In case if you use oidc-client just update to the latest version
-. If oidc-client is not used add direct dependency to daikon-spring-auth
-. Update with new classes: old IdProvider interface was renamed to AuthIdProvider and oidc-client's UserDetails to AuthUserDetails
+Currently three authentication managers are available:
 
-IMPORTANT: don't add direct dependency to this library while using old oidc-client version. This may cause exceptions like this one in Runtime:
-           ``java.lang.ClassCastException: class org.talend.daikon.spring.sat.model.userdetails.AuthUserDetails cannot be cast to class org.talend.iam.security.userdetails.UserDetails``
+* link:src/main/java/org/talend/daikon/spring/auth/manager/AuthenticationManagerFactory.java#auth0JwtAuthenticationManager[`Auth0AuthenticationManager`]
+* link:src/main/java/org/talend/daikon/spring/auth/manager/AuthenticationManagerFactory.java#iamJwtAuthenticationManager[`IamJwtAuthenticationManager`]
+* link:src/main/java/org/talend/daikon/spring/auth/manager/AuthenticationManagerFactory.java#opaqueTokenAuthenticationManager[`OpaqueTokenAuthenticationManager`]
+
+`Auth0AuthenticationManager` will be chosen if the `iss` (issuer) claim of the JWT is the same as the value of application property
+`spring.security.oauth2.resourceserver.auth0.jwt.issuer-uri`. This manager is created for support of the SAT, it will validate headers populated by
+passthrough-auth service (Gloo AuthConfig) or parse Auth0 JWT itself issued for service account. The result of the successful
+authentication is `SatAuthenticationToken` in the SecurityContext. +
+
+`IamJwtAuthenticationManager` will be chosen if the Bearer token is JWT but `iss` claim does *not match* Auth0.
+This manager requires application property `spring.security.oauth2.resourceserver.iam.jwt.jwk-set-uri`.
+The result of the successful authentication is `BearerTokenAuthentication` in the SecurityContext,
+with `UserDetailsConverter` used for converting jwt claims into `AuthUserDetails`. +
+
+`OpaqueTokenAuthenticationManager` will be chosen if the Bearer token cannot be parsed as JWT.
+This manager requires application property `spring.security.oauth2.resourceserver.iam.opaque-token.introspection-uri`.
+The token will be sent for the introspection, ip-allowlist support is provided by `IpAllowListHeaderInterceptor`.
+The result of the successful authentication is `BearerTokenAuthentication` in the SecurityContext,
+with `UserDetailsConverter` used for converting introspection response into `AuthUserDetails`. +
+
+== Exception handling
+
+By default Spring Security will return authentication error response without body, bu with the `WWW_AUTHENTICATE` header containing detailed description of the error.
+To override this behavior the following classes were created `TalendBearerTokenAuthenticationEntryPoint` and `AuthExceptionHandler`. +
+`TalendBearerTokenAuthenticationEntryPoint` overrides response in case of failed authentication (by default it's handled by `BearerTokenAuthenticationEntryPoint`),
+it must be enabled explicitly (see configuration section). +
+`AuthExceptionHandler#handleAccessDeniedException()` overrides response in case of insufficient permissions; it is enabled by default,
+but can be disabled using property `spring.security.oauth2.resourceserver.exception-handler.enabled`
+
+. Response body is added
+. WWW_AUTHENTICATE header only contains error code instead of the detailed error
+
+== Calls to downstream services
+
+`AuthAutoConfiguration` introduces `oauth2RestTemplate` with two interceptors `BearerTokenInterceptor` and `IpAllowListHeaderInterceptor`
+This RestTemplate can be used in order to support forwarding IP of the caller and Bearer token to the subsequent requests
+
+== Caching
+
+`AuthAutoConfiguration` tries to autowire bean of type `CacheManager` and get chane for name `jwk-set-cache`.
+If this cannot be done JWK Set will be cached by default using simple `ConcurrentMapCache`.
+Property `spring.security.oauth2.resourceserver.jwk-set-cache-name` can be used to overwrite cache name.
 
 == Adding dependency
 
-To start supporting SAT it’s necessary to add the next dependency:
+Drop oidc-client dependency (scim-client dependency still can be used). +
+Drop deprecated spring security dependencies for OAuth2 like
+```
+implementation 'org.springframework.security.oauth:spring-security-oauth2:$version'
+implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$version'
+```
+
+Add the next dependency to your pom.xml:
 
 ```xml
 <dependency>
@@ -26,8 +71,58 @@ To start supporting SAT it’s necessary to add the next dependency:
     <version>${daikon.version}</version>
 </dependency>
 ```
+or to your build.gradle:
+```
+implementation "org.talend.daikon:daikon-spring-auth:$daikonVersion"
+```
+
+IMPORTANT: don't add direct dependency to this library while using old oidc-client version. This may cause exceptions like this one in Runtime:
+``java.lang.ClassCastException: class org.talend.daikon.spring.sat.model.userdetails.AuthUserDetails cannot be cast to class org.talend.iam.security.userdetails.UserDetails``
 
 == Configuration
 
-In case of using oidc-client lib no config is needed +
-Otherwise Auth0AuthenticationManager must be declared as Spring Component manually (see SatAutoConfiguration)
+Following properties are required to be present in your `application.yml`:
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        auth0:
+          jwt:
+            # Auth0 issuer uri
+            issuer-uri: ${SAT_ISSUER_URI:https://dev.talend-dev.auth0.com/}
+        iam:
+          jwt:
+            # IAM jwk set uri
+            jwk-set-uri: ${OIDC_URL:http://tpsvc-idp/oidc}/jwk/keys
+          opaque-token:
+            introspection-uri: ${OIDC_URL:http://tpsvc-idp/oidc}/oauth2/introspect
+```
+
+`ResourceServerConfigurerAdapter` usages should be replaced with `WebSecurityConfigurerAdapter`.
+If you have two or more of those use `@Order(100+)` annotations to avoid conflicts.
+Please see link:https://github.com/spring-projects/spring-security/wiki/OAuth-2.0-Migration-Guide[OAuth 2.0 Migration Guide] for reference on other changes
+
+Now when inside configuration class extending `WebSecurityConfigurerAdapter` next snippet should be added:
+```
+    @Autowired
+    private AuthenticationManagerResolver<HttpServletRequest> authenticationManagerResolver;
+
+    @Autowired
+    private TalendBearerTokenAuthenticationEntryPoint tokenAuthenticationEntryPoint;
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                ...
+                .and()
+                .oauth2ResourceServer()
+                .authenticationManagerResolver(authenticationManagerResolver)
+                .authenticationEntryPoint(tokenAuthenticationEntryPoint) // optional
+                .and()
+                ...
+    }
+```
+Note that usage of `TalendBearerTokenAuthenticationEntryPoint` is optional, it can be omitted or replaced with custom implementation
+
+Example of this library integrated into application can be found in the link:https://github.com/Talend/platform-services-audit-logs-api/pull/130[`audit-logs-api`] project

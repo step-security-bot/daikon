@@ -1,16 +1,16 @@
-package org.talend.daikon.spring.sat.model.token;
+package org.talend.daikon.spring.auth.model.token;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.talend.daikon.spring.sat.model.token.SatAuthenticationToken.USER_DETAILS_NAME_SA_SUFFIX;
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.CLAIM_PERMISSIONS;
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.HEADER_CLIENT_ID;
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.HEADER_PERMISSIONS;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.HEADER_SA_NAME;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
+import static org.talend.daikon.spring.auth.model.token.SatAuthenticationToken.USER_DETAILS_NAME_SA_SUFFIX;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.CLAIM_PERMISSIONS;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_CLIENT_ID;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_PERMISSIONS;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
 
 import java.util.Arrays;
 import java.util.Collection;

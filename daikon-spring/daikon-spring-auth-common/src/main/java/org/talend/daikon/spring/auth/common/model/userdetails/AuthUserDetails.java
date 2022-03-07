@@ -2,15 +2,13 @@ package org.talend.daikon.spring.auth.common.model.userdetails;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -28,7 +26,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class AuthUserDetails extends User implements AuthIdProvider {
+public class AuthUserDetails extends User implements AuthIdProvider, OAuth2AuthenticatedPrincipal {
 
     private static final long serialVersionUID = 2055118616753764874L;
 
@@ -81,6 +79,8 @@ public class AuthUserDetails extends User implements AuthIdProvider {
     private String salesForceAccountId;
 
     private Boolean ipcEnabled;
+
+    private Map<String, Object> attributes; // JWT or introspection claims
 
     public AuthUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -138,4 +138,10 @@ public class AuthUserDetails extends User implements AuthIdProvider {
     public String toString() {
         return getUsername();
     }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
 }

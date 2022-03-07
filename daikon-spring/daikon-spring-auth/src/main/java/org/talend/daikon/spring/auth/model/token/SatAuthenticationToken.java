@@ -1,9 +1,9 @@
-package org.talend.daikon.spring.sat.model.token;
+package org.talend.daikon.spring.auth.model.token;
 
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.HEADER_SA_NAME;
-import static org.talend.daikon.spring.sat.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
 
 import java.util.Collection;
 

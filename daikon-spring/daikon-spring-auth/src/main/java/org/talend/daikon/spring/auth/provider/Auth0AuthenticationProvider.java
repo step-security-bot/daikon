@@ -1,4 +1,4 @@
-package org.talend.daikon.spring.sat.provider;
+package org.talend.daikon.spring.auth.provider;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,11 +9,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.talend.daikon.spring.sat.model.token.AuthenticationToken;
+import org.talend.daikon.spring.auth.model.token.AuthenticationToken;
 
 /**
  * Provides info about mandatory claims/headers in case of authentication with different Auth0 JWT tokens
- * Builds AuthenticationToken with {@link org.talend.daikon.spring.sat.model.userdetails.AuthUserDetails} in case of success
+ * Builds AuthenticationToken with {@link org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails} in case of
+ * success
  */
 public interface Auth0AuthenticationProvider {
 

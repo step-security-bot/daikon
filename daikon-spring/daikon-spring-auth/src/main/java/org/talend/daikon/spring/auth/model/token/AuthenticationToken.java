@@ -1,8 +1,8 @@
-package org.talend.daikon.spring.sat.model.token;
+package org.talend.daikon.spring.auth.model.token;
 
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.CLAIM_PERMISSIONS;
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.HEADER_CLIENT_ID;
-import static org.talend.daikon.spring.sat.provider.Auth0AuthenticationProvider.HEADER_PERMISSIONS;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.CLAIM_PERMISSIONS;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_CLIENT_ID;
+import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_PERMISSIONS;
 
 import java.util.ArrayList;
 import java.util.Arrays;

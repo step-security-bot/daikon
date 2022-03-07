@@ -1,0 +1,33 @@
+{
+  "jti": "d8ba5254-fefd-4948-a932-2be7bb310bb2",
+  "iss": "https://iam.int.cloud.talend.com/oidc",
+  "sub": "befb746d-10b2-442e-974c-896d26379573",
+  "preferred_username": "mbutko@mbutko01.us.talend.com",
+  "login": "mbutko@mbutko01.us.talend.com",
+  "iat": 1644937529,
+  "username": "mbutko@mbutko01.us.talend.com",
+  "name": "User Talend",
+  "given_name": "User",
+  "family_name": "Talend",
+  "email": "user@yopmails.com",
+  "entitlements": "CRAWLING_CREATE,TMC_OPERATOR,DATASET_READ",
+  "tenant_id": "9133741e-d49d-4cd8-a09e-9791fead2583",
+  "tenant_name": "mbutko01.us.talend.com",
+  "group_ids": [
+    "48e38a59-ce6f-497a-84b9-63598ff8304b",
+    "914413da-6a86-4a5f-b753-a963d1916179"
+  ],
+  "preferred_language": "en",
+  "applications": [],
+  "timezone": null,
+  "pendo_user_id": null,
+  "pendo_company_name": null,
+  "pendo_datacenter": null,
+  "subscription_type": null,
+  "subscription_status": null,
+  "support_level": null,
+  "sales_force_contact_id": null,
+  "sales_force_account_id": null,
+  "ipc_enabled": null,
+  "active": true
+}

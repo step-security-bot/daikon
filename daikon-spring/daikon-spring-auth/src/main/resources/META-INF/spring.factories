@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.talend.daikon.spring.sat.config.SatAutoConfiguration
+org.talend.daikon.spring.auth.config.AuthAutoConfiguration

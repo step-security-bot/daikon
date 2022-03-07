@@ -44,12 +44,12 @@ public class TenancyContextWebFilter implements WebFilter {
         if (principal instanceof Jwt) {
             Jwt jwtPrincipal = (Jwt) principal;
             addTenant(tenantContext, jwtPrincipal.getClaimAsString(TENANT_ID), "JWT");
-        } else if (principal instanceof OAuth2AuthenticatedPrincipal) {
-            OAuth2AuthenticatedPrincipal oauth2Principal = (OAuth2AuthenticatedPrincipal) principal;
-            addTenant(tenantContext, oauth2Principal.getAttribute(TENANT_ID), "Opaque token");
         } else if (authentication.getPrincipal() instanceof AuthUserDetails) {
             AuthUserDetails userDetails = (AuthUserDetails) principal;
             addTenant(tenantContext, userDetails.getTenantId(), "Auth0 token");
+        } else if (principal instanceof OAuth2AuthenticatedPrincipal) {
+            OAuth2AuthenticatedPrincipal oauth2Principal = (OAuth2AuthenticatedPrincipal) principal;
+            addTenant(tenantContext, oauth2Principal.getAttribute(TENANT_ID), "Opaque token");
         } else {
             LOGGER.debug("Authentication not managed, cannot extract TenancyContext for '{}'", principal);
         }
