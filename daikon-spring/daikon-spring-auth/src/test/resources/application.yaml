@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        auth0:
+          jwt:
+            issuer-uri: https://dev.talend.auth0.com/
+        iam:
+          jwt:
+            jwk-set-uri: http://tpsvc-idp/oidc/jwk/keys
+          opaque-token:
+            introspection-uri: http://tpsvc-idp/oidc/oauth2/introspect

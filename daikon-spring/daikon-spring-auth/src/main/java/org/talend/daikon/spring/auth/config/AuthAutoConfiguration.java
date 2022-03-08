@@ -21,13 +21,14 @@ import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 import org.talend.daikon.multitenant.provider.TenantProvider;
 import org.talend.daikon.multitenant.web.TenantIdentificationStrategy;
@@ -124,11 +125,18 @@ public class AuthAutoConfiguration {
         private static final Logger LOGGER = LoggerFactory.getLogger(AuthExceptionHandler.class);
 
         @ExceptionHandler
-        @ResponseBody
-        @ResponseStatus(HttpStatus.FORBIDDEN)
-        public ErrorResponse handleAccessDeniedException(AccessDeniedException e) {
-            LOGGER.debug("Handling AccessDeniedException: {}", e.getMessage());
-            return ErrorResponse.builder().status(HttpStatus.FORBIDDEN.value()).detail(e.getMessage()).build();
+        public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+            if (SecurityContextHolder.getContext().getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
+                LOGGER.debug("Handling AccessDeniedException for unauthorized request: {}", e.getMessage());
+                HttpStatus status = HttpStatus.UNAUTHORIZED;
+                ErrorResponse response = ErrorResponse.builder().status(status.value()).detail(status.getReasonPhrase()).build();
+                return ResponseEntity.status(status).body(response);
+            } else {
+                LOGGER.debug("Handling AccessDeniedException with insufficient permissions: {}", e.getMessage());
+                HttpStatus status = HttpStatus.FORBIDDEN;
+                ErrorResponse response = ErrorResponse.builder().status(status.value()).detail(e.getMessage()).build();
+                return ResponseEntity.status(status).body(response);
+            }
         }
 
         @Data
