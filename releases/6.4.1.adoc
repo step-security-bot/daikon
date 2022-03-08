@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.4.1) - 03/08/2022
+
+Thanks to @Mark Butko
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-18473[TPSVC-18473]: Integrate PAT and IAM JWT support in daikon-spring-auth (link:https://github.com/Talend/daikon/pull/823[#823])
