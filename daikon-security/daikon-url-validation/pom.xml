@@ -3,11 +3,11 @@
 
 	<parent>
 		<groupId>org.talend.daikon</groupId>
-		<artifactId>daikon-crypto</artifactId>
+		<artifactId>daikon-security</artifactId>
 		<version>6.4.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>daikon-signature-verifier</artifactId>
-	<name>daikon signature verifier library</name>
+	<artifactId>daikon-url-validation</artifactId>
+	<name>Utilities to validate URLs</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>
@@ -18,29 +18,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j-log4j12.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -75,14 +52,14 @@
 						<configuration>
 							<classifier>bundle</classifier>
 							<instructions>
-								<Bundle-SymbolicName>org.talend.daikon.signature.verify</Bundle-SymbolicName>
+								<Bundle-SymbolicName>org.talend.daikon.security.url</Bundle-SymbolicName>
 								<DynamicImport-Package>*</DynamicImport-Package>
 								<Service-Component>*</Service-Component>
 								<Embed-Transitive>true</Embed-Transitive>
 								<Embed-Dependency>*;artifactId=paranamer|snappy-java|commons-compress|xz;inline=true
 								</Embed-Dependency>
 								<Import-Package>
-									com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
+									*
 								</Import-Package>
 							</instructions>
 						</configuration>

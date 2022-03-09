@@ -98,7 +98,7 @@
         <module>daikon-messages</module>
         <module>daikon-audit</module>
         <module>daikon-i18n</module>
-        <module>daikon-crypto</module>
+        <module>daikon-security</module>
         <module>daikon-scala</module>
         <module>daikon-documentation</module>
         <module>releases</module>

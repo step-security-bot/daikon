@@ -6,9 +6,9 @@
         <artifactId>daikon-parent</artifactId>
         <version>6.4.2-SNAPSHOT</version>
     </parent>
-    <artifactId>daikon-crypto</artifactId>
+    <artifactId>daikon-security</artifactId>
     <packaging>pom</packaging>
-    <name>Daikon Crypto related modules.</name>
+    <name>Daikon Security related modules.</name>
     <url>https://github.com/Talend/daikon</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,5 +19,6 @@
     <modules>
         <module>daikon-signature-verifier</module>
         <module>crypto-utils</module>
+        <module>daikon-url-validation</module>
     </modules>
 </project>
