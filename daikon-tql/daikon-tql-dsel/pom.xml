@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.talend.daikon</groupId>
+        <artifactId>daikon-tql</artifactId>
+        <version>6.4.3-SNAPSHOT</version>
+    </parent>
+    <artifactId>daikon-tql-dsel</artifactId>
+    <name>Daikon TQL to DSEL library</name>
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <maplang.version>1.4.0</maplang.version>
+        <releases>https://artifacts-zl.talend.com/nexus/content/repositories/releases/</releases>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>releases</id>
+            <name>releases</name>
+            <url>${releases}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.talend.maplang</groupId>
+            <artifactId>org.talend.maplang.el.interpreter</artifactId>
+            <version>${maplang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.maplang</groupId>
+            <artifactId>org.talend.maplang.el.parser</artifactId>
+            <version>${maplang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>daikon-tql-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

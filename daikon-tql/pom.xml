@@ -24,6 +24,7 @@
         <module>daikon-tql-core</module>
         <module>daikon-tql-mongo</module>
         <module>daikon-tql-bean</module>
+        <module>daikon-tql-dsel</module>
     </modules>
 
     <profiles>
