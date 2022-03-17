@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.5.0) - 03/11/2022
+
+Thanks to @lgirard
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-10591[TDP-10591]: [RunConv][Back] TQL-DSEL convertor (utility class) (link:https://github.com/Talend/daikon/pull/828[#828])
