@@ -12,15 +12,21 @@
 // ============================================================================
 package org.talend.daikon.messages.header;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.talend.daikon.messages.MessageEnvelope;
 import org.talend.daikon.messages.MessageHeader;
 import org.talend.daikon.messages.MessagePayload;
-import org.talend.daikon.messages.header.consumer.*;
+import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
+import org.talend.daikon.messages.header.consumer.ExecutionContextUpdater;
+import org.talend.daikon.messages.header.consumer.ExecutionContextUpdaterImpl;
+import org.talend.daikon.messages.header.consumer.SecurityTokenSetter;
+import org.talend.daikon.messages.header.consumer.ServiceAccountIdSetter;
+import org.talend.daikon.messages.header.consumer.TenantIdSetter;
+import org.talend.daikon.messages.header.consumer.UserIdSetter;
 
 public class TestExecutionContextUpdaterImpl {
 
@@ -34,7 +40,7 @@ public class TestExecutionContextUpdaterImpl {
 
     private ServiceAccountIdSetter serviceAccountIdSetter;
 
-    @Before
+    @BeforeEach
     public void initMock() {
         securityTokenSetter = Mockito.mock(SecurityTokenSetter.class);
         userIdSetter = Mockito.mock(UserIdSetter.class);

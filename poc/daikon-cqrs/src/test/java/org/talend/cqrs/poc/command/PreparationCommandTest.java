@@ -2,11 +2,11 @@ package org.talend.cqrs.poc.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.axonframework.test.aggregate.FixtureConfiguration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.cqrs.poc.preparation.command.Preparation;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreateCommand;
 import org.talend.cqrs.poc.preparation.command.create.PreparationCreatedEvent;
@@ -16,12 +16,12 @@ import org.talend.cqrs.poc.preparation.command.update.PreparationUpdateCommand;
 import org.talend.cqrs.poc.preparation.command.update.PreparationUpdatedEvent;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class PreparationCommandTest {
 
     private FixtureConfiguration<Preparation> fixture;
 
-    @Before
+    @BeforeEach
     public void init() {
         fixture = new AggregateTestFixture<>(Preparation.class);
     }

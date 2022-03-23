@@ -1,11 +1,18 @@
 package org.talend.logging.audit.impl;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+import org.talend.logging.audit.AuditEvent;
+import org.talend.logging.audit.AuditLoggerFactory;
+import org.talend.logging.audit.Context;
+import org.talend.logging.audit.ContextBuilder;
+import org.talend.logging.audit.LogLevel;
 
 import java.lang.reflect.Proxy;
-
-import org.junit.Test;
-import org.talend.logging.audit.*;
 
 public class ProxyEventAuditLoggerTest {
 
@@ -27,38 +34,48 @@ public class ProxyEventAuditLoggerTest {
         verify(base);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTooManyArguments() {
-        Context ctx = ContextBuilder.emptyContext();
-        Throwable thr = new IllegalStateException();
-        TestEvent testEvent = getEventAuditLogger(null);
-        testEvent.testWithParams(ctx, thr, "");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Context ctx = ContextBuilder.emptyContext();
+            Throwable thr = new IllegalStateException();
+            TestEvent testEvent = getEventAuditLogger(null);
+            testEvent.testWithParams(ctx, thr, "");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRepeatedContext() {
-        Context ctx = ContextBuilder.emptyContext();
-        TestEvent testEvent = getEventAuditLogger(null);
-        testEvent.testWithParams(ctx, ctx);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Context ctx = ContextBuilder.emptyContext();
+            TestEvent testEvent = getEventAuditLogger(null);
+            testEvent.testWithParams(ctx, ctx);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRepeatedThrowable() {
-        Throwable thr = new IllegalStateException();
-        TestEvent testEvent = getEventAuditLogger(null);
-        testEvent.testWithParams(thr, thr);
+        assertThrows(IllegalArgumentException.class, () -> {
+            Throwable thr = new IllegalStateException();
+            TestEvent testEvent = getEventAuditLogger(null);
+            testEvent.testWithParams(thr, thr);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testMissingAnnotation() {
-        TestEvent testEvent = getEventAuditLogger(null);
-        testEvent.notEvent();
+        assertThrows(IllegalArgumentException.class, () -> {
+            TestEvent testEvent = getEventAuditLogger(null);
+            testEvent.notEvent();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWrongArgumentType() {
-        TestEvent testEvent = getEventAuditLogger(null);
-        testEvent.testWithParams("");
+        assertThrows(IllegalArgumentException.class, () -> {
+            TestEvent testEvent = getEventAuditLogger(null);
+            testEvent.testWithParams("");
+        });
     }
 
     private static TestEvent getEventAuditLogger(AuditLoggerBase loggerBase) {

@@ -1,10 +1,10 @@
 package org.talend.daikon.content.journal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -13,15 +13,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,12 +27,17 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @ActiveProfiles("mock")
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataMongoTest
 @ContextConfiguration
 @ComponentScan("org.talend.daikon.content.journal")
@@ -69,14 +69,14 @@ public class MongoResourceJournalResolverTest {
 
         resolver.clear("/location1");
 
-        assertEquals("Location 1.1 should not exist anymore", 0L, repository.countByName("/location1.1"));
-        assertEquals("Location 1.2 should not exist anymore", 0L, repository.countByName("/location1.2"));
-        assertEquals("Location 1.3 should not exist anymore", 0L, repository.countByName("/location1.3"));
-        assertEquals("Location 2.1 should still exist", 1L, repository.countByName("/location2.1"));
-        assertEquals("Location 2.3 should still exist", 1L, repository.countByName("/location2.2"));
+        assertEquals(0L, repository.countByName("/location1.1"), "Location 1.1 should not exist anymore");
+        assertEquals(0L, repository.countByName("/location1.2"), "Location 1.2 should not exist anymore");
+        assertEquals(0L, repository.countByName("/location1.3"), "Location 1.3 should not exist anymore");
+        assertEquals(1L, repository.countByName("/location2.1"), "Location 2.1 should still exist");
+        assertEquals(1L, repository.countByName("/location2.2"), "Location 2.3 should still exist");
     }
 
-    @Before
+    @BeforeEach
     public void initData() {
         resolver.setResourceResolver(resourceResolver);
 
@@ -91,7 +91,7 @@ public class MongoResourceJournalResolverTest {
         Mockito.reset(resourceResolver);
     }
 
-    @After
+    @AfterEach
     public void cleanData() {
         mongoTemplate.remove(new Query(), ResourceJournalEntry.class, collectionName);
     }
@@ -125,9 +125,9 @@ public class MongoResourceJournalResolverTest {
         List<String> listLocation = resolver.matches("/location1*").collect(Collectors.toList());
 
         // Then
-        assertEquals("Size of the list should be equals", 3, listLocation.size());
+        assertEquals(3, listLocation.size(), "Location 2.3 should still exist");
         for (String location : listLocation) {
-            assertTrue("Location should start by location1", location.startsWith("/location1"));
+            assertTrue(location.startsWith("/location1"), "Location should start by location1");
         }
     }
 
@@ -160,7 +160,7 @@ public class MongoResourceJournalResolverTest {
         final long count = countRecord();
 
         // Then
-        assertEquals("Nb location should be equals", nbLocation + 1, count);
+        assertEquals(nbLocation + 1, count, "Nb location should be equals");
     }
 
     @Test
@@ -173,7 +173,7 @@ public class MongoResourceJournalResolverTest {
         final long count = countRecord();
 
         // Then
-        assertEquals("Nb location should be equals", nbLocation - 1, count);
+        assertEquals(nbLocation - 1, count, "Nb location should be equals");
     }
 
     @Test

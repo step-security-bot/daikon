@@ -1,18 +1,19 @@
 package org.talend.daikon.crypto.digest;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Base64;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.crypto.EncodingUtils;
 import org.talend.daikon.crypto.KeySource;
 import org.talend.daikon.crypto.KeySources;
+
+import java.util.Arrays;
 
 public class PBKDF2PasswordDigesterTest {
 
@@ -161,18 +162,20 @@ public class PBKDF2PasswordDigesterTest {
         assertTrue(digester1.validate("myPassword", digest1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldFailWithoutDelimiterInDigest() throws Exception {
-        // given
-        String value = "myPassword";
+        assertThrows(IllegalArgumentException.class, () -> {
+            // given
+            String value = "myPassword";
 
-        // when
-        PasswordDigester digester1 = new PBKDF2PasswordDigester(256, 310000);
-        final String digest1 = digester1.digest(value);
-        String newDigest = digest1.replace('-', '_');
+            // when
+            PasswordDigester digester1 = new PBKDF2PasswordDigester(256, 310000);
+            final String digest1 = digester1.digest(value);
+            String newDigest = digest1.replace('-', '_');
 
-        // then
-        digester1.validate(value, newDigest);
+            // then
+            digester1.validate(value, newDigest);
+        });
     }
 
     @Test

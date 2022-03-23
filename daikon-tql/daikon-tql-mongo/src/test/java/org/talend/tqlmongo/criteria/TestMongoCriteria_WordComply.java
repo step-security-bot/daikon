@@ -1,12 +1,13 @@
 package org.talend.tqlmongo.criteria;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.bson.Document;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
+
+import java.util.List;
 
 public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
 
@@ -16,8 +17,8 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Ll}]{2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
     }
 
     @Test
@@ -26,9 +27,9 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^\\p{Lu}[\\p{Ll}]{1,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
     }
 
     @Test
@@ -37,8 +38,8 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^\\p{Lu}[\\p{Ll}]{1,} [\\p{Nd}][\\p{Ll}]{2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
     }
 
     @Test
@@ -47,7 +48,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^\\p{Lu}[\\p{Ll}]{1,} \\p{Lu}[\\p{Ll}]{1,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -56,7 +57,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^\\p{Lu}[\\p{Ll}]{1,}_\\[Number\\]$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -65,7 +66,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^\\][\\p{Ll}]{2,}@$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -75,7 +76,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
                 false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -84,7 +85,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").is("");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -93,7 +94,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Han}]$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -102,7 +103,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Ll}]$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -111,7 +112,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Lu}]$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -120,10 +121,10 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Nd}|\\p{Lu}\\p{Ll}]{2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(3, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(3, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
 
     }
 
@@ -133,7 +134,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Han}]{2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -142,7 +143,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^([\\x{3041}-\\x{3096}]|\\x{309D}|\\x{309E}|\\x{30FC})$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -152,7 +153,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
                 false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -162,7 +163,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
                 "^([\\x{FF66}-\\x{FF9D}]|[\\x{30A1}-\\x{30FA}]|\\x{30FD}|\\x{30FE}|[\\x{31F0}-\\x{31FF}]|\\x{30FC})$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -172,7 +173,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
                 "^([\\x{FF66}-\\x{FF9D}]|[\\x{30A1}-\\x{30FA}]|\\x{30FD}|\\x{30FE}|[\\x{31F0}-\\x{31FF}]|\\x{30FC}){2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -181,7 +182,7 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^([\\x{AC00}-\\x{D7AF}])$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -190,21 +191,21 @@ public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = getExpectedCriteria("name", "^([\\x{AC00}-\\x{D7AF}]){2,}$", false);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
-    @Ignore("$not with $regex is not supported, see https://jira.talendforge.org/browse/TDS-4339")
+    @Disabled("$not with $regex is not supported, see https://jira.talendforge.org/browse/TDS-4339")
     @Test
     public void negation() {
         Criteria criteria = doTest("not (name wordComplies '[word]')");
         Criteria expectedCriteria = getExpectedCriteria("name", "^[\\p{Ll}]{2,}$", true);
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(4, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(4, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     private Criteria getExpectedCriteria(String field, String regex, boolean negation) {

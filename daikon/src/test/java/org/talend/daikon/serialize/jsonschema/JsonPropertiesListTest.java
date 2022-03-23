@@ -12,17 +12,18 @@
 // ============================================================================
 package org.talend.daikon.serialize.jsonschema;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.PropertiesList;
 import org.talend.daikon.properties.TestPropertiesList.TestComponentProperties;
 import org.talend.daikon.properties.TestPropertiesList.TestEnum;
 import org.talend.daikon.properties.TestPropertiesList.TestProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.serialize.FullExampleTestUtil;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * created by dmytro.chmyga on Jul 13, 2017
@@ -43,7 +44,7 @@ public class JsonPropertiesListTest {
         String expectedJson = JsonSchemaUtilTest.readJson("PropertiesListProperties.json");
         TestComponentProperties compProperties = createAndSetupTestProperties();
         String jsonValue = JsonSchemaUtil.toJson(compProperties, Form.MAIN, "someDef");
-        Assert.assertEquals(expectedJson, jsonValue);
+        assertEquals(expectedJson, jsonValue);
     }
 
     private static TestComponentProperties createAndSetupTestProperties() {

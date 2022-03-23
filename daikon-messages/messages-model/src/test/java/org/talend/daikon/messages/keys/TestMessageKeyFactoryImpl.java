@@ -12,9 +12,12 @@
 // ============================================================================
 package org.talend.daikon.messages.keys;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.talend.daikon.messages.MessageKey;
 import org.talend.daikon.messages.header.producer.TenantIdProvider;
@@ -30,7 +33,7 @@ public class TestMessageKeyFactoryImpl {
     private final MessageKeyFactoryImpl.RandomGenerator randomGenerator = Mockito
             .mock(MessageKeyFactoryImpl.RandomGenerator.class);
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         Mockito.when(tenantIdProvider.getTenantId()).thenReturn(TENANT_ID);
 
@@ -45,11 +48,11 @@ public class TestMessageKeyFactoryImpl {
 
         MessageKey messageKey2 = factory.createMessageKey();
 
-        Assert.assertFalse(messageKey1.equals(messageKey2));
+        assertFalse(messageKey1.equals(messageKey2));
 
-        Assert.assertFalse(messageKey1.hashCode() == messageKey2.hashCode());
+        assertFalse(messageKey1.hashCode() == messageKey2.hashCode());
 
-        Assert.assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
+        assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
     }
 
     @Test
@@ -60,13 +63,13 @@ public class TestMessageKeyFactoryImpl {
 
         MessageKey messageKey2 = factory.createMessageKey();
 
-        Assert.assertTrue(messageKey1.equals(messageKey2));
+        assertTrue(messageKey1.equals(messageKey2));
 
-        Assert.assertTrue(messageKey1.hashCode() == messageKey2.hashCode());
+        assertTrue(messageKey1.hashCode() == messageKey2.hashCode());
 
-        Assert.assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
+        assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
 
-        Assert.assertEquals(messageKey1.getRandom(), messageKey2.getRandom());
+        assertEquals(messageKey1.getRandom(), messageKey2.getRandom());
     }
 
     @Test
@@ -77,13 +80,13 @@ public class TestMessageKeyFactoryImpl {
 
         MessageKey messageKey2 = factory.buildMessageKey().withKey("KEY1", "VALUE1").withKey("KEY2", "VALUE2").build();
 
-        Assert.assertTrue(messageKey1.equals(messageKey2));
+        assertTrue(messageKey1.equals(messageKey2));
 
-        Assert.assertTrue(messageKey1.hashCode() == messageKey2.hashCode());
+        assertTrue(messageKey1.hashCode() == messageKey2.hashCode());
 
-        Assert.assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
+        assertEquals(messageKey1.getTenantId(), messageKey2.getTenantId());
 
-        Assert.assertEquals(messageKey1.getKeys(), messageKey2.getKeys());
+        assertEquals(messageKey1.getKeys(), messageKey2.getKeys());
 
     }
 

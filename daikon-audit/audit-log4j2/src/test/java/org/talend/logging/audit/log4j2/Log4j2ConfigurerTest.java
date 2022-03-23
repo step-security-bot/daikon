@@ -1,8 +1,8 @@
 package org.talend.logging.audit.log4j2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.logging.event.layout.Log4j2JSONLayout;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;

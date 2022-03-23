@@ -1,7 +1,8 @@
 package org.talend.tql;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.talend.tql.model.TqlElement;
 
 public class TestTqlParser_Comply extends TestTqlParser_Abstract {
@@ -10,7 +11,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
     public void testParseFieldCompliesPattern1() throws Exception {
         TqlElement tqlElement = doTest("name complies 'aaaaaaa'");
         String expected = "OrExpression{expressions=[AndExpression{expressions=[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='aaaaaaa'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -18,7 +19,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies 'Aaaaaaa'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='Aaaaaaa'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -26,7 +27,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies 'Aaaaaa 9aaa'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='Aaaaaa 9aaa'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -34,7 +35,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies 'Aaa Aaaa'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='Aaa Aaaa'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -42,7 +43,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies 'Aaaa_99'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='Aaaa_99'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -50,7 +51,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies ']ss@'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern=']ss@'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies 'Aaaa أبجد Aaaa'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern='Aaaa أبجد Aaaa'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -66,6 +67,6 @@ public class TestTqlParser_Comply extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name complies ''");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldCompliesPattern{field='FieldReference{path='name'}', pattern=''}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 }

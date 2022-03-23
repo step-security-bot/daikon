@@ -12,13 +12,18 @@
 // ============================================================================
 package org.talend.daikon.exception;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.talend.daikon.exception.error.CommonErrorCodes;
+import org.talend.daikon.exception.error.ErrorCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,12 +31,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.Collection;
-
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.talend.daikon.exception.error.CommonErrorCodes;
-import org.talend.daikon.exception.error.ErrorCode;
 
 public class TalendRuntimeExceptionTest {
 
@@ -206,7 +205,7 @@ public class TalendRuntimeExceptionTest {
 
     /**
      * Return the given inputstream as a String.
-     * 
+     *
      * @param input the input stream to read.
      * @return the given inputstream content.
      * @throws IOException if an error occurred.

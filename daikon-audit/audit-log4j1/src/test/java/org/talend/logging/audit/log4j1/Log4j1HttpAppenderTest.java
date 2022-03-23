@@ -5,10 +5,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.logging.audit.impl.http.HttpAppenderException;
 import org.talend.logging.audit.impl.http.HttpEventSender;
 
@@ -71,9 +72,11 @@ public class Log4j1HttpAppenderTest {
         testPropagateException(false);
     }
 
-    @Test(expected = HttpAppenderException.class)
+    @Test
     public void testPropagateExceptionTrue() {
-        testPropagateException(true);
+        assertThrows(HttpAppenderException.class, () -> {
+            testPropagateException(true);
+        });
     }
 
     private static void testPropagateException(boolean propagate) {

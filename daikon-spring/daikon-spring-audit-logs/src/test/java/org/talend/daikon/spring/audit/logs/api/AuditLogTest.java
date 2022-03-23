@@ -12,9 +12,9 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.talend.daikon.spring.audit.logs.config.AuditLogTestConfig;
@@ -45,7 +45,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import io.micrometer.core.instrument.Counter;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = AuditLogTestApp.class)
 @AutoConfigureMockMvc
 @TestPropertySource(properties = { //
@@ -93,7 +93,7 @@ public class AuditLogTest {
 
     private ListAppender<ILoggingEvent> logListAppender;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Rest auditLogger mock
         reset(auditLoggerBase);

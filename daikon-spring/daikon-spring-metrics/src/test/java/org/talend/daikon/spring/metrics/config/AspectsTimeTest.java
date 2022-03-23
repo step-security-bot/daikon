@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.metrics.config;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -13,8 +13,8 @@ import java.util.concurrent.Callable;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import brave.ScopedSpan;
 import brave.Tracer;
@@ -35,7 +35,7 @@ public class AspectsTimeTest {
 
     private ScopedSpan span;
 
-    @Before
+    @BeforeEach
     public void setUp() throws NoSuchMethodException {
         final MeterRegistry meterRegistry = mock(MeterRegistry.class);
         counter = mock(Counter.class);

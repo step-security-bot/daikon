@@ -1,11 +1,11 @@
 package org.talend.logging.audit.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.talend.logging.audit.LogAppenders;
 
 import java.util.Arrays;
-
-import org.junit.*;
-import org.talend.logging.audit.LogAppenders;
 
 public class AuditConfigurationTest {
 

@@ -1,21 +1,23 @@
 package org.talend.daikon.crypto;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.Test;
-
 import java.util.Base64;
 
 public class CipherSourcesTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldFailWithInvalidTagLength() throws Exception {
-        assertRoundTrip(CipherSources.aesGcm(12, 4, null));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertRoundTrip(CipherSources.aesGcm(12, 4, null));
+        });
     }
 
     @Test
@@ -75,16 +77,18 @@ public class CipherSourcesTest {
         assertNotEquals(encrypt1, encrypt2);
     }
 
-    @Test(expected = BadPaddingException.class)
+    @Test
     public void blowfishUnableToDecrypt() throws Exception {
-        String aWonderfulString = "aWonderfulString";
+        assertThrows(BadPaddingException.class, () -> {
+            String aWonderfulString = "aWonderfulString";
 
-        final Encryption encryptionAES = new Encryption(KeySources.machineUID(16), CipherSources.aes());
-        String encryptedAESString = encryptionAES.encrypt(aWonderfulString);
+            final Encryption encryptionAES = new Encryption(KeySources.machineUID(16), CipherSources.aes());
+            String encryptedAESString = encryptionAES.encrypt(aWonderfulString);
 
-        final Encryption encryptionBlowfish = new Encryption(KeySources.machineUID(16), CipherSources.blowfish());
+            final Encryption encryptionBlowfish = new Encryption(KeySources.machineUID(16), CipherSources.blowfish());
 
-        encryptionBlowfish.decrypt(encryptedAESString);
+            encryptionBlowfish.decrypt(encryptedAESString);
+        });
     }
 
     @Test
@@ -104,9 +108,11 @@ public class CipherSourcesTest {
         assertNotEquals(expectedString, badEncryptedString);
     }
 
-    @Test(expected = AEADBadTagException.class)
+    @Test
     public void changeIVEncryptionStringAESGCM() throws Exception {
-        changeIVEncryptionString("aWonderfulString", CipherSources.aesGcm(16));
+        assertThrows(AEADBadTagException.class, () -> {
+            changeIVEncryptionString("aWonderfulString", CipherSources.aesGcm(16));
+        });
     }
 
     private String changeIVEncryptionString(String expectedString, CipherSource cipherSource) throws Exception {
@@ -129,9 +135,11 @@ public class CipherSourcesTest {
         assertNotEquals(expectedString, badEncryptedResult);
     }
 
-    @Test(expected = AEADBadTagException.class)
+    @Test
     public void changeEncryptedPayloadStringAESGCM() throws Exception {
-        changeEncryptedPayloadString("changePayloadStringWithAES", CipherSources.aesGcm(16));
+        assertThrows(AEADBadTagException.class, () -> {
+            changeEncryptedPayloadString("changePayloadStringWithAES", CipherSources.aesGcm(16));
+        });
     }
 
     private String changeEncryptedPayloadString(String expectedString, CipherSource cipherSource) throws Exception {

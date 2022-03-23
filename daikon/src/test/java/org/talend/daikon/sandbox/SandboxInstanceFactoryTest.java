@@ -12,12 +12,23 @@
 // ============================================================================
 package org.talend.daikon.sandbox;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.talend.daikon.runtime.RuntimeInfo;
+import org.talend.daikon.runtime.RuntimeUtil;
+import org.talend.daikon.sandbox.properties.ClassLoaderIsolatedSystemProperties;
+import org.talend.java.util.ClosableLRUMap;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,17 +36,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.talend.daikon.runtime.RuntimeInfo;
-import org.talend.daikon.runtime.RuntimeUtil;
-import org.talend.daikon.sandbox.properties.ClassLoaderIsolatedSystemProperties;
-import org.talend.java.util.ClosableLRUMap;
 
 public class SandboxInstanceFactoryTest {
 
@@ -197,19 +197,19 @@ public class SandboxInstanceFactoryTest {
 
     private Properties previous;
 
-    @BeforeClass
+    @BeforeAll
     static public void setupMvnHandler() {
         RuntimeUtil.registerMavenUrlHandler();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         previous = System.getProperties();
         SandboxInstanceFactory.clearCache();
 
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         System.setProperties(previous);
     }

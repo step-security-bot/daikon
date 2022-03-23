@@ -12,10 +12,11 @@
 // ============================================================================
 package org.talend.daikon.avro.converter.string;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.avro.Schema;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.avro.AvroUtils;
 
 /**
@@ -64,10 +65,11 @@ public class StringDoubleConverterTest extends StringConverterTest {
      * Checks {@link StringDoubleConverter#convertToAvro(String)} throws
      * {@link NumberFormatException} if not a number string is passed
      */
-    @Test(expected = NumberFormatException.class)
     public void testConvertToAvroNotDouble() {
-        StringDoubleConverter converter = createConverter();
-        converter.convertToAvro("not a double");
+        assertThrows(NumberFormatException.class, () -> {
+            StringDoubleConverter converter = createConverter();
+            converter.convertToAvro("not a double");
+        });
     }
 
 }

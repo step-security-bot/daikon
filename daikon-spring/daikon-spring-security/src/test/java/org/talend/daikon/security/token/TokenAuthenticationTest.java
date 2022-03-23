@@ -1,18 +1,19 @@
 package org.talend.daikon.security.token;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 
 public class TokenAuthenticationTest {
 
     private Authentication authentication;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         authentication = TokenAuthentication.INSTANCE;
     }
@@ -25,9 +26,11 @@ public class TokenAuthenticationTest {
         assertEquals(TokenAuthentication.ADMIN_TOKEN_AUTHENTICATION, authentication.getPrincipal());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotAllowAuthenticatedChange() {
-        authentication.setAuthenticated(false);
+        assertThrows(IllegalArgumentException.class, () -> {
+            authentication.setAuthenticated(false);
+        });
     }
 
     @Test

@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 import java.net.URI;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -31,7 +31,7 @@ public class Auth0ExchangeFilterFunctionTest {
         when(serverWebExchange.getRequest()).thenReturn(request);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.mandatoryHeaders = new SatReactiveAuthenticationProvider().getMandatoryHeaders();
     }

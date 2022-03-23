@@ -12,12 +12,11 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.TestPropertiesList.TestEnum;
 import org.talend.daikon.properties.TestPropertiesList.TestProperties;
 import org.talend.daikon.properties.presentation.Form;
@@ -25,11 +24,14 @@ import org.talend.daikon.properties.service.PropertiesService;
 import org.talend.daikon.properties.service.PropertiesServiceImpl;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class PropertiesListTest {
 
     private PropertiesService<Properties> propService;
 
-    @Before
+    @BeforeEach
     public void init() {
         propService = new PropertiesServiceImpl();
     }
@@ -45,10 +47,10 @@ public class PropertiesListTest {
         // check rows quantity and order
         ArrayList<TestProperties> subProps = new ArrayList<>(propertiesList.getPropertiesList());
 
-        Assert.assertEquals("Number of added properties is wrong", 3, subProps.size());
-        Assert.assertEquals(row1, subProps.get(0));
-        Assert.assertEquals(row2, subProps.get(1));
-        Assert.assertEquals(row3, subProps.get(2));
+        assertEquals(3, subProps.size(), "Number of added properties is wrong");
+        assertEquals(row1, subProps.get(0));
+        assertEquals(row2, subProps.get(1));
+        assertEquals(row3, subProps.get(2));
     }
 
     @Test
@@ -65,9 +67,9 @@ public class PropertiesListTest {
         // check rows quantity and order
         ArrayList<TestProperties> subProps = new ArrayList<>(propertiesList.getPropertiesList());
 
-        Assert.assertEquals("Number of added properties is wrong", 2, subProps.size());
-        Assert.assertEquals(row2, subProps.get(0));
-        Assert.assertEquals(row3, subProps.get(1));
+        assertEquals(2, subProps.size(), "Number of added properties is wrong");
+        assertEquals(row2, subProps.get(0));
+        assertEquals(row3, subProps.get(1));
     }
 
     @Test
@@ -79,8 +81,8 @@ public class PropertiesListTest {
 
         ArrayList<TestProperties> subProps = new ArrayList<>(propertiesList.getPropertiesList());
 
-        Assert.assertEquals("Number of added properties is wrong", 1, subProps.size());
-        Assert.assertEquals(row1, subProps.get(0));
+        assertEquals(1, subProps.size(), "Number of added properties is wrong");
+        assertEquals(row1, subProps.get(0));
     }
 
     @Test
@@ -94,18 +96,18 @@ public class PropertiesListTest {
         // check rows quantity and order
         ArrayList<TestProperties> subProps = new ArrayList<>(propertiesList.getPropertiesList());
 
-        Assert.assertEquals("Number of added properties is wrong", 3, subProps.size());
-        Assert.assertEquals(row1, subProps.get(0));
-        Assert.assertEquals(row2, subProps.get(1));
-        Assert.assertEquals(row3, subProps.get(2));
+        assertEquals(3, subProps.size(), "Number of added properties is wrong");
+        assertEquals(row1, subProps.get(0));
+        assertEquals(row2, subProps.get(1));
+        assertEquals(row3, subProps.get(2));
 
         TestProperties row4 = propertiesList.getNestedPropertiesFactory().createAndInit("row4");
         TestProperties row5 = propertiesList.getNestedPropertiesFactory().createAndInit("row5");
         propertiesList.addAllRows(Arrays.asList(row4, row5));
         subProps = new ArrayList<>(propertiesList.getPropertiesList());
-        Assert.assertEquals("Number of added properties is wrong", 5, subProps.size());
-        Assert.assertEquals(row4, subProps.get(3));
-        Assert.assertEquals(row5, subProps.get(4));
+        assertEquals(5, subProps.size(), "Number of added properties is wrong");
+        assertEquals(row4, subProps.get(3));
+        assertEquals(row5, subProps.get(4));
     }
 
     @Test
@@ -115,8 +117,8 @@ public class PropertiesListTest {
 
         ArrayList<TestProperties> subProps = new ArrayList<>(propertiesList.getPropertiesList());
 
-        Assert.assertEquals(1, subProps.size());
-        Assert.assertEquals(row, subProps.get(0));
+        assertEquals(1, subProps.size());
+        assertEquals(row, subProps.get(0));
     }
 
     @Test
@@ -125,13 +127,13 @@ public class PropertiesListTest {
         TestProperties row1 = propertiesList.getNestedPropertiesFactory().createAndInit("row1");
         row1.intProp.setValue(1);
         PropertiesTestUtils.checkAndAfter(propService, row1.getForm(Form.MAIN), row1.intProp.getName(), row1);
-        Assert.assertEquals(1, (int) row1.intProp.getValue());
-        Assert.assertEquals(TestEnum.ONE, row1.stringProp.getValue());
+        assertEquals(1, (int) row1.intProp.getValue());
+        assertEquals(TestEnum.ONE, row1.stringProp.getValue());
 
         row1.intProp.setValue(2);
         PropertiesTestUtils.checkAndAfter(propService, row1.getForm(Form.MAIN), row1.intProp.getName(), row1);
-        Assert.assertEquals(2, (int) row1.intProp.getValue());
-        Assert.assertEquals(TestEnum.TWO, row1.stringProp.getValue());
+        assertEquals(2, (int) row1.intProp.getValue());
+        assertEquals(TestEnum.TWO, row1.stringProp.getValue());
     }
 
     @Test
@@ -141,29 +143,29 @@ public class PropertiesListTest {
         propertiesList.addRow(row1);
         row1.intProp.setValue(1);
 
-        Assert.assertFalse(propertiesList.getForm(Form.MAIN).getWidget(row1.getName()).isCallAfter());
+        assertFalse(propertiesList.getForm(Form.MAIN).getWidget(row1.getName()).isCallAfter());
         PropertiesTestUtils.checkAndAfter(propService, row1.getForm(Form.MAIN), row1.intProp.getName(), row1);
 
-        Assert.assertEquals(1, (int) row1.intProp.getValue());
-        Assert.assertEquals(TestEnum.ONE, row1.stringProp.getValue());
+        assertEquals(1, (int) row1.intProp.getValue());
+        assertEquals(TestEnum.ONE, row1.stringProp.getValue());
     }
 
     @Test
     public void testMinMaxGetterSetter() {
         PropertiesList<TestProperties> propertiesList = createPropertiesList();
-        Assert.assertEquals(propertiesList.getMinItems(), "1");
-        Assert.assertEquals(propertiesList.getMaxItems(), "10");
+        assertEquals(propertiesList.getMinItems(), "1");
+        assertEquals(propertiesList.getMaxItems(), "10");
         propertiesList.setMinItems("0");
         propertiesList.setMaxItems("20");
-        Assert.assertEquals(propertiesList.getMinItems(), "0");
-        Assert.assertEquals(propertiesList.getMaxItems(), "20");
+        assertEquals(propertiesList.getMinItems(), "0");
+        assertEquals(propertiesList.getMaxItems(), "20");
     }
 
     @Test
     public void testi18N() {
         TestPropertiesList.TestComponentProperties tpl = (TestPropertiesList.TestComponentProperties) new TestPropertiesList.TestComponentProperties(
                 "foo").init();
-        Assert.assertEquals(tpl.filters.getDisplayName(), "Filters");
+        assertEquals(tpl.filters.getDisplayName(), "Filters");
     }
 
     private PropertiesList<TestProperties> createPropertiesList() {

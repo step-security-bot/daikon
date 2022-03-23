@@ -12,11 +12,13 @@
 // ============================================================================
 package org.talend.daikon.avro.converter.string;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.avro.Schema;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.avro.AvroUtils;
+import org.talend.daikon.crypto.digest.BCryptPasswordDigester;
 
 /**
  * Unit tests for {@link StringFloatConverter}.
@@ -64,9 +66,11 @@ public class StringFloatConverterTest extends StringConverterTest {
      * Checks {@link StringFloatConverter#convertToAvro(String)} throws
      * {@link NumberFormatException} if not a number string is passed
      */
-    @Test(expected = NumberFormatException.class)
+    @Test
     public void testConvertToAvroNotFloat() {
-        StringFloatConverter converter = createConverter();
-        converter.convertToAvro("not a float");
+        assertThrows(NumberFormatException.class, () -> {
+            StringFloatConverter converter = createConverter();
+            converter.convertToAvro("not a float");
+        });
     }
 }

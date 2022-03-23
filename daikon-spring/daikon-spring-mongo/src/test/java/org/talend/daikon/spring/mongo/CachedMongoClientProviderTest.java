@@ -1,19 +1,19 @@
 package org.talend.daikon.spring.mongo;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-
-import java.net.InetSocketAddress;
-import java.util.concurrent.TimeUnit;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import de.bwaldvogel.mongo.MongoServer;
 import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 public class CachedMongoClientProviderTest {
 
@@ -37,7 +37,7 @@ public class CachedMongoClientProviderTest {
         };
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         server = new MongoServer(new MemoryBackend());
 
@@ -45,7 +45,7 @@ public class CachedMongoClientProviderTest {
         serverAddress = server.bind();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         server.shutdown();
     }

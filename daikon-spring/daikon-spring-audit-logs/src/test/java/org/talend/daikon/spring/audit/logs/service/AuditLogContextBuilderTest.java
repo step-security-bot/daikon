@@ -1,22 +1,20 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.time.Instant;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.talend.logging.audit.Context;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.talend.logging.audit.Context;
 
-@RunWith(MockitoJUnitRunner.class)
+import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
+import java.util.UUID;
+
+@ExtendWith(MockitoExtension.class)
 public class AuditLogContextBuilderTest {
 
     @Test

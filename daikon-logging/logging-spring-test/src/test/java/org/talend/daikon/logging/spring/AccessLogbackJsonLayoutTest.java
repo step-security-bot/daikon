@@ -8,12 +8,12 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.ResourceUtils;
 import org.talend.daikon.logging.ecs.EcsFields;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = SimpleApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AccessLogbackJsonLayoutTest {
 
     @Value("${local.server.port}")
@@ -32,7 +32,7 @@ public class AccessLogbackJsonLayoutTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @Before
+    @BeforeEach
     public void setup() {
         RestAssured.port = port;
     }

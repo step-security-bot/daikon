@@ -1,7 +1,7 @@
 package org.talend.logging.audit.impl;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.talend.logging.audit.AuditLoggingException;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.ContextBuilder;
@@ -21,7 +21,7 @@ public class AbstractAuditLoggerBaseTest {
 
     private static final AuditConfigurationMap CONFIG = new AuditConfigurationMapImpl();
 
-    @BeforeClass
+    @BeforeAll
     public static void setupSuite() {
         AuditConfiguration.APPLICATION_NAME.setValue(CONFIG, "app", String.class);
         AuditConfiguration.SERVICE_NAME.setValue(CONFIG, "svc", String.class);

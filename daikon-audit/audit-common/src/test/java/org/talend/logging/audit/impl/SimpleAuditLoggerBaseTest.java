@@ -5,61 +5,62 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.easymock.MockType.STRICT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.logging.audit.LogLevel.INFO;
+
+import org.easymock.EasyMockExtension;
+import org.easymock.Mock;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.easymock.EasyMockRule;
-import org.easymock.Mock;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
+@ExtendWith(EasyMockExtension.class)
 public class SimpleAuditLoggerBaseTest {
 
     private SimpleAuditLoggerBase simpleAuditLoggerBase;
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Rule
-    public EasyMockRule mocks = new EasyMockRule(this);
 
     @Mock(STRICT)
     public AbstractBackend backend;
 
     @Test
     public void testInitAutoNoKafkaBackendNotFound() {
-        AuditConfigurationMap config = new AuditConfigurationMapImpl();
-        config.setValue(AuditConfiguration.BACKEND, Backends.AUTO, Backends.class);
+        RuntimeException expectedException = assertThrows(RuntimeException.class, () -> {
+            AuditConfigurationMap config = new AuditConfigurationMapImpl();
+            config.setValue(AuditConfiguration.BACKEND, Backends.AUTO, Backends.class);
+            simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Unable to load backend org.talend.logging.audit.kafka.KafkaBackend");
+        });
 
-        simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
+        assertEquals("Unable to load backend org.talend.logging.audit.kafka.KafkaBackend", expectedException.getMessage());
+
     }
 
     @Test
     public void testInitKafkaBackendNotFound() {
-        AuditConfigurationMap config = new AuditConfigurationMapImpl();
-        config.setValue(AuditConfiguration.BACKEND, Backends.KAFKA, Backends.class);
+        RuntimeException expectedException = assertThrows(RuntimeException.class, () -> {
+            AuditConfigurationMap config = new AuditConfigurationMapImpl();
+            config.setValue(AuditConfiguration.BACKEND, Backends.KAFKA, Backends.class);
+            simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Unable to load backend org.talend.logging.audit.kafka.KafkaBackend");
+        });
 
-        simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
+        assertEquals("Unable to load backend org.talend.logging.audit.kafka.KafkaBackend", expectedException.getMessage());
+
     }
 
     @Test
     public void testInitNotSupportedBackend() {
-        AuditConfigurationMap config = new AuditConfigurationMapImpl();
-        config.setValue(AuditConfiguration.BACKEND, Backends.LOGBACK, Backends.class);
+        IllegalArgumentException expectedException = assertThrows(IllegalArgumentException.class, () -> {
+            AuditConfigurationMap config = new AuditConfigurationMapImpl();
+            config.setValue(AuditConfiguration.BACKEND, Backends.LOGBACK, Backends.class);
+            simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
 
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Unsupported backend LOGBACK");
+        });
 
-        simpleAuditLoggerBase = new SimpleAuditLoggerBase(config);
+        assertEquals("Unsupported backend LOGBACK", expectedException.getMessage());
     }
 
     @Test

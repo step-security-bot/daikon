@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Marker;
 import org.talend.daikon.logging.ecs.EcsFieldsChecker;
 import org.talend.daikon.logging.ecs.MdcEcsMapper;
@@ -28,7 +28,7 @@ public abstract class AbstractLayoutTest {
 
     private LogDetails logDetails;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.logDetails = new LogDetails(this.getClass());
     }

@@ -1,47 +1,56 @@
 package org.talend.logging.audit;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-
 public class ContextBuilderTest {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void contextBuilderCreateImutableContextPut() {
-        ContextBuilder builder = ContextBuilder.create();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ContextBuilder builder = ContextBuilder.create();
 
-        final Context context = builder.build();
+            final Context context = builder.build();
 
-        context.put("aa", "bb");
+            context.put("aa", "bb");
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void contextBuilderCreateImutableContextPutAll() {
-        ContextBuilder builder = ContextBuilder.create();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ContextBuilder builder = ContextBuilder.create();
 
-        final Context context = builder.build();
+            final Context context = builder.build();
 
-        context.putAll(Collections.<String, String> emptyMap());
+            context.putAll(Collections.<String, String> emptyMap());
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void contextBuilderCreateImutableContextRemove() {
-        ContextBuilder builder = ContextBuilder.create();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ContextBuilder builder = ContextBuilder.create();
 
-        final Context context = builder.build();
+            final Context context = builder.build();
 
-        context.remove("aa");
+            context.remove("aa");
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void contextBuilderCreateImutableContextClear() {
-        ContextBuilder builder = ContextBuilder.create();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            ContextBuilder builder = ContextBuilder.create();
 
-        final Context context = builder.build();
+            final Context context = builder.build();
 
-        context.clear();
+            context.clear();
+        });
     }
 
     @Test()

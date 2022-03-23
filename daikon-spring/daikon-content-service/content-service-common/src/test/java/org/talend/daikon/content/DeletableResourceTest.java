@@ -1,14 +1,17 @@
 package org.talend.daikon.content;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public abstract class DeletableResourceTest extends DeletableLoaderResourceTests {
 
@@ -16,15 +19,16 @@ public abstract class DeletableResourceTest extends DeletableLoaderResourceTests
 
     protected DeletableResource resource;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         resource = resolver.getResource(LOCATION);
         try (OutputStream outputStream = resource.getOutputStream()) {
             outputStream.write("test".getBytes());
         }
+
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             resource.delete();

@@ -1,26 +1,23 @@
 package org.talend.tqlmongo.criteria;
 
-import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.Net;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.bson.Document;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -30,13 +27,14 @@ import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.TqlExpressionVisitor;
 import org.talend.tqlmongo.ASTVisitor;
 
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.IMongodConfig;
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
-import de.flapdoodle.embed.mongo.config.Net;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
+import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class TestMongoCriteria_Abstract {
 
@@ -50,20 +48,17 @@ public abstract class TestMongoCriteria_Abstract {
                     new AbstractMap.SimpleEntry<>("+?'n$", 28.8d))
             .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    private static MongoTemplate mongoTemplate;
+    public static MongoTemplate mongoTemplate;
 
     private static MongodExecutable mongodExecutable;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws IOException {
         MongodStarter starter = MongodStarter.getDefaultInstance();
 
         String bindIp = "localhost";
         int port = 12345;
-        IMongodConfig mongodConfig = new MongodConfigBuilder().version(Version.Main.V3_4)
+        MongodConfig mongodConfig = MongodConfig.builder().version(Version.Main.V3_4)
                 .net(new Net(bindIp, port, Network.localhostIsIPv6())).build();
         mongodExecutable = starter.prepare(mongodConfig);
         mongodExecutable.start();
@@ -72,13 +67,8 @@ public abstract class TestMongoCriteria_Abstract {
         mongoTemplate = new MongoTemplate(mongo, DB_NAME);
     }
 
-    @Before
-    public void setup() {
-        insertData();
-    }
-
-    @Before
-    public void cleanDB() {
+    @BeforeEach
+    public void cleanDBAndInsertData() {
         Set<String> collectionsName = mongoTemplate.getCollectionNames();
         for (String collectionName : collectionsName) {
             mongoTemplate.remove(new Query(), collectionName);
@@ -86,9 +76,10 @@ public abstract class TestMongoCriteria_Abstract {
             if (!collectionName.contains("system.indexes"))
                 mongoTemplate.remove(new Query(), collectionName);
         }
+        insertData();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         mongodExecutable.stop();
     }
@@ -104,11 +95,11 @@ public abstract class TestMongoCriteria_Abstract {
     }
 
     protected void assertCriteriaEquals(Criteria criteria, Criteria expectedCriteria) {
-        Assert.assertEquals(expectedCriteria.getCriteriaObject().toJson(), criteria.getCriteriaObject().toJson());
+        assertEquals(expectedCriteria.getCriteriaObject().toJson(), criteria.getCriteriaObject().toJson());
     }
 
     protected Criteria doTest(String query) {
-        ANTLRInputStream input = new ANTLRInputStream(query);
+        CodePointCharStream input = CharStreams.fromString(query);
         TqlLexer lexer = new TqlLexer(input);
         TqlParser parser = new TqlParser(new CommonTokenStream(lexer));
         TqlParser.ExpressionContext expression = parser.expression();
@@ -123,6 +114,7 @@ public abstract class TestMongoCriteria_Abstract {
         return mongoTemplate.find(query, Record.class);
     }
 
+    @org.springframework.data.mongodb.core.mapping.Document(collection = COLLECTION_NAME)
     public class Record {
 
         private final String name;

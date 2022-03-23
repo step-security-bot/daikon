@@ -1,28 +1,35 @@
 package org.talend.daikon.serialize.jsonschema;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.isA;
-import static org.junit.Assert.*;
-import static org.talend.daikon.properties.property.PropertyFactory.*;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.talend.daikon.properties.property.PropertyFactory.newInteger;
+import static org.talend.daikon.properties.property.PropertyFactory.newString;
+import static org.talend.daikon.properties.property.PropertyFactory.newStringList;
 
 import org.apache.avro.Schema;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.serialize.FullExampleProperties;
 
-public class JsonBaseToolTest {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+public class JsonBaseToolTest {
 
     // these are the byte codes of a class called org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass
     // package org.talend.daikon.serialize.jsonschema;
@@ -66,42 +73,47 @@ public class JsonBaseToolTest {
     }
 
     @Test
-    public void findClass() throws ClassNotFoundException {
-        FullExampleProperties properties = new FullExampleProperties("fullexample");
-        assertEquals(String.class,
-                JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.stringProp.getType()));
-        assertEquals(Integer.class,
-                JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.integerProp.getType()));
-        assertEquals(Date.class, JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.dateProp.getType()));
-        assertEquals(Schema.class, JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.schema.getType()));
+    public void findClass() {
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            FullExampleProperties properties = new FullExampleProperties("fullexample");
+            assertEquals(String.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.stringProp.getType()));
+            assertEquals(Integer.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.integerProp.getType()));
+            assertEquals(Date.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.dateProp.getType()));
+            assertEquals(Schema.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.schema.getType()));
 
-        // test inner class, which will has "$" in the real class name but "." from the getType.
-        assertEquals(FullExampleProperties.CommonProperties.ColEnum.class,
-                JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.commonProp.colEnum.getType()));
-        assertEquals(String.class,
-                JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.commonProp.colString.getType()));
+            // test inner class, which will has "$" in the real class name but "." from the getType.
+            assertEquals(FullExampleProperties.CommonProperties.ColEnum.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.commonProp.colEnum.getType()));
+            assertEquals(String.class,
+                    JsonBaseTool.findClass(properties.getClass().getClassLoader(), properties.commonProp.colString.getType()));
 
-        // given
-        ClassLoader anotherCL = new AnotherClassLoader();
-        // make sure the class is loaded by the class loader and not the current CL.
-        assertNotNull(anotherCL.loadClass("org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass"));
-        try {
-            this.getClass().getClassLoader().loadClass("org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
-            fail("should have thrown an exception");
-        } catch (ClassNotFoundException cnfe) {
-            // expected
-        }
+            // given
+            ClassLoader anotherCL = new AnotherClassLoader();
+            // make sure the class is loaded by the class loader and not the current CL.
+            assertNotNull(anotherCL.loadClass("org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass"));
+            try {
+                this.getClass().getClassLoader().loadClass("org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
+                fail("should have thrown an exception");
+            } catch (ClassNotFoundException cnfe) {
+                // expected
+            }
 
-        // when
-        Class classfound = JsonBaseTool.findClass(anotherCL, "org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
+            // when
+            Class classfound = JsonBaseTool.findClass(anotherCL,
+                    "org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
 
-        // assert
-        assertNotNull(classfound);
-        // also make sure an exception is thrown when the class is not found
-        thrown.expect(RuntimeException.class);
-        thrown.expectCause(isA(ClassNotFoundException.class));
-        JsonBaseTool.findClass(this.getClass().getClassLoader(),
-                "org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
+            // assert
+            assertNotNull(classfound);
+            // also make sure an exception is thrown when the class is not found
+            JsonBaseTool.findClass(this.getClass().getClassLoader(),
+                    "org.talend.daikon.serialize.jsonschema.AnotherClassloaderClass");
+        });
+        assertTrue(thrown.getCause() instanceof ClassNotFoundException);
+
     }
 
     @Test

@@ -16,7 +16,7 @@ package org.talend.daikon.serialize.javadefault;
 import java.io.*;
 import java.text.ParseException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.serialize.FullExampleProperties;
 import org.talend.daikon.serialize.FullExampleTestUtil;
 

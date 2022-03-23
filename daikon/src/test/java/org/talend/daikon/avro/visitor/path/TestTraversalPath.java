@@ -12,29 +12,27 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.path;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 
 public class TestTraversalPath {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testRoot() {
         Schema schema = createSimpleSchema();
         TraversalPath path = TraversalPath.create(schema);
         TraversalPath.TraversalPathElement root = path.last();
-        Assert.assertTrue(root instanceof org.talend.daikon.avro.visitor.path.TraversalPath.RootPathElement);
-        Assert.assertEquals("/", path.toString());
-        Assert.assertEquals(schema, root.getSchema());
+        assertTrue(root instanceof org.talend.daikon.avro.visitor.path.TraversalPath.RootPathElement);
+        assertEquals("/", path.toString());
+        assertEquals(schema, root.getSchema());
     }
 
     @Test
@@ -43,51 +41,55 @@ public class TestTraversalPath {
         TraversalPath path = TraversalPath.create(schema).append("step1").append("step2");
         Iterator<TraversalPath.TraversalPathElement> elements = path.iterator();
         TraversalPath.TraversalPathElement root = elements.next();
-        Assert.assertTrue(root instanceof TraversalPath.RootPathElement);
-        Assert.assertEquals(schema, root.getSchema());
+        assertTrue(root instanceof TraversalPath.RootPathElement);
+        assertEquals(schema, root.getSchema());
 
         TraversalPath.TraversalPathElement step1 = elements.next();
-        Assert.assertEquals("step1", step1.getName());
-        Assert.assertEquals(0, step1.getPosition());
-        Assert.assertEquals(schema.getField("step1").schema(), step1.getSchema());
+        assertEquals("step1", step1.getName());
+        assertEquals(0, step1.getPosition());
+        assertEquals(schema.getField("step1").schema(), step1.getSchema());
 
         TraversalPath.TraversalPathElement step2 = elements.next();
-        Assert.assertEquals("step2", step2.getName());
-        Assert.assertEquals(0, step2.getPosition());
-        Assert.assertEquals(schema.getField("step1").schema().getField("step2").schema(), step2.getSchema());
+        assertEquals("step2", step2.getName());
+        assertEquals(0, step2.getPosition());
+        assertEquals(schema.getField("step1").schema().getField("step2").schema(), step2.getSchema());
 
-        Assert.assertEquals("/step1/step2", path.toString());
+        assertEquals("/step1/step2", path.toString());
 
-        Assert.assertEquals(root, path.root());
-        Assert.assertEquals(step2, path.last());
+        assertEquals(root, path.root());
+        assertEquals(step2, path.last());
     }
 
     @Test
     public void testAppendByIndex() {
         Schema schema = createSimpleSchema();
         TraversalPath path = TraversalPath.create(schema).append(0).append(0);
-        Assert.assertEquals("/step1/step2", path.toString());
+        assertEquals("/step1/step2", path.toString());
     }
 
     @Test
     public void testAppendByBadIndex() {
-        Schema schema = createSimpleSchema();
-        expectedException.expect(IndexOutOfBoundsException.class);
-        TraversalPath.create(schema).append(35);
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            Schema schema = createSimpleSchema();
+            TraversalPath.create(schema).append(35);
+        });
     }
 
     @Test
     public void testAppendNameNotFound() {
-        Schema schema = createSimpleSchema();
-        expectedException.expect(NullPointerException.class);
-        TraversalPath.create(schema).append("step1").append("unknown");
+        assertThrows(NullPointerException.class, () -> {
+            Schema schema = createSimpleSchema();
+            TraversalPath.create(schema).append("step1").append("unknown");
+        });
+
     }
 
     @Test
     public void testAppendNotARecord() {
-        Schema schema = createSimpleSchema();
-        expectedException.expect(AvroRuntimeException.class);
-        TraversalPath.create(schema).append("step1").append("step2").append("step3");
+        assertThrows(AvroRuntimeException.class, () -> {
+            Schema schema = createSimpleSchema();
+            TraversalPath.create(schema).append("step1").append("step2").append("step3");
+        });
     }
 
     @Test
@@ -99,21 +101,21 @@ public class TestTraversalPath {
         Iterator<TraversalPath.TraversalPathElement> elements = path.iterator();
 
         TraversalPath.TraversalPathElement root = elements.next();
-        Assert.assertTrue(root instanceof TraversalPath.RootPathElement);
-        Assert.assertEquals(schema, root.getSchema());
+        assertTrue(root instanceof TraversalPath.RootPathElement);
+        assertEquals(schema, root.getSchema());
 
         TraversalPath.TraversalPathElement array = elements.next();
-        Assert.assertEquals("array", array.getName());
-        Assert.assertEquals(1, array.getPosition());
-        Assert.assertEquals(schema.getField("array").schema(), array.getSchema());
+        assertEquals("array", array.getName());
+        assertEquals(1, array.getPosition());
+        assertEquals(schema.getField("array").schema(), array.getSchema());
 
         TraversalPath.ArrayItemPathElement arrayElement = (TraversalPath.ArrayItemPathElement) elements.next();
-        Assert.assertEquals("array", arrayElement.getName());
-        Assert.assertEquals(1, arrayElement.getPosition());
-        Assert.assertEquals(5, arrayElement.getIndex());
-        Assert.assertEquals(schema.getField("array").schema().getElementType(), arrayElement.getSchema());
+        assertEquals("array", arrayElement.getName());
+        assertEquals(1, arrayElement.getPosition());
+        assertEquals(5, arrayElement.getIndex());
+        assertEquals(schema.getField("array").schema().getElementType(), arrayElement.getSchema());
 
-        Assert.assertEquals("/array[5]", path.toString());
+        assertEquals("/array[5]", path.toString());
     }
 
     @Test
@@ -125,45 +127,45 @@ public class TestTraversalPath {
         Iterator<TraversalPath.TraversalPathElement> elements = path.iterator();
 
         TraversalPath.TraversalPathElement root = elements.next();
-        Assert.assertTrue(root instanceof TraversalPath.RootPathElement);
-        Assert.assertEquals(schema, root.getSchema());
+        assertTrue(root instanceof TraversalPath.RootPathElement);
+        assertEquals(schema, root.getSchema());
 
         TraversalPath.TraversalPathElement map = elements.next();
-        Assert.assertEquals("map", map.getName());
-        Assert.assertEquals(2, map.getPosition());
-        Assert.assertEquals(schema.getField("map").schema(), map.getSchema());
+        assertEquals("map", map.getName());
+        assertEquals(2, map.getPosition());
+        assertEquals(schema.getField("map").schema(), map.getSchema());
 
         TraversalPath.MapEntryPathElement entry = (TraversalPath.MapEntryPathElement) elements.next();
-        Assert.assertEquals("map", entry.getName());
-        Assert.assertEquals(2, entry.getPosition());
-        Assert.assertEquals("key1", entry.getKey());
-        Assert.assertEquals(schema.getField("map").schema().getValueType(), entry.getSchema());
+        assertEquals("map", entry.getName());
+        assertEquals(2, entry.getPosition());
+        assertEquals("key1", entry.getKey());
+        assertEquals(schema.getField("map").schema().getValueType(), entry.getSchema());
     }
 
     @Test
     public void testJSONPathPrinter() throws Exception {
         Schema schema = createSimpleSchema();
 
-        Assert.assertEquals("$.step1.step2",
+        assertEquals("$.step1.step2",
                 TraversalPath.create(schema).append("step1").append("step2").toString(new JsonPathPrinter()));
 
-        Assert.assertEquals("$.array[5]",
+        assertEquals("$.array[5]",
                 TraversalPath.create(schema).append("array").appendArrayIndex(5).toString(new JsonPathPrinter()));
 
-        Assert.assertEquals("$.map.key1",
+        assertEquals("$.map.key1",
                 TraversalPath.create(schema).append("map").appendMapEntry("key1").toString(new JsonPathPrinter()));
     }
 
     @Test
     public void testJSONPathPrinterBrackets() throws Exception {
         Schema schema = createSimpleSchema();
-        Assert.assertEquals("$['step1']['step2']", TraversalPath.create(schema).append("step1").append("step2")
+        assertEquals("$['step1']['step2']", TraversalPath.create(schema).append("step1").append("step2")
                 .toString(new JsonPathPrinter(JsonPathPrinter.JsonPathStyle.BRACKETS)));
 
-        Assert.assertEquals("$['array'][5]", TraversalPath.create(schema).append("array").appendArrayIndex(5)
+        assertEquals("$['array'][5]", TraversalPath.create(schema).append("array").appendArrayIndex(5)
                 .toString(new JsonPathPrinter(JsonPathPrinter.JsonPathStyle.BRACKETS)));
 
-        Assert.assertEquals("$['map']['key1']", TraversalPath.create(schema).append("map").appendMapEntry("key1")
+        assertEquals("$['map']['key1']", TraversalPath.create(schema).append("map").appendMapEntry("key1")
                 .toString(new JsonPathPrinter(JsonPathPrinter.JsonPathStyle.BRACKETS)));
     }
 
@@ -175,7 +177,7 @@ public class TestTraversalPath {
         Schema schema2 = createSimpleSchema();
         TraversalPath path2 = TraversalPath.create(schema2).append("step1").append("step2");
 
-        Assert.assertEquals(path1, path2);
+        assertEquals(path1, path2);
     }
 
     private Schema createSimpleSchema() {

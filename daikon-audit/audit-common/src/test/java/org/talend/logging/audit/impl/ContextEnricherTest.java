@@ -1,11 +1,12 @@
 package org.talend.logging.audit.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.junit.Test;
 
 public class ContextEnricherTest {
 

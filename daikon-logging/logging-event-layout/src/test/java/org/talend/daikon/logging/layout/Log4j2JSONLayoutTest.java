@@ -16,7 +16,7 @@ import org.apache.logging.log4j.core.util.KeyValuePair;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.apache.logging.log4j.util.StringMap;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.logging.event.layout.Log4j2JSONLayout;
 
 import java.util.HashMap;

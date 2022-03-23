@@ -12,8 +12,18 @@
 // ============================================================================
 package org.talend.daikon.signature.verify;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.signature.exceptions.MissingEntryException;
+import org.talend.daikon.signature.exceptions.NoValidCertificateException;
+import org.talend.daikon.signature.exceptions.UnsignedArchiveException;
+import org.talend.daikon.signature.exceptions.UnsignedEntryException;
+import org.talend.daikon.signature.exceptions.VerifyFailedException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,16 +31,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.cert.CertPathValidatorException;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.talend.daikon.signature.exceptions.MissingEntryException;
-import org.talend.daikon.signature.exceptions.NoValidCertificateException;
-import org.talend.daikon.signature.exceptions.UnsignedArchiveException;
-import org.talend.daikon.signature.exceptions.UnsignedEntryException;
-import org.talend.daikon.signature.exceptions.VerifyFailedException;
 
 public class ZipVerifierTest {
 
@@ -40,7 +40,7 @@ public class ZipVerifierTest {
 
     private static File workingFolder = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws Exception {
         String folderPath = getResourceFilePath("");
         workingFolder = new File(folderPath, "working_folder");//$NON-NLS-1$
@@ -53,13 +53,12 @@ public class ZipVerifierTest {
         generater.generateSignedFiles();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() throws IOException {
         FileUtils.deleteDirectory(workingFolder);
     }
 
     /**
-     * 
      * @throws Exception
      */
     @Test

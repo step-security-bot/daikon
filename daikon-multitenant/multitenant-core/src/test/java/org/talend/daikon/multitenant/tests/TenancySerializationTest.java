@@ -12,20 +12,24 @@
 // ============================================================================
 package org.talend.daikon.multitenant.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.multitenant.context.DefaultTenancyContext;
+import org.talend.daikon.multitenant.provider.DefaultTenant;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.daikon.multitenant.context.DefaultTenancyContext;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
-
 /**
  * Test serialization of tenancy components
- * 
+ *
  * @author David Green (Tasktop Technologies Inc.)
  */
 public class TenancySerializationTest {
@@ -43,7 +47,7 @@ public class TenancySerializationTest {
     }
 
     private void assertSerializable(Object o) {
-        Assert.assertTrue(o instanceof Serializable);
+        assertTrue(o instanceof Serializable);
         Object copy;
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -56,10 +60,10 @@ public class TenancySerializationTest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Assert.fail("Cannot serialize object " + o);
+            fail("Cannot serialize object " + o);
             throw new IllegalStateException(e);
         }
-        Assert.assertNotNull(copy);
-        Assert.assertEquals(o, copy);
+        assertNotNull(copy);
+        assertEquals(o, copy);
     }
 }

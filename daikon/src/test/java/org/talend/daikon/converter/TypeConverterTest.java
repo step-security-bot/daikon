@@ -1,8 +1,12 @@
 package org.talend.daikon.converter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
@@ -12,10 +16,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class TypeConverterTest {
 
@@ -136,13 +136,13 @@ public class TypeConverterTest {
 
     static Locale initialLocale;
 
-    @BeforeClass
+    @BeforeAll
     public static void setLocale() {
         initialLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
     }
 
-    @AfterClass
+    @AfterAll
     public static void resetLocale() {
         Locale.setDefault(initialLocale);
     }

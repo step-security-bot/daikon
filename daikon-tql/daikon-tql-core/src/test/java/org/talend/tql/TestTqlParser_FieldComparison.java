@@ -1,7 +1,8 @@
 package org.talend.tql;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.talend.tql.model.TqlElement;
 
 public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
@@ -12,7 +13,7 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=EQ}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -21,7 +22,7 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=NEQ}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -30,7 +31,7 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=LT}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -39,7 +40,7 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=GT}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -48,7 +49,7 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=LET}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -57,6 +58,6 @@ public class TestTqlParser_FieldComparison extends TestTqlParser_Abstract {
         String expected = "OrExpression{expressions=[AndExpression{expressions=[" + "ComparisonExpression{"
                 + "operator=ComparisonOperator{operator=GET}, " + "field=FieldReference{path='field1'}, "
                 + "valueOrField=FieldReference{path='field2'}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 }

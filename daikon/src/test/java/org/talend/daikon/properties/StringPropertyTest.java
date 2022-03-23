@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.SimpleNamedThing;
 import org.talend.daikon.exception.TalendRuntimeException;
@@ -28,6 +28,10 @@ import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.Property.Flags;
 import org.talend.daikon.properties.property.StringProperty;
 import org.talend.daikon.security.CryptoHelper;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class StringPropertyTest {
 
@@ -120,22 +124,24 @@ public class StringPropertyTest {
         assertEquals("foo", stringProperty.getValue());
     }
 
-    @Test(expected = TalendRuntimeException.class)
+    @Test
     public void testEncryptionFailure() {
-        StringProperty stringProperty = new StringProperty("foo") {// in order to have i18n related to this class
-        };
-        stringProperty.setValue("foo");
-        assertEquals("foo", stringProperty.getValue());
-        stringProperty.encryptStoredValue(true);
-        // value should be the same cause we did not set the Encrypt flag
-        assertEquals("foo", stringProperty.getValue());
-        stringProperty.encryptStoredValue(false);
-        // value should be the same cause we did not set the Encrypt flag
-        assertEquals("foo", stringProperty.getValue());
+        assertThrows(TalendRuntimeException.class, () -> {
+            StringProperty stringProperty = new StringProperty("foo") {// in order to have i18n related to this class
+            };
+            stringProperty.setValue("foo");
+            assertEquals("foo", stringProperty.getValue());
+            stringProperty.encryptStoredValue(true);
+            // value should be the same cause we did not set the Encrypt flag
+            assertEquals("foo", stringProperty.getValue());
+            stringProperty.encryptStoredValue(false);
+            // value should be the same cause we did not set the Encrypt flag
+            assertEquals("foo", stringProperty.getValue());
 
-        // make the property to be encrypted
-        stringProperty.setFlags(EnumSet.of(Flags.ENCRYPT));
-        assertEquals("foo", stringProperty.getValue());
-        stringProperty.encryptStoredValue(true);
+            // make the property to be encrypted
+            stringProperty.setFlags(EnumSet.of(Flags.ENCRYPT));
+            assertEquals("foo", stringProperty.getValue());
+            stringProperty.encryptStoredValue(true);
+        });
     }
 }

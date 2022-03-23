@@ -1,9 +1,8 @@
 package org.talend.tqlmongo.criteria;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.talend.tqlmongo.excp.TqlMongoException;
 
@@ -11,9 +10,6 @@ import org.talend.tqlmongo.excp.TqlMongoException;
  * Created by gmzoughi on 06/07/16.
  */
 public class TestMongoCriteria_Complex extends TestMongoCriteria_Abstract {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testParseLiteralComparison() {
@@ -45,16 +41,16 @@ public class TestMongoCriteria_Complex extends TestMongoCriteria_Abstract {
 
     @Test
     public void testParseFieldIsValid() {
-        expectedException.expect(TqlMongoException.class);
-        doTest("field1 is valid");
-        Assert.fail();
+        assertThrows(TqlMongoException.class, () -> {
+            doTest("field1 is valid");
+        });
     }
 
     @Test
     public void testParseFieldIsInvalid() {
-        expectedException.expect(TqlMongoException.class);
-        doTest("field1 is invalid");
-        Assert.fail();
+        assertThrows(TqlMongoException.class, () -> {
+            doTest("field1 is invalid");
+        });
     }
 
     @Test

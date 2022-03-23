@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.avro.SchemaBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {ConvertAvroMap}.

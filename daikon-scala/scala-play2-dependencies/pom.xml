@@ -82,6 +82,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>co.helmethair</groupId>
+                <artifactId>scalatest-junit-runner</artifactId>
+                <version>${scalatest-junit-runner-version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
@@ -19,9 +22,7 @@ import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.daikon.avro.visitor.record.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +54,7 @@ public class TestRecordVisit {
         visitor.verifyField("/enumField", "B");
         visitor.verifyField("/fixedField", new GenericData.Fixed(null, "c24d3c52ec03b24f".getBytes()));
         visitor.verifyBytesField("/bytesField", "ABCD".getBytes());
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -73,7 +74,7 @@ public class TestRecordVisit {
         // visit the inner record structure
         visitor.verifyField("/inner/innerIntField", 321);
         visitor.verifyField("/inner/innerLongField", 987654321L);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -90,7 +91,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfSimpleTypes[0]", 456L);
         visitor.verifyField("/arrayOfSimpleTypes[1]", 789L);
         visitor.verifyField("/arrayOfSimpleTypes[2]", 123456789L);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -107,7 +108,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfSimpleTypes", 456L, Schema.create(Schema.Type.LONG));
         visitor.verifyField("/arrayOfSimpleTypes", 789L, Schema.create(Schema.Type.LONG));
         visitor.verifyField("/arrayOfSimpleTypes", 123456789L, Schema.create(Schema.Type.LONG));
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -131,7 +132,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfArrayOfSimpleType[1][0]", array.get(1).get(0));
         visitor.verifyField("/arrayOfArrayOfSimpleType[1][1]", array.get(1).get(1));
         visitor.verifyField("/arrayOfArrayOfSimpleType[1][2]", array.get(1).get(2));
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -158,7 +159,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfArrayOfSimpleType", array.get(1).get(0), secondLevelArray.getElementType());
         visitor.verifyField("/arrayOfArrayOfSimpleType", array.get(1).get(1), secondLevelArray.getElementType());
         visitor.verifyField("/arrayOfArrayOfSimpleType", array.get(1).get(2), secondLevelArray.getElementType());
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -179,7 +180,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfRecords[1]", "{\"innerIntField\": 789, \"innerLongField\": 789123}");
         visitor.verifyField("/arrayOfRecords[1]/innerIntField", 789);
         visitor.verifyField("/arrayOfRecords[1]/innerLongField", 789123L);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -201,7 +202,7 @@ public class TestRecordVisit {
         visitor.verifyField("/arrayOfRecords", "{\"innerIntField\": 789, \"innerLongField\": 789123}", innerSchema);
         visitor.verifyField("/arrayOfRecords/innerIntField", 789, Schema.create(Schema.Type.INT));
         visitor.verifyField("/arrayOfRecords/innerLongField", 789123L, Schema.create(Schema.Type.LONG));
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -215,7 +216,7 @@ public class TestRecordVisit {
         visitor.verifyRoot();
         visitor.verifyField("/intField", 123);
         visitor.verifyField("/optionalLongField", 123456789L);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
 
         visitor = new RecordingVisitor();
         record = loadRecord("optionalSimpleTypeNull", "optionalSimpleType");
@@ -226,7 +227,7 @@ public class TestRecordVisit {
         visitor.verifyRoot();
         visitor.verifyField("/intField", 123);
         visitor.verifyField("/optionalLongField", null);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -243,7 +244,7 @@ public class TestRecordVisit {
         visitor.verifyField("/mapOfSimpleTypes/key1", 345L);
         visitor.verifyField("/mapOfSimpleTypes/key2", 546L);
         visitor.verifyField("/mapOfSimpleTypes/key3", 125L);
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -266,7 +267,7 @@ public class TestRecordVisit {
         visitor.verifyField("/mapOfRecords/key3", "{\"innerInt\": 3, \"innerString\": \"value3\"}");
         visitor.verifyField("/mapOfRecords/key3/innerInt", 3);
         visitor.verifyField("/mapOfRecords/key3/innerString", "value3");
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     @Test
@@ -289,7 +290,7 @@ public class TestRecordVisit {
         visitor.verifyField("/mapOfArrays/key2[1]", "E");
         visitor.verifyField("/mapOfArrays/key3", "[F]");
         visitor.verifyField("/mapOfArrays/key3[0]", "F");
-        Assert.assertTrue("Visitor not verified", visitor.isVerified());
+        assertTrue(visitor.isVerified(), "Visitor not verified");
     }
 
     private Schema loadSchema(String name) throws IOException {
@@ -413,23 +414,23 @@ public class TestRecordVisit {
             if (value instanceof String && (!(actualValue instanceof String))) {
                 actualValue = actualValue.toString();
             }
-            Assert.assertEquals("Value does not match", value, actualValue);
-            Assert.assertEquals("Full path does not match", path, next.getPath().toString());
+            assertEquals(value, actualValue, "Value does not match");
+            assertEquals(path, next.getPath().toString(), "Full path does not match");
             if (schema != null) {
-                Assert.assertEquals("Schema does not match", schema, next.getPath().last().getSchema());
+                assertEquals(schema, next.getPath().last().getSchema(), "Schema does not match");
             }
         }
 
         public void verifyBytesField(String path, byte[] value) {
             VisitableBytes field = (VisitableBytes) visit.removeFirst();
             ByteBuffer bytes = field.getValue();
-            Assert.assertTrue(Arrays.equals(bytes.array(), value));
-            Assert.assertEquals("Full path does not match", path, field.getPath().toString());
+            assertTrue(Arrays.equals(bytes.array(), value));
+            assertEquals(path, field.getPath().toString(), "Full path does not match");
         }
 
         public void verifyRoot() {
             VisitableStructure next = visit.removeFirst();
-            Assert.assertEquals("Full path does not match", "/", next.getPath().toString());
+            assertEquals("/", next.getPath().toString(), "Full path does not match");
         }
 
         public boolean isVerified() {

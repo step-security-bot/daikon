@@ -12,16 +12,16 @@
 // ============================================================================
 package org.talend.daikon.avro;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 /**
  * Unit test for {@link org.talend.daikon.avro.AvroNamesValidationHelper}
- *
  */
 public class AvroNamesValidationHelperTest {
 
@@ -39,6 +39,6 @@ public class AvroNamesValidationHelperTest {
             convertedNames.add(AvroNamesValidationHelper.getAvroCompatibleName(name));
         }
 
-        Assert.assertEquals(convertedNames, AVRO_COMPATIBLE_NAMES);
+        assertEquals(convertedNames, AVRO_COMPATIBLE_NAMES);
     }
 }

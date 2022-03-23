@@ -1,10 +1,11 @@
 package org.talend.tqlmongo.criteria;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
+
+import java.util.List;
 
 /**
  * Created by gmzoughi on 06/07/16.
@@ -17,9 +18,9 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("ssen");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
     }
 
     @Test
@@ -28,9 +29,9 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("noi");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
     }
 
     @Test
@@ -39,8 +40,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("2");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
     }
 
     @Test
@@ -49,7 +50,7 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("azerty");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(5, records.size());
+        assertEquals(5, records.size());
     }
 
     @Test
@@ -67,8 +68,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("gha");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
     }
 
     @Test
@@ -77,8 +78,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("Gha");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
     }
 
     @Test
@@ -87,8 +88,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("\\+");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -97,8 +98,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("\\?");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -107,8 +108,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("\\$");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -117,8 +118,8 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
         Criteria expectedCriteria = Criteria.where("name").regex("'");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     // ANTLR uses simple quotes as a delimiter, so if the string contains a simple quote, it should be escaped
@@ -127,17 +128,17 @@ public class TestMongoCriteria_Contain extends TestMongoCriteria_Abstract {
     public void testParseFieldContainsValueCheckSimpleQuoteShouldBeEscaped() {
         Criteria criteria = doTest("name contains '''"); // equals a search on an empty string
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(5, records.size()); // returns all records
+        assertEquals(5, records.size()); // returns all records
 
         criteria = doTest("name contains 'ghassen''"); // equals a search on 'ghassen'
         records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size()); // returns only 'ghassen' record
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.size()); // returns only 'ghassen' record
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
 
         criteria = doTest("name contains 'ghassen'xxxxxxxxxxxxxxxxxxxx"); // equals a search on on 'ghassen'
         records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size()); // returns only 'ghassen' record
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.size()); // returns only 'ghassen' record
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
     }
 
 }

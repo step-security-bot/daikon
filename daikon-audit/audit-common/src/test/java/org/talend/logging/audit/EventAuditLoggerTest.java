@@ -1,13 +1,13 @@
 package org.talend.logging.audit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;

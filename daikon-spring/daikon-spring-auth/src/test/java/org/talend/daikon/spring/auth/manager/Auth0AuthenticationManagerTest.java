@@ -2,10 +2,10 @@ package org.talend.daikon.spring.auth.manager;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.doReturn;
@@ -19,19 +19,21 @@ import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.C
 import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
 import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
 
-import java.security.interfaces.RSAPublicKey;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.nimbusds.jose.JOSEObjectType;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.cache.support.NoOpCache;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -48,17 +50,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
+import java.security.interfaces.RSAPublicKey;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.UUID;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class Auth0AuthenticationManagerTest {
 
     private static final String ISSUER = "https://url.talend-dev.dumb.com/";
@@ -67,7 +66,7 @@ public class Auth0AuthenticationManagerTest {
 
     private SatAuthenticationProvider satAuthenticationProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.satAuthenticationProvider = Mockito.spy(new SatAuthenticationProvider());
         Auth0AuthenticationManager authenticationManager = new Auth0AuthenticationManager(mockProperties(),
@@ -75,7 +74,7 @@ public class Auth0AuthenticationManagerTest {
         this.authenticationManager = Mockito.spy(authenticationManager);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         RequestContextHolder.setRequestAttributes(null);
     }

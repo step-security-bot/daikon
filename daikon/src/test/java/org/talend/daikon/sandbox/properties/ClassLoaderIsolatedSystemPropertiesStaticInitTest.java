@@ -12,20 +12,16 @@ package org.talend.daikon.sandbox.properties;
 //
 // ============================================================================
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.talend.daikon.runtime.RuntimeInfo;
 
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.talend.daikon.runtime.RuntimeInfo;
-import org.talend.daikon.sandbox.SandboxInstanceFactory;
 
 public class ClassLoaderIsolatedSystemPropertiesStaticInitTest {
 
@@ -52,25 +48,15 @@ public class ClassLoaderIsolatedSystemPropertiesStaticInitTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         previous = System.getProperties();
         assertFalse(previous instanceof ClassLoaderIsolatedSystemProperties);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         System.setProperties(previous);
-    }
-
-    @Test
-    @Ignore("until it is fixed")
-    public void testSetupJVMIsolationProperties() {
-        assertFalse(System.getProperties() instanceof ClassLoaderIsolatedSystemProperties);
-        // just do the call to have the static initializer called
-        SandboxInstanceFactory.createSandboxedInstance(new TestRuntime(this.getClass().getCanonicalName()),
-                this.getClass().getClassLoader(), true);
-        assertTrue(System.getProperties() instanceof ClassLoaderIsolatedSystemProperties);
     }
 
 }

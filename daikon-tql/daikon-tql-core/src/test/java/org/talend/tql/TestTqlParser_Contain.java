@@ -1,7 +1,8 @@
 package org.talend.tql;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.talend.tql.model.TqlElement;
 
 public class TestTqlParser_Contain extends TestTqlParser_Abstract {
@@ -11,7 +12,7 @@ public class TestTqlParser_Contain extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name contains 'ssen'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldContainsExpression{field='FieldReference{path='name'}', value='ssen', caseSensitive=true}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -19,7 +20,7 @@ public class TestTqlParser_Contain extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name contains 'noi'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldContainsExpression{field='FieldReference{path='name'}', value='noi', caseSensitive=true}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -27,7 +28,7 @@ public class TestTqlParser_Contain extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name contains '2'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldContainsExpression{field='FieldReference{path='name'}', value='2', caseSensitive=true}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -35,7 +36,7 @@ public class TestTqlParser_Contain extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name contains 'azerty'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldContainsExpression{field='FieldReference{path='name'}', value='azerty', caseSensitive=true}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -43,6 +44,6 @@ public class TestTqlParser_Contain extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name contains ''");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldContainsExpression{field='FieldReference{path='name'}', value='', caseSensitive=true}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 }

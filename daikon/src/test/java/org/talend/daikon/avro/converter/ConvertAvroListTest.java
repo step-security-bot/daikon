@@ -2,14 +2,14 @@ package org.talend.daikon.avro.converter;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.avro.SchemaBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {ConvertAvroList}.

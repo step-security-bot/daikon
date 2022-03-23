@@ -1,20 +1,23 @@
 package org.talend.daikon.token;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.security.CryptoHelper;
 
 import java.net.InetAddress;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.daikon.security.CryptoHelper;
-
 public class TokenGeneratorTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testArguments() throws Exception {
-        TokenGenerator.generateMachineToken(null);
+    @Test
+    public void testArguments() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            TokenGenerator.generateMachineToken(null);
+        });
     }
 
     @Test
@@ -24,7 +27,7 @@ public class TokenGeneratorTest {
         final String token = TokenGenerator.generateMachineToken(cryptoHelper);
 
         // Then
-        Assert.assertNotNull(token);
+        assertNotNull(token);
         final String decryptedToken = cryptoHelper.decrypt(token);
         final String hostName = InetAddress.getLocalHost().getHostName();
         final String osPart = "-" + System.getProperty("os.name") + System.getProperty("os.version");

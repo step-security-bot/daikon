@@ -1,9 +1,9 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.between;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -18,7 +18,7 @@ public class TestTqlApi_Between extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 between ['value1', 'value2']");
         // TQL api query
         TqlElement tqlElement = between("field1", "value1", "value2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -27,7 +27,7 @@ public class TestTqlApi_Between extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 between [123, 456]");
         // TQL api query
         TqlElement tqlElement = between("field1", 123, 456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class TestTqlApi_Between extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 between [123.45, 456.78]");
         // TQL api query
         TqlElement tqlElement = between("field1", 123.45, 456.78);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
 }

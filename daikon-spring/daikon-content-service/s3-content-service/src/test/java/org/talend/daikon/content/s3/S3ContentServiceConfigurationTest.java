@@ -1,6 +1,7 @@
 package org.talend.daikon.content.s3;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -10,7 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.amazonaws.services.s3.AmazonS3;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -18,16 +19,18 @@ public class S3ContentServiceConfigurationTest {
 
     private S3ContentServiceConfiguration configuration = new S3ContentServiceConfiguration();
 
-    @Test(expected = S3ContentServiceConfiguration.InvalidConfiguration.class)
+    @Test
     public void shouldCheckEndpointURLWhenUsingMinio() {
-        // given
-        final Environment environment = mock(Environment.class);
-        final ApplicationContext context = mock(ApplicationContext.class);
+        assertThrows(S3ContentServiceConfiguration.InvalidConfiguration.class, () -> {
+            // given
+            final Environment environment = mock(Environment.class);
+            final ApplicationContext context = mock(ApplicationContext.class);
 
-        when(environment.getProperty(eq("content-service.store.s3.authentication"), anyString())).thenReturn("MINIO");
+            when(environment.getProperty(eq("content-service.store.s3.authentication"), anyString())).thenReturn("MINIO");
 
-        // when
-        configuration.amazonS3(environment, context);
+            // when
+            configuration.amazonS3(environment, context);
+        });
     }
 
     @Test

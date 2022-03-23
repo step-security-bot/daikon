@@ -1,11 +1,12 @@
 package org.talend.daikon.messages.serialization;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.messages.MessageKey;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.daikon.messages.MessageKey;
 
 public class TestDaikonMessageSerialization {
 
@@ -24,9 +25,9 @@ public class TestDaikonMessageSerialization {
 
         MessageKey deserializeData = daikonMessageKeyDeserializer.deserialize("topic", serializeData);
 
-        Assert.assertEquals(data.getTenantId(), deserializeData.getTenantId());
-        Assert.assertEquals(data.getRandom(), deserializeData.getRandom());
-        Assert.assertEquals(data.getKeys(), deserializeData.getKeys());
+        assertEquals(data.getTenantId(), deserializeData.getTenantId());
+        assertEquals(data.getRandom(), deserializeData.getRandom());
+        assertEquals(data.getKeys(), deserializeData.getKeys());
 
     }
 

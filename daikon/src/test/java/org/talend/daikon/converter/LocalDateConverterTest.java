@@ -1,25 +1,18 @@
 package org.talend.daikon.converter;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.exception.TalendRuntimeException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.talend.daikon.exception.TalendRuntimeException;
-
 /**
  * To find more test, please refer to TypeConverterTest
- *
  */
 public class LocalDateConverterTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testAsLocalDateWithDateTimeFormatter() {
@@ -30,11 +23,12 @@ public class LocalDateConverterTest {
 
     @Test
     public void testError() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        thrown.expect(TalendRuntimeException.class);
-        thrown.expect(hasProperty("code", is(TypeConverterErrorCode.CANNOT_PARSE)));
-        thrown.expectMessage("Cannot parse '  03/12/2007' using the specified format.");
-        TypeConverter.asLocalDate().withDateTimeFormatter(formatter).convert("  03/12/2007");
+        TalendRuntimeException thrown = assertThrows(TalendRuntimeException.class, () -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            TypeConverter.asLocalDate().withDateTimeFormatter(formatter).convert("  03/12/2007");
+        });
+        assertEquals(TypeConverterErrorCode.CANNOT_PARSE, thrown.getCode());
+        assertEquals("Cannot parse '  03/12/2007' using the specified format.", thrown.getMessage());
     }
 
 }

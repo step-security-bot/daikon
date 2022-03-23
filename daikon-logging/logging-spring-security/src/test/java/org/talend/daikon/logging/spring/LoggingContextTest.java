@@ -12,26 +12,26 @@
 // ============================================================================
 package org.talend.daikon.logging.spring;
 
+import static com.jayway.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.jayway.restassured.RestAssured;
 import org.apache.log4j.MDC;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
-
-import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
 
 @SpringBootTest(classes = { LoggingApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(LoggingContextTest.SampleRequestHandlerConfiguration.class)
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class LoggingContextTest {
 
     @Value("${local.server.port}")
@@ -40,7 +40,7 @@ public class LoggingContextTest {
     @Autowired
     private SampleRequestHandlerConfiguration sampleRequestHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
         sampleRequestHandler.verifier = () -> {

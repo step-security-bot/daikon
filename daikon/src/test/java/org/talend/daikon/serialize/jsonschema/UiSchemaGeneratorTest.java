@@ -1,11 +1,11 @@
 package org.talend.daikon.serialize.jsonschema;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.skyscreamer.jsonassert.JSONAssert.assertNotEquals;
 import static org.talend.daikon.properties.presentation.Widget.widget;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.ReferenceExampleProperties;
 import org.talend.daikon.properties.ReferenceExampleProperties.TestAProperties;

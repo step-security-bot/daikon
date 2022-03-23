@@ -1,20 +1,21 @@
 package org.talend.logging.audit.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.logging.audit.impl.AuditConfiguration.APPENDER_FILE_PATH;
 import static org.talend.logging.audit.impl.AuditConfiguration.APPLICATION_NAME;
 import static org.talend.logging.audit.impl.AuditConfiguration.LOG_APPENDER;
 
-import java.util.Properties;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.util.Properties;
 
 public class AuditConfigurationMapImplTest {
 
     private Properties properties = new Properties();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setProperty(LOG_APPENDER, "none");
         setProperty(APPENDER_FILE_PATH, "/tmp");
@@ -36,13 +37,15 @@ public class AuditConfigurationMapImplTest {
         config.validateConfiguration();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void validateConfigurationRequiredFilePath() {
-        setProperty(LOG_APPENDER, "file");
-        setProperty(APPENDER_FILE_PATH, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            setProperty(LOG_APPENDER, "file");
+            setProperty(APPENDER_FILE_PATH, null);
 
-        AuditConfigurationMap config = AuditConfiguration.loadFromProperties(properties);
-        config.validateConfiguration();
+            AuditConfigurationMap config = AuditConfiguration.loadFromProperties(properties);
+            config.validateConfiguration();
+        });
     }
 
     @Test

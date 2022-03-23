@@ -1,11 +1,12 @@
 package org.talend.daikon.avro;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class NameUtilTest {
 
@@ -28,7 +29,7 @@ public class NameUtilTest {
             resultNames.add(name);
         }
 
-        Assert.assertEquals(expectedSet, resultNames);
+        assertEquals(expectedSet, resultNames);
     }
 
 }

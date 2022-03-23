@@ -1,9 +1,9 @@
 package org.talend.daikon.serialize.jsonschema;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.serialize.FullExampleProperties;
@@ -16,7 +16,7 @@ public class JsonWidgetTest {
 
     private Form advancedForm;
 
-    @Before
+    @BeforeEach
     public void init() {
         properties.init();
         mainForm = properties.getForm(Form.MAIN);

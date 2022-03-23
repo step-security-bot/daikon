@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
@@ -20,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Assert;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -150,8 +152,8 @@ public class MultiTenantApplication {
         }
 
         private void checkContextIsClean() {
-            Assert.assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
-            Assert.assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
+            assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
+            assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
         }
     }
 

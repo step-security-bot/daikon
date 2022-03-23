@@ -1,36 +1,44 @@
 package org.talend.daikon.content;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Objects;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
 
 public abstract class DeletableResourceLoaderTest extends DeletableLoaderResourceTests {
 
-    @After
+    @AfterEach
     public void after() throws IOException {
         resolver.clear("/**");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnNull() {
-        resolver.getResource(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            resolver.getResource(null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnEmptyString() {
-        resolver.getResource("");
+        assertThrows(IllegalArgumentException.class, () -> {
+            resolver.getResource("");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnSpaceString() {
-        resolver.getResource("  ");
+        assertThrows(IllegalArgumentException.class, () -> {
+            resolver.getResource("  ");
+        });
     }
 
     @Test

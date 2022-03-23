@@ -12,13 +12,26 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.assertj.core.api.BDDSoftAssertions;
+import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.talend.daikon.definition.Definition;
+import org.talend.daikon.definition.service.DefinitionRegistryService;
+import org.talend.daikon.properties.ReferenceExampleProperties.TestAProperties;
+import org.talend.daikon.properties.ReferenceExampleProperties.TestBProperties;
+import org.talend.daikon.properties.property.Property;
+import org.talend.daikon.properties.test.PropertiesTestUtils;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -29,22 +42,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
-import org.talend.daikon.definition.Definition;
-import org.talend.daikon.definition.service.DefinitionRegistryService;
-import org.talend.daikon.properties.ReferenceExampleProperties.TestAProperties;
-import org.talend.daikon.properties.ReferenceExampleProperties.TestBProperties;
-import org.talend.daikon.properties.property.Property;
-import org.talend.daikon.properties.test.PropertiesTestUtils;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+@ExtendWith(SoftAssertionsExtension.class)
 public class ReferencePropertiesTest {
 
-    @Rule
-    public ErrorCollector errorCollector = new ErrorCollector();
+    @InjectSoftAssertions
+    BDDSoftAssertions errorCollector;
 
     @Test
     public void testI18N() {
@@ -127,7 +129,7 @@ public class ReferencePropertiesTest {
             }
         }, null);
 
-        assertNotNull("Referenced properties visited", visited.contains(testAProp));
+        assertNotNull(visited.contains(testAProp), "Referenced properties visited");
     }
 
     @Test

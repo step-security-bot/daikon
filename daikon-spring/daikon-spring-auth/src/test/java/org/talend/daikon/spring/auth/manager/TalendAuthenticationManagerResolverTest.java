@@ -1,20 +1,15 @@
 package org.talend.daikon.spring.auth.manager;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.Before;
-import org.junit.Test;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.PlainJWT;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +21,11 @@ import org.springframework.security.oauth2.server.resource.authentication.Opaque
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.PlainJWT;
+import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class TalendAuthenticationManagerResolverTest {
 
@@ -39,7 +37,7 @@ public class TalendAuthenticationManagerResolverTest {
 
     private TalendAuthenticationManagerResolver resolver;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         OAuth2ResourceServerProperties iamProperties = new OAuth2ResourceServerProperties();
         iamProperties.getOpaquetoken().setIntrospectionUri(INTROSPECTION_URI);

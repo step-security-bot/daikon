@@ -1,6 +1,6 @@
 package org.talend.daikon.logging.kafka;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.internals.ProducerInterceptors;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.talend.daikon.logging.TalendKafkaProducerInterceptor;
 import org.talend.daikon.messages.MessageKey;

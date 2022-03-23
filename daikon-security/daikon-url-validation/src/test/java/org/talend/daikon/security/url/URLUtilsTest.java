@@ -1,15 +1,17 @@
 package org.talend.daikon.security.url;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import java.net.Inet6Address;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 public class URLUtilsTest {
 
-    @org.junit.Test
+    @Test
     public void testIsLocalUrlLoopbackAddress() throws MalformedURLException {
         // loopback address
         assertTrue(URLUtils.isLocalUrl(new URL("http://127.0.0.1/my/api")));
@@ -19,7 +21,7 @@ public class URLUtilsTest {
         assertFalse(URLUtils.isLocalUrl(new URL("http://www.google.fr")));
     }
 
-    @org.junit.Test
+    @Test
     public void testIsLocalUrlPrivateAddress() throws MalformedURLException {
         // RFC1918 / Private Address Space : https://tools.ietf.org/html/rfc1918
         assertTrue(URLUtils.isLocalUrl(new URL("http://10.0.0.0/my/api")));
@@ -38,13 +40,13 @@ public class URLUtilsTest {
         assertTrue(URLUtils.isLocalUrl(new URL("https://172.18.0.7/my/api")));
     }
 
-    @org.junit.Test
+    @Test
     public void testIsLocalUrlIPV6() throws Exception {
         assertTrue(URLUtils.isLocalAddress(Inet6Address.getByName("fe80::9656:d028:8652:66b6")));
         assertFalse(URLUtils.isLocalAddress(Inet6Address.getByName("2001:db8::8c28:c929:72db:49fe")));
     }
 
-    @org.junit.Test
+    @Test
     public void testIsLocalAWSMetadataService() throws Exception {
         assertTrue(URLUtils.isLocalUrl(new URL("http://169.254.169.254")));
         assertTrue(URLUtils.isLocalAddress(Inet6Address.getByName("fd00:ec2::254")));

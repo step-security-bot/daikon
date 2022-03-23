@@ -1,9 +1,9 @@
 package org.talend.tql.parser;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
 
@@ -19,13 +19,12 @@ public class TqlTest {
         assertNotNull(parse);
     }
 
-    @Test(expected = TqlException.class)
+    @Test
     public void parse_elementThrowTqlException() throws Exception {
-        String query = "toto";
-
-        Tql.parse(query);
-
-        fail(); // should have thrown exception
+        assertThrows(TqlException.class, () -> {
+            String query = "toto";
+            Tql.parse(query);
+        });
     }
 
 }

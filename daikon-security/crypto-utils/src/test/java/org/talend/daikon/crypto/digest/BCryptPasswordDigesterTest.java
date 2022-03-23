@@ -1,12 +1,12 @@
 package org.talend.daikon.crypto.digest;
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 
 public class BCryptPasswordDigesterTest {
 
@@ -52,15 +52,19 @@ public class BCryptPasswordDigesterTest {
         assertEquals(String.valueOf(strength), digest.substring(4, 6));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldNotAllowNegativeStrength() throws Exception {
-        new BCryptPasswordDigester(-5);
+    @Test
+    public void shouldNotAllowNegativeStrength() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new BCryptPasswordDigester(-5);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotAllowPasswordsGreaterThan72Bytes() throws Exception {
-        PasswordDigester digester = new BCryptPasswordDigester();
-        digester.digest(StringUtils.repeat("x", 100));
+        assertThrows(IllegalArgumentException.class, () -> {
+            PasswordDigester digester = new BCryptPasswordDigester();
+            digester.digest(StringUtils.repeat("x", 100));
+        });
     }
 
     @Test

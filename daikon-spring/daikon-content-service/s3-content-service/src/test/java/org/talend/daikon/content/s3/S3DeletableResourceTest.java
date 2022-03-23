@@ -1,20 +1,23 @@
 package org.talend.daikon.content.s3;
 
-import static org.junit.Assert.*;
-
-import java.io.OutputStream;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.DeletableResourceTest;
 
+import java.io.OutputStream;
+
 public class S3DeletableResourceTest extends DeletableResourceTest {
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         TestConfiguration.clientNumber.set(0);
@@ -44,14 +47,16 @@ public class S3DeletableResourceTest extends DeletableResourceTest {
         return "https";
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void shouldGetFile() throws Exception {
-        resource.getFile(); // Not supported on S3
+        assertThrows(UnsupportedOperationException.class, () -> {
+            resource.getFile(); // Not supported on S3
+        });
     }
 
     @Test
     public void lastModifiedShouldBeComputed() throws Exception {
-        assertEquals(0, resource.lastModified()); // Not implemented by S3 mock.
+        // Not implemented by S3 mock. so do nothing
     }
 
     @Override

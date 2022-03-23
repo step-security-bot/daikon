@@ -12,12 +12,12 @@
 // ============================================================================
 package org.talend.daikon.serialize.jsonio;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.daikon.properties.property.PropertyFactory.newProperty;
 
 import java.util.EnumSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.PropertiesImpl;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.security.CryptoHelper;

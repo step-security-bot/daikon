@@ -12,8 +12,9 @@
 // ============================================================================
 package org.talend.daikon.messages.envelope;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class TestMessageConverterRegistryImpl {
 
@@ -24,8 +25,8 @@ public class TestMessageConverterRegistryImpl {
         messageConverterRegistry.registerConverter("format1", new Message1Converter());
         messageConverterRegistry.registerConverter("format2", new Message2Converter());
 
-        Assert.assertEquals(Message1Converter.class, messageConverterRegistry.getMessageConverter("format1").getClass());
-        Assert.assertEquals(Message2Converter.class, messageConverterRegistry.getMessageConverter("format2").getClass());
+        assertEquals(Message1Converter.class, messageConverterRegistry.getMessageConverter("format1").getClass());
+        assertEquals(Message2Converter.class, messageConverterRegistry.getMessageConverter("format2").getClass());
 
     }
 

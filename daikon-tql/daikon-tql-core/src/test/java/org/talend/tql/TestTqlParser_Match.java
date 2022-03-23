@@ -1,7 +1,8 @@
 package org.talend.tql;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.talend.tql.model.TqlElement;
 
 public class TestTqlParser_Match extends TestTqlParser_Abstract {
@@ -11,7 +12,7 @@ public class TestTqlParser_Match extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name ~ '^[A-Z][a-z]*$'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldMatchesRegex{field='FieldReference{path='name'}', regex='^[A-Z][a-z]*$'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -19,7 +20,7 @@ public class TestTqlParser_Match extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name ~ '^[A-Z|a-z]*$'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldMatchesRegex{field='FieldReference{path='name'}', regex='^[A-Z|a-z]*$'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -27,7 +28,7 @@ public class TestTqlParser_Match extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name ~ '^[A-Z]'");
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldMatchesRegex{field='FieldReference{path='name'}', regex='^[A-Z]'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -35,7 +36,7 @@ public class TestTqlParser_Match extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name ~ '\\d'"); // contains any digit
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldMatchesRegex{field='FieldReference{path='name'}', regex='\\d'}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -43,6 +44,6 @@ public class TestTqlParser_Match extends TestTqlParser_Abstract {
         TqlElement tqlElement = doTest("name ~ ''"); // contains any digit
         String expected = "OrExpression{expressions=[AndExpression{expressions="
                 + "[FieldMatchesRegex{field='FieldReference{path='name'}', regex=''}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 }

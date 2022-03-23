@@ -1,14 +1,15 @@
 package org.talend.daikon.properties;
 
-import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.ValidationResult.Result;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 import org.talend.daikon.properties.validation.ValidationHelper;
 import org.talend.daikon.properties.validation.Validator;
+
+import java.util.Map;
 
 /**
  * Created by dmytro.sylaiev on 5/29/2017.
@@ -72,10 +73,10 @@ public class ValidationResultsTest {
         ValidationResults validationResults = createDefaultValidationResults();
 
         Map<String, ValidationResult> allResults = validationResults.getAll();
-        Assert.assertEquals(allResults.size(), 2);
+        assertEquals(allResults.size(), 2);
         ValidationResult testResult = allResults.get("testResult");
-        Assert.assertEquals(Result.OK, testResult.getStatus());
-        Assert.assertEquals("OK", testResult.getMessage());
+        assertEquals(Result.OK, testResult.getStatus());
+        assertEquals("OK", testResult.getMessage());
     }
 
     @Test
@@ -85,14 +86,14 @@ public class ValidationResultsTest {
         Map<String, ValidationResult> allResults = validationResults.getAll();
 
         ValidationResult errorResult = allResults.get("errorResult");
-        Assert.assertEquals(Result.ERROR, errorResult.getStatus());
-        Assert.assertEquals("ERROR", errorResult.getMessage());
+        assertEquals(Result.ERROR, errorResult.getStatus());
+        assertEquals("ERROR", errorResult.getMessage());
 
         Map<String, ValidationResult> errors = validationResults.getErrors();
-        Assert.assertEquals(1, errors.size());
+        assertEquals(1, errors.size());
 
         Map<String, ValidationResult> warnings = validationResults.getWarnings();
-        Assert.assertEquals(0, warnings.size());
+        assertEquals(0, warnings.size());
     }
 
     private ValidationResults createDefaultValidationResults() {
@@ -111,30 +112,30 @@ public class ValidationResultsTest {
         validationResults.addValidationResult("testResult", validationResult);
 
         Map<String, ValidationResult> allResults = validationResults.getAll();
-        Assert.assertEquals(1, allResults.size());
+        assertEquals(1, allResults.size());
         ValidationResult testResult = allResults.get("testResult");
-        Assert.assertEquals(Result.OK, testResult.getStatus());
-        Assert.assertEquals("OK", testResult.getMessage());
+        assertEquals(Result.OK, testResult.getStatus());
+        assertEquals("OK", testResult.getMessage());
 
         // Test that warning will rewrite ok result
         validationResult = new ValidationResult(Result.WARNING, "WARNING");
         validationResults.addValidationResult("testResult", validationResult);
 
         allResults = validationResults.getAll();
-        Assert.assertEquals(1, allResults.size());
+        assertEquals(1, allResults.size());
         testResult = allResults.get("testResult");
-        Assert.assertEquals(Result.WARNING, testResult.getStatus());
-        Assert.assertEquals("WARNING", testResult.getMessage());
+        assertEquals(Result.WARNING, testResult.getStatus());
+        assertEquals("WARNING", testResult.getMessage());
 
         // Test that Error will rewrite warning result
         validationResult = new ValidationResult(Result.ERROR, "ERROR");
         validationResults.addValidationResult("testResult", validationResult);
 
         allResults = validationResults.getAll();
-        Assert.assertEquals(1, allResults.size());
+        assertEquals(1, allResults.size());
         testResult = allResults.get("testResult");
-        Assert.assertEquals(Result.ERROR, testResult.getStatus());
-        Assert.assertEquals("ERROR", testResult.getMessage());
+        assertEquals(Result.ERROR, testResult.getStatus());
+        assertEquals("ERROR", testResult.getMessage());
 
         // Test that Warning and ok results won't rewrite error result
         validationResult = new ValidationResult(Result.WARNING, "WARN");
@@ -143,10 +144,10 @@ public class ValidationResultsTest {
         validationResults.addValidationResult("testResult", validationResult);
 
         allResults = validationResults.getAll();
-        Assert.assertEquals(1, allResults.size());
+        assertEquals(1, allResults.size());
         testResult = allResults.get("testResult");
-        Assert.assertEquals(Result.ERROR, testResult.getStatus());
-        Assert.assertEquals("ERROR", testResult.getMessage());
+        assertEquals(Result.ERROR, testResult.getStatus());
+        assertEquals("ERROR", testResult.getMessage());
     }
 
     @Test
@@ -155,11 +156,11 @@ public class ValidationResultsTest {
         props.init();
 
         ValidationResults results = ValidationHelper.validateProperties(props);
-        Assert.assertEquals(1, results.getErrors().size());
+        assertEquals(1, results.getErrors().size());
 
         props.nestedProperties.propertyToValidate.setValue("abc");
         results = ValidationHelper.validateProperties(props);
-        Assert.assertEquals(0, results.getErrors().size());
+        assertEquals(0, results.getErrors().size());
     }
 
 }

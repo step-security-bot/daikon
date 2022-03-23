@@ -12,6 +12,11 @@
 // ============================================================================
 package org.talend.daikon.security;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,15 +27,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
-import javax.net.ssl.SSLContext;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 /**
  * created by wchen on Nov 15, 2016
  * Detailled comment
- *
  */
 public class SSLContextProviderTest {
 
@@ -42,6 +41,6 @@ public class SSLContextProviderTest {
         URL trustStore = this.getClass().getResource("truststore");
         String trustPath = new File(trustStore.toURI().getSchemeSpecificPart()).getAbsolutePath();
         SSLContext buildContext = SSLContextProvider.buildContext("TLS", keyPath, "talend", "JKS", trustPath, "talend", "JKS");
-        Assert.assertNotNull(buildContext);
+        assertNotNull(buildContext);
     }
 }

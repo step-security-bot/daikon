@@ -1,9 +1,10 @@
 package org.talend.daikon.security;
 
-import org.junit.Test;
-import org.talend.daikon.crypto.KeySources;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.crypto.KeySources;
 
 public class CryptoHelperTest {
 

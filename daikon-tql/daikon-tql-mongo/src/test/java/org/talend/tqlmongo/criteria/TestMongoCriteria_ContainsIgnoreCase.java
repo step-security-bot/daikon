@@ -1,10 +1,11 @@
 package org.talend.tqlmongo.criteria;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
+
+import java.util.List;
 
 /**
  * Created by gmzoughi on 06/07/16.
@@ -17,9 +18,9 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("ssen", "i");
         assertCriteriaEquals(criteria, expectedCriteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
     }
 
     @Test
@@ -28,9 +29,9 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("noi", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
     }
 
     @Test
@@ -39,8 +40,8 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("2", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Benoit 2eme")).count());
     }
 
     @Test
@@ -49,7 +50,7 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("azerty", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(0, records.size());
+        assertEquals(0, records.size());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(5, records.size());
+        assertEquals(5, records.size());
     }
 
     @Test
@@ -67,9 +68,9 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("gha", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
     }
 
     @Test
@@ -78,9 +79,9 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("Gha", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(2, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
+        assertEquals(2, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("ghassen")).count());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("Ghassen")).count());
     }
 
     @Test
@@ -89,8 +90,8 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("\\+", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -99,8 +100,8 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("\\?", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -109,8 +110,8 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("\\$", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 
     @Test
@@ -119,7 +120,7 @@ public class TestMongoCriteria_ContainsIgnoreCase extends TestMongoCriteria_Abst
         Criteria expectedCriteria = Criteria.where("name").regex("'", "i");
         assertCriteriaEquals(expectedCriteria, criteria);
         List<Record> records = this.getRecords(criteria);
-        Assert.assertEquals(1, records.size());
-        Assert.assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
+        assertEquals(1, records.size());
+        assertEquals(1, records.stream().filter(r -> r.getName().equals("+?'n$")).count());
     }
 }

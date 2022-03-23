@@ -1,5 +1,6 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.eq;
 import static org.talend.tql.api.TqlBuilder.eqFields;
 import static org.talend.tql.api.TqlBuilder.gt;
@@ -13,8 +14,7 @@ import static org.talend.tql.api.TqlBuilder.lteFields;
 import static org.talend.tql.api.TqlBuilder.neq;
 import static org.talend.tql.api.TqlBuilder.neqFields;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -26,7 +26,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("0001='value'");
         // TQL api query
         TqlElement tqlElement = eq("0001", "value");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 = field(field2)");
         // TQL api query
         TqlElement tqlElement = eqFields("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 = 'field2'");
         // TQL api query
         TqlElement tqlElement = eq("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 = 1");
         // TQL api query
         TqlElement tqlElement = eq("field1", 1);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 = 123.456");
         // TQL api query
         TqlElement tqlElement = eq("field1", 123.456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != field(field2)");
         // TQL api query
         TqlElement tqlElement = neqFields("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != 'field2'");
         // TQL api query
         TqlElement tqlElement = neq("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != 1");
         // TQL api query
         TqlElement tqlElement = neq("field1", 1);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != 1.45");
         // TQL api query
         TqlElement tqlElement = neq("field1", 1.45);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != true");
         // TQL api query
         TqlElement tqlElement = neq("field1", true);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 < 1");
         // TQL api query
         TqlElement tqlElement = lt("field1", 1);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 < 123.456");
         // TQL api query
         TqlElement tqlElement = lt("field1", 123.456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 < field(f2)");
         // TQL api query
         TqlElement tqlElement = ltFields("field1", "f2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 <= field(field2)");
         // TQL api query
         TqlElement tqlElement = lteFields("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 <= 2");
         // TQL api query
         TqlElement tqlElement = lte("field1", 2);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 <= 123.456");
         // TQL api query
         TqlElement tqlElement = lte("field1", 123.456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -170,7 +170,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 >= field(field2)");
         // TQL api query
         TqlElement tqlElement = gteFields("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -179,7 +179,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 >= 1");
         // TQL api query
         TqlElement tqlElement = gte("field1", 1);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 >= 123.456");
         // TQL api query
         TqlElement tqlElement = gte("field1", 123.456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 > field(field2)");
         // TQL api query
         TqlElement tqlElement = gtFields("field1", "field2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -206,7 +206,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 > 1");
         // TQL api query
         TqlElement tqlElement = gt("field1", 1);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -215,7 +215,7 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 > 123.456");
         // TQL api query
         TqlElement tqlElement = gt("field1", 123.456);
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -224,6 +224,6 @@ public class TestTqlApi_FieldComparison extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 != 'fiel\\'d2'");
         // TQL api query
         TqlElement tqlElement = neq("field1", "fiel'd2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 }

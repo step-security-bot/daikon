@@ -1,12 +1,12 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.and;
 import static org.talend.tql.api.TqlBuilder.between;
 import static org.talend.tql.api.TqlBuilder.eqFields;
 import static org.talend.tql.api.TqlBuilder.or;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -21,7 +21,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1=field(toto) or field2=field(tata)");
         // TQL api query
         TqlElement tqlElement = or(eqFields("field1", "toto"), eqFields("field2", "tata"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1=field(value1) or field2=field(value2) or field3=field(value3)");
         // TQL api query
         TqlElement tqlElement = or(eqFields("field1", "value1"), eqFields("field2", "value2"), eqFields("field3", "value3"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = or(eqFields("field1", "value1"), eqFields("field2", "value2"), eqFields("field3", "value3"),
                 eqFields("field4", "value4"), eqFields("field5", "value5"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 between ['1', '2'] or field2 between ['3', '4']");
         // TQL api query
         TqlElement tqlElement = or(between("field1", "1", "2"), between("field2", "3", "4"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = or(between("field1", "1", "2"), between("field2", "3", "4"), between("field3", "5", "6"),
                 between("field4", "7", "8"), between("field5", "9", "10"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = or(or(eqFields("f1", "value1"), eqFields("f2", "value2")),
                 or(eqFields("f3", "value3"), eqFields("f4", "value4")));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -81,6 +81,6 @@ public class TestTqlApi_Or extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = or(and(eqFields("f1", "value1"), eqFields("f2", "value2")),
                 and(eqFields("f3", "value3"), eqFields("f4", "value4")));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 }

@@ -12,38 +12,29 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
+import static com.jayway.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.talend.daikon.multitenant.web.MultiTenantApplication.MESSAGE;
+
 import com.jayway.restassured.RestAssured;
 import org.apache.log4j.MDC;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
-import static com.jayway.restassured.RestAssured.given;
-import static org.talend.daikon.multitenant.web.MultiTenantApplication.MESSAGE;
-
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @Import(MultiTenantApplicationTest.SampleRequestHandlerConfiguration.class)
 @SpringBootTest(classes = { MultiTenantApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MultiTenantApplicationTest {
@@ -54,7 +45,7 @@ public class MultiTenantApplicationTest {
     @Autowired
     private SampleRequestHandlerConfiguration handlerConfiguration;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
         handlerConfiguration.verifier = () -> {
@@ -64,8 +55,8 @@ public class MultiTenantApplicationTest {
     @Test
     public void testSyncWithoutTenant() {
         handlerConfiguration.verifier = () -> {
-            Assert.assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
-            Assert.assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
+            assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
+            assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
         };
         given().get("/sync").then().statusCode(200).body(Matchers.equalTo(MESSAGE));
     }
@@ -74,8 +65,8 @@ public class MultiTenantApplicationTest {
     public void testSyncWithTenantHeader() {
         String tenantId = "MyTestTenantId";
         handlerConfiguration.verifier = () -> {
-            Assert.assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
-            Assert.assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
+            assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
+            assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
         };
         given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/sync").then().statusCode(200)
                 .body(Matchers.equalTo(MESSAGE));
@@ -84,8 +75,8 @@ public class MultiTenantApplicationTest {
     @Test
     public void testAsyncWithoutTenant() {
         handlerConfiguration.verifier = () -> {
-            Assert.assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
-            Assert.assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
+            assertFalse(TenancyContextHolder.getContext().getOptionalTenant().isPresent());
+            assertNull(MDC.get(MdcKeys.ACCOUNT_ID));
         };
         given().get("/async").then().statusCode(200).body(Matchers.equalTo(MESSAGE));
     }
@@ -94,8 +85,8 @@ public class MultiTenantApplicationTest {
     public void testAsyncWithTenantHeader() {
         String tenantId = "MyAsyncTestTenantId";
         handlerConfiguration.verifier = () -> {
-            Assert.assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
-            Assert.assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
+            assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
+            assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
         };
         given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/async").then().statusCode(200)
                 .body(Matchers.equalTo(MESSAGE));
@@ -106,8 +97,8 @@ public class MultiTenantApplicationTest {
         String errorMessage = "Expected error message";
         String tenantId = "MyTestTenantId";
         handlerConfiguration.verifier = () -> {
-            Assert.assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
-            Assert.assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
+            assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
+            assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
             throw new RuntimeException(errorMessage);
         };
         given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/sync").then().statusCode(500);
@@ -118,8 +109,8 @@ public class MultiTenantApplicationTest {
         String errorMessage = "Expected error message";
         String tenantId = "MyTestTenantId";
         handlerConfiguration.verifier = () -> {
-            Assert.assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
-            Assert.assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
+            assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
+            assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
             throw new RuntimeException(errorMessage);
         };
         given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/async").then().statusCode(500);

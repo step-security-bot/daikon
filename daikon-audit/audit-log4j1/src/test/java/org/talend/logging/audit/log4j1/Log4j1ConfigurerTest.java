@@ -1,14 +1,14 @@
 package org.talend.logging.audit.log4j1;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.logging.event.layout.Log4jJSONLayout;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;

@@ -12,24 +12,26 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-import java.lang.reflect.Method;
-
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.runtime.RuntimeContext;
 import org.talend.daikon.properties.service.Repository;
 
+import java.lang.reflect.Method;
+
 /**
  * Unit-tests for {@link PropertiesDynamicMethodHelper}
- * 
+ * <p>
  * Client code should call <code>isCall*()<code> methods of {@link Form} and {@link Widget} classes to discover whether it is
  * allowed to call callbacks.
  * There are 4 cases for each callback:
@@ -53,7 +55,6 @@ import org.talend.daikon.properties.service.Repository;
  * Then new callback will be called. If Product doesn't pass RuntimeContext argument, then old callback should be called.
  * </li>
  * </ol>
- * 
  */
 public class PropertiesDynamicMethodHelperTest {
 
@@ -254,38 +255,38 @@ public class PropertiesDynamicMethodHelperTest {
         }
     }
 
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void testFindMethodNullPropertyName() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("The ComponentService was used to access a property with a null(or empty) property name. Type:");
-
-        PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
-        PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_AFTER, null, true);
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
+            PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_AFTER, null, true);
+        });
+        assertTrue(thrown.getMessage()
+                .contains("The ComponentService was used to access a property with a null(or empty) property name. Type:"));
     }
 
     @Test
     public void testFindMethodNullObject() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage("Instance whose method is being searched for should not be null");
-        PropertiesDynamicMethodHelper.findMethod(null, Properties.METHOD_AFTER, "property", true);
+        NullPointerException thrown = assertThrows(NullPointerException.class, () -> {
+            PropertiesDynamicMethodHelper.findMethod(null, Properties.METHOD_AFTER, "property", true);
+        });
+        assertEquals("Instance whose method is being searched for should not be null", thrown.getMessage());
     }
 
     @Test
     public void testFindMethodUnknownTypeRequired() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: unknownTriggerTypeProperty not found");
-        PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
-        PropertiesDynamicMethodHelper.findMethod(props, "unknownTriggerType", "property", true);
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
+            PropertiesDynamicMethodHelper.findMethod(props, "unknownTriggerType", "property", true);
+        });
+        assertEquals("Method: unknownTriggerTypeProperty not found", thrown.getMessage());
     }
 
     @Test
     public void testFindMethodUnknownTypeNotRequired() {
         PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
         Method method = PropertiesDynamicMethodHelper.findMethod(props, "unknownTriggerType", "property", false);
-        Assert.assertNull(method);
+        assertNull(method);
     }
 
     /**
@@ -297,7 +298,7 @@ public class PropertiesDynamicMethodHelperTest {
 
         PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
         Method method = PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_AFTER, "property", false);
-        Assert.assertEquals(expectedMethodDefinition, method.toString());
+        assertEquals(expectedMethodDefinition, method.toString());
     }
 
     /**
@@ -311,7 +312,7 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithBothCallbacks props = new PropertiesWithBothCallbacks();
         Method method = PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_AFTER, "property", false,
                 RuntimeContext.class);
-        Assert.assertEquals(expectedMethodDefinition, method.toString());
+        assertEquals(expectedMethodDefinition, method.toString());
     }
 
     /**
@@ -321,7 +322,7 @@ public class PropertiesDynamicMethodHelperTest {
     public void testFindMethodPackage() {
         PropertiesWithoutCallbacks props = new PropertiesWithoutCallbacks();
         Method method = PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_BEFORE, "someProperty", false);
-        Assert.assertNull(method);
+        assertNull(method);
     }
 
     /**
@@ -331,40 +332,40 @@ public class PropertiesDynamicMethodHelperTest {
     public void testFindMethodPrivate() {
         PropertiesWithoutCallbacks props = new PropertiesWithoutCallbacks();
         Method method = PropertiesDynamicMethodHelper.findMethod(props, Properties.METHOD_VALIDATE, "anotherProperty", false);
-        Assert.assertNull(method);
+        assertNull(method);
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
      */
     @Test
-    public void testAfterFormBackNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormBackMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.afterFormBack(withoutCallbacks, Form.MAIN);
+    public void testAfterFormBackNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.afterFormBack(withoutCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: afterFormBackMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormBackNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormBackMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.afterFormBack(withNewCallbacks, Form.MAIN);
+    public void testAfterFormBackNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.afterFormBack(withNewCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: afterFormBackMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormBackOldCallback() throws Throwable {
@@ -375,8 +376,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormBackBothCallbacks() throws Throwable {
@@ -387,37 +388,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormBackRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormBackMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormBack(withoutCallbacks, Form.MAIN, context);
+    public void testAfterFormBackRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormBack(withoutCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: afterFormBackMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormBackRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormBackMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormBack(withNewCallbacks, Form.MAIN, context);
+    public void testAfterFormBackRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormBack(withNewCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: afterFormBackMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormBackRuntimeContextOldCallback() throws Throwable {
@@ -431,8 +434,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormBackRuntimeContextBothCallbacks() throws Throwable {
@@ -444,37 +447,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormFinishkNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormFinishMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        Repository repository = mock(Repository.class);
-        PropertiesDynamicMethodHelper.afterFormFinish(withoutCallbacks, Form.MAIN, repository);
+    public void testAfterFormFinishkNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            Repository repository = mock(Repository.class);
+            PropertiesDynamicMethodHelper.afterFormFinish(withoutCallbacks, Form.MAIN, repository);
+        });
+        assertEquals("Method: afterFormFinishMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormFinishNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormFinishMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        Repository repository = mock(Repository.class);
-        PropertiesDynamicMethodHelper.afterFormFinish(withNewCallbacks, Form.MAIN, repository);
+    public void testAfterFormFinishNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            Repository repository = mock(Repository.class);
+            PropertiesDynamicMethodHelper.afterFormFinish(withNewCallbacks, Form.MAIN, repository);
+        });
+        assertEquals("Method: afterFormFinishMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormFinishOldCallback() throws Throwable {
@@ -486,8 +491,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormFinishBothCallbacks() throws Throwable {
@@ -499,39 +504,41 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormFinishRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormFinishMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        Repository repository = mock(Repository.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormFinish(withoutCallbacks, Form.MAIN, repository, context);
+    public void testAfterFormFinishRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            Repository repository = mock(Repository.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormFinish(withoutCallbacks, Form.MAIN, repository, context);
+        });
+        assertEquals("Method: afterFormFinishMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormFinishRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormFinishMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        Repository repository = mock(Repository.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormFinish(withNewCallbacks, Form.MAIN, repository, context);
+    public void testAfterFormFinishRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            Repository repository = mock(Repository.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormFinish(withNewCallbacks, Form.MAIN, repository, context);
+        });
+        assertEquals("Method: afterFormFinishMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormFinishRuntimeContextOldCallback() throws Throwable {
@@ -546,8 +553,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormFinishRuntimeContextBothCallbacks() throws Throwable {
@@ -560,35 +567,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormNextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormNextMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.afterFormNext(withoutCallbacks, Form.MAIN);
+    public void testAfterFormNextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.afterFormNext(withoutCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: afterFormNextMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormNextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormNextMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.afterFormNext(withNewCallbacks, Form.MAIN);
+    public void testAfterFormNextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.afterFormNext(withNewCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: afterFormNextMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormNextOldCallback() throws Throwable {
@@ -599,8 +608,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormNextBothCallbacks() throws Throwable {
@@ -611,37 +620,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormNextRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormNextMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormNext(withoutCallbacks, Form.MAIN, context);
+    public void testAfterFormNextRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormNext(withoutCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: afterFormNextMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterFormNextRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterFormNextMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterFormNext(withNewCallbacks, Form.MAIN, context);
+    public void testAfterFormNextRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterFormNext(withNewCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: afterFormNextMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormNextRuntimeContextOldCallback() throws Throwable {
@@ -655,8 +666,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterFormNextRuntimeContextBothCallbacks() throws Throwable {
@@ -668,35 +679,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterPropertyNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.afterProperty(withoutCallbacks, "property");
+    public void testAfterPropertyNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.afterProperty(withoutCallbacks, "property");
+        });
+        assertEquals("Method: afterProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterPropertyNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.afterProperty(withNewCallbacks, "property");
+    public void testAfterPropertyNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.afterProperty(withNewCallbacks, "property");
+        });
+        assertEquals("Method: afterProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterPropertyOldCallback() throws Throwable {
@@ -707,8 +720,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterPropertyBothCallbacks() throws Throwable {
@@ -719,37 +732,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterPropertyRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterProperty(withoutCallbacks, "property", context);
+    public void testAfterPropertyRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterProperty(withoutCallbacks, "property", context);
+        });
+        assertEquals("Method: afterProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testAfterPropertyRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: afterProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.afterProperty(withNewCallbacks, "property", context);
+    public void testAfterPropertyRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.afterProperty(withNewCallbacks, "property", context);
+        });
+        assertEquals("Method: afterProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterPropertyRuntimeContextOldCallback() throws Throwable {
@@ -763,8 +778,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterPropertyRuntimeContextBothCallbacks() throws Throwable {
@@ -776,8 +791,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterReferenceOldCallback() throws Throwable {
@@ -788,8 +803,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterReferenceBothCallbacks() throws Throwable {
@@ -800,8 +815,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterReferenceRuntimeContextOldCallback() throws Throwable {
@@ -815,8 +830,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testAfterReferenceRuntimeContextBothCallbacks() throws Throwable {
@@ -828,35 +843,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforeFormPresentNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeFormPresentMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.beforeFormPresent(withoutCallbacks, Form.MAIN);
+    public void testBeforeFormPresentNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.beforeFormPresent(withoutCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: beforeFormPresentMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforeFormPresentNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeFormPresentMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.beforeFormPresent(withNewCallbacks, Form.MAIN);
+    public void testBeforeFormPresentNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.beforeFormPresent(withNewCallbacks, Form.MAIN);
+        });
+        assertEquals("Method: beforeFormPresentMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforeFormPresentOldCallback() throws Throwable {
@@ -867,8 +884,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforeFormPresentBothCallbacks() throws Throwable {
@@ -879,37 +896,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforeFormPresentRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeFormPresentMain not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforeFormPresent(withoutCallbacks, Form.MAIN, context);
+    public void testBeforeFormPresentRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforeFormPresent(withoutCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: beforeFormPresentMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforeFormPresentRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeFormPresentMain not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforeFormPresent(withNewCallbacks, Form.MAIN, context);
+    public void testBeforeFormPresentRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforeFormPresent(withNewCallbacks, Form.MAIN, context);
+        });
+        assertEquals("Method: beforeFormPresentMain not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforeFormPresentRuntimeContextOldCallback() throws Throwable {
@@ -923,8 +942,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforeFormPresentRuntimeContextBothCallbacks() throws Throwable {
@@ -936,35 +955,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyActivateNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.beforePropertyActivate(withoutCallbacks, "property");
+    public void testBeforePropertyActivateNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.beforePropertyActivate(withoutCallbacks, "property");
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyActivateNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.beforePropertyActivate(withNewCallbacks, "property");
+    public void testBeforePropertyActivateNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.beforePropertyActivate(withNewCallbacks, "property");
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyActivateOldCallback() throws Throwable {
@@ -975,8 +996,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyActivateBothCallbacks() throws Throwable {
@@ -987,37 +1008,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyActivateRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforePropertyActivate(withoutCallbacks, "property", context);
+    public void testBeforePropertyActivateRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforePropertyActivate(withoutCallbacks, "property", context);
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyActivateRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforePropertyActivate(withNewCallbacks, "property", context);
+    public void testBeforePropertyActivateRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforePropertyActivate(withNewCallbacks, "property", context);
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyActivateRuntimeContextOldCallback() throws Throwable {
@@ -1031,8 +1054,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyActivateRuntimeContextBothCallbacks() throws Throwable {
@@ -1044,35 +1067,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyPresentNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.beforePropertyPresent(withoutCallbacks, "property");
+    public void testBeforePropertyPresentNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.beforePropertyPresent(withoutCallbacks, "property");
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyPresentNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.beforePropertyPresent(withNewCallbacks, "property");
+    public void testBeforePropertyPresentNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.beforePropertyPresent(withNewCallbacks, "property");
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyPresentOldCallback() throws Throwable {
@@ -1083,8 +1108,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyPresentBothCallbacks() throws Throwable {
@@ -1095,37 +1120,39 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyPresentRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforePropertyPresent(withoutCallbacks, "property", context);
+    public void testBeforePropertyPresentRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforePropertyPresent(withoutCallbacks, "property", context);
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testBeforePropertyPresentRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: beforeProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.beforePropertyPresent(withNewCallbacks, "property", context);
+    public void testBeforePropertyPresentRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.beforePropertyPresent(withNewCallbacks, "property", context);
+        });
+        assertEquals("Method: beforeProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyPresentRuntimeContextOldCallback() throws Throwable {
@@ -1139,8 +1166,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testBeforePropertyPresentRuntimeContextBothCallbacks() throws Throwable {
@@ -1152,35 +1179,37 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testValidatePropertyNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: validateProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        PropertiesDynamicMethodHelper.validateProperty(withoutCallbacks, "property");
+    public void testValidatePropertyNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            PropertiesDynamicMethodHelper.validateProperty(withoutCallbacks, "property");
+        });
+        assertEquals("Method: validateProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testValidatePropertyNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: validateProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        PropertiesDynamicMethodHelper.validateProperty(withNewCallbacks, "property");
+    public void testValidatePropertyNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            PropertiesDynamicMethodHelper.validateProperty(withNewCallbacks, "property");
+        });
+        assertEquals("Method: validateProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testValidatePropertyOldCallback() throws Throwable {
@@ -1191,8 +1220,8 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that callback without parameters is called even if {@link Properties} class has both kinds of callbacks
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testValidatePropertyBothCallbacks() throws Throwable {
@@ -1203,37 +1232,40 @@ public class PropertiesDynamicMethodHelperTest {
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has no triggers at all
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testValidatePropertyRuntimeContextNoCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: validateProperty not found");
-        PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.validateProperty(withoutCallbacks, "property", context);
+    public void testValidatePropertyRuntimeContextNoCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithoutCallbacks withoutCallbacks = mock(PropertiesWithoutCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.validateProperty(withoutCallbacks, "property", context);
+        });
+        assertEquals("Method: validateProperty not found", thrown.getMessage());
     }
 
     /**
      * Asserts that method throws {@link IllegalArgumentException}, when {@link Properties} class has callback with
      * {@link RuntimeContext} parameter, but has no callback without parameters
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
-    public void testValidatePropertyRuntimeContextNewCallback() throws Throwable {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Method: validateProperty not found");
-        PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
-        RuntimeContext context = mock(RuntimeContext.class);
-        PropertiesDynamicMethodHelper.validateProperty(withNewCallbacks, "property", context);
+    public void testValidatePropertyRuntimeContextNewCallback() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            PropertiesWithRuntimeContextCallbacks withNewCallbacks = mock(PropertiesWithRuntimeContextCallbacks.class);
+            RuntimeContext context = mock(RuntimeContext.class);
+            PropertiesDynamicMethodHelper.validateProperty(withNewCallbacks, "property", context);
+        });
+        assertEquals("Method: validateProperty not found", thrown.getMessage());
+
     }
 
     /**
      * Asserts that callback without parameters is called, when it is the only callback present in {@link Properties} class
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testValidatePropertyRuntimeContextOldCallback() throws Throwable {
@@ -1247,8 +1279,8 @@ public class PropertiesDynamicMethodHelperTest {
      * Asserts that callback with {@link RuntimeContext} parameter is called, when {@link Properties} class has both kinds of
      * callbacks
      * and product passes {@link RuntimeContext} argument to the method
-     * 
-     * @throws Throwable
+     *
+     * @
      */
     @Test
     public void testValidatePropertyRuntimeContextBothCallbacks() throws Throwable {
@@ -1271,10 +1303,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithoutCallbacks withoutCallbacks = new PropertiesWithoutCallbacks();
         Form form = new Form(withoutCallbacks, Form.MAIN);
         PropertiesDynamicMethodHelper.setFormLayoutMethods(withoutCallbacks, Form.MAIN, form);
-        Assert.assertFalse(form.isCallBeforeFormPresent());
-        Assert.assertFalse(form.isCallAfterFormBack());
-        Assert.assertFalse(form.isCallAfterFormNext());
-        Assert.assertFalse(form.isCallAfterFormFinish());
+        assertFalse(form.isCallBeforeFormPresent());
+        assertFalse(form.isCallAfterFormBack());
+        assertFalse(form.isCallAfterFormNext());
+        assertFalse(form.isCallAfterFormFinish());
     }
 
     /**
@@ -1290,10 +1322,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithOldCallbacks withOldCallbacks = new PropertiesWithOldCallbacks();
         Form form = new Form(withOldCallbacks, Form.MAIN);
         PropertiesDynamicMethodHelper.setFormLayoutMethods(withOldCallbacks, Form.MAIN, form);
-        Assert.assertTrue(form.isCallBeforeFormPresent());
-        Assert.assertTrue(form.isCallAfterFormBack());
-        Assert.assertTrue(form.isCallAfterFormNext());
-        Assert.assertTrue(form.isCallAfterFormFinish());
+        assertTrue(form.isCallBeforeFormPresent());
+        assertTrue(form.isCallAfterFormBack());
+        assertTrue(form.isCallAfterFormNext());
+        assertTrue(form.isCallAfterFormFinish());
     }
 
     /**
@@ -1310,10 +1342,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithRuntimeContextCallbacks withRuntimeContextCallbacks = new PropertiesWithRuntimeContextCallbacks();
         Form form = new Form(withRuntimeContextCallbacks, Form.MAIN);
         PropertiesDynamicMethodHelper.setFormLayoutMethods(withRuntimeContextCallbacks, Form.MAIN, form);
-        Assert.assertFalse(form.isCallBeforeFormPresent());
-        Assert.assertFalse(form.isCallAfterFormBack());
-        Assert.assertFalse(form.isCallAfterFormNext());
-        Assert.assertFalse(form.isCallAfterFormFinish());
+        assertFalse(form.isCallBeforeFormPresent());
+        assertFalse(form.isCallAfterFormBack());
+        assertFalse(form.isCallAfterFormNext());
+        assertFalse(form.isCallAfterFormFinish());
     }
 
     /**
@@ -1329,10 +1361,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithBothCallbacks withBothCallbacks = new PropertiesWithBothCallbacks();
         Form form = new Form(withBothCallbacks, Form.MAIN);
         PropertiesDynamicMethodHelper.setFormLayoutMethods(withBothCallbacks, Form.MAIN, form);
-        Assert.assertTrue(form.isCallBeforeFormPresent());
-        Assert.assertTrue(form.isCallAfterFormBack());
-        Assert.assertTrue(form.isCallAfterFormNext());
-        Assert.assertTrue(form.isCallAfterFormFinish());
+        assertTrue(form.isCallBeforeFormPresent());
+        assertTrue(form.isCallAfterFormBack());
+        assertTrue(form.isCallAfterFormNext());
+        assertTrue(form.isCallAfterFormFinish());
     }
 
     /**
@@ -1348,10 +1380,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithoutCallbacks withoutCallbacks = new PropertiesWithoutCallbacks();
         Widget widget = new Widget(withoutCallbacks);
         PropertiesDynamicMethodHelper.setWidgetLayoutMethods(withoutCallbacks, "property", widget);
-        Assert.assertFalse(widget.isCallBeforePresent());
-        Assert.assertFalse(widget.isCallBeforeActivate());
-        Assert.assertFalse(widget.isCallValidate());
-        Assert.assertFalse(widget.isCallAfter());
+        assertFalse(widget.isCallBeforePresent());
+        assertFalse(widget.isCallBeforeActivate());
+        assertFalse(widget.isCallValidate());
+        assertFalse(widget.isCallAfter());
     }
 
     /**
@@ -1367,10 +1399,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithOldCallbacks withOldCallbacks = new PropertiesWithOldCallbacks();
         Widget widget = new Widget(withOldCallbacks);
         PropertiesDynamicMethodHelper.setWidgetLayoutMethods(withOldCallbacks, "property", widget);
-        Assert.assertTrue(widget.isCallBeforePresent());
-        Assert.assertFalse(widget.isCallBeforeActivate());
-        Assert.assertTrue(widget.isCallValidate());
-        Assert.assertTrue(widget.isCallAfter());
+        assertTrue(widget.isCallBeforePresent());
+        assertFalse(widget.isCallBeforeActivate());
+        assertTrue(widget.isCallValidate());
+        assertTrue(widget.isCallAfter());
     }
 
     /**
@@ -1386,10 +1418,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithRuntimeContextCallbacks withRuntimeContextCallbacks = new PropertiesWithRuntimeContextCallbacks();
         Widget widget = new Widget(withRuntimeContextCallbacks);
         PropertiesDynamicMethodHelper.setWidgetLayoutMethods(withRuntimeContextCallbacks, "property", widget);
-        Assert.assertFalse(widget.isCallBeforePresent());
-        Assert.assertFalse(widget.isCallBeforeActivate());
-        Assert.assertFalse(widget.isCallValidate());
-        Assert.assertFalse(widget.isCallAfter());
+        assertFalse(widget.isCallBeforePresent());
+        assertFalse(widget.isCallBeforeActivate());
+        assertFalse(widget.isCallValidate());
+        assertFalse(widget.isCallAfter());
     }
 
     /**
@@ -1405,10 +1437,10 @@ public class PropertiesDynamicMethodHelperTest {
         PropertiesWithBothCallbacks withBothCallbacks = new PropertiesWithBothCallbacks();
         Widget widget = new Widget(withBothCallbacks);
         PropertiesDynamicMethodHelper.setWidgetLayoutMethods(withBothCallbacks, "property", widget);
-        Assert.assertTrue(widget.isCallBeforePresent());
-        Assert.assertFalse(widget.isCallBeforeActivate());
-        Assert.assertTrue(widget.isCallValidate());
-        Assert.assertTrue(widget.isCallAfter());
+        assertTrue(widget.isCallBeforePresent());
+        assertFalse(widget.isCallBeforeActivate());
+        assertTrue(widget.isCallValidate());
+        assertTrue(widget.isCallAfter());
     }
 
 }

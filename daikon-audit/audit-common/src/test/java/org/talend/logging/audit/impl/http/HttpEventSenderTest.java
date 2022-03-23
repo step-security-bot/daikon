@@ -15,21 +15,17 @@
  */
 package org.talend.logging.audit.impl.http;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.SetSystemProperty;
 
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.ProvideSystemProperty;
-
+@SetSystemProperty(key = "org.talend.logging.audit.impl.http.HttpEventSender.username", value = "system-prop-user")
+@SetSystemProperty(key = "org.talend.logging.audit.impl.http.HttpEventSender.encoding", value = "UTF-16")
+@SetSystemProperty(key = "org.talend.logging.audit.impl.http.HttpEventSender.connectTimeout", value = "5000")
 public class HttpEventSenderTest {
-
-    @Rule
-    public final ProvideSystemProperty provideSystemProperty = new ProvideSystemProperty(
-            "org.talend.logging.audit.impl.http.HttpEventSender.username", "system-prop-user") // String
-                    .and("org.talend.logging.audit.impl.http.HttpEventSender.encoding", "UTF-16") // Charset
-                    .and("org.talend.logging.audit.impl.http.HttpEventSender.connectTimeout", "5000"); // int
 
     @Test
     public void overrideSystemProps() {

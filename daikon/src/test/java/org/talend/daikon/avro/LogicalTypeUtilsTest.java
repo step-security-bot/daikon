@@ -12,14 +12,15 @@
 // ============================================================================
 package org.talend.daikon.avro;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit-tests for {@link LogicalTypeUtils}
@@ -223,9 +224,11 @@ public class LogicalTypeUtilsTest {
         assertNull(LogicalTypeUtils.getSchemaByLogicalType(null));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetSchemaByLogicalTypeNotSupported() {
-        LogicalTypeUtils.getSchemaByLogicalType("unsupported");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            LogicalTypeUtils.getSchemaByLogicalType("unsupported");
+        });
     }
 
 }

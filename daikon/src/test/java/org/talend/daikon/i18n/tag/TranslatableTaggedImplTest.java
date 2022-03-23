@@ -12,15 +12,15 @@
 // ============================================================================
 package org.talend.daikon.i18n.tag;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.i18n.GlobalI18N;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
-import org.talend.daikon.i18n.GlobalI18N;
 
 /**
  * Tests for {@link TranslatableTaggedImpl} class

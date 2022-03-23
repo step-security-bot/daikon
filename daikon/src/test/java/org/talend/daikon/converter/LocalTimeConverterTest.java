@@ -1,25 +1,18 @@
 package org.talend.daikon.converter;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.exception.TalendRuntimeException;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.talend.daikon.exception.TalendRuntimeException;
-
 /**
  * To find more test, please refer to TypeCOnverterTest
- *
  */
 public class LocalTimeConverterTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testAsLocalTimeWithDateTimeFormatter() {
@@ -29,11 +22,13 @@ public class LocalTimeConverterTest {
 
     @Test
     public void testError() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ss:mm:HH");
-        thrown.expect(TalendRuntimeException.class);
-        thrown.expect(hasProperty("code", is(TypeConverterErrorCode.CANNOT_PARSE)));
-        thrown.expectMessage("Cannot parse 'ss:15:08' using the specified format.");
-        TypeConverter.asLocalTime().withDateTimeFormatter(formatter).convert("ss:15:08");
+        TalendRuntimeException thrown = assertThrows(TalendRuntimeException.class, () -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ss:mm:HH");
+            TypeConverter.asLocalTime().withDateTimeFormatter(formatter).convert("ss:15:08");
+        });
+        assertEquals(TypeConverterErrorCode.CANNOT_PARSE, thrown.getCode());
+        assertEquals("Cannot parse 'ss:15:08' using the specified format.", thrown.getMessage());
+
     }
 
 }

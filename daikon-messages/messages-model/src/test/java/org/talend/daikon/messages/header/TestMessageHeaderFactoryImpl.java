@@ -12,14 +12,25 @@
 // ============================================================================
 package org.talend.daikon.messages.header;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.apache.avro.AvroRuntimeException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.talend.daikon.messages.MessageHeader;
 import org.talend.daikon.messages.MessageTypes;
-import org.talend.daikon.messages.header.producer.*;
+import org.talend.daikon.messages.header.producer.CorrelationIdProvider;
+import org.talend.daikon.messages.header.producer.IdGenerator;
+import org.talend.daikon.messages.header.producer.MessageHeaderFactory;
+import org.talend.daikon.messages.header.producer.MessageHeaderFactoryImpl;
+import org.talend.daikon.messages.header.producer.SecurityTokenProvider;
+import org.talend.daikon.messages.header.producer.ServiceAccountIdProvider;
+import org.talend.daikon.messages.header.producer.ServiceInfoProvider;
+import org.talend.daikon.messages.header.producer.TenantIdProvider;
+import org.talend.daikon.messages.header.producer.TimestampProvider;
+import org.talend.daikon.messages.header.producer.UserProvider;
 
 public class TestMessageHeaderFactoryImpl {
 
@@ -43,7 +54,7 @@ public class TestMessageHeaderFactoryImpl {
 
     private String securityTokenMock = "securityTokenMock";
 
-    @Before
+    @BeforeEach
     public void setup() {
         messageIdMock = "messageIdMock";
     }
@@ -64,26 +75,28 @@ public class TestMessageHeaderFactoryImpl {
         assertMessageHeader(eventHeader, MessageTypes.EVENT, name);
     }
 
-    @Test(expected = AvroRuntimeException.class)
+    @Test
     public void testInvalidHeaderCreation() {
-        String name = "eventName";
-        messageIdMock = null;
-        MessageHeaderFactory factory = createFactory();
-        factory.createMessageHeader(MessageTypes.EVENT, name);
+        assertThrows(AvroRuntimeException.class, () -> {
+            String name = "eventName";
+            messageIdMock = null;
+            MessageHeaderFactory factory = createFactory();
+            factory.createMessageHeader(MessageTypes.EVENT, name);
+        });
     }
 
     private void assertMessageHeader(MessageHeader header, MessageTypes type, String name) {
-        Assert.assertEquals(type, header.getType());
-        Assert.assertEquals(name, header.getName());
-        Assert.assertEquals(messageIdMock, header.getId());
-        Assert.assertEquals(applicationMock, header.getIssuer().getApplication());
-        Assert.assertEquals(serviceMock, header.getIssuer().getService());
-        Assert.assertEquals(versionMock, header.getIssuer().getVersion());
-        Assert.assertEquals(timestampMock, header.getTimestamp(), 0);
-        Assert.assertEquals(userIdMock, header.getUserId());
-        Assert.assertEquals(tenantIdMock, header.getTenantId());
-        Assert.assertEquals(correlationIdMock, header.getCorrelationId());
-        Assert.assertEquals(securityTokenMock, header.getSecurityToken());
+        assertEquals(type, header.getType());
+        assertEquals(name, header.getName());
+        assertEquals(messageIdMock, header.getId());
+        assertEquals(applicationMock, header.getIssuer().getApplication());
+        assertEquals(serviceMock, header.getIssuer().getService());
+        assertEquals(versionMock, header.getIssuer().getVersion());
+        assertEquals(timestampMock, header.getTimestamp(), 0);
+        assertEquals(userIdMock, header.getUserId());
+        assertEquals(tenantIdMock, header.getTenantId());
+        assertEquals(correlationIdMock, header.getCorrelationId());
+        assertEquals(securityTokenMock, header.getSecurityToken());
     }
 
     private MessageHeaderFactory createFactory() {

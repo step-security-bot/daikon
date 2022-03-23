@@ -3,18 +3,20 @@ package org.talend.daikon.spring.reactive.sat.model.token;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
-import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.*;
-import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.*;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.CLAIM_PERMISSIONS;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.HEADER_CLIENT_ID;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.HEADER_PERMISSIONS;
+import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.CLAIM_SA_NAME;
+import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.CLAIM_TENANT_ID;
+import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.HEADER_SA_NAME;
+import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.HEADER_TENANT_ID;
 import static org.talend.daikon.spring.reactive.sat.model.token.SatReactiveAuthenticationToken.USER_DETAILS_NAME_SA_SUFFIX;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import org.junit.Before;
-import org.junit.Test;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.PlainJWT;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.security.core.Authentication;
@@ -22,9 +24,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.PlainJWT;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SatReactiveAuthenticationTokenTest {
 
@@ -41,7 +45,7 @@ public class SatReactiveAuthenticationTokenTest {
 
     private MockServerHttpRequest request;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.request = MockServerHttpRequest.get("/").build();
     }

@@ -12,23 +12,23 @@
 // ============================================================================
 package org.talend.daikon.properties.test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
+import org.assertj.core.api.BDDSoftAssertions;
+import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.definition.Definition;
 import org.talend.daikon.definition.service.DefinitionRegistryService;
 
 public abstract class AbstractPropertiesTest {
 
     // for benchmarking the apis, one suggestion is to use http://openjdk.java.net/projects/code-tools/jmh/.
-    @Rule
-    public ErrorCollector errorCollector = new ErrorCollector();
+    @InjectSoftAssertions
+    BDDSoftAssertions errorCollector;
 
     abstract public DefinitionRegistryService getDefinitionRegistry();
 
@@ -54,14 +54,14 @@ public abstract class AbstractPropertiesTest {
      */
     public void assertComponentIsRegistered(String definitionName) {
         Definition definition = getDefinitionRegistry().getDefinitionsMapByType(Definition.class).get(definitionName);
-        assertNotNull("Could not find the definition [" + definitionName + "], please check the registered definitions",
-                definition);
+        assertNotNull(definition,
+                "Could not find the definition [" + definitionName + "], please check the registered definitions");
     }
 
     /**
      * Check that the set of Definitions that correspond to requestClass contain the value with the given definitionName
      * and definitionClass.
-     * 
+     *
      * @param requestClass The set of definitions to request by superclass.
      * @param definitionName The name of the definition to request.
      * @param definitionClass The expected type of class returned.

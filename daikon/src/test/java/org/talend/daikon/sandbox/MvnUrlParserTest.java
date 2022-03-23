@@ -17,191 +17,206 @@
  */
 package org.talend.daikon.sandbox;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
 
-import org.junit.Test;
-
 public class MvnUrlParserTest {
 
-    @Test(expected = MalformedURLException.class)
-    public void constructorWithNullPath() throws MalformedURLException {
-        new MvnUrlParser(null);
+    @Test
+    public void constructorWithNullPath() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser(null);
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlStartingWithRepositorySeparator() throws MalformedURLException {
-        new MvnUrlParser("!group");
+    @Test
+    public void urlStartingWithRepositorySeparator() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("!group");
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlEndingWithRepositorySeparator() throws MalformedURLException {
-        new MvnUrlParser("http://repository!");
+    @Test
+    public void urlEndingWithRepositorySeparator() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("http://repository!");
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlWithRepositoryAndNoGroup() throws MalformedURLException {
-        new MvnUrlParser("http://repository!");
+    @Test
+    public void urlWithRepositoryAndNoGroup() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("http://repository!");
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlWithoutRepositoryAndNoGroup() throws MalformedURLException {
-        new MvnUrlParser("");
+    @Test
+    public void urlWithoutRepositoryAndNoGroup() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("");
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlWithRepositoryAndNoArtifact() throws MalformedURLException {
-        new MvnUrlParser("http://repository!group");
+    @Test
+    public void urlWithRepositoryAndNoArtifact() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("http://repository!group");
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
-    public void urlWithoutRepositoryAndNoArtifact() throws MalformedURLException {
-        new MvnUrlParser("group");
+    @Test
+    public void urlWithoutRepositoryAndNoArtifact() {
+        assertThrows(MalformedURLException.class, () -> {
+            new MvnUrlParser("group");
+        });
     }
 
     @Test
     public void urlWithRepositoryAndGroupArtifact() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("http://repository@id=fake!group/artifact");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "LATEST", MvnUrlParser.getVersion());
-        assertEquals("Type", "jar", MvnUrlParser.getType());
-        assertEquals("Classifier", null, MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/LATEST/artifact-LATEST.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("LATEST", MvnUrlParser.getVersion(), "Version");
+        assertEquals("jar", MvnUrlParser.getType(), "Type");
+        assertEquals(null, MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/LATEST/artifact-LATEST.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifact() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "LATEST", MvnUrlParser.getVersion());
-        assertEquals("Type", "jar", MvnUrlParser.getType());
-        assertEquals("Classifier", null, MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/LATEST/artifact-LATEST.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("LATEST", MvnUrlParser.getVersion(), "Version");
+        assertEquals("jar", MvnUrlParser.getType(), "Type");
+        assertEquals(null, MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/LATEST/artifact-LATEST.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithRepositoryAndGroupArtifactVersionType() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("http://repository@id=fake!group/artifact/version/type");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "version", MvnUrlParser.getVersion());
-        assertEquals("Type", "type", MvnUrlParser.getType());
-        assertEquals("Classifier", null, MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/version/artifact-version.type", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("version", MvnUrlParser.getVersion(), "Version");
+        assertEquals("type", MvnUrlParser.getType(), "Type");
+        assertEquals(null, MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/version/artifact-version.type", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithRepositoryAndGroupArtifactVersionTypeClassifier() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("http://repository@id=fake!group/artifact/version/type/classifier");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "version", MvnUrlParser.getVersion());
-        assertEquals("Type", "type", MvnUrlParser.getType());
-        assertEquals("Classifier", "classifier", MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/version/artifact-version-classifier.type", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("version", MvnUrlParser.getVersion(), "Version");
+        assertEquals("type", MvnUrlParser.getType(), "Type");
+        assertEquals("classifier", MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/version/artifact-version-classifier.type", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifactVersionType() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version/type");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "version", MvnUrlParser.getVersion());
-        assertEquals("Type", "type", MvnUrlParser.getType());
-        assertEquals("Classifier", null, MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/version/artifact-version.type", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("version", MvnUrlParser.getVersion(), "Version");
+        assertEquals("type", MvnUrlParser.getType(), "Type");
+        assertEquals(null, MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/version/artifact-version.type", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifactVersionTypeClassifier() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version/type/classifier");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "version", MvnUrlParser.getVersion());
-        assertEquals("Type", "type", MvnUrlParser.getType());
-        assertEquals("Classifier", "classifier", MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/version/artifact-version-classifier.type", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("version", MvnUrlParser.getVersion(), "Version");
+        assertEquals("type", MvnUrlParser.getType(), "Type");
+        assertEquals("classifier", MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/version/artifact-version-classifier.type", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifactVersionClassifier() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version//classifier");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "version", MvnUrlParser.getVersion());
-        assertEquals("Type", "jar", MvnUrlParser.getType());
-        assertEquals("Classifier", "classifier", MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/version/artifact-version-classifier.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("version", MvnUrlParser.getVersion(), "Version");
+        assertEquals("jar", MvnUrlParser.getType(), "Type");
+        assertEquals("classifier", MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/version/artifact-version-classifier.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifactTypeClassifier() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact//type/classifier");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "LATEST", MvnUrlParser.getVersion());
-        assertEquals("Type", "type", MvnUrlParser.getType());
-        assertEquals("Classifier", "classifier", MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/LATEST/artifact-LATEST-classifier.type", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("LATEST", MvnUrlParser.getVersion(), "Version");
+        assertEquals("type", MvnUrlParser.getType(), "Type");
+        assertEquals("classifier", MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/LATEST/artifact-LATEST-classifier.type", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithoutRepositoryAndGroupArtifactClassifier() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact///classifier");
-        assertEquals("Group", "group", MvnUrlParser.getGroup());
-        assertEquals("Artifact", "artifact", MvnUrlParser.getArtifact());
-        assertEquals("Version", "LATEST", MvnUrlParser.getVersion());
-        assertEquals("Type", "jar", MvnUrlParser.getType());
-        assertEquals("Classifier", "classifier", MvnUrlParser.getClassifier());
-        assertEquals("Artifact path", "group/artifact/LATEST/artifact-LATEST-classifier.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group", MvnUrlParser.getGroup(), "Group");
+        assertEquals("artifact", MvnUrlParser.getArtifact(), "Artifact");
+        assertEquals("LATEST", MvnUrlParser.getVersion(), "Version");
+        assertEquals("jar", MvnUrlParser.getType(), "Type");
+        assertEquals("classifier", MvnUrlParser.getClassifier(), "Classifier");
+        assertEquals("group/artifact/LATEST/artifact-LATEST-classifier.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void urlWithJarRepository() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("jar:http://repository/repository.jar!/@id=fake!group/artifact/0.1.0");
-        assertEquals("Artifact path", "group/artifact/0.1.0/artifact-0.1.0.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group/artifact/0.1.0/artifact-0.1.0.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void trailingSpace() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser(" http://repository/repository@id=fake!group/artifact/0.1.0");
-        assertEquals("Artifact path", "group/artifact/0.1.0/artifact-0.1.0.jar", MvnUrlParser.getArtifactPath());
+        assertEquals("group/artifact/0.1.0/artifact-0.1.0.jar", MvnUrlParser.getArtifactPath(), "Artifact path");
     }
 
     @Test
     public void snapshotPath() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version-SNAPSHOT");
-        assertEquals("Artifact snapshot path", "group/artifact/version-SNAPSHOT/artifact-version-timestamp-build.jar",
-                MvnUrlParser.getSnapshotPath("version-SNAPSHOT", "timestamp", "build"));
+        assertEquals("group/artifact/version-SNAPSHOT/artifact-version-timestamp-build.jar",
+                MvnUrlParser.getSnapshotPath("version-SNAPSHOT", "timestamp", "build"), "Artifact snapshot path");
     }
 
     @Test
     public void artifactPathWithVersion() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version");
-        assertEquals("Artifact path", "group/artifact/version2/artifact-version2.jar", MvnUrlParser.getArtifactPath("version2"));
+        assertEquals("group/artifact/version2/artifact-version2.jar", MvnUrlParser.getArtifactPath("version2"), "Artifact path");
     }
 
     @Test
     public void versionMetadataPath() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version");
-        assertEquals("Version metadata path", "group/artifact/version2/maven-metadata.xml",
-                MvnUrlParser.getVersionMetadataPath("version2"));
+        assertEquals("group/artifact/version2/maven-metadata.xml", MvnUrlParser.getVersionMetadataPath("version2"),
+                "Version metadata path");
     }
 
     @Test
     public void artifactMetadataPath() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version");
-        assertEquals("Artifact metadata path", "group/artifact/maven-metadata.xml", MvnUrlParser.getArtifactMetdataPath());
+        assertEquals("group/artifact/maven-metadata.xml", MvnUrlParser.getArtifactMetdataPath(), "Artifact metadata path");
     }
 
     @Test
     public void artifactLocalMetadataPath() throws MalformedURLException {
         MvnUrlParser MvnUrlParser = new MvnUrlParser("group/artifact/version");
-        assertEquals("Artifact local metadata path", "group/artifact/maven-metadata-local.xml",
-                MvnUrlParser.getArtifactLocalMetdataPath());
+        assertEquals("group/artifact/maven-metadata-local.xml", MvnUrlParser.getArtifactLocalMetdataPath(),
+                "Artifact local metadata path");
     }
 
 }

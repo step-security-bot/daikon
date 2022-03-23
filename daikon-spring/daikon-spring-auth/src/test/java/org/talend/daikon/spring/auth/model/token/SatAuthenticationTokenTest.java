@@ -12,15 +12,13 @@ import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.C
 import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
 import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.PlainJWT;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,11 +27,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.PlainJWT;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SatAuthenticationTokenTest {
 
     private static final String SUBJECT = "aocZUQ8wJWdMGjM2HpfCUvw0NlplMf9k@clients";
@@ -49,7 +48,7 @@ public class SatAuthenticationTokenTest {
 
     private MockHttpServletRequest request;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));

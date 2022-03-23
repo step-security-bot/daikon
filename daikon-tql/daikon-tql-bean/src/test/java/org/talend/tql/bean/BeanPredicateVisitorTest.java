@@ -1,19 +1,19 @@
 package org.talend.tql.bean;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.junit.jupiter.api.Test;
+import org.talend.tql.model.Expression;
+import org.talend.tql.parser.Tql;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import org.junit.Test;
-import org.talend.tql.model.Expression;
-import org.talend.tql.parser.Tql;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BeanPredicateVisitorTest {
 
@@ -391,13 +391,15 @@ public class BeanPredicateVisitorTest {
         assertFalse(predicate.test(bean));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void shouldNotMatchBeanOnMissingField() {
-        // given
-        final Expression query = Tql.parse("wrongField = 'value'");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            // given
+            final Expression query = Tql.parse("wrongField = 'value'");
 
-        // then
-        query.accept(new BeanPredicateVisitor<>(Bean.class));
+            // then
+            query.accept(new BeanPredicateVisitor<>(Bean.class));
+        });
     }
 
     @Test

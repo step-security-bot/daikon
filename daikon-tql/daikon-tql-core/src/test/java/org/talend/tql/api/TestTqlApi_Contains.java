@@ -1,9 +1,9 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.contains;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -15,7 +15,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains 'ssen'");
         // TQL api query
         TqlElement tqlElement = contains("name", "ssen");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains 'noi'");
         // TQL api query
         TqlElement tqlElement = contains("name", "noi");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains '2'");
         // TQL api query
         TqlElement tqlElement = contains("name", "2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains 'azerty'");
         // TQL api query
         TqlElement tqlElement = contains("name", "azerty");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains ''");
         // TQL api query
         TqlElement tqlElement = contains("name", "");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class TestTqlApi_Contains extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name contains 'aze\\'rty'");
         // TQL api query
         TqlElement tqlElement = contains("name", "aze'rty");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
 }

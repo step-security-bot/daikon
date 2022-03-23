@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.metrics.io;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
@@ -12,8 +12,8 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MeteredInputStreamTest {
 
@@ -21,7 +21,7 @@ public class MeteredInputStreamTest {
 
     private InputStream delegate;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         delegate = mock(InputStream.class);
         when(delegate.read(any())).thenReturn(10);

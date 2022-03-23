@@ -1,7 +1,8 @@
 package org.talend.tql;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.talend.tql.model.TqlElement;
 
 public class TestTqlParser_Not extends TestTqlParser_Abstract {
@@ -13,7 +14,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "[NotExpression{expression=OrExpression{expressions=[AndExpression{expressions="
                 + "[ComparisonExpression{operator=ComparisonOperator{operator=EQ}, "
                 + "field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=QUOTED_VALUE, value='value1'}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -24,7 +25,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "[NotExpression{expression=OrExpression{expressions=[AndExpression{expressions="
                 + "[ComparisonExpression{operator=ComparisonOperator{operator=EQ}, "
                 + "field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=QUOTED_VALUE, value='value1'}}]}]}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -35,7 +36,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "[ComparisonExpression{operator=ComparisonOperator{operator=EQ}, field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=QUOTED_VALUE, value='value1'}}, "
                 + "FieldCompliesPattern{field='FieldReference{path='field1'}', pattern='aaa9'}]}, AndExpression{expressions="
                 + "[ComparisonExpression{operator=ComparisonOperator{operator=GT}, field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=INT, value='999'}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -46,7 +47,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "[ComparisonExpression{operator=ComparisonOperator{operator=EQ}, field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=QUOTED_VALUE, value='value1'}}]}, "
                 + "AndExpression{expressions=[FieldCompliesPattern{field='FieldReference{path='field1'}', pattern='aaa9'}, "
                 + "ComparisonExpression{operator=ComparisonOperator{operator=GT}, field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=INT, value='999'}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -59,7 +60,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "AndExpression{expressions=[FieldCompliesPattern{field='FieldReference{path='field1'}', pattern='aaa9'}, NotExpression{expression=OrExpression{expressions="
                 + "[AndExpression{expressions=[ComparisonExpression{operator=ComparisonOperator{operator=GT}, field=FieldReference{path='field1'}, "
                 + "valueOrField=LiteralValue{literal=INT, value='999'}}]}]}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "[NotExpression{expression=OrExpression{expressions=[AndExpression{expressions=[FieldCompliesPattern{field='FieldReference{path='field1'}', pattern='aaa9'}]}]}}]}, "
                 + "AndExpression{expressions=[ComparisonExpression{operator=ComparisonOperator{operator=GT}, field=FieldReference{path='field1'}, "
                 + "valueOrField=LiteralValue{literal=INT, value='999'}}]}]}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 
     @Test
@@ -83,6 +84,6 @@ public class TestTqlParser_Not extends TestTqlParser_Abstract {
                 + "AndExpression{expressions=[NotExpression{expression=OrExpression{expressions="
                 + "[AndExpression{expressions=[FieldCompliesPattern{field='FieldReference{path='field1'}', pattern='aaa9'}, "
                 + "ComparisonExpression{operator=ComparisonOperator{operator=GT}, field=FieldReference{path='field1'}, valueOrField=LiteralValue{literal=INT, value='999'}}]}]}}]}]}}]}]}";
-        Assert.assertEquals(expected, tqlElement.toString());
+        assertEquals(expected, tqlElement.toString());
     }
 }

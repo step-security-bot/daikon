@@ -12,53 +12,50 @@
 // ============================================================================
 package org.talend.daikon.sandbox;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.talend.daikon.sandbox.SandboxControl.CLASSLOADER_REUSABLE;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.sandbox.properties.ClassLoaderIsolatedSystemProperties;
+import org.talend.daikon.token.TokenGenerator;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.talend.daikon.sandbox.properties.ClassLoaderIsolatedSystemProperties;
-
 public class SandboxedInstanceTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private static final String TEST_CLASS_NAME = "org.talend.test.MyClass1";
 
     private Properties previous;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         previous = System.getProperties();
         assertFalse(System.getProperties() instanceof ClassLoaderIsolatedSystemProperties);
         System.setProperties(ClassLoaderIsolatedSystemProperties.getInstance());
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() {
         System.setProperties(previous);
     }
 
     /**
      * Test method for {@link org.talend.daikon.sandbox.SandboxedInstance#close()}.
-     * 
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws ClassNotFoundException
-     * 
-     * @throws Exception
+     *
      */
     @Test
-    public void testClose() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void testClose() {
         URLClassLoader urlClassLoader = URLClassLoader
                 .newInstance(Collections.singleton(this.getClass().getResource("zeLib-0.0.1.jar")).toArray(new URL[1]));
         SandboxedInstance sandboxedInstance = new SandboxedInstance(TEST_CLASS_NAME, false, urlClassLoader, CLASSLOADER_REUSABLE);
@@ -70,7 +67,7 @@ public class SandboxedInstanceTest {
         assertTrue(ClassLoaderIsolatedSystemProperties.getInstance().isIsolated(instance.getClass().getClassLoader()));
     }
 
-    public void testAutoClose() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void testAutoClose() {
         URLClassLoader urlClassLoader = URLClassLoader
                 .newInstance(Collections.singleton(this.getClass().getResource("zeLib-0.0.1.jar")).toArray(new URL[1]));
         ClassLoader sandboxedClassLoader;
@@ -85,15 +82,10 @@ public class SandboxedInstanceTest {
 
     /**
      * Test method for {@link org.talend.daikon.sandbox.SandboxedInstance#getInstance()}.
-     * 
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws ClassNotFoundException
-     * 
-     * @throws Exception
+     *
      */
     @Test
-    public void testGetInstanceWithDefault() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void testGetInstanceWithDefault() {
         URLClassLoader urlClassLoader = URLClassLoader
                 .newInstance(Collections.singleton(this.getClass().getResource("zeLib-0.0.1.jar")).toArray(new URL[1]));
         try (SandboxedInstance sandboxedInstance = new SandboxedInstance(TEST_CLASS_NAME, true, urlClassLoader,
@@ -115,32 +107,33 @@ public class SandboxedInstanceTest {
     }
 
     @Test
-    public void getInstanceWithStandardProperties()
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        URLClassLoader urlClassLoader = URLClassLoader
-                .newInstance(Collections.singleton(this.getClass().getResource("zeLib-0.0.1.jar")).toArray(new URL[1]));
-        SandboxedInstance sandboxedInstance = new SandboxedInstance(TEST_CLASS_NAME, false, urlClassLoader,
-                !CLASSLOADER_REUSABLE);
-        try {
-            assertNull(sandboxedInstance.isolatedThread);
-            assertNull(sandboxedInstance.previousContextClassLoader);
-            assertFalse(sandboxedInstance.useCurrentJvmProperties);
-            ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
-            assertNotEquals(urlClassLoader, previousClassLoader);
-            assertFalse(ClassLoaderIsolatedSystemProperties.getInstance().isIsolated(urlClassLoader));
-            Object instance = sandboxedInstance.getInstance();
-            assertTrue(ClassLoaderIsolatedSystemProperties.getInstance().isIsolated(urlClassLoader));
-            assertNotNull(instance);
-            assertEquals(Thread.currentThread(), sandboxedInstance.isolatedThread);
-            assertEquals(previousClassLoader, sandboxedInstance.previousContextClassLoader);
-            assertEquals(urlClassLoader, Thread.currentThread().getContextClassLoader());
-            assertNotEquals(previous, System.getProperties());
-        } finally {
-            sandboxedInstance.close();
-        }
-        // check that an exception is thrown once the close is called.
-        thrown.expect(IllegalStateException.class);
-        sandboxedInstance.getInstance();
+    public void getInstanceWithStandardProperties() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            TokenGenerator.generateMachineToken(null);
+            URLClassLoader urlClassLoader = URLClassLoader
+                    .newInstance(Collections.singleton(this.getClass().getResource("zeLib-0.0.1.jar")).toArray(new URL[1]));
+            SandboxedInstance sandboxedInstance = new SandboxedInstance(TEST_CLASS_NAME, false, urlClassLoader,
+                    !CLASSLOADER_REUSABLE);
+            try {
+                assertNull(sandboxedInstance.isolatedThread);
+                assertNull(sandboxedInstance.previousContextClassLoader);
+                assertFalse(sandboxedInstance.useCurrentJvmProperties);
+                ClassLoader previousClassLoader = Thread.currentThread().getContextClassLoader();
+                assertNotEquals(urlClassLoader, previousClassLoader);
+                assertFalse(ClassLoaderIsolatedSystemProperties.getInstance().isIsolated(urlClassLoader));
+                Object instance = sandboxedInstance.getInstance();
+                assertTrue(ClassLoaderIsolatedSystemProperties.getInstance().isIsolated(urlClassLoader));
+                assertNotNull(instance);
+                assertEquals(Thread.currentThread(), sandboxedInstance.isolatedThread);
+                assertEquals(previousClassLoader, sandboxedInstance.previousContextClassLoader);
+                assertEquals(urlClassLoader, Thread.currentThread().getContextClassLoader());
+                assertNotEquals(previous, System.getProperties());
+            } finally {
+                // check that an exception is thrown once the close is called.
+                sandboxedInstance.close();
+            }
+            sandboxedInstance.getInstance();
+        });
     }
 
     public Object createNewInstanceWithNewClassLoader()

@@ -1,11 +1,16 @@
 package org.talend.daikon.crypto;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class KeySourcesTest {
 
@@ -40,39 +45,53 @@ public class KeySourcesTest {
         assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, 310000));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithNegativeKeyLength() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), -1, 310000));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), -1, 310000));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithZeroKeyLength() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 0, 310000));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 0, 310000));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithNegativeIterations() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, -1));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, -1));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithLowIterations() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, 50000));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, 50000));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithZeroIterations() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, 0));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", KeySources.random(16).getKey(), 256, 0));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithNullSalt() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", null, 256, 310000));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", null, 256, 310000));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromPBKDF2WithEmptySalt() throws Exception {
-        assertSource(KeySources.pbkDf2("DataPrepIsSoCool", new byte[0], 256, 0));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.pbkDf2("DataPrepIsSoCool", new byte[0], 256, 0));
+        });
     }
 
     @Test
@@ -115,9 +134,11 @@ public class KeySourcesTest {
         assertEquals(128 / 8, key1.getKey().length);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotGenerateFromMissingSystemProperty() throws Exception {
-        assertSource(KeySources.systemProperty("missingSystemProperty"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertSource(KeySources.systemProperty("missingSystemProperty"));
+        });
     }
 
     @Test

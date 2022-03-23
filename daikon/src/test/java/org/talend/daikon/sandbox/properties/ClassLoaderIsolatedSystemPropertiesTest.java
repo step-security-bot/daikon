@@ -12,7 +12,13 @@ package org.talend.daikon.sandbox.properties;
 //
 // ============================================================================
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,24 +27,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 public class ClassLoaderIsolatedSystemPropertiesTest {
 
     public static final int TEST_TIMES = 5;
 
     private Properties previous;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         previous = System.getProperties();
         ClassLoaderIsolatedSystemProperties threadIsolatedProperties = ClassLoaderIsolatedSystemProperties.getInstance();
         System.setProperties(threadIsolatedProperties);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         System.setProperties(previous);
     }

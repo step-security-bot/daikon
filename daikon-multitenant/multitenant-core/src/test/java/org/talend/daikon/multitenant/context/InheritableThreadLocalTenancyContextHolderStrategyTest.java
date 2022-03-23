@@ -12,20 +12,18 @@
 // ============================================================================
 package org.talend.daikon.multitenant.context;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
 public class InheritableThreadLocalTenancyContextHolderStrategyTest extends TenancyContextHolderTest {
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         TenancyContextHolder.setStrategyName(TenancyContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
-    @After
     @Override
     public void tearDown() {
         TenancyContextHolder.setStrategyName(TenancyContextHolder.MODE_THREADLOCAL);

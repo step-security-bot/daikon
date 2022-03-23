@@ -12,26 +12,25 @@
 // ============================================================================
 package org.talend.daikon.messages.header;
 
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.avro.generic.IndexedRecord;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.messages.MessageHeader;
 import org.talend.daikon.messages.MessageIssuer;
 import org.talend.daikon.messages.MessageTypes;
 import org.talend.daikon.messages.header.consumer.MessageHeaderExtractor;
 
-public class TestMessageHeaderExtractor {
+import java.io.IOException;
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+public class TestMessageHeaderExtractor {
 
     @Test
     public void testHiddenSecuredField() {
@@ -44,8 +43,8 @@ public class TestMessageHeaderExtractor {
                 .setServiceAccountId("serviceAccountId") //
                 .setSecurityToken("securityToken").build();
 
-        Assert.assertNotNull(messageHeader.toString());
-        Assert.assertTrue(messageHeader.toString().contains("\"securityToken\": <hidden>"));
+        assertNotNull(messageHeader.toString());
+        assertTrue(messageHeader.toString().contains("\"securityToken\": <hidden>"));
     }
 
     @Test
@@ -66,7 +65,7 @@ public class TestMessageHeaderExtractor {
 
         MessageHeaderExtractor extractor = new MessageHeaderExtractor();
         MessageHeader output = extractor.extractHeader(message);
-        Assert.assertEquals(messageHeader, output);
+        assertEquals(messageHeader, output);
     }
 
     @Test
@@ -88,41 +87,42 @@ public class TestMessageHeaderExtractor {
 
         MessageHeaderExtractor extractor = new MessageHeaderExtractor();
         MessageHeader output = extractor.extractHeader(message);
-        Assert.assertNotNull(output);
-        Assert.assertEquals(0, GenericData.get().compare(messageHeader, output, headerSchema));
+        assertNotNull(output);
+        assertEquals(0, GenericData.get().compare(messageHeader, output, headerSchema));
     }
 
     @Test
-    public void testStringAsFirstField() throws Exception {
-        Schema messageSchema = SchemaBuilder.record("message").fields().name("fakeHeader").type().stringType().noDefault()
-                .endRecord();
+    public void testStringAsFirstField() {
+        IllegalArgumentException expectedException = assertThrows(IllegalArgumentException.class, () -> {
+            Schema messageSchema = SchemaBuilder.record("message").fields().name("fakeHeader").type().stringType().noDefault()
+                    .endRecord();
 
-        IndexedRecord message = new GenericRecordBuilder(messageSchema).set("fakeHeader", "hello").build();
+            IndexedRecord message = new GenericRecordBuilder(messageSchema).set("fakeHeader", "hello").build();
 
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Provided message's first field is not a record but STRING");
+            MessageHeaderExtractor extractor = new MessageHeaderExtractor();
+            extractor.extractHeader(message);
 
-        MessageHeaderExtractor extractor = new MessageHeaderExtractor();
-        extractor.extractHeader(message);
+        });
+        assertEquals("Provided message's first field is not a record but STRING", expectedException.getMessage());
     }
 
     @Test
-    public void testUnknownRecordAsFirstField() throws Exception {
-        Schema firstFieldSchema = SchemaBuilder.record("firstField").fields().name("field1").type().stringType().noDefault()
-                .endRecord();
+    public void testUnknownRecordAsFirstField() {
+        IllegalArgumentException expectedException = assertThrows(IllegalArgumentException.class, () -> {
+            Schema firstFieldSchema = SchemaBuilder.record("firstField").fields().name("field1").type().stringType().noDefault()
+                    .endRecord();
 
-        Schema messageSchema = SchemaBuilder.record("message").fields().name("fakeHeader").type(firstFieldSchema).noDefault()
-                .endRecord();
+            Schema messageSchema = SchemaBuilder.record("message").fields().name("fakeHeader").type(firstFieldSchema).noDefault()
+                    .endRecord();
 
-        IndexedRecord firstField = new GenericRecordBuilder(firstFieldSchema).set("field1", "value1").build();
+            IndexedRecord firstField = new GenericRecordBuilder(firstFieldSchema).set("field1", "value1").build();
 
-        IndexedRecord message = new GenericRecordBuilder(messageSchema).set("fakeHeader", firstField).build();
+            IndexedRecord message = new GenericRecordBuilder(messageSchema).set("fakeHeader", firstField).build();
 
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Provided message's first field is not a header but firstField");
-
-        MessageHeaderExtractor extractor = new MessageHeaderExtractor();
-        extractor.extractHeader(message);
+            MessageHeaderExtractor extractor = new MessageHeaderExtractor();
+            extractor.extractHeader(message);
+        });
+        assertEquals("Provided message's first field is not a header but firstField", expectedException.getMessage());
     }
 
     private Schema loadMessageHeaderSchema() throws IOException {

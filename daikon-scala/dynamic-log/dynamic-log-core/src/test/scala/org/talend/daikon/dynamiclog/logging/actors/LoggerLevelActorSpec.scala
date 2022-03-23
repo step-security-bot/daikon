@@ -1,7 +1,6 @@
 package org.talend.daikon.dynamiclog.logging.actors
 
 import java.util.concurrent.TimeUnit
-
 import akka.cluster.pubsub.DistributedPubSubMediator.{Subscribe, SubscribeAck}
 import akka.pattern.AskSupport
 import akka.actor.ActorSystem
@@ -14,13 +13,11 @@ import org.specs2.mutable.SpecificationLike
 import org.specs2.specification.AfterAll
 import org.talend.daikon.dynamiclog.logging.actors.LoggerLevelActor._
 import play.api.test.WithApplication
-import scala.concurrent.duration.FiniteDuration
-import play.api.{Application, Configuration, Logger}
-import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
+import scala.concurrent.duration.FiniteDuration
+import play.api.{Application, Configuration}
+import play.api.inject.guice.GuiceApplicationBuilder
+
 class LoggerLevelActorSpec
   extends TestKitBase
     with SpecificationLike

@@ -12,12 +12,13 @@
 // ============================================================================
 package org.talend.daikon.i18n;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
-
-import org.junit.Test;
 
 public class I18nMessagesTest {
 
@@ -60,16 +61,20 @@ public class I18nMessagesTest {
         assertEquals("test foo and bar", i18nMessages.getMessage("ze.message.key", "foo", "bar"));
     }
 
-    @Test(expected = MissingResourceException.class)
+    @Test
     public void testResourceNotfoundExceptionNoKey() {
-        I18nMessages i18nMessages = new DynamicLocalFormatedI18nImpl(null, "org.talend.daikon.i18n.testMessage");
-        i18nMessages.getMessage("unknown.key");
+        assertThrows(MissingResourceException.class, () -> {
+            I18nMessages i18nMessages = new DynamicLocalFormatedI18nImpl(null, "org.talend.daikon.i18n.testMessage");
+            i18nMessages.getMessage("unknown.key");
+        });
     }
 
-    @Test(expected = MissingResourceException.class)
+    @Test
     public void testResourceNotfoundExceptionNoFileFound() {
-        I18nMessages i18nMessages = new DynamicLocalFormatedI18nImpl(null, "org.talend.daikon.i18n.testMessageNoExisting");
-        i18nMessages.getMessage("any.key");
+        assertThrows(MissingResourceException.class, () -> {
+            I18nMessages i18nMessages = new DynamicLocalFormatedI18nImpl(null, "org.talend.daikon.i18n.testMessageNoExisting");
+            i18nMessages.getMessage("any.key");
+        });
     }
 
     @Test

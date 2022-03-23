@@ -1,11 +1,12 @@
 package org.talend.daikon.serialize.jsonschema;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.serialize.FullExampleProperties;
 import org.talend.daikon.serialize.FullExampleTestUtil;
 

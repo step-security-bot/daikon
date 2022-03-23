@@ -1,5 +1,6 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.and;
 import static org.talend.tql.api.TqlBuilder.between;
 import static org.talend.tql.api.TqlBuilder.eq;
@@ -9,8 +10,7 @@ import static org.talend.tql.api.TqlBuilder.lt;
 import static org.talend.tql.api.TqlBuilder.not;
 import static org.talend.tql.api.TqlBuilder.or;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.Expression;
 
@@ -30,8 +30,8 @@ public class TestTqlApi_Immut extends TestTqlParser_Abstract {
         and(tqlExpr1, tqlExpr2);
         and(not(tqlExpr1), not(tqlExpr2));
         // Check operations leave intial expressions unchanged
-        Assert.assertEquals(tql1Str, tqlExpr1.toString());
-        Assert.assertEquals(tql2Str, tqlExpr2.toString());
+        assertEquals(tql1Str, tqlExpr1.toString());
+        assertEquals(tql2Str, tqlExpr2.toString());
     }
 
     @Test
@@ -46,8 +46,8 @@ public class TestTqlApi_Immut extends TestTqlParser_Abstract {
         and(tqlExpr1, tqlExpr2);
         or(not(tqlExpr1), not(tqlExpr2));
         // Check operations leave intial expressions unchanged
-        Assert.assertEquals(tql1Str, tqlExpr1.toString());
-        Assert.assertEquals(tql2Str, tqlExpr2.toString());
+        assertEquals(tql1Str, tqlExpr1.toString());
+        assertEquals(tql2Str, tqlExpr2.toString());
     }
 
 }

@@ -1,7 +1,7 @@
 
 package org.talend.daikon.serialize.jsonio;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.talend.daikon.serialize.PostDeserializeSetup;

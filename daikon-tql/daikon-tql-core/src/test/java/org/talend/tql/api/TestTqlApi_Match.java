@@ -1,9 +1,9 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.match;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -15,7 +15,7 @@ public class TestTqlApi_Match extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name ~ '^[A-Z][a-z]*$'");
         // TQL api query
         TqlElement tqlElement = match("name", "^[A-Z][a-z]*$");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TestTqlApi_Match extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name ~ '\\d'");
         // TQL api query
         TqlElement tqlElement = match("name", "\\d");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestTqlApi_Match extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name ~ ''");
         // TQL api query
         TqlElement tqlElement = match("name", "");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class TestTqlApi_Match extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name ~ '^[A-Z][\\'][a-z]*$'");
         // TQL api query
         TqlElement tqlElement = match("name", "^[A-Z]['][a-z]*$");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
 }

@@ -18,18 +18,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.talend.daikon.multitenant.context.DefaultTenancyContext;
@@ -42,32 +49,33 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
-@Import(MultiTenantApplication.CustomWebSecurityConfigurerAdapter.class)
+@Import(MultiTenantApplication.CustomSecurityConfiguration.class)
 public class MultiTenantApplication {
 
     @Configuration
-    @EnableWebSecurity
-    public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+    public class CustomSecurityConfiguration {
 
         @Bean
         public PasswordEncoder passwordEncoder() {
             return new BCryptPasswordEncoder();
         }
 
-        @Autowired
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            String password = passwordEncoder().encode("password");
-            auth.inMemoryAuthentication().withUser("user").password(password).authorities("ROLE_USER");
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+            return (web) -> web.ignoring().antMatchers("/public/**");
         }
 
-        @Override
-        public void configure(WebSecurity web) {
-            web.ignoring().antMatchers("/public/**");
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+            return http.build();
+        }
+
+        @Bean
+        public UserDetailsManager users(PasswordEncoder passwordEncoder) {
+            String password = passwordEncoder.encode("password");
+            UserDetails user = User.builder().username("user").password(password).authorities("ROLE_USER").build();
+            return new InMemoryUserDetailsManager(user);
         }
     }
 

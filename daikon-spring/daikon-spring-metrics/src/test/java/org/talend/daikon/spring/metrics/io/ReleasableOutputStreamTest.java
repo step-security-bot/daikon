@@ -1,17 +1,17 @@
 package org.talend.daikon.spring.metrics.io;
 
-import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.commons.io.output.NullOutputStream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.apache.commons.io.output.NullOutputStream;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ReleasableOutputStreamTest {
 
@@ -21,7 +21,7 @@ public class ReleasableOutputStreamTest {
 
     private ReleasableOutputStream failedReleasableOutputStream;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         releasableOutputStream = new ReleasableOutputStream(new NullOutputStream(), () -> wasCalled.set(true));
         failedReleasableOutputStream = new ReleasableOutputStream(new OutputStream() {
@@ -38,7 +38,7 @@ public class ReleasableOutputStreamTest {
         }, () -> wasCalled.set(true));
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         releasableOutputStream.close();
         wasCalled.set(false);

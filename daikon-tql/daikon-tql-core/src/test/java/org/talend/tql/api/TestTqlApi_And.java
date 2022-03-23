@@ -1,13 +1,13 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.and;
 import static org.talend.tql.api.TqlBuilder.eq;
 import static org.talend.tql.api.TqlBuilder.eqFields;
 import static org.talend.tql.api.TqlBuilder.isInvalid;
 import static org.talend.tql.api.TqlBuilder.or;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -22,7 +22,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest("0001=field(toto) and 0002=field(tata)");
         // TQL api query
         TqlElement tqlElement = and(eqFields("0001", "toto"), eqFields("0002", "tata"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1=field(toto) and field2=field(tata)");
         // TQL api query
         TqlElement tqlElement = and(eqFields("field1", "toto"), eqFields("field2", "tata"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1=field(value1) and field2=field(value2) and field3=field(value3)");
         // TQL api query
         TqlElement tqlElement = and(eqFields("field1", "value1"), eqFields("field2", "value2"), eqFields("field3", "value3"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement tqlElement = and(eqFields("field1", "value1"), //
                 eqFields("field2", "value2"), //
                 eqFields("field3", "value3"), eqFields("field4", "value4"), eqFields("field5", "value5"));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest("f1=field(toto) and (f2=field(titi) and f3=field(tata))");
         // TQL api query
         TqlElement tqlElement = and(eqFields("f1", "toto"), and(eqFields("f2", "titi"), eqFields("f3", "tata")));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = and(and(eqFields("f1", "toto"), eqFields("f2", "tutu")),
                 and(eqFields("f2", "titi"), eqFields("f3", "tata")));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = and(or(eqFields("f1", "toto"), eqFields("f2", "tutu")),
                 or(eqFields("f2", "titi"), eqFields("f3", "tata")));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         // TQL api query
         TqlElement tqlElement = and(or(eqFields("f1", "toto"), eqFields("f2", "tutu")),
                 or(eqFields("f2", "titi"), and(eqFields("f3", "tata"), isInvalid("f4"))));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest("f1=1 and (f2=2 and (f3=3 and (f4=4 and f5=5 and f6=6)))");
         // TQL api query
         TqlElement tqlElement = and(eq("f1", 1), and(eq("f2", 2), and(eq("f3", 3), and(eq("f4", 4), eq("f5", 5), eq("f6", 6)))));
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
 }

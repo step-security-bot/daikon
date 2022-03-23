@@ -1,7 +1,8 @@
 package org.talend.tqlmongo.criteria;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.talend.tqlmongo.excp.TqlMongoException;
 
@@ -65,8 +66,8 @@ public class TestMongoCriteria_Integer extends TestMongoCriteria_Abstract {
 
     @Test
     public void testIntegerOutOfRange() {
-        expectedException.expect(TqlMongoException.class);
-        doTest("field1 = 99999999999999999999999999999999999999999999999999");
-        Assert.fail();
+        assertThrows(TqlMongoException.class, () -> {
+            doTest("field1 = 99999999999999999999999999999999999999999999999999");
+        });
     }
 }

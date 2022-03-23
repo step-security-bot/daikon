@@ -4,7 +4,7 @@ import static org.easymock.EasyMock.*;
 
 import java.lang.reflect.Proxy;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.logging.audit.*;
 
 public class ProxyAuditLoggerTest {

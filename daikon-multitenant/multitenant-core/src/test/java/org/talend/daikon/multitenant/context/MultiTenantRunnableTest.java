@@ -1,18 +1,18 @@
 package org.talend.daikon.multitenant.context;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.talend.daikon.multitenant.context.MultiTenantRunnable.wrap;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.multitenant.provider.DefaultTenant;
 
 public class MultiTenantRunnableTest {
 
     private TenancyContext context;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         context = TenancyContextHolder.createEmptyContext();
         context.setTenant(new DefaultTenant("tenant-1234", null));

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericRecord;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.avro.AvroUtils;
 
 /**

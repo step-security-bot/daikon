@@ -12,12 +12,12 @@
 // ============================================================================
 package org.talend.daikon.i18n.tag;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.i18n.ClassBasedI18nMessages;
 import org.talend.daikon.i18n.I18nMessages;
 
@@ -28,7 +28,7 @@ public class TagImplTest {
 
     private static I18nMessages i18nMessages;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         i18nMessages = new ClassBasedI18nMessages(TagImplTest.class);
     }

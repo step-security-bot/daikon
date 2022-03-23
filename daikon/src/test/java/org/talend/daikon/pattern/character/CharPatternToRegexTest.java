@@ -1,6 +1,6 @@
 package org.talend.daikon.pattern.character;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -8,9 +8,9 @@ import javax.script.ScriptException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CharPatternToRegexTest {
 
@@ -222,8 +222,8 @@ public class CharPatternToRegexTest {
         assertMatches("a]b", CharPatternToRegex.toRegex("a]a"));
         assertMatches("a+b", CharPatternToRegex.toRegex("a+a"));
         assertMatches("a*b", CharPatternToRegex.toRegex("a*a"));
-        assertEquals("At least one of the characters [({^+*|\\.?$})] is not well escaped",
-                "^\\[\\(\\{\\^\\+\\*\\|\\\\\\.\\?\\$\\}\\)\\]$", CharPatternToRegex.toRegex("[({^+*|\\.?$})]"));
+        assertEquals("^\\[\\(\\{\\^\\+\\*\\|\\\\\\.\\?\\$\\}\\)\\]$", CharPatternToRegex.toRegex("[({^+*|\\.?$})]"),
+                "At least one of the characters [({^+*|\\.?$})] is not well escaped");
 
         assertJavaScriptMatches("a b", CharPatternToRegex.toJavaScriptRegex("a a"));
         assertJavaScriptMatches("a,b", CharPatternToRegex.toJavaScriptRegex("a,a"));
@@ -234,18 +234,18 @@ public class CharPatternToRegexTest {
         assertJavaScriptMatches("a+b", CharPatternToRegex.toJavaScriptRegex("a+a"));
         assertJavaScriptMatches("a*b", CharPatternToRegex.toJavaScriptRegex("a*a"));
         assertJavaScriptMatches("a/b", CharPatternToRegex.toJavaScriptRegex("a/a"));
-        assertEquals("At least one of the characters [({^+*|\\.?$})] is not well escaped",
-                "^\\[\\(\\{\\^\\+\\*\\|\\\\\\.\\?\\$\\}\\)\\]$", CharPatternToRegex.toJavaScriptRegex("[({^+*|\\.?$})]"));
+        assertEquals("^\\[\\(\\{\\^\\+\\*\\|\\\\\\.\\?\\$\\}\\)\\]$", CharPatternToRegex.toJavaScriptRegex("[({^+*|\\.?$})]"),
+                "At least one of the characters [({^+*|\\.?$})] is not well escaped");
     }
 
     private void assertMatches(String example, String regex) {
         Matcher matcher = Pattern.compile(regex).matcher(example);
-        assertTrue(String.format("Regex %s won't match %s", regex, example), matcher.find());
+        assertTrue(matcher.find(), String.format("Regex %s won't match %s", regex, example));
     }
 
     private void assertNoMatches(String example, String regex) {
         Matcher matcher = Pattern.compile(regex).matcher(example);
-        assertFalse(String.format("Regex %s match %s", regex, example), matcher.find());
+        assertFalse(matcher.find(), String.format("Regex %s match %s", regex, example));
     }
 
     private void assertJavaScriptMatches(String example, String regex) {

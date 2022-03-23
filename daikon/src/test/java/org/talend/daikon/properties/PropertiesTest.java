@@ -14,26 +14,24 @@ package org.talend.daikon.properties;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.talend.daikon.properties.property.PropertyFactory.newProperty;
 import static org.talend.daikon.properties.property.PropertyFactory.newString;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import org.apache.commons.lang3.reflect.TypeLiteral;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
+import org.assertj.core.api.BDDSoftAssertions;
+import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.crypto.CipherSources;
 import org.talend.daikon.crypto.Encryption;
@@ -57,6 +55,11 @@ import org.talend.daikon.security.CryptoHelper;
 import org.talend.daikon.serialize.PostDeserializeSetup;
 import org.talend.daikon.serialize.SerializerDeserializer;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+@ExtendWith(SoftAssertionsExtension.class)
 public class PropertiesTest {
 
     private static final KeySource keySource = KeySources.random(16);
@@ -114,8 +117,8 @@ public class PropertiesTest {
         }
     }
 
-    @Rule
-    public ErrorCollector errorCollector = new ErrorCollector();
+    @InjectSoftAssertions
+    BDDSoftAssertions errorCollector;
 
     @Test
     public void testSerializeProp() {

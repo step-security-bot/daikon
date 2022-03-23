@@ -19,8 +19,8 @@ import javax.servlet.http.Part;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.spring.metrics.io.Metered;
 
 import io.micrometer.core.instrument.Counter;
@@ -34,7 +34,7 @@ public class AspectsVolumeTest {
 
     private ProceedingJoinPoint point;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Throwable {
         final MeterRegistry meterRegistry = mock(MeterRegistry.class);
         counter = mock(Counter.class);

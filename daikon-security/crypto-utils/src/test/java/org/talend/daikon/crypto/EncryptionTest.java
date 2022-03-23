@@ -1,11 +1,12 @@
 package org.talend.daikon.crypto;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.IllegalBlockSizeException;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class EncryptionTest {
 
@@ -15,7 +16,7 @@ public class EncryptionTest {
 
     private Encryption encryption;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         encryption = new Encryption(KeySources.fixedKey("DataPrepIsSoCool"), CipherSources.aes());
     }
@@ -33,13 +34,15 @@ public class EncryptionTest {
         assertEquals(src, decrypted);
     }
 
-    @Test(expected = IllegalBlockSizeException.class)
+    @Test
     public void should_throw_an_exception_when_trying_to_decrypt_a_non_encrypted_value() throws Exception {
-        // given
-        String src = "ApplicationName";
+        assertThrows(IllegalBlockSizeException.class, () -> {
+            // given
+            String src = "ApplicationName";
 
-        // when
-        encryption.decrypt(src);
+            // when
+            encryption.decrypt(src);
+        });
     }
 
     @Test

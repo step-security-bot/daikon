@@ -14,16 +14,16 @@ package org.talend.daikon.multitenant.async;
 
 import com.jayway.restassured.RestAssured;
 import org.apache.log4j.MDC;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
 import org.talend.daikon.multitenant.context.DefaultTenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContext;
@@ -31,9 +31,9 @@ import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @Import(AsyncContextPropagationTest.MessagePublicationHandlerConfiguration.class)
 @SpringBootTest(classes = { MultiTenantApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AsyncContextPropagationTest {
@@ -44,7 +44,7 @@ public class AsyncContextPropagationTest {
     @Autowired
     private MessagePublicationHandlerConfiguration handlerConfiguration;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         RestAssured.port = port;
         handlerConfiguration.verifier = () -> {

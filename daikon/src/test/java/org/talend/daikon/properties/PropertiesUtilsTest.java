@@ -12,10 +12,11 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import javax.inject.Inject;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import javax.inject.Inject;
 
 public class PropertiesUtilsTest {
 
@@ -37,7 +38,7 @@ public class PropertiesUtilsTest {
 
         PropertiesUtils.injectObject(props, injectedObject);
 
-        Assert.assertSame("Injected object is not the same", injectedObject, props.obj);
+        assertSame(injectedObject, props.obj, "Injected object is not the same");
     }
 
 }

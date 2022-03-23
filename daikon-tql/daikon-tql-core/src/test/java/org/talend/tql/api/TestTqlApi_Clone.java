@@ -1,9 +1,10 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.talend.tql.api.TqlBuilder.cloneExpression;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.Expression;
 import org.talend.tql.model.OrExpression;
@@ -20,9 +21,9 @@ public class TestTqlApi_Clone extends TestTqlParser_Abstract {
         Expression toClone = (Expression) doTest("(f1=1 and f2=2) or f3=true");
         // TQL
         TqlElement cloned = cloneExpression(toClone);
-        Assert.assertNotSame(toClone, cloned);
-        Assert.assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
-        Assert.assertEquals(toClone.toString(), cloned.toString());
+        assertNotSame(toClone, cloned);
+        assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
+        assertEquals(toClone.toString(), cloned.toString());
     }
 
     @Test
@@ -31,9 +32,9 @@ public class TestTqlApi_Clone extends TestTqlParser_Abstract {
         Expression toClone = (Expression) doTest("(f1=1 and (not(f2=2 and f4=4))) or f3=true");
         // TQL
         TqlElement cloned = cloneExpression(toClone);
-        Assert.assertNotSame(toClone, cloned);
-        Assert.assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
-        Assert.assertEquals(toClone.toString(), cloned.toString());
+        assertNotSame(toClone, cloned);
+        assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
+        assertEquals(toClone.toString(), cloned.toString());
     }
 
     @Test
@@ -43,9 +44,9 @@ public class TestTqlApi_Clone extends TestTqlParser_Abstract {
                 "((f1=1 and (f2=2 or f2=22)) or f3=3) and not (f3 between [1.2, 9.45] or (f4 is valid and f5 is empty))");
         // TQL
         TqlElement cloned = cloneExpression(toClone);
-        Assert.assertNotSame(toClone, cloned);
-        Assert.assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
-        Assert.assertEquals(toClone.toString(), cloned.toString());
+        assertNotSame(toClone, cloned);
+        assertNotSame(((OrExpression) toClone).getExpressions(), ((OrExpression) cloned).getExpressions());
+        assertEquals(toClone.toString(), cloned.toString());
     }
 
 }

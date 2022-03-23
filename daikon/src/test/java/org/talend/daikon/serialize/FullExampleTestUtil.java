@@ -13,6 +13,10 @@
 
 package org.talend.daikon.serialize;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.avro.SchemaBuilder;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.avro.SchemaConstants;
@@ -25,10 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class FullExampleTestUtil {
 
@@ -61,13 +61,13 @@ public class FullExampleTestUtil {
         for (NamedThing expectedProp : expectedProps) {
             String propName = expectedProp.getName();
             NamedThing actualProp = actualProperties.getProperty(propName);
-            assertNotNull(propName, actualProp);
+            assertNotNull(actualProp, propName);
             if (expectedProp instanceof Properties) {
-                assertTrue(propName + " should Properties", actualProp instanceof Properties);
+                assertTrue(actualProp instanceof Properties, propName + " should Properties");
                 assertPropertiesValueAreEquals((Properties) expectedProp, (Properties) actualProp);
             } else if (expectedProp instanceof Property) {
-                assertTrue(propName + " should Property", actualProp instanceof Property);
-                assertEquals(propName, ((Property) expectedProp).getValue(), ((Property) actualProp).getValue());
+                assertTrue(actualProp instanceof Property, propName + " should Property");
+                assertEquals(((Property) expectedProp).getValue(), ((Property) actualProp).getValue(), propName);
             }
         }
 

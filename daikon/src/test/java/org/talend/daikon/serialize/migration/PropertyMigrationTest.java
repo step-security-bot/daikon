@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.daikon.serialize.migration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.Properties;
 import org.talend.daikon.serialize.SerializerDeserializer.Deserialized;
 
@@ -32,7 +32,7 @@ public class PropertyMigrationTest {
                 ParentProperties.class);
 
         ParentProperties properties = deser.object;
-        assertTrue("should be true, but not", deser.migrated);
+        assertTrue(deser.migrated, "should be true, but not");
         assertEquals("I'm born since version 0", properties.versionZeroProp.getValue());
         assertEquals("I'm born since version 1", properties.versionZeroNestedProp.versionOneProp.getValue());
 

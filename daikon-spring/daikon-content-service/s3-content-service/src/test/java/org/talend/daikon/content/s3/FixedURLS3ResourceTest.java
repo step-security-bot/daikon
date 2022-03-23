@@ -1,16 +1,16 @@
 package org.talend.daikon.content.s3;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.content.DeletableResource;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 public class FixedURLS3ResourceTest {
 

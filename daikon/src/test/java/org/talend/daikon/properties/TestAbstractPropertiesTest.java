@@ -12,16 +12,17 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.definition.Definition;
 import org.talend.daikon.definition.service.DefinitionRegistryService;
 import org.talend.daikon.properties.test.AbstractPropertiesTest;
 import org.talend.daikon.properties.testproperties.TestProperties;
+
+import java.util.Collections;
 
 public class TestAbstractPropertiesTest {
 

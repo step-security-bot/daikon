@@ -12,9 +12,11 @@
 // ============================================================================
 package org.talend.daikon.messages.envelope;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.talend.daikon.messages.MessageEnvelope;
 import org.talend.daikon.messages.MessageHeader;
@@ -34,7 +36,7 @@ public class TestMessageEnvelopeHandlerImpl {
 
     private MessageHeader messageHeader = new MessageHeader();
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         Mockito.when(messageConverterRegistry.getMessageConverter(FORMAT)).thenReturn(new TestMessageConverter());
@@ -52,11 +54,11 @@ public class TestMessageEnvelopeHandlerImpl {
 
         MessageEnvelope envelope = handler.wrap(MessageTypes.COMMAND, MESSAGE_NAME, anyMessage, FORMAT);
 
-        Assert.assertNotNull(envelope);
+        assertNotNull(envelope);
 
-        Assert.assertEquals(FORMAT, envelope.getPayload().getFormat());
-        Assert.assertEquals(new TestMessageConverter().serialize(anyMessage), envelope.getPayload().getContent());
-        Assert.assertEquals(messageHeader, envelope.getHeader());
+        assertEquals(FORMAT, envelope.getPayload().getFormat());
+        assertEquals(new TestMessageConverter().serialize(anyMessage), envelope.getPayload().getContent());
+        assertEquals(messageHeader, envelope.getHeader());
     }
 
     @Test
@@ -72,7 +74,7 @@ public class TestMessageEnvelopeHandlerImpl {
 
         AnyMessage result = handler.unwrap(envelope, AnyMessage.class);
 
-        Assert.assertEquals(anyMessage, result);
+        assertEquals(anyMessage, result);
 
     }
 

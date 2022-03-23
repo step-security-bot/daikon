@@ -1,9 +1,9 @@
 package org.talend.tql.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.containsIgnoreCase;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.tql.TestTqlParser_Abstract;
 import org.talend.tql.model.TqlElement;
 
@@ -15,7 +15,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase 'ssen'");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "ssen");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase 'noi'");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "noi");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase '2'");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "2");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase 'azerty'");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "azerty");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase ''");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class TestTqlApi_ContainsIgnoreCase extends TestTqlParser_Abstract {
         TqlElement expected = doTest("name containsIgnoreCase 'aze\\'rty'");
         // TQL api query
         TqlElement tqlElement = containsIgnoreCase("name", "aze'rty");
-        Assert.assertEquals(expected.toString(), tqlElement.toString());
+        assertEquals(expected.toString(), tqlElement.toString());
     }
 
 }

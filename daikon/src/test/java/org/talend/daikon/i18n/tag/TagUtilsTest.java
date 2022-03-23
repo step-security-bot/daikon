@@ -12,11 +12,12 @@
 // ============================================================================
 package org.talend.daikon.i18n.tag;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.i18n.ClassBasedI18nMessages;
 import org.talend.daikon.i18n.I18nMessages;
 
@@ -27,7 +28,7 @@ public class TagUtilsTest {
 
     private static I18nMessages i18nMessages;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         i18nMessages = new ClassBasedI18nMessages(TagUtilsTest.class);
     }
@@ -60,9 +61,9 @@ public class TagUtilsTest {
         TagImpl tag = new TagImpl("testTag");
         tag.setI18nMessageFormatter(i18nMessages);
 
-        Assert.assertTrue(TagUtils.hasTag(tag, "Testing"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "sting tag"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "test"));
+        assertTrue(TagUtils.hasTag(tag, "Testing"));
+        assertTrue(TagUtils.hasTag(tag, "sting tag"));
+        assertTrue(TagUtils.hasTag(tag, "test"));
     }
 
     @Test
@@ -72,9 +73,9 @@ public class TagUtilsTest {
         tag.setI18nMessageFormatter(i18nMessages);
         tag.setI18nMessageFormatter(i18nMessages);
 
-        Assert.assertTrue(TagUtils.hasTag(tag, "testTag"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "parent"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "parentTag"));
+        assertTrue(TagUtils.hasTag(tag, "testTag"));
+        assertTrue(TagUtils.hasTag(tag, "parent"));
+        assertTrue(TagUtils.hasTag(tag, "parentTag"));
     }
 
     @Test
@@ -82,11 +83,11 @@ public class TagUtilsTest {
         TagImpl tag = new TagImpl("testTag", CommonTestTags.COMMON_TAG);
         tag.setI18nMessageFormatter(i18nMessages);
 
-        Assert.assertTrue(TagUtils.hasTag(tag, "Common tag"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "Com"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "mon tag"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "Common tag/Testing"));
-        Assert.assertTrue(TagUtils.hasTag(tag, "Testing"));
+        assertTrue(TagUtils.hasTag(tag, "Common tag"));
+        assertTrue(TagUtils.hasTag(tag, "Com"));
+        assertTrue(TagUtils.hasTag(tag, "mon tag"));
+        assertTrue(TagUtils.hasTag(tag, "Common tag/Testing"));
+        assertTrue(TagUtils.hasTag(tag, "Testing"));
     }
 
     @Test
@@ -94,8 +95,8 @@ public class TagUtilsTest {
         TagImpl tag = new TagImpl("testTag", CommonTestTags.COMMON_TAG);
         tag.setI18nMessageFormatter(i18nMessages);
 
-        Assert.assertFalse(TagUtils.hasTag(tag, "MySQL"));
-        Assert.assertFalse(TagUtils.hasTag(tag, "Cloud"));
+        assertFalse(TagUtils.hasTag(tag, "MySQL"));
+        assertFalse(TagUtils.hasTag(tag, "Cloud"));
     }
 
     @Test

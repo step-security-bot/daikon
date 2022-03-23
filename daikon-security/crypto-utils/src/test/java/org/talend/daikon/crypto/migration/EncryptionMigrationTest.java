@@ -1,25 +1,28 @@
 package org.talend.daikon.crypto.migration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.crypto.CipherSources;
 import org.talend.daikon.crypto.Encryption;
 import org.talend.daikon.crypto.KeySources;
 
 public class EncryptionMigrationTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotAcceptEmptySource() {
-        EncryptionMigration.build(null, new Encryption(KeySources.random(6), CipherSources.getDefault()));
+        assertThrows(IllegalArgumentException.class, () -> {
+            EncryptionMigration.build(null, new Encryption(KeySources.random(6), CipherSources.getDefault()));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldNotAcceptEmptyTarget() {
-        EncryptionMigration.build(new Encryption(KeySources.random(6), CipherSources.getDefault()), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            EncryptionMigration.build(new Encryption(KeySources.random(6), CipherSources.getDefault()), null);
+        });
     }
 
     @Test

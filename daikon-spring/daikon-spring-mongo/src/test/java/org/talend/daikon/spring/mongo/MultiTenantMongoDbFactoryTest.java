@@ -1,19 +1,20 @@
 package org.talend.daikon.spring.mongo;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeHost;
 import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
 
-import java.util.List;
-import java.util.Map;
-
 import de.bwaldvogel.mongo.MongoServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
+import java.util.Map;
 
 @TestPropertySource(properties = "multi-tenancy.mongodb.active=true")
 public class MultiTenantMongoDbFactoryTest extends AbstractMultiTenantMongoDbTest {
@@ -129,16 +130,18 @@ public class MultiTenantMongoDbFactoryTest extends AbstractMultiTenantMongoDbTes
         assertEquals("tenant2", allTenant2.get(0).getValue());
     }
 
-    @Test(expected = InvalidDataAccessResourceUsageException.class)
+    @Test
     public void shouldFailOnDatabaseNameProviderFailure() {
-        // Given
-        final TestData tenant1 = new TestData();
-        tenant1.setId("1");
-        tenant1.setValue("tenant1");
+        assertThrows(InvalidDataAccessResourceUsageException.class, () -> {
+            // Given
+            final TestData tenant1 = new TestData();
+            tenant1.setId("1");
+            tenant1.setValue("tenant1");
 
-        // When
-        changeTenant("failure");
-        mongoTemplate.insert(tenant1);
+            // When
+            changeTenant("failure");
+            mongoTemplate.insert(tenant1);
+        });
     }
 
     @Test

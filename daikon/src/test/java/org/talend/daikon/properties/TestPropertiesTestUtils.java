@@ -12,8 +12,8 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -21,16 +21,16 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
+import org.assertj.core.api.BDDSoftAssertions;
+import org.junit.jupiter.api.Test;
 import org.talend.daikon.definition.Definition;
 import org.talend.daikon.definition.DefinitionImageType;
 import org.talend.daikon.definition.service.DefinitionRegistryService;
 import org.talend.daikon.i18n.I18nMessages;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
 import org.talend.daikon.properties.testproperties.TestProperties;
+
+import java.util.Collections;
 
 public class TestPropertiesTestUtils {
 
@@ -89,7 +89,7 @@ public class TestPropertiesTestUtils {
         when(repDef.getPropertiesClass()).thenReturn(TestProperties.class);
         when(defRegServ.getDefinitionsMapByType(Definition.class)).thenReturn(Collections.singletonMap("NAME", repDef));
 
-        ErrorCollector errorCollector = spy(new ErrorCollector());
+        BDDSoftAssertions errorCollector = spy(new BDDSoftAssertions());
         // check when everything is fine
         assertThat(repDef, notNullValue());
         when(repDef.getDisplayName()).thenReturn("foo");
@@ -97,25 +97,25 @@ public class TestPropertiesTestUtils {
 
         PropertiesTestUtils.assertAlli18nAreSetup(defRegServ, errorCollector);
 
-        verify(errorCollector, times(0)).addError(any(Throwable.class));
+        verify(errorCollector, times(0)).fail(any(String.class), any(Throwable.class));
 
         // check when displayName and title is missing
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getDisplayName()).thenReturn(Definition.I18N_DISPLAY_NAME_SUFFIX);
         when(repDef.getTitle()).thenReturn(Definition.I18N_TITLE_NAME_SUFFIX);
 
         PropertiesTestUtils.assertAlli18nAreSetup(defRegServ, errorCollector);
 
-        verify(errorCollector, times(2)).addError(any(Throwable.class));
+        verify(errorCollector, times(2)).fail(any(String.class), any(Throwable.class));
 
         // check when displayName and title are null
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getDisplayName()).thenReturn(null);
         when(repDef.getTitle()).thenReturn(null);
 
         PropertiesTestUtils.assertAlli18nAreSetup(defRegServ, errorCollector);
 
-        verify(errorCollector, times(2)).addError(any(Throwable.class));
+        verify(errorCollector, times(2)).fail(any(String.class), any(Throwable.class));
     }
 
     @Test
@@ -130,59 +130,59 @@ public class TestPropertiesTestUtils {
         assertThat(repDef, notNullValue());
 
         // There is a PNG icon available.
-        ErrorCollector errorCollector = spy(new ErrorCollector());
+        BDDSoftAssertions errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32))
                 .thenReturn("/org/talend/daikon/properties/messages.properties");
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
         when(repDef.getIconKey()).thenReturn(null);
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(0)).addError(any(Throwable.class));
+        verify(errorCollector, times(0)).fail(any(String.class), any(Throwable.class));
 
         // There is an SVG icon available.
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn("/org/talend/daikon/properties/messages.properties");
         when(repDef.getIconKey()).thenReturn(null);
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(0)).addError(any(Throwable.class));
+        verify(errorCollector, times(0)).fail(any(String.class), any(Throwable.class));
 
         // There is an iconKey available.
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
         when(repDef.getIconKey()).thenReturn("icon-key");
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(0)).addError(any(Throwable.class));
+        verify(errorCollector, times(0)).fail(any(String.class), any(Throwable.class));
 
         // check when no icon information is present
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
         when(repDef.getIconKey()).thenReturn(null);
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(1)).addError(any(Throwable.class));
+        verify(errorCollector, times(1)).fail(any(String.class), any(Throwable.class));
 
         // There is a PNG icon available, but the path is wrong
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn("foo");
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn(null);
         when(repDef.getIconKey()).thenReturn(null);
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(1)).addError(any(Throwable.class));
+        verify(errorCollector, times(1)).fail(any(String.class), any(Throwable.class));
 
         // There is an SVG icon available.
-        errorCollector = spy(new ErrorCollector());
+        errorCollector = spy(new BDDSoftAssertions());
         when(repDef.getImagePath(DefinitionImageType.PALETTE_ICON_32X32)).thenReturn(null);
         when(repDef.getImagePath(DefinitionImageType.SVG_ICON)).thenReturn("foo");
         when(repDef.getIconKey()).thenReturn(null);
 
         PropertiesTestUtils.assertAnIconIsSetup(defRegServ, errorCollector);
-        verify(errorCollector, times(1)).addError(any(Throwable.class));
+        verify(errorCollector, times(1)).fail(any(String.class), any(Throwable.class));
     }
 
 }

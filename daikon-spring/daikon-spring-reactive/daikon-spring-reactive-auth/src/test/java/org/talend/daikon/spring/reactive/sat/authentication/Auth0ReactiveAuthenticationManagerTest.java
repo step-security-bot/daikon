@@ -8,11 +8,11 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -37,7 +37,7 @@ import com.nimbusds.jwt.SignedJWT;
 
 import reactor.test.StepVerifier;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class Auth0ReactiveAuthenticationManagerTest {
 
     private static final String ISSUER = "https://url.talend-dev.dumb.com/";
@@ -46,7 +46,7 @@ public class Auth0ReactiveAuthenticationManagerTest {
 
     private ServerWebExchange serverWebExchange;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SatReactiveAuthenticationProvider satAuthenticationProvider = new SatReactiveAuthenticationProvider();
         Auth0ReactiveAuthenticationManager authenticationManager = new Auth0ReactiveAuthenticationManager(mockProperties(),

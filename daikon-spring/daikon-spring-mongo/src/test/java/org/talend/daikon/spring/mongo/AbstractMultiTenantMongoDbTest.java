@@ -1,22 +1,22 @@
 package org.talend.daikon.spring.mongo;
 
+import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import de.bwaldvogel.mongo.MongoServer;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 
-import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @EnableMongoRepositories
 @ComponentScan("org.talend.daikon.spring.mongo")
 @ContextConfiguration(classes = MultiTenantMongoDbFactoryTest.class)
@@ -31,7 +31,7 @@ public abstract class AbstractMultiTenantMongoDbTest {
     @Autowired
     private TenantInformationProvider tenantInformationProvider;
 
-    @Before
+    @BeforeEach
     public void tearDown() throws IOException {
         // Drop all created databases during test
         MongoClient client = MongoClients

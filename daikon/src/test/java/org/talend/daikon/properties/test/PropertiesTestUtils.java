@@ -13,22 +13,15 @@
 package org.talend.daikon.properties.test;
 
 import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.rules.ErrorCollector;
+import org.assertj.core.api.BDDSoftAssertions;
+import org.assertj.core.api.Condition;
 import org.ops4j.pax.url.mvn.ServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +37,13 @@ import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.service.PropertiesService;
 import org.talend.daikon.serialize.SerializerDeserializer;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 // import static org.hamcrest.Matchers.*;
 
@@ -65,7 +65,7 @@ public class PropertiesTestUtils {
         } // no local repo set so do nothing
     }
 
-    public static Properties checkSerialize(Properties props, ErrorCollector errorCollector) {
+    public static Properties checkSerialize(Properties props, BDDSoftAssertions errorCollector) {
         String s = props.toSerialized();
         SerializerDeserializer.Deserialized<Properties> d = Properties.Helper.fromSerializedPersistent(s, Properties.class);
         Properties deserProps = d.object;
@@ -106,12 +106,12 @@ public class PropertiesTestUtils {
 
     /**
      * check all properties of a component for i18n, check form i18n, check ComponentProperties title is i18n
-     * 
+     *
      * @param defRegistry where to get all the definitions
      * @param errorCollector used to collect all errors at once. @see <a
      * href="http://junit.org/apidocs/org/junit/rules/ErrorCollector.html">ErrorCollector</a>
      */
-    static public void assertAlli18nAreSetup(DefinitionRegistryService defRegistry, ErrorCollector errorCollector) {
+    static public void assertAlli18nAreSetup(DefinitionRegistryService defRegistry, BDDSoftAssertions errorCollector) {
         Collection<Definition> allDefs = defRegistry.getDefinitionsMapByType(Definition.class).values();
         for (Definition def : allDefs) {
             Class propertiesClass = def.getPropertiesClass();
@@ -129,26 +129,34 @@ public class PropertiesTestUtils {
                 LOGGER.info("No properties to check fo I18n for :" + def.getName());
             }
             // check definition name
-            errorCollector.checkThat("displayName for definition [" + def.getClass().getName() + "] must not be null",
-                    def.getDisplayName(), notNullValue());
-            errorCollector.checkThat(
-                    "missing I18n displayName [" + def.getDisplayName() + "] for definition [" + def.getClass().getName() + "]",
-                    def.getDisplayName(), not(endsWith(Definition.I18N_DISPLAY_NAME_SUFFIX)));
+            errorCollector.then(def.getDisplayName())
+                    .as("displayName for definition [" + def.getClass().getName() + "] must not be null").isNotNull();
+            errorCollector.then(def.getDisplayName())
+                    .as("missing I18n displayName [" + def.getDisplayName() + "] for definition [" + def.getClass().getName()
+                            + "]")
+                    .isNot(new Condition<>(s -> s != null && s.endsWith(Definition.I18N_DISPLAY_NAME_SUFFIX),
+                            "Ending with " + Definition.I18N_DISPLAY_NAME_SUFFIX));
             // check definition title
-            errorCollector.checkThat("title for definition [" + def.getClass().getName() + "] must not be null", def.getTitle(),
-                    notNullValue());
-            errorCollector.checkThat(
-                    "missing I18n title [" + def.getTitle() + "] for definition [" + def.getClass().getName() + "]",
-                    def.getTitle(), not(endsWith(Definition.I18N_TITLE_NAME_SUFFIX)));
+            errorCollector.then(def.getTitle()).as("title for definition [" + def.getClass().getName() + "] must not be null")
+                    .isNotNull();
+            errorCollector.then(def.getTitle())
+                    .as("missing I18n title [" + def.getTitle() + "] for definition [" + def.getClass().getName() + "]")
+                    .isNot(new Condition<>(s -> s != null && s.endsWith(Definition.I18N_TITLE_NAME_SUFFIX),
+                            "Ending with " + Definition.I18N_TITLE_NAME_SUFFIX));
+
+            for (AssertionError assertionError : errorCollector.assertionErrorsCollected()) {
+                errorCollector.fail(assertionError.getMessage(), new Throwable(assertionError.getMessage()));
+            }
+
         }
     }
 
     /**
      * Check that all Components and Wizards have at least one icon image set.
-     * 
+     *
      * @param defRegistry service to get the components to be checked.
      */
-    public static void assertAnIconIsSetup(DefinitionRegistryService defRegistry, ErrorCollector errorCollector) {
+    public static void assertAnIconIsSetup(DefinitionRegistryService defRegistry, BDDSoftAssertions errorCollector) {
         Collection<Definition> allDefs = defRegistry.getDefinitionsMapByType(Definition.class).values();
         for (Definition def : allDefs) {
             String pngImagePath = def.getImagePath(DefinitionImageType.PALETTE_ICON_32X32);
@@ -156,26 +164,35 @@ public class PropertiesTestUtils {
             String iconKey = def.getIconKey();
             // At least one of the icon resources must be present.
             if (pngImagePath == null && svgImagePath == null && iconKey == null) {
-                errorCollector
-                        .addError(new Throwable("the definition [" + def.getName() + "] must have at least one icon resource."));
+                errorCollector.fail("the definition [" + def.getName() + "] must have at least one icon resource.",
+                        new Throwable("the definition [" + def.getName() + "] must have at least one icon resource."));
             }
             if (pngImagePath != null) {// check that the image resource exists
                 InputStream resourceAsStream = def.getClass().getResourceAsStream(pngImagePath);
-                errorCollector
-                        .checkThat(
-                                "Failed to find the image for path [" + pngImagePath + "] for the definition [" + def.getName()
-                                        + "].\nIt should be located at ["
-                                        + def.getClass().getPackage().getName().replace('.', '/') + "/" + pngImagePath + "]",
-                                resourceAsStream, notNullValue());
+                if (resourceAsStream == null) {
+                    errorCollector.fail("the definition [" + def.getName() + "] must have at least one icon resource.",
+                            new Throwable("the definition [" + def.getName() + "] must have at least one icon resource."));
+                } else {
+                    errorCollector.then(resourceAsStream)
+                            .as("Failed to find the image for path [" + pngImagePath + "] for the definition [" + def.getName()
+                                    + "].\nIt should be located at [" + def.getClass().getPackage().getName().replace('.', '/')
+                                    + "/" + pngImagePath + "]")
+                            .isEqualTo(notNullValue());
+                }
             }
             if (svgImagePath != null) {// check that the image resource exists
                 InputStream resourceAsStream = def.getClass().getResourceAsStream(svgImagePath);
-                errorCollector
-                        .checkThat(
-                                "Failed to find the image for path [" + svgImagePath + "] for the definition [" + def.getName()
-                                        + "].\nIt should be located at ["
-                                        + def.getClass().getPackage().getName().replace('.', '/') + "/" + svgImagePath + "]",
-                                resourceAsStream, notNullValue());
+                if (resourceAsStream == null) {
+                    errorCollector.fail("the definition [" + def.getName() + "] must have at least one icon resource.",
+                            new Throwable("the definition [" + def.getName() + "] must have at least one icon resource."));
+                } else {
+                    errorCollector.then(resourceAsStream)
+                            .as("Failed to find the image for path [" + svgImagePath + "] for the definition [" + def.getName()
+                                    + "].\nIt should be located at [" + def.getClass().getPackage().getName().replace('.', '/')
+                                    + "/" + svgImagePath + "]")
+                            .isEqualTo(notNullValue());
+                }
+
             }
             // There is no test for iconKey -- the product is responsible for obtaining the icon corresponding to this
             // value.
@@ -185,7 +202,7 @@ public class PropertiesTestUtils {
     /**
      * check that all Components have theirs internationalisation properties setup correctly.
      */
-    static public void checkAllI18N(Properties checkedProps, final ErrorCollector errorCollector) {
+    static public void checkAllI18N(Properties checkedProps, final BDDSoftAssertions errorCollector) {
         if (checkedProps == null) {
             LOGGER.info("No properties to be checked.");
         } else {
@@ -197,17 +214,17 @@ public class PropertiesTestUtils {
                     // check forms
                     List<Form> forms = properties.getForms();
                     for (Form form : forms) {
-                        errorCollector.checkThat(
-                                "Form [" + form.getProperties().getClass().getCanonicalName() + "#" + form.getName()
+                        errorCollector.then(form.getDisplayName().endsWith(".displayName"))
+                                .as("Form [" + form.getProperties().getClass().getCanonicalName() + "#" + form.getName()
                                         + "] should have a translated message key [form." + form.getName()
-                                        + ".displayName] in [the proper messages.properties]",
-                                form.getDisplayName().endsWith(".displayName"), is(false));
-                        errorCollector.checkThat(
-                                "Form [" + form.getProperties().getClass().getCanonicalName() + "#" + form.getName()
-                                        + "] should have a translated message key [form." + form.getName()
-                                        + ".title] in [the proper messages.properties]",
-                                form.getTitle().endsWith(".title"), is(false));
+                                        + ".displayName] in [the proper messages.properties]")
+                                .isEqualTo(false);
 
+                        errorCollector.then(form.getTitle().endsWith(".title"))
+                                .as("Form [" + form.getProperties().getClass().getCanonicalName() + "#" + form.getName()
+                                        + "] should have a translated message key [form." + form.getName()
+                                        + ".title] in [the proper messages.properties]")
+                                .isEqualTo(false);
                     }
                 }
 
@@ -224,18 +241,23 @@ public class PropertiesTestUtils {
     /**
      * check that the property has a display name that is translated. We basically checks that is does not end with
      * ".displayName".
-     * 
+     *
      * @param errorCollector, to collect the error
      * @param prop the property to check for an i18N {@link Property#getDisplayName()}
      * @param parent, used only for the error message to identify the origin of the property
      */
-    static public void chekProperty(final ErrorCollector errorCollector, Property<?> prop, Object parent) {
+    static public void chekProperty(final BDDSoftAssertions errorCollector, Property<?> prop, Object parent) {
         // check that property.getDisplay name has been translated.
-        errorCollector.checkThat(
-                "property [" + parent.getClass().getCanonicalName() + "#" + prop.getName()
+        errorCollector.then(prop.getDisplayName().endsWith(".displayName"))
+                .as("property [" + parent.getClass().getCanonicalName() + "#" + prop.getName()
                         + "] should have a translated message key [property." + prop.getName()
-                        + ".displayName] in [the proper messages.properties]",
-                prop.getDisplayName().endsWith(".displayName"), is(false));
+                        + ".displayName] in [the proper messages.properties]")
+                .isEqualTo(false);
+        if (!errorCollector.assertionErrorsCollected().isEmpty()) {
+            errorCollector.fail("property [" + parent.getClass().getCanonicalName() + "#" + prop.getName()
+                    + "] should have a translated message key [property." + prop.getName()
+                    + ".displayName] in [the proper messages.properties]", new Throwable());
+        }
         if (prop.getDisplayName().endsWith(".displayName")) {// display this to help create the I18N file
             System.out.println("property." + prop.getName() + ".displayName=");
         }
@@ -244,7 +266,7 @@ public class PropertiesTestUtils {
     /**
      * generate the list of nested class that are of type Properties and format them to used in the Component Definition
      * to tell which are the supported nested classes. The output is formated to have hyper links in Eclipse
-     * 
+     *
      * @param prop the property to parse
      * @return the sting comma separated list of nested Proerties classes.
      */

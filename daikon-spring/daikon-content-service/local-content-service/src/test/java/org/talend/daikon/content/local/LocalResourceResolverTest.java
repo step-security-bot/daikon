@@ -1,11 +1,14 @@
 package org.talend.daikon.content.local;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.FileSystemResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -18,16 +21,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-
 public class LocalResourceResolverTest {
 
     private LocalResourceResolver resolver;
 
     private Path resolverRepositoryPath;
 
-    @Before
+    @BeforeEach
     public void createCache() throws IOException {
         final FileSystemResourceLoader resourceLoader;
         resourceLoader = new FileSystemResourceLoader();
@@ -37,7 +37,7 @@ public class LocalResourceResolverTest {
         resolver = new LocalResourceResolver(new ContextualPatternResolver(delegate, "target/store"), "target/store");
     }
 
-    @After
+    @AfterEach
     public void cleanupRepository() {
         FileUtils.deleteQuietly(resolverRepositoryPath.toFile());
     }
@@ -80,7 +80,7 @@ public class LocalResourceResolverTest {
     }
 
     @Test
-    @Ignore("There is a bug which makes implementation find two resources when there is one but containing a '/'")
+    @Disabled("There is a bug which makes implementation find two resources when there is one but containing a '/'")
     public void findResources() throws IOException {
         String data = "toto data";
         String location = "toto/location";

@@ -1,12 +1,13 @@
 package org.talend.tqlmongo.criteria;
 
-import java.util.Arrays;
-import java.util.Collections;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.talend.tql.excp.TqlException;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by gmzoughi on 06/07/16.
@@ -78,9 +79,9 @@ public class TestMongoCriteria_In extends TestMongoCriteria_Abstract {
 
     @Test
     public void testParseFieldInString() {
-        expectedException.expect(TqlException.class);
-        doTest("field1 in [a, b]");
-        Assert.fail();
+        assertThrows(TqlException.class, () -> {
+            doTest("field1 in [a, b]");
+        });
     }
 
     @Test

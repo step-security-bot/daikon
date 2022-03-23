@@ -12,18 +12,18 @@
 // ============================================================================
 package org.talend.daikon.messages.spring.consumer;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.messages.header.consumer.TenantIdSetter;
 import org.talend.daikon.messages.spring.test.utils.MessageTestApp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = MessageTestApp.class, properties = "iam.accounts.url=aValue")
 public class MultiTenantConsumerSettersConfigurationTest {
 

@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.metrics.io;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -12,8 +12,8 @@ import java.io.InputStream;
 
 import javax.servlet.http.Part;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PartWrapperTest {
 
@@ -21,7 +21,7 @@ public class PartWrapperTest {
 
     private Part delegate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         delegate = mock(Part.class);
         partWrapper = new PartWrapper(delegate);

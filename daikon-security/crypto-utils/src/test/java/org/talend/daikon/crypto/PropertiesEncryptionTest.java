@@ -13,7 +13,13 @@
 
 package org.talend.daikon.crypto;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.exception.TalendRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,16 +37,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.talend.daikon.exception.TalendRuntimeException;
-
 public class PropertiesEncryptionTest {
 
     private Encryption encryption;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Deprecated method is used on purpose here, see PropertiesMigration for encryption migration
         encryption = new Encryption(KeySources.fixedKey("DataPrepIsSoCool"), CipherSources.aes());
@@ -144,9 +145,11 @@ public class PropertiesEncryptionTest {
                 FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8));
     }
 
-    @Test(expected = TalendRuntimeException.class)
+    @Test
     public void loadAndDecrypt_fileNotFound() {
-        new PropertiesEncryption(encryption).loadAndDecrypt("NOT_FOUND", Collections.singleton("admin.password"));
+        assertThrows(TalendRuntimeException.class, () -> {
+            new PropertiesEncryption(encryption).loadAndDecrypt("NOT_FOUND", Collections.singleton("admin.password"));
+        });
     }
 
     @Test

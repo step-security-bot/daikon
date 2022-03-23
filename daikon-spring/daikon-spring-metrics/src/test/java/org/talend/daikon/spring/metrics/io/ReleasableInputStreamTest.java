@@ -1,16 +1,17 @@
 package org.talend.daikon.spring.metrics.io;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.commons.io.input.NullInputStream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.apache.commons.io.input.NullInputStream;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ReleasableInputStreamTest {
 
@@ -20,7 +21,7 @@ public class ReleasableInputStreamTest {
 
     private ReleasableInputStream failedReleasableInputStream;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         releasableInputStream = new ReleasableInputStream(new NullInputStream(2048), () -> wasCalled.set(true));
         failedReleasableInputStream = new ReleasableInputStream(new InputStream() {
@@ -42,7 +43,7 @@ public class ReleasableInputStreamTest {
         }, () -> wasCalled.set(true));
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         releasableInputStream.close();
         wasCalled.set(false);
@@ -57,13 +58,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
-    public void failedRead() throws Exception {
-        // When
-        failedReleasableInputStream.read();
+    @Test
+    public void failedRead() {
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.read();
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -75,13 +78,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
-    public void failedRead1() throws Exception {
-        // When
-        failedReleasableInputStream.read(new byte[1024]);
+    @Test
+    public void failedRead1() {
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.read(new byte[1024]);
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -93,13 +98,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
-    public void failedRead2() throws Exception {
-        // When
-        failedReleasableInputStream.read(new byte[1024], 0, 1024);
+    @Test
+    public void failedRead2() {
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.read(new byte[1024], 0, 1024);
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -111,13 +118,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
-    public void failedSkip() throws Exception {
-        // When
-        failedReleasableInputStream.skip(100);
+    @Test
+    public void failedSkip() {
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.skip(100);
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -129,13 +138,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
-    public void failedAvailable() throws Exception {
-        // When
-        failedReleasableInputStream.available();
+    @Test
+    public void failedAvailable() {
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.available();
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -148,7 +159,7 @@ public class ReleasableInputStreamTest {
     }
 
     @Test
-    public void mark() throws Exception {
+    public void mark() {
         // When
         releasableInputStream.mark(0);
 
@@ -156,13 +167,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void failedMark() throws Exception {
-        // When
-        failedReleasableInputStream.mark(0);
+    @Test
+    public void failedMark() {
+        assertThrows(RuntimeException.class, () -> {
+            // When
+            failedReleasableInputStream.mark(0);
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
@@ -175,13 +188,15 @@ public class ReleasableInputStreamTest {
         assertFalse(wasCalled.get());
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void failedReset() throws Exception {
-        // When
-        failedReleasableInputStream.reset();
+        assertThrows(IOException.class, () -> {
+            // When
+            failedReleasableInputStream.reset();
 
-        // Then
-        assertTrue(wasCalled.get());
+            // Then
+            assertTrue(wasCalled.get());
+        });
     }
 
     @Test
