@@ -79,9 +79,10 @@
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <slf4j.version>1.7.26</slf4j.version>
         <snakeyaml.version>1.26</snakeyaml.version>
-        <spring-boot.version>2.6.2</spring-boot.version>
+        <spring-boot.version>2.6.6</spring-boot.version>
         <spring-cloud-aws.version>2.3.2</spring-cloud-aws.version>
         <spring-cloud-dependencies.version>2021.0.0</spring-cloud-dependencies.version>
+        <spring-cloud-function.version>3.2.3</spring-cloud-function.version>
         <yaml.codegen.maven.plugin.version>0.0.6</yaml.codegen.maven.plugin.version>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <json-schema-validator.version>1.0.64</json-schema-validator.version>
@@ -187,6 +188,12 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito-core.version}</version>
+            </dependency>
+            <!-- Override Spring Cloud Function due to a CVE -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-function-context</artifactId>
+                <version>${spring-cloud-function.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.skyscreamer</groupId>
