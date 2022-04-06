@@ -43,6 +43,8 @@
 
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
         <spring-cloud-dependencies.version>Hoxton.SR11</spring-cloud-dependencies.version>
+        <spring-cloud-function.version>3.1.7</spring-cloud-function.version>
+        <spring-framework.version>5.2.20.RELEASE</spring-framework.version>
 
         <s3mock.version>0.1.6</s3mock.version>
         <aws-java-sdk-s3.version>1.11.18</aws-java-sdk-s3.version>
@@ -64,7 +66,7 @@
         <javax.inject.version>1</javax.inject.version>
         <pax-url-aether.version>2.6.2</pax-url-aether.version>
         <mockito-core.version>2.2.15</mockito-core.version>
-        <log4j2.version>2.13.2</log4j2.version>
+        <log4j2.version>2.17.1</log4j2.version>
         <hamcrest-all.version>1.3</hamcrest-all.version>
         <hamcrest-json.version>0.2</hamcrest-json.version>
         <json-path-assert.version>2.2.0</json-path-assert.version>
@@ -75,7 +77,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <feign-core.version>8.18.0</feign-core.version>
         <gson.version>2.8.6</gson.version>
-        <jackson.1x.version>1.9.15-TALEND</jackson.1x.version>
+        <jackson.1x.version>1.9.16-TALEND</jackson.1x.version>
         <snakeyaml.version>1.26</snakeyaml.version>
         <elastic.ecs.logging.version>1.0.1</elastic.ecs.logging.version>
         <yaml.codegen.maven.plugin.version>0.0.6</yaml.codegen.maven.plugin.version>
@@ -181,6 +183,12 @@
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito-core.version}</version>
             </dependency>
+            <!-- Override Spring Cloud Function due to a CVE -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-function-context</artifactId>
+                <version>${spring-cloud-function.version}</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -209,6 +217,13 @@
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -272,6 +287,16 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpg-jdk15on</artifactId>
                 <version>${bcprov.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-to-slf4j</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
