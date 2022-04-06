@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.talend.daikon</groupId>
+        <artifactId>daikon-parent</artifactId>
+        <version>5.11.3-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>releases</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Release notes</name>
+    <url>https://github.com/Talend/daikon</url>
+
+    <properties>
+        <!-- skip the deployment for this pom, not necessary -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <!-- Used by daikon-documentation, here for documentation purposes -->
+        <user />
+        <password />
+        <version />
+        <output />
+    </properties>
+
+    <profiles>
+        <profile>
+            <!-- Build release notes only for "release" profile -->
+            <id>release-notes</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.talend.daikon</groupId>
+                        <artifactId>daikon-documentation</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-release-notes</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>release-notes</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

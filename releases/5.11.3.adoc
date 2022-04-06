@@ -1,0 +1,16 @@
+= Daikon Release Notes (5.11.3) - 04/06/2022
+
+Thanks to @Colm O hEigeartaigh, @Sebastien Gandon, @IevgenTarasov
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDKN-319[TDKN-319]: Audit messages sent to LogServer contain no MDC values
+
+== Other
+- backport security fixes  (link:https://github.com/Talend/daikon/pull/836[#836])
+- chore(build):create maintenance branch
+- Revert "Publish artifacts"
+- Publish artifacts
+- Updated version to 5.11.2
+- Ensure correct field names
+- Disabled reporting build as it fails with connection refused
+- Updated version to 5.11.1
