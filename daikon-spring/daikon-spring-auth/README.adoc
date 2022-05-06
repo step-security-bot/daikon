@@ -49,9 +49,21 @@ This RestTemplate can be used in order to support forwarding IP of the caller an
 
 == Caching
 
-`AuthAutoConfiguration` tries to autowire bean of type `CacheManager` and get chane for name `jwk-set-cache`.
-If this cannot be done JWK Set will be cached by default using simple `ConcurrentMapCache`.
+=== JWK set
+`AuthAutoConfiguration` tries to autowire bean of type `CacheManager` and get cache for name `jwk-set-cache`. +
+If this cannot be done JWK Set will be cached by default using simple `ConcurrentMapCache`. +
 Property `spring.security.oauth2.resourceserver.jwk-set-cache-name` can be used to overwrite cache name.
+
+=== PAT introspection
+`AuthAutoConfiguration` tries to autowire bean of type `CacheManager` and get cache for name `oauthTokenInfoCache`. +
+If this cannot be done PAT introspection will *not be cached* by default. +
+Property `spring.security.oauth2.resourceserver.iam.opaque-token.cache-name` can be used to overwrite cache name. +
+Property `spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled` can be used to disable cache (by default it's `true`). +
+
+Deprecated properties used by `oidc-client` *will be ignored* and should be removed from your config:
+
+* `security.oauth2.resource.tokenInfoUriCache.name`
+* `security.oauth2.resource.tokenInfoUriCache.enabled`
 
 == Adding dependency
 

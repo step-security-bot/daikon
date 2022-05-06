@@ -1,5 +1,7 @@
 package org.talend.daikon.spring.auth.manager;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.SupplierJwtDecoder;
@@ -20,11 +21,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.introspection.NimbusOpaqueTokenIntrospector;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 import org.talend.daikon.spring.auth.common.model.userdetails.UserDetailsConverter;
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
+import org.talend.daikon.spring.auth.introspection.AuthUserDetailsConverterIntrospector;
+import org.talend.daikon.spring.auth.introspection.CachedOpaqueTokenIntrospector;
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 
 public class AuthenticationManagerFactory {
@@ -38,7 +40,7 @@ public class AuthenticationManagerFactory {
     // IAM JWT
     public static AuthenticationManager iamJwtAuthenticationManager(OAuth2ResourceServerProperties iamOauth2Properties,
             Cache jwkSetCache) {
-        if (StringUtils.hasText(iamOauth2Properties.getJwt().getJwkSetUri())) {
+        if (hasText(iamOauth2Properties.getJwt().getJwkSetUri())) {
             // supplier is provided, otherwise unit tests are failing when trying to query the URL
             SupplierJwtDecoder jwtDecoder = new SupplierJwtDecoder(
                     () -> NimbusJwtDecoder.withJwkSetUri(iamOauth2Properties.getJwt().getJwkSetUri()).cache(jwkSetCache).build());
@@ -65,41 +67,33 @@ public class AuthenticationManagerFactory {
     }
 
     // PAT
-    public static AuthenticationManager opaqueTokenAuthenticationManager(OAuth2ResourceServerProperties iamOauth2Properties) {
-        if (StringUtils.hasText(iamOauth2Properties.getOpaquetoken().getIntrospectionUri())) {
-
-            String introspectionUri = iamOauth2Properties.getOpaquetoken().getIntrospectionUri();
-            String clientId = Optional.ofNullable(iamOauth2Properties.getOpaquetoken().getClientId()).orElse("");
-            String clientSecret = Optional.ofNullable(iamOauth2Properties.getOpaquetoken().getClientSecret()).orElse("");
-
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(clientId, clientSecret));
-            restTemplate.getInterceptors().add(new IpAllowListHeaderInterceptor());
-
-            NimbusOpaqueTokenIntrospector delegate = new NimbusOpaqueTokenIntrospector(introspectionUri, restTemplate);
-            TalendOpaqueTokenIntrospector wrapper = new TalendOpaqueTokenIntrospector(delegate);
-
-            return new ProviderManager(new OpaqueTokenAuthenticationProvider(wrapper));
+    public static AuthenticationManager opaqueTokenAuthenticationManager(OAuth2ResourceServerProperties iamOauth2Properties,
+            Cache patIntrospectionCache) {
+        if (!hasText(iamOauth2Properties.getOpaquetoken().getIntrospectionUri())) {
+            throw new IllegalArgumentException("Property spring.security.oauth2.resourceserver.iam.opaque-token."
+                    + "introspection-uri must be present in application properties");
         }
-        throw new IllegalArgumentException("Property spring.security.oauth2.resourceserver.iam.opaque-token.introspection-uri "
-                + "must be present in application properties");
+
+        String introspectionUri = iamOauth2Properties.getOpaquetoken().getIntrospectionUri();
+        String clientId = Optional.ofNullable(iamOauth2Properties.getOpaquetoken().getClientId()).orElse("");
+        String clientSecret = Optional.ofNullable(iamOauth2Properties.getOpaquetoken().getClientSecret()).orElse("");
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(clientId, clientSecret));
+        restTemplate.getInterceptors().add(new IpAllowListHeaderInterceptor());
+
+        NimbusOpaqueTokenIntrospector delegate = new NimbusOpaqueTokenIntrospector(introspectionUri, restTemplate);
+        AuthUserDetailsConverterIntrospector converterIntrospector = new AuthUserDetailsConverterIntrospector(delegate);
+
+        if (null != patIntrospectionCache) {
+            return opaqueTokenProviderManager(new CachedOpaqueTokenIntrospector(converterIntrospector, patIntrospectionCache));
+        } else {
+            return opaqueTokenProviderManager(converterIntrospector);
+        }
     }
 
-    /**
-     * Returns {@link AuthUserDetails} object as a result of successful introspection
-     */
-    public static class TalendOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
-
-        private final OpaqueTokenIntrospector delegate;
-
-        public TalendOpaqueTokenIntrospector(OpaqueTokenIntrospector delegate) {
-            this.delegate = delegate;
-        }
-
-        public OAuth2AuthenticatedPrincipal introspect(String token) {
-            OAuth2AuthenticatedPrincipal principal = this.delegate.introspect(token);
-            return UserDetailsConverter.convert(principal.getAttributes());
-        }
-
+    private static ProviderManager opaqueTokenProviderManager(OpaqueTokenIntrospector introspector) {
+        return new ProviderManager(new OpaqueTokenAuthenticationProvider(introspector));
     }
+
 }

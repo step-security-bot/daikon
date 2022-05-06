@@ -5,9 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory.auth0JwtAuthenticationManager;
+import static org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory.iamJwtAuthenticationManager;
+import static org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory.opaqueTokenAuthenticationManager;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.PlainJWT;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -21,11 +29,8 @@ import org.springframework.security.oauth2.server.resource.authentication.Opaque
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.PlainJWT;
 
 public class TalendAuthenticationManagerResolverTest {
 
@@ -48,8 +53,13 @@ public class TalendAuthenticationManagerResolverTest {
 
         List<Auth0AuthenticationProvider> auth0AuthenticationProviders = Arrays.asList(new SatAuthenticationProvider());
 
-        resolver = new TalendAuthenticationManagerResolver(iamProperties, auth0Properties, auth0AuthenticationProviders,
-                new ConcurrentMapCache("jwk-set-store"));
+        ConcurrentMapCache jwkSetCache = new ConcurrentMapCache("jwk-set-store");
+        resolver = TalendAuthenticationManagerResolver.builder()
+                .auth0JwtAuthenticationManager(
+                        auth0JwtAuthenticationManager(auth0Properties, auth0AuthenticationProviders, jwkSetCache))
+                .auth0IssuerUri(auth0Properties.getJwt().getIssuerUri())
+                .iamJwtAuthenticationManager(iamJwtAuthenticationManager(iamProperties, jwkSetCache))
+                .opaqueTokenAuthenticationManager(opaqueTokenAuthenticationManager(iamProperties, null)).build();
     }
 
     @Test

@@ -3,6 +3,7 @@ package org.talend.daikon.spring.auth.config;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -35,6 +37,7 @@ import org.talend.daikon.multitenant.web.TenantIdentificationStrategy;
 import org.talend.daikon.spring.auth.exception.TalendBearerTokenAuthenticationEntryPoint;
 import org.talend.daikon.spring.auth.interceptor.BearerTokenInterceptor;
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
+import org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory;
 import org.talend.daikon.spring.auth.manager.TalendAuthenticationManagerResolver;
 import org.talend.daikon.spring.auth.multitenant.AccountSecurityContextIdentificationStrategy;
 import org.talend.daikon.spring.auth.multitenant.UserDetailsTenantProvider;
@@ -57,8 +60,16 @@ import lombok.NoArgsConstructor;
 @EnableConfigurationProperties(OAuth2ResourceServerProperties.class)
 public class AuthAutoConfiguration {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthAutoConfiguration.class);
+
     @Value("${spring.security.oauth2.resourceserver.jwk-set-cache-name:jwk-set-cache}")
     private String jwkSetCacheName;
+
+    @Value("${spring.security.oauth2.resourceserver.iam.opaque-token.cache-name:oauthTokenInfoCache}")
+    private String patIntrospectionCacheName;
+
+    @Value("${spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled:true}")
+    private boolean patIntrospectionCacheEnabled;
 
     @Bean
     public RestTemplate oauth2RestTemplate() {
@@ -74,11 +85,42 @@ public class AuthAutoConfiguration {
             @Qualifier("auth0Oauth2Properties") OAuth2ResourceServerProperties auth0Oauth2Properties,
             List<Auth0AuthenticationProvider> auth0AuthenticationProviders, Optional<CacheManager> cacheManager) {
 
-        Cache jwkSetCache = cacheManager.map(manager -> manager.getCache(jwkSetCacheName))
-                .orElse(new ConcurrentMapCache(jwkSetCacheName));
+        cacheManager.ifPresent(manager -> LOGGER.info("Cache manager {} is found", manager.getClass().getName()));
 
-        return new TalendAuthenticationManagerResolver(iamOauth2Properties, auth0Oauth2Properties, auth0AuthenticationProviders,
-                jwkSetCache);
+        Cache jwkSetCache = cacheManager.map(manager -> manager.getCache(jwkSetCacheName)).map(cache -> {
+            LOGGER.info("{} is used for jwkSet cache {}", cacheManager.get().getClass().getName(), jwkSetCacheName);
+            return cache;
+        }).orElseGet(() -> {
+            LOGGER.info("ConcurrentMapCache is used for jwkSet cache {}", jwkSetCacheName);
+            return new ConcurrentMapCache(jwkSetCacheName);
+        });
+
+        Cache patIntrospectionCache = cacheManager.filter(ignored -> patIntrospectionCacheEnabled)
+                .map(manager -> manager.getCache(patIntrospectionCacheName)).map(cache -> {
+                    LOGGER.info("{} is used for PAT introspection cache {} : {}", cacheManager.get().getClass().getName(),
+                            patIntrospectionCacheName, cache.getClass().getName());
+                    return cache;
+                }).orElseGet(() -> {
+                    LOGGER.warn("PAT introspection cache '{}' is disabled. This may lead to performance issues. "
+                            + "Please consider adding cache configuration and enabling it by setting "
+                            + "spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled=true "
+                            + "(Current value is '{}').", patIntrospectionCacheName, patIntrospectionCacheEnabled);
+                    return null;
+                });
+
+        AuthenticationManager auth0JwtAuthenticationManager = AuthenticationManagerFactory
+                .auth0JwtAuthenticationManager(auth0Oauth2Properties, auth0AuthenticationProviders, jwkSetCache);
+
+        AuthenticationManager iamJwtAuthenticationManager = AuthenticationManagerFactory
+                .iamJwtAuthenticationManager(iamOauth2Properties, jwkSetCache);
+
+        AuthenticationManager opaqueTokenAuthenticationManager = AuthenticationManagerFactory
+                .opaqueTokenAuthenticationManager(iamOauth2Properties, patIntrospectionCache);
+
+        return TalendAuthenticationManagerResolver.builder().auth0JwtAuthenticationManager(auth0JwtAuthenticationManager)
+                .auth0IssuerUri(auth0Oauth2Properties.getJwt().getIssuerUri())
+                .iamJwtAuthenticationManager(iamJwtAuthenticationManager)
+                .opaqueTokenAuthenticationManager(opaqueTokenAuthenticationManager).build();
     }
 
     @Bean
@@ -152,4 +194,27 @@ public class AuthAutoConfiguration {
         }
     }
 
+    @Value("${security.oauth2.resource.tokenInfoUriCache.name:#{null}}")
+    private String deprecatedCacheName;
+
+    @Value("${security.oauth2.resource.tokenInfoUriCache.enabled:#{null}}")
+    private Boolean deprecatedCacheEnabled;
+
+    @PostConstruct
+    public void logDeprecatedPropertiesWarning() {
+        if (deprecatedCacheName != null) {
+            LOGGER.warn(
+                    "Property security.oauth2.resource.tokenInfoUriCache.name is deprecated "
+                            + "and its value '{}' will be ignored. "
+                            + "Please use new property spring.security.oauth2.resourceserver.iam.opaque-token.cache-name",
+                    deprecatedCacheName);
+        }
+        if (deprecatedCacheEnabled != null) {
+            LOGGER.warn(
+                    "Property security.oauth2.resource.tokenInfoUriCache.enabled is deprecated "
+                            + "and its value '{}' will be ignored. "
+                            + "Please use new property spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled",
+                    deprecatedCacheEnabled);
+        }
+    }
 }
