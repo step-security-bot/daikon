@@ -1,0 +1,63 @@
+= Daikon Release Notes (6.6.0) - 05/06/2022
+
+Thanks to @Mark Butko, @Oleksandr Zhelezniak, @dependabot[bot], @Colm O hEigeartaigh, @Fabien Abballe, @lgirard, @Michael Tallet, @Gabriel Marquet, @vgagara-talend, @Damien Rubio, @ngrange-talend, @gmarquet, @wang wei, @Jérémy Hervy, @Nicolas Comont, @Ievgen Tarasov, @mbutko, @Francois Huaulme
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDI-47338[TDI-47338]: [Java 17] Unable to open the tJDBCInput jobs created after 731 R2021-08 (link:https://github.com/Talend/daikon/pull/837[#837])
+- link:https://jira.talendforge.org/browse/TDKN-337[TDKN-337]: Update to SpringBoot 2.6.6 (link:https://github.com/Talend/daikon/pull/833[#833])
+- link:https://jira.talendforge.org/browse/TPRUN-2858[TPRUN-2858]: engine-info api documentation is missing (link:https://github.com/Talend/daikon/pull/809[#809])
+- link:https://jira.talendforge.org/browse/TDKN-319[TDKN-319]: Audit messages sent to LogServer contain no MDC values (link:https://github.com/Talend/daikon/pull/790[#790])
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/776[#776])
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/775[#775])
+- link:https://jira.talendforge.org/browse/TPSVC-17987[TPSVC-17987]: [Service Account] Audit log request url field contains internal url (link:https://github.com/Talend/daikon/pull/774[#774])
+
+== Feature
+- link:https://jira.talendforge.org/browse/APIC-774[APIC-774]: Logging ECS field sets in Daikon (link:https://github.com/Talend/daikon/pull/808[#808])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-18599[TPSVC-18599]: Cache result of PAT introspection in daikon-spring-auth (link:https://github.com/Talend/daikon/pull/841[#841])
+- link:https://jira.talendforge.org/browse/TDKN-336[TDKN-336]: Update Atlassian JIRA client to 5.2.x (link:https://github.com/Talend/daikon/pull/830[#830])
+- link:https://jira.talendforge.org/browse/TDKN-335[TDKN-335]: Switch to Junit5 (link:https://github.com/Talend/daikon/pull/829[#829])
+- link:https://jira.talendforge.org/browse/TDP-10591[TDP-10591]: [RunConv][Back] TQL-DSEL convertor (utility class) (link:https://github.com/Talend/daikon/pull/828[#828])
+- link:https://jira.talendforge.org/browse/TDKN-332[TDKN-332]: Update Apache Kafka to 2.8.1 (link:https://github.com/Talend/daikon/pull/826[#826])
+- link:https://jira.talendforge.org/browse/INFOSEC-802[INFOSEC-802]: Move AWS Designer code for validation URLs to Daikon (link:https://github.com/Talend/daikon/pull/825[#825])
+- link:https://jira.talendforge.org/browse/TPSVC-18473[TPSVC-18473]: Integrate PAT and IAM JWT support in daikon-spring-auth (link:https://github.com/Talend/daikon/pull/823[#823])
+- link:https://jira.talendforge.org/browse/TPSVC-18473[TPSVC-18473]: Integrate PAT and IAM JWT support in daikon-spring-auth (link:https://github.com/Talend/daikon/pull/819[#819])
+- link:https://jira.talendforge.org/browse/TDKN-330[TDKN-330]: Make daikon-logging compatible with traceId, spanId field names (link:https://github.com/Talend/daikon/pull/820[#820])
+- link:https://jira.talendforge.org/browse/TDKN-329[TDKN-329]: Update Pax Url to 2.6.11 (link:https://github.com/Talend/daikon/pull/818[#818])
+- link:https://jira.talendforge.org/browse/TDKN-327[TDKN-327]: Update Logback to 1.2.9 and Maven to 3.3.4 (link:https://github.com/Talend/daikon/pull/811[#811])
+- link:https://jira.talendforge.org/browse/TDKN-325[TDKN-325]: Update Log4J to 2.17.1 (link:https://github.com/Talend/daikon/pull/805[#805])
+- link:https://jira.talendforge.org/browse/TPSVC-18193[TPSVC-18193]: Move SAT authentication manager to Daikon (link:https://github.com/Talend/daikon/pull/803[#803])
+- link:https://jira.talendforge.org/browse/TPSVC-18193[TPSVC-18193]: Move SAT authentication manager to Daikon (link:https://github.com/Talend/daikon/pull/799[#799])
+- link:https://jira.talendforge.org/browse/TPSVC-17974[TPSVC-17974]: Populate userId and accountId in the log context for scim (link:https://github.com/Talend/daikon/pull/797[#797])
+- link:https://jira.talendforge.org/browse/TDKN-324[TDKN-324]: Update Log4J to 2.16.0 (link:https://github.com/Talend/daikon/pull/796[#796])
+- link:https://jira.talendforge.org/browse/TDKN-323[TDKN-323]: Update Log4J to 2.15.0 (link:https://github.com/Talend/daikon/pull/795[#795])
+- link:https://jira.talendforge.org/browse/TDKN-322[TDKN-322]: Update Jackson to 1.9.16-TALEND (link:https://github.com/Talend/daikon/pull/789[#789])
+- link:https://jira.talendforge.org/browse/TPSVC-17973[TPSVC-17973]: Review the SLO for audit logs to avoid unnecessary noise (link:https://github.com/Talend/daikon/pull/777[#777])
+- link:https://jira.talendforge.org/browse/TPSVC-17706[TPSVC-17706]: Notify TPOPS when a service account is deleted (link:https://github.com/Talend/daikon/pull/771[#771])
+- link:https://jira.talendforge.org/browse/TDKN-317[TDKN-317]: Update Maven version to 3.8.2 to fix a CVE (link:https://github.com/Talend/daikon/pull/767[#767])
+- link:https://jira.talendforge.org/browse/TPSVC-17706[TPSVC-17706]: Notify TPOPS when a service account is deleted (link:https://github.com/Talend/daikon/pull/770[#770])
+- link:https://jira.talendforge.org/browse/TDKN-318[TDKN-318]: PBKDF2PasswordDigester re-uses the same salt (link:https://github.com/Talend/daikon/pull/768[#768])
+
+== Other
+- chore(deps): bump spring-webmvc  (link:https://github.com/Talend/daikon/pull/834[#834])
+- Fix if condition  (link:https://github.com/Talend/daikon/pull/817[#817])
+- Add semgrep SARIF upload to Github code scanning findings  (link:https://github.com/Talend/daikon/pull/816[#816])
+- [Security] Create semgrep github action on self-hosted github runner  (link:https://github.com/Talend/daikon/pull/815[#815])
+- chore(): update TSBI jenkinsfile  (link:https://github.com/Talend/daikon/pull/814[#814])
+- chore(): common dataset schema json schema  (link:https://github.com/Talend/daikon/pull/804[#804])
+- fix(): remove redundant model classes (they were migrated to common lib)  (link:https://github.com/Talend/daikon/pull/812[#812])
+- Add TLS to Talend url
+- chore(): upgrade daikon to spring boot 2.6  (link:https://github.com/Talend/daikon/pull/807[#807])
+- fix: register java time module since Jackson 12 requires it  (link:https://github.com/Talend/daikon/pull/806[#806])
+- fix daikon for java 17, now only miss javascript engine  (link:https://github.com/Talend/daikon/pull/780[#780])
+- chore(deps): bump log4j-api from 2.16.0 to 2.17.0  (link:https://github.com/Talend/daikon/pull/800[#800])
+- chore: replace lerna by yarn workspace and use talend-scripts  (link:https://github.com/Talend/daikon/pull/791[#791])
+- chore(deps): bump lodash.template from 4.4.0 to 4.5.0 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/788[#788])
+- chore(deps): bump yargs-parser from 5.0.0 to 5.0.1 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/787[#787])
+- Switch repo to https  (link:https://github.com/Talend/daikon/pull/779[#779])
+- Fix container image for SAST scan  (link:https://github.com/Talend/daikon/pull/773[#773])
+- chore(deps): bump tmpl in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/772[#772])
+- Use a constant-time method of comparing pbkdf2 digests  (link:https://github.com/Talend/daikon/pull/769[#769])
+- chore(sb): Upgrade to Spring Boot 2.4.9  (link:https://github.com/Talend/daikon/pull/765[#765])
+- chore(deps): bump path-parse in /daikon-tql/daikon-tql-client  (link:https://github.com/Talend/daikon/pull/766[#766])
