@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.7.0) - 05/09/2022
+
+Thanks to @blohar
+
+== Other
+- Use mongoUri as key for OnePerReplicaSet mongo connection strategy.  (link:https://github.com/Talend/daikon/pull/838[#838])
