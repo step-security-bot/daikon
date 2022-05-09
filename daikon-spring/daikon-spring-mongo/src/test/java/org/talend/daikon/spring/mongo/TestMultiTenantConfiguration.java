@@ -1,5 +1,7 @@
 package org.talend.daikon.spring.mongo;
 
+import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_TENANT;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -77,7 +79,7 @@ public class TestMultiTenantConfiguration {
             String uri = "mongodb://127.0.0.1:" + mongoServer.getLocalAddress().getPort() + "/" + dataBaseName.get();
             return TenantInformation.builder()
                     .clientSettings(MongoClientSettings.builder().applyConnectionString(new ConnectionString(uri)).build())
-                    .databaseName(dataBaseName.get()).build();
+                    .databaseName(dataBaseName.get()).mongoConnectionStrategy(ONE_PER_TENANT).build();
         };
     }
 

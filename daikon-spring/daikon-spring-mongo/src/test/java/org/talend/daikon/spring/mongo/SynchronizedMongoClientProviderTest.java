@@ -1,5 +1,7 @@
 package org.talend.daikon.spring.mongo;
 
+import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_TENANT;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -23,7 +25,7 @@ public class SynchronizedMongoClientProviderTest {
         when(tenantInformationProvider.getTenantInformation()).thenReturn(TenantInformation.builder().databaseName("db")
                 .clientSettings(
                         MongoClientSettings.builder().applyConnectionString(new ConnectionString("mongodb://no_host")).build())
-                .build());
+                .mongoConnectionStrategy(ONE_PER_TENANT).build());
         final MongoClient mongoClient = mock(MongoClient.class);
         when(mongoClientProvider.get(eq(tenantInformationProvider))).thenReturn(mongoClient);
         doAnswer(invocation -> {
@@ -54,7 +56,7 @@ public class SynchronizedMongoClientProviderTest {
         when(tenantInformationProvider.getTenantInformation()).thenReturn(TenantInformation.builder().databaseName("db")
                 .clientSettings(
                         MongoClientSettings.builder().applyConnectionString(new ConnectionString("mongodb://no_host")).build())
-                .build());
+                .mongoConnectionStrategy(ONE_PER_TENANT).build());
         final MongoClient mongoClient = mock(MongoClient.class);
         when(mongoClientProvider.get(eq(tenantInformationProvider))).thenReturn(mongoClient);
         doAnswer(invocation -> {
@@ -86,11 +88,11 @@ public class SynchronizedMongoClientProviderTest {
         when(tenantInformationProvider1.getTenantInformation()).thenReturn(TenantInformation.builder().databaseName("db")
                 .clientSettings(
                         MongoClientSettings.builder().applyConnectionString(new ConnectionString("mongodb://no_host_1")).build())
-                .build());
+                .mongoConnectionStrategy(ONE_PER_TENANT).build());
         when(tenantInformationProvider2.getTenantInformation()).thenReturn(TenantInformation.builder().databaseName("db")
                 .clientSettings(
                         MongoClientSettings.builder().applyConnectionString(new ConnectionString("mongodb://no_host_2")).build())
-                .build());
+                .mongoConnectionStrategy(ONE_PER_TENANT).build());
         final MongoClient mongoClient1 = mock(MongoClient.class);
         final MongoClient mongoClient2 = mock(MongoClient.class);
         when(mongoClientProvider.get(eq(tenantInformationProvider1))).thenReturn(mongoClient1);

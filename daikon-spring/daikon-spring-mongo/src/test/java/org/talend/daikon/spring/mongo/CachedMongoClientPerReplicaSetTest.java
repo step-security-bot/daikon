@@ -3,6 +3,8 @@ package org.talend.daikon.spring.mongo;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_REPLICASET;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -15,39 +17,64 @@ import org.junit.jupiter.api.Test;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
-public class CachedMongoClientProviderTest {
+public class CachedMongoClientPerReplicaSetTest {
+
+    private static MongoServer server1;
+
+    private static MongoServer server2;
+
+    private final CachedMongoClientProvider cachedMongoClientProvider = new CachedMongoClientProvider(1, TimeUnit.SECONDS);
+
+    private static InetSocketAddress serverAddress1;
+
+    private static InetSocketAddress serverAddress2;
 
     private static final TenantInformationProvider TENANT1 = getTenantInformationProvider("Tenant1");
 
     private static final TenantInformationProvider TENANT2 = getTenantInformationProvider("Tenant2");
 
-    private static MongoServer server;
+    private static final TenantInformationProvider TENANT3 = getTenantInformationProvider("Tenant3");
 
-    private final CachedMongoClientProvider cachedMongoClientProvider = new CachedMongoClientProvider(1, TimeUnit.SECONDS);
-
-    private static InetSocketAddress serverAddress;
+    private static final ConnectionStrategy mongoConnectionStrategy = ONE_PER_REPLICASET;
 
     private static TenantInformationProvider getTenantInformationProvider(final String tenant) {
         return () -> {
-            ConnectionString connectionString = new ConnectionString(
-                    "mongodb://" + serverAddress.getHostName() + ":" + serverAddress.getPort() + "/" + tenant);
+            String mongoUri = getMongoUri(tenant);
+            ConnectionString connectionString = new ConnectionString(mongoUri);
             return TenantInformation.builder()
                     .clientSettings(MongoClientSettings.builder().applyConnectionString(connectionString).build())
-                    .databaseName(tenant).build();
+                    .databaseName(tenant).mongoUri(connectionString.getConnectionString())
+                    .mongoConnectionStrategy(mongoConnectionStrategy).build();
         };
     }
 
     @BeforeAll
     public static void setUp() {
-        server = new MongoServer(new MemoryBackend());
-
+        server1 = new MongoServer(new MemoryBackend());
         // bind on a random local port
-        serverAddress = server.bind();
+        serverAddress1 = server1.bind();
+
+        server2 = new MongoServer(new MemoryBackend());
+        // bind on a random local port
+        serverAddress2 = server2.bind();
     }
 
     @AfterAll
     public static void tearDown() {
-        server.shutdown();
+        server1.shutdown();
+        server2.shutdown();
+    }
+
+    private static String getMongoUri(String tenant) {
+        switch (tenant) {
+        case "Tenant3":
+            return "mongodb://" + serverAddress2.getHostName() + ":" + serverAddress2.getPort();
+        case "Tenant1":
+        case "Tenant2":
+        default:
+            return "mongodb://" + serverAddress1.getHostName() + ":" + serverAddress1.getPort();
+
+        }
     }
 
     @Test
@@ -72,13 +99,15 @@ public class CachedMongoClientProviderTest {
     }
 
     @Test
-    public void shouldCreateClientForTenants() {
+    public void shouldCreateClientForReplicaSet() {
         // When
         final MongoClient client1 = cachedMongoClientProvider.get(TENANT1);
         final MongoClient client2 = cachedMongoClientProvider.get(TENANT2);
+        final MongoClient client3 = cachedMongoClientProvider.get(TENANT3);
 
         // Then
-        assertNotSame(client1, client2);
+        assertSame(client1, client2);
+        assertNotSame(client1, client3);
     }
 
     @Test
