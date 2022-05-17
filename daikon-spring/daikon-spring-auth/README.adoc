@@ -59,6 +59,7 @@ Property `spring.security.oauth2.resourceserver.jwk-set-cache-name` can be used 
 If this cannot be done PAT introspection will *not be cached* by default. +
 Property `spring.security.oauth2.resourceserver.iam.opaque-token.cache-name` can be used to overwrite cache name. +
 Property `spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled` can be used to disable cache (by default it's `true`). +
+Property `spring.security.oauth2.resourceserver.iam.opaque-token.cache-redis-ttl` can be used to set ttl for Redis cache (by default it's `2 min`). +
 
 Deprecated properties used by `oidc-client` *will be ignored* and should be removed from your config:
 

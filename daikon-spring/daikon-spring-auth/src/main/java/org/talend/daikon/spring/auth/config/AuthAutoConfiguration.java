@@ -1,5 +1,7 @@
 package org.talend.daikon.spring.auth.config;
 
+import static org.talend.daikon.spring.auth.config.RedisCacheConfig.wrapRedisCacheWithExceptionHandler;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -57,6 +60,7 @@ import lombok.NoArgsConstructor;
  */
 @Configuration
 @ConditionalOnClass(value = { Jwt.class, OAuth2ResourceServerProperties.class })
+@Import(RedisCacheConfig.class)
 @EnableConfigurationProperties(OAuth2ResourceServerProperties.class)
 public class AuthAutoConfiguration {
 
@@ -87,26 +91,36 @@ public class AuthAutoConfiguration {
 
         cacheManager.ifPresent(manager -> LOGGER.info("Cache manager {} is found", manager.getClass().getName()));
 
-        Cache jwkSetCache = cacheManager.map(manager -> manager.getCache(jwkSetCacheName)).map(cache -> {
-            LOGGER.info("{} is used for jwkSet cache {}", cacheManager.get().getClass().getName(), jwkSetCacheName);
-            return cache;
-        }).orElseGet(() -> {
-            LOGGER.info("ConcurrentMapCache is used for jwkSet cache {}", jwkSetCacheName);
-            return new ConcurrentMapCache(jwkSetCacheName);
-        });
+        // @formatter:off
+        Cache jwkSetCache = cacheManager
+                .filter(manager -> manager.getCacheNames().contains(jwkSetCacheName)) // otherwise Redis creates it "InFlight"
+                .map(manager -> manager.getCache(jwkSetCacheName))
+                .map(cache -> {
+                    LOGGER.info("{} is used for jwkSet cache {}", cacheManager.get().getClass().getName(), jwkSetCacheName);
+                    return cache;
+                })
+                .map(wrapRedisCacheWithExceptionHandler()) // only for redis cache (TPSVC-18791)
+                .orElseGet(() -> {
+                    LOGGER.info("ConcurrentMapCache is used for jwkSet cache {}", jwkSetCacheName);
+                    return new ConcurrentMapCache(jwkSetCacheName);
+                });
 
         Cache patIntrospectionCache = cacheManager.filter(ignored -> patIntrospectionCacheEnabled)
-                .map(manager -> manager.getCache(patIntrospectionCacheName)).map(cache -> {
+                .map(manager -> manager.getCache(patIntrospectionCacheName))
+                .map(cache -> {
                     LOGGER.info("{} is used for PAT introspection cache {} : {}", cacheManager.get().getClass().getName(),
                             patIntrospectionCacheName, cache.getClass().getName());
                     return cache;
-                }).orElseGet(() -> {
+                })
+                .map(wrapRedisCacheWithExceptionHandler()) // only for redis cache (TPSVC-18791)
+                .orElseGet(() -> {
                     LOGGER.warn("PAT introspection cache '{}' is disabled. This may lead to performance issues. "
                             + "Please consider adding cache configuration and enabling it by setting "
                             + "spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled=true "
                             + "(Current value is '{}').", patIntrospectionCacheName, patIntrospectionCacheEnabled);
                     return null;
                 });
+        // @formatter:on
 
         AuthenticationManager auth0JwtAuthenticationManager = AuthenticationManagerFactory
                 .auth0JwtAuthenticationManager(auth0Oauth2Properties, auth0AuthenticationProviders, jwkSetCache);
@@ -142,11 +156,7 @@ public class AuthAutoConfiguration {
         return new OAuth2ResourceServerProperties();
     }
 
-    @Bean
-    @ConditionalOnMissingBean(TalendBearerTokenAuthenticationEntryPoint.class)
-    public TalendBearerTokenAuthenticationEntryPoint talendBearerTokenAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        return new TalendBearerTokenAuthenticationEntryPoint(objectMapper);
-    }
+    // multitenacy
 
     @Bean
     @ConditionalOnMissingBean(TenantProvider.class)
@@ -158,6 +168,14 @@ public class AuthAutoConfiguration {
     @ConditionalOnMissingBean(TenantIdentificationStrategy.class)
     public TenantIdentificationStrategy identificationStrategy() {
         return new AccountSecurityContextIdentificationStrategy();
+    }
+
+    // exception handling
+
+    @Bean
+    @ConditionalOnMissingBean(TalendBearerTokenAuthenticationEntryPoint.class)
+    public TalendBearerTokenAuthenticationEntryPoint talendBearerTokenAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        return new TalendBearerTokenAuthenticationEntryPoint(objectMapper);
     }
 
     @ControllerAdvice
@@ -193,6 +211,8 @@ public class AuthAutoConfiguration {
             private int status;
         }
     }
+
+    // log deprecated options
 
     @Value("${security.oauth2.resource.tokenInfoUriCache.name:#{null}}")
     private String deprecatedCacheName;
