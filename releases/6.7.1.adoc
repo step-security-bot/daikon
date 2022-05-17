@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.7.1) - 05/17/2022
+
+Thanks to @Mark Butko
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-18791[TPSVC-18791]: Error 500 calling /iam-server/users/count (link:https://github.com/Talend/daikon/pull/843[#843])
