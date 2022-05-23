@@ -3,8 +3,6 @@ package org.talend.daikon.spring.mongo;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_REPLICASET;
-
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -13,6 +11,8 @@ import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
+import org.talend.daikon.spring.mongo.info.ReplicasetTenantInformation;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -35,16 +35,13 @@ public class CachedMongoClientPerReplicaSetTest {
 
     private static final TenantInformationProvider TENANT3 = getTenantInformationProvider("Tenant3");
 
-    private static final ConnectionStrategy mongoConnectionStrategy = ONE_PER_REPLICASET;
-
     private static TenantInformationProvider getTenantInformationProvider(final String tenant) {
         return () -> {
             String mongoUri = getMongoUri(tenant);
             ConnectionString connectionString = new ConnectionString(mongoUri);
-            return TenantInformation.builder()
+            return ReplicasetTenantInformation.builder()
                     .clientSettings(MongoClientSettings.builder().applyConnectionString(connectionString).build())
-                    .databaseName(tenant).mongoUri(connectionString.getConnectionString())
-                    .mongoConnectionStrategy(mongoConnectionStrategy).build();
+                    .databaseName(tenant).mongoUri(connectionString.getConnectionString()).build();
         };
     }
 
