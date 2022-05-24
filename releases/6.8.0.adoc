@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.0) - 05/24/2022
+
+Thanks to @tduperron
+
+== Other
+- chore(TPGOV-): refactor for mongo  (link:https://github.com/Talend/daikon/pull/846[#846])
