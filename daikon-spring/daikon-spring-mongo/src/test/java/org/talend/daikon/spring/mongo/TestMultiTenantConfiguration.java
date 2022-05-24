@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
+import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,9 +78,9 @@ public class TestMultiTenantConfiguration {
             }
 
             String uri = "mongodb://127.0.0.1:" + mongoServer.getLocalAddress().getPort() + "/" + dataBaseName.get();
-            return TenantInformation.builder()
+            return MultiSchemaTenantInformation.builder()
                     .clientSettings(MongoClientSettings.builder().applyConnectionString(new ConnectionString(uri)).build())
-                    .databaseName(dataBaseName.get()).mongoConnectionStrategy(ONE_PER_TENANT).build();
+                    .databaseName(dataBaseName.get()).build();
         };
     }
 

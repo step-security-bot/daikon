@@ -3,8 +3,6 @@ package org.talend.daikon.spring.mongo;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_TENANT;
-
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -13,6 +11,7 @@ import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -29,15 +28,13 @@ public class CachedMongoClientPerTenantProviderTest {
 
     private static InetSocketAddress serverAddress;
 
-    private static final ConnectionStrategy mongoConnectionStrategy = ONE_PER_TENANT;
-
     private static TenantInformationProvider getTenantInformationProvider(final String tenant) {
         return () -> {
             ConnectionString connectionString = new ConnectionString(
                     "mongodb://" + serverAddress.getHostName() + ":" + serverAddress.getPort() + "/" + tenant);
-            return TenantInformation.builder()
+            return MultiSchemaTenantInformation.builder()
                     .clientSettings(MongoClientSettings.builder().applyConnectionString(connectionString).build())
-                    .databaseName(tenant).mongoConnectionStrategy(mongoConnectionStrategy).build();
+                    .databaseName(tenant).build();
         };
     }
 
