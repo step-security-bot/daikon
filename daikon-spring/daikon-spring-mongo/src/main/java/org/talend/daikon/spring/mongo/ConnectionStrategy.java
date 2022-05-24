@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum ConnectionStrategy {
     ONE_PER_TENANT("onePerTenant"),
-    ONE_PER_REPLICASET("`onePerReplicaSet`");
+    ONE_PER_REPLICASET("onePerReplicaSet");
 
     private final String strategy;
 
