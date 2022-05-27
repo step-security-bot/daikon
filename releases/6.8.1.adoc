@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.1) - 05/25/2022
+
+Thanks to @vPiatnytsia
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-18856[TPSVC-18856]: Auditlogs should be resilient to malformed URI (link:https://github.com/Talend/daikon/pull/844[#844])
