@@ -1,31 +1,34 @@
 # Common dataset schema description
 
-The goal of this module is to provide a common dataset schema description. 
+The goal of this module is to provide a *common* dataset schema description. 
 
-This work is based on DPP proposal: https://github.com/Talend/data-processing-runtime/wiki/[Design]-Validation-Processor
+This work is based on [DQ-Runtime Schema](https://github.com/Talend/data-processing-runtime/blob/main/docs/specification/DQ-Runtime_Schema/design.md).
 
-Explanation about how dataset schema is used across Talend product can be found on lucidchart: https://lucid.app/lucidchart/cf1ec35f-db0b-41e2-aebd-86ce8df0d3d2/edit?invitationId=inv_b9f735dd-a269-44b7-b3dd-e1af0bb68017
+Explanation about how dataset schema is used across Talend products can be found on [Lucidchart](https://lucid.app/lucidchart/cf1ec35f-db0b-41e2-aebd-86ce8df0d3d2/edit?invitationId=inv_b9f735dd-a269-44b7-b3dd-e1af0bb68017).
 
 ## JSON Schema
 
-JSON schemas representing a dataset schema are located under `src/main/resources` folder. They define mandatory and none mandatory field and set a description for each field
+JSON schemas representing a dataset schema are located under `src/main/resources` folder. They define mandatory and none-mandatory fields and set a description for each field.
 
-## Modification made on DPP proposal
+## Modification made on DQ-Runtime Schema
 
-Small adjustments have been made to the original DPP proposal:
+Small adjustments have been made to the original DQ-Runtime Schema:
 
-* `dqTypeLabel` is similar to `dqType`. We remove it from the json schema definition
+* `dqTypeLabel` is removed (as it is similar to `dqType`)
 * `description` field is added
+* `talend.component.semanticType` is removed
+* `talend.component.dqType` is removed
+* `talend.component.qualityAggregate` is removed
+
+Some properties comming from TCK are also impacted:
+
 * `talend.component.label` is renamed `originalFieldName`
-* `talend.component.semanticType` is removed from the schema
-* `talend.component.dqType` is removed from the schema
-* `talend.component.qualityAggregate` is removed from the schema
-* `talend.component.DATETIME` is rename `isDatetime`
+* `talend.component.DATETIME` is renamed `isDatetime`
 
 
 ## JSON serializer/deserializer
 
-In order to be able to serialize/deserialize the json payload with `"null"` avro format. We need to use a custom `ObjectMapper`.
+In order to be able to serialize/deserialize the JSON payload with `"null"` avro format. We need to use a custom `ObjectMapper`.
 
 This custom mapper is defined like that:
 
@@ -54,7 +57,7 @@ public class DatasetSchemaMapperConfiguration {
 
 ## Validate payload based on JSON Schema
 
-There is a couple of existing libraries to validate a payload according to a json schema: https://json-schema.org/implementations.html#validators.
+There is a couple of existing libraries to validate a payload according to a JSON schema: https://json-schema.org/implementations.html#validators.
 
 For our test we use:
 
@@ -67,11 +70,11 @@ For our test we use:
 </dependency>
 ```
 
-## Dataset schema pojo
+## Dataset schema POJOs
 
-Some lombok pojos are available under `org.talend.daikon.schema.dataset`.
+Some lombok POJOs are available under `org.talend.daikon.schema.dataset`.
 
-All pojo defined an attribute:
+All POJOs define an attribute:
 
 ```java
 @JsonAnySetter
@@ -79,7 +82,7 @@ All pojo defined an attribute:
 Map<String, Object> additionalProperties;
 ```
 
-In order to serialize/deserialize additional properties not defined on the schema. This properties are unwrapped during the serialization process through:
+In order to serialize/deserialize additional properties not defined on the schema. These properties are unwrapped during the serialization process through:
 
 ```java
 @JsonAnyGetter
