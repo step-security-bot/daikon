@@ -1,0 +1,11 @@
+= Daikon Release Notes (6.8.2) - 06/06/2022
+
+Thanks to @Mark Butko, @Jad Darrous, @Colm O hEigeartaigh
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDKN-339[TDKN-339]: Update to Spring Boot 2.6.8 (link:https://github.com/Talend/daikon/pull/849[#849])
+
+== Other
+- fix: exclude OAuth2ResourceServer auto config with application listener  (link:https://github.com/Talend/daikon/pull/852[#852])
+- doc(): Update common dataset schema README  (link:https://github.com/Talend/daikon/pull/839[#839])
+- Updating Spring Cloud to 2021.0.3  (link:https://github.com/Talend/daikon/pull/850[#850])
