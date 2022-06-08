@@ -1,19 +1,20 @@
-name: Semgrep PR Scan
-
+name: Semgrep
 on:
-  # Scan changed files in PRs, block on new issues only (existing issues ignored)
-  pull_request:
+  pull_request: {}
+  push:
     branches:
-      - "master"
-
+      - master
+    paths:
+      - .github/workflows/semgrep.yml
+  schedule:
+    - cron: '0 0 * * 0'
 jobs:
   semgrep:
-    # Skip any PR created by dependabot to avoid permission issues
+    name: Scan
+    runs-on: ubuntu-latest
     if: (github.actor != 'dependabot[bot]')
-    uses: Talend/github-actions/.github/workflows/semgrep.yml@semgrep
-    with:
-      semgrep_fail_on_issues: false
-      semgrep_config: "p/secrets auto"
-      semgrep_severity_levels: 1
-    secrets:
-      github_action_token: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
