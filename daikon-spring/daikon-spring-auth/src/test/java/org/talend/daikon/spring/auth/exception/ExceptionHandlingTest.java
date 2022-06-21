@@ -37,20 +37,20 @@ public class ExceptionHandlingTest {
     @WithAnonymousUser
     public void testGetAnonymousUser() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/test")).andExpect(MockMvcResultMatchers.status().isUnauthorized())
-                .andExpect(MockMvcResultMatchers.content().string("{\"status\":401,\"title\":\"Unauthorized\"}"));
+                .andExpect(MockMvcResultMatchers.content().json("{\"status\":401,\"title\":\"Unauthorized\"}"));
     }
 
     @Test
     public void testGetUnauthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/test")).andExpect(MockMvcResultMatchers.status().isUnauthorized())
-                .andExpect(MockMvcResultMatchers.content().string("{\"status\":401,\"title\":\"Unauthorized\"}"));
+                .andExpect(MockMvcResultMatchers.content().json("{\"status\":401,\"title\":\"Unauthorized\"}"));
     }
 
     @Test
     @WithMockUser(authorities = "INSUFFICIENT")
     public void testGetForbidden() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/test")).andExpect(MockMvcResultMatchers.status().isForbidden())
-                .andExpect(MockMvcResultMatchers.content().string("{\"detail\":\"Access is denied\",\"status\":403}"));
+                .andExpect(MockMvcResultMatchers.content().json("{\"detail\":\"Access is denied\",\"status\":403}"));
     }
 
 }

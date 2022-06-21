@@ -30,6 +30,7 @@
 
         <assertj-core.version>3.8.0</assertj-core.version>
         <aspectjweaver.version>1.8.9</aspectjweaver.version>
+        <asm.version>9.2</asm.version>
         <avro.version>1.10.2</avro.version>
         <aws-java-sdk-s3.version>1.11.18</aws-java-sdk-s3.version>
         <bcprov.version>1.69</bcprov.version>
@@ -177,6 +178,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.bwaldvogel</groupId>
