@@ -123,4 +123,17 @@ public abstract class AuthenticationToken implements Authentication {
         return permissions.map(String::trim).map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append(" [");
+        sb.append("Principal=").append(getPrincipal()).append(", ");
+        sb.append("Credentials=[PROTECTED], ");
+        sb.append("Tenant ID=").append(this.authUserDetails.getTenantId()).append(", ");
+        sb.append("Authenticated=").append(isAuthenticated()).append(", ");
+        sb.append("Granted Authorities=").append(this.authorities);
+        sb.append("]");
+        return sb.toString();
+    }
+
 }
