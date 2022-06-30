@@ -14,6 +14,8 @@ public class MultiTenantRunnableTest {
 
     @BeforeEach
     public void setUp() {
+        TenancyContextHolder.setStrategyName(TenancyContextHolder.MODE_THREADLOCAL);
+
         context = TenancyContextHolder.createEmptyContext();
         context.setTenant(new DefaultTenant("tenant-1234", null));
         TenancyContextHolder.setContext(context);
