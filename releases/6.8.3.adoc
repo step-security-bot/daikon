@@ -1,0 +1,18 @@
+= Daikon Release Notes (6.8.3) - 07/04/2022
+
+Thanks to @RajshreeSawant, @Ievgen Tarasov, @Colm O hEigeartaigh, @Mark Butko, @tduperron, @Gabriel Marquet
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPRUN-3858[TPRUN-3858]: PAT token is not supported by the engine-runtime-provisioner and engine-info services (link:https://github.com/Talend/daikon/pull/862[#862])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPGOV-1261[TPGOV-1261]: Fix daikon test (link:https://github.com/Talend/daikon/pull/851[#851])
+
+== Other
+- feat: added daikon-spring-license module  (link:https://github.com/Talend/daikon/pull/857[#857])
+- Bump Nimbusds version to 9.37.2  (link:https://github.com/Talend/daikon/pull/859[#859])
+- fix: align asm version with tsbi  (link:https://github.com/Talend/daikon/pull/860[#860])
+- Remove optional oauth2 dependency from spring-security-oauth2-autoconfigure  (link:https://github.com/Talend/daikon/pull/858[#858])
+- There's no need to manually override spring cloud function context any more since Spring Boot updates  (link:https://github.com/Talend/daikon/pull/854[#854])
+- Revert "Security: Switch semgrep PR scan to Talend workflow"  (link:https://github.com/Talend/daikon/pull/856[#856])
+- Switch semgrep PR scan to Talend workflow  (link:https://github.com/Talend/daikon/pull/855[#855])
