@@ -123,6 +123,7 @@ public class ReleaseNotes extends AbstractMojo {
             }
             LOGGER.info("Release notes generated @ '{}'.", file.getAbsoluteFile().getAbsolutePath());
         } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }
