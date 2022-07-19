@@ -9,7 +9,10 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.SearchResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.daikon.finders.ItemFinder;
 import org.talend.daikon.model.JiraReleaseNoteItem;
 import org.talend.daikon.model.PullRequest;
@@ -25,6 +28,8 @@ import lombok.Getter;
  * Finds Jira for release note based of Git history (finds Jira ids from Git commit messages).
  */
 public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFinder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JiraGitItemFinder.class);
 
     private final String jiraServerUrl;
 
@@ -72,7 +77,13 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
                             Issue issue = issueCache.get(jiraId);
                             if (issue == null) {
                                 // Issue can move to another id in Jira (issue id changed between git log and Jira)
-                                issue = client.getIssueClient().getIssue(jiraId).claim();
+                                try {
+                                    issue = client.getIssueClient().getIssue(jiraId).claim();
+                                } catch (RestClientException ex) {
+                                    // Log a warning but proceed, as maybe the regular expression is incorrectly flagging
+                                    // something as a JIRA
+                                    LOGGER.warn("Error getting issue from JIRA", ex);
+                                }
                             }
                             return new ProcessedJiraTuple(issue, rawGitCommit.getPullRequest());
                         });

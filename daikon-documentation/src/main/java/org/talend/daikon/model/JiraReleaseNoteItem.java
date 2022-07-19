@@ -19,12 +19,18 @@ public class JiraReleaseNoteItem implements ReleaseNoteItem {
 
     @Override
     public ReleaseNoteItemType getIssueType() {
-        return ReleaseNoteItemType.fromJiraIssueType(issue.getIssueType());
+        if (issue != null) {
+            return ReleaseNoteItemType.fromJiraIssueType(issue.getIssueType());
+        }
+        return ReleaseNoteItemType.MISC;
     }
 
     @Override
     public void writeTo(PrintWriter writer) {
-        writer.print("- link:" + jiraServerUrl + "/browse/" + issue.getKey() + "[" + issue.getKey() + "]: " + issue.getSummary());
+        if (issue != null) {
+            writer.print(
+                    "- link:" + jiraServerUrl + "/browse/" + issue.getKey() + "[" + issue.getKey() + "]: " + issue.getSummary());
+        }
         if (pullRequest != null) {
             writer.println(" (link:" + pullRequest.getUrl() + "[#" + pullRequest.getDisplay() + "])");
         } else {
@@ -34,7 +40,7 @@ public class JiraReleaseNoteItem implements ReleaseNoteItem {
 
     @Override
     public String toString() {
-        return "JiraReleaseNoteItem{" + getIssueType() + ", " + "issue=" + issue.getSummary() + '}';
+        return "JiraReleaseNoteItem{" + getIssueType() + ", " + "issue=" + issue != null ? issue.getSummary() : "" + '}';
     }
 
 }
