@@ -1,0 +1,15 @@
+= Daikon Release Notes (6.8.4) - 07/20/2022
+
+Thanks to @Colm O hEigeartaigh, @Mark Butko
+
+== Other
+- Updating gson to 2.8.9 to fix CVE-2022-25647 (#866) (link:https://github.com/Talend/daikon/pull/866[#866])
+- Fixing NPE in daikon-documentation when the JIRA isn't found  (link:https://github.com/Talend/daikon/pull/870[#870])
+- Adding logging to try to diagnose NPE
+- Adding exception stack traces to Jenkins
+- Fixing documentation process when a JIRA is not found  (link:https://github.com/Talend/daikon/pull/869[#869])
+- Revert "Updating Maven to 3.8.6 " (link:https://github.com/Talend/daikon/pull/867[#867])
+- fix: fix asm conflict with tsbi  (link:https://github.com/Talend/daikon/pull/868[#868])
+- Updating Maven to 3.8.6  (link:https://github.com/Talend/daikon/pull/867[#867])
+- Updating Spring Boot to 2.6.9  (link:https://github.com/Talend/daikon/pull/865[#865])
+- Updating Commons Configuration to 2.8.0  (link:https://github.com/Talend/daikon/pull/864[#864])
