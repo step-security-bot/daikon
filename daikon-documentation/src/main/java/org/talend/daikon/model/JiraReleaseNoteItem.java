@@ -17,6 +17,8 @@ public class JiraReleaseNoteItem implements ReleaseNoteItem {
 
     private final PullRequest pullRequest;
 
+    private final String shortMessage;
+
     @Override
     public ReleaseNoteItemType getIssueType() {
         if (issue != null) {
@@ -30,6 +32,8 @@ public class JiraReleaseNoteItem implements ReleaseNoteItem {
         if (issue != null) {
             writer.print(
                     "- link:" + jiraServerUrl + "/browse/" + issue.getKey() + "[" + issue.getKey() + "]: " + issue.getSummary());
+        } else if (shortMessage != null) {
+            writer.print("- " + shortMessage);
         }
         if (pullRequest != null) {
             writer.println(" (link:" + pullRequest.getUrl() + "[#" + pullRequest.getDisplay() + "])");
@@ -40,7 +44,13 @@ public class JiraReleaseNoteItem implements ReleaseNoteItem {
 
     @Override
     public String toString() {
-        return "JiraReleaseNoteItem{" + getIssueType() + ", " + "issue=" + issue != null ? issue.getSummary() : "" + '}';
+        String description = "JiraReleaseNoteItem{" + getIssueType();
+        if (issue != null) {
+            description += ", " + "issue=" + issue.getSummary() + '}';
+        } else if (shortMessage != null) {
+            description += ", " + "commit=" + shortMessage + '}';
+        }
+        return description;
     }
 
 }

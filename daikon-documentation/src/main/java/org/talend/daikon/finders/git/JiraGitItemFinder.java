@@ -54,7 +54,7 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
                 return getGitCommits() //
                         .filter(c -> !c.getCommit().getShortMessage().contains("release")) //
                         .map(c -> new RawGitCommit(JIRA_DETECTION_PATTERN.matcher(c.getCommit().getShortMessage()),
-                                c.getPullRequest())) //
+                                c.getPullRequest(), c.getCommit().getShortMessage())) //
                         .filter(rawGitCommit -> rawGitCommit.getJiraIdMatcher().matches()) //
                         .collect(Collectors.toList());
             }) //
@@ -85,12 +85,12 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
                                     LOGGER.warn("Error getting issue from JIRA", ex);
                                 }
                             }
-                            return new ProcessedJiraTuple(issue, rawGitCommit.getPullRequest());
+                            return new ProcessedJiraTuple(issue, rawGitCommit.getPullRequest(), rawGitCommit.getShortMessage());
                         });
                     }) //
                     .thenApply(processedJiraTuples -> processedJiraTuples.map(tuple -> new JiraReleaseNoteItem(tuple.getIssue(), //
                             jiraServerUrl, //
-                            tuple.getPullRequest())) //
+                            tuple.getPullRequest(), tuple.getShortMessage())) //
                     ) //
                     .get();
         } catch (Exception e) {
@@ -105,6 +105,8 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
         Matcher jiraIdMatcher;
 
         PullRequest pullRequest;
+
+        String shortMessage;
     }
 
     @Getter
@@ -114,5 +116,7 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
         Issue issue;
 
         PullRequest pullRequest;
+
+        String shortMessage;
     }
 }
