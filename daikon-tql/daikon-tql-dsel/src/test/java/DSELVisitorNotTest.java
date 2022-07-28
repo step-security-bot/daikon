@@ -14,10 +14,10 @@ public class DSELVisitorNotTest {
 
     @BeforeAll
     static void setUp() {
-        final HashMap<String, String> ftot = new HashMap<>();
-        ftot.put("name", "STRING");
-        ftot.put("total", "INTEGER");
-        fieldToType = Collections.unmodifiableMap(ftot);
+        final HashMap<String, String> fToType = new HashMap<>();
+        fToType.put("name", "STRING");
+        fToType.put("total", "INTEGER");
+        fieldToType = Collections.unmodifiableMap(fToType);
     }
 
     @Test

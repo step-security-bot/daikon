@@ -17,6 +17,7 @@ public class DSELConverter {
      * Utility method to convert a TQL query to a DSEL query.
      *
      * @param query TQL query as String
+     * @param fieldToType the mapping to get the type for each field
      * @return DSEL ELNode ready to serve for DSEL intepreter
      */
     public ELNode convert(String query, Map<String, String> fieldToType) throws TqlException {
