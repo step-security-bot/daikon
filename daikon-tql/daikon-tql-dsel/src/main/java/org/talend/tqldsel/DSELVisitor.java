@@ -2,6 +2,8 @@ package org.talend.tqldsel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.daikon.pattern.character.CharPatternToRegex;
+import org.talend.daikon.pattern.word.WordPatternToRegex;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
@@ -169,12 +171,28 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldCompliesPattern elt) {
-        throw new TqlException("Needs implementation : visit(FieldCompliesPattern elt)");
+        LOGGER.debug("Inside Visit FieldCompliesPattern " + elt.toString());
+        final TqlElement ex = elt.getField();
+
+        ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        fieldCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
+        final String regexp = CharPatternToRegex.toRegex(elt.getPattern());
+        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, regexp)); // Regexp
+
+        return fieldCompliesNode;
     }
 
     @Override
     public ELNode visit(FieldWordCompliesPattern elt) {
-        throw new TqlException("Needs implementation : visit(FieldWordCompliesPattern elt)");
+        LOGGER.debug("Inside Visit FieldWordCompliesPattern " + elt.toString());
+        final TqlElement ex = elt.getField();
+
+        ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        fieldWordCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
+        final String regexp = WordPatternToRegex.toRegex(elt.getPattern(), true);
+        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, regexp)); // regexp
+
+        return fieldWordCompliesNode;
     }
 
     @Override

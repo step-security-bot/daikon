@@ -15,11 +15,11 @@ public class DSELConverter {
     /**
      * Utility method to convert a TQL query to a DSEL query.
      *
-     * @param query TQL query as String
+     * @param tqlQuery TQL query as String
      * @return DSEL ELNode ready to serve for DSEL intepreter
      */
-    public static ELNode convert(String query) throws TqlException {
-        Expression exp = Tql.parse(query);
+    public static ELNode convert(String tqlQuery) throws TqlException {
+        Expression exp = Tql.parse(tqlQuery);
         ELNode raw = exp.accept(visitor);
 
         return wrapNode(raw);
