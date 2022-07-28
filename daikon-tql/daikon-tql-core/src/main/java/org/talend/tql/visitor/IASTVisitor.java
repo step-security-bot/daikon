@@ -107,15 +107,24 @@ public interface IASTVisitor<T> {
     T visit(FieldMatchesRegex elt);
 
     /**
-     * Visits a {@link FieldCompliesPattern}
-     * 
+     * Visits a {@link FieldCompliesPattern}.
+     *
+     * Convert a TQL pattern filter to its
+     * equivalent as a DSEL expression using the regexp 'matches' function.
+     *
      * @param elt element to visit
+     * @see <a href="https://jira.talendforge.org/browse/TDQ-15793">TDQ-15793</a>
      */
     T visit(FieldCompliesPattern elt);
 
     /**
      * Visits a {@link FieldWordCompliesPattern}
-     * 
+     *
+     * Convert a TQL word pattern filter to its
+     * equivalent as a DSEL expression using the regexp 'matches' function.
+     *
+     * Look for the org.talend.daikon.pattern.word.WordPattern class to have details on available word patterns.
+     *
      * @param elt element to visit
      */
     T visit(FieldWordCompliesPattern elt);

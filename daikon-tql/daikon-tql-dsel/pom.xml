@@ -53,6 +53,11 @@
             <version>${junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>daikon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
