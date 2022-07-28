@@ -14,15 +14,15 @@ import java.util.Map;
 public class DSELConverter {
 
     /**
-     * Utility method to convert a TQL query to a DSEL query.
+     * Utility method to convert a TQL tqlQuery to a DSEL tqlQuery.
      *
-     * @param query TQL query as String
+     * @param tqlQuery TQL tqlQuery as String
      * @param fieldToType the mapping to get the type for each field
      * @return DSEL ELNode ready to serve for DSEL intepreter
      */
-    public ELNode convert(String query, Map<String, String> fieldToType) throws TqlException {
+    public ELNode convert(String tqlQuery, Map<String, String> fieldToType) throws TqlException {
         DSELVisitor visitor = new DSELVisitor(fieldToType);
-        Expression exp = Tql.parse(query);
+        Expression exp = Tql.parse(tqlQuery);
         ELNode raw = exp.accept(visitor);
 
         return wrapNode(raw);
