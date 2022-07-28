@@ -23,7 +23,8 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
 
     /**
      *
-     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema
      */
     public DSELVisitor(Map<String, String> fieldToType) {
         this.fieldToType = fieldToType;
@@ -160,7 +161,7 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         final ELNode node = ex.accept(this);
         regexNode.addChild(node);
         final String validFieldType = fieldToType.get(node.getImage());
-        if(validFieldType == null) {
+        if (validFieldType == null) {
             throw new TqlException(String.format("Cannot find the type of the field '%s'", node.getImage()));
         }
         regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, validFieldType));
@@ -177,7 +178,7 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         final ELNode node = ex.accept(this);
         regexNode.addChild(node);
         final String invalidFieldType = fieldToType.get(node.getImage());
-        if(invalidFieldType == null) {
+        if (invalidFieldType == null) {
             throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
         }
         regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, invalidFieldType));

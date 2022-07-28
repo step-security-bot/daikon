@@ -142,14 +142,12 @@ public class DSELVisitorFunctionCallTest {
         assertEquals(wrapNode(isValidNode), actual);
     }
 
-
     @Test
     public void testParseIsValidWithExpectedException() {
         final String tqlQuery = "unknown is valid";
         final DSELConverter dselConverter = new DSELConverter();
 
-        Exception exception = assertThrows(TqlException.class, () ->
-                dselConverter.convert(tqlQuery, fieldToType));
+        Exception exception = assertThrows(TqlException.class, () -> dselConverter.convert(tqlQuery, fieldToType));
         assertEquals("Cannot find the type of the field 'unknown'", exception.getMessage());
     }
 
@@ -166,13 +164,11 @@ public class DSELVisitorFunctionCallTest {
         assertEquals(wrapNode(isValidNode), actual);
     }
 
-
     @Test
     public void testParseIsInvalidWithExpectedException() {
         final String tqlQuery = "unknown is invalid";
         final DSELConverter dselConverter = new DSELConverter();
-        Exception exception = assertThrows(TqlException.class, () ->
-                dselConverter.convert(tqlQuery, fieldToType));
+        Exception exception = assertThrows(TqlException.class, () -> dselConverter.convert(tqlQuery, fieldToType));
         assertEquals("Cannot find the 'type' of the field 'unknown'", exception.getMessage());
     }
 

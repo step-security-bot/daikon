@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DSELVisitorOrAndTest {
 
-
     static Map<String, String> fieldToType;
 
     @BeforeAll

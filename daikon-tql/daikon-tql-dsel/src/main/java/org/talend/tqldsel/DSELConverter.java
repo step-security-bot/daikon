@@ -17,7 +17,8 @@ public class DSELConverter {
      * Utility method to convert a TQL tqlQuery to a DSEL tqlQuery.
      *
      * @param tqlQuery TQL tqlQuery as String
-     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema
      * @return DSEL ELNode ready to serve for DSEL interpreter
      */
     public ELNode convert(final String tqlQuery, Map<String, String> fieldToType) throws TqlException {
@@ -29,7 +30,8 @@ public class DSELConverter {
      * Utility method to convert a TQL query to a DSEL query.
      *
      * @param tqlQuery TQL query
-     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema
      * @return DSEL ELNode ready to serve for DSEL interpreter
      */
     public static ELNode convert(final Expression tqlQuery, Map<String, String> fieldToType) throws TqlException {
