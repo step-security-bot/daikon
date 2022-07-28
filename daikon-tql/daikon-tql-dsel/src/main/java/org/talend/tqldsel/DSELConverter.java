@@ -17,21 +17,31 @@ public class DSELConverter {
      * Utility method to convert a TQL tqlQuery to a DSEL tqlQuery.
      *
      * @param tqlQuery TQL tqlQuery as String
-     * @param fieldToType the mapping to get the type for each field
-     * @return DSEL ELNode ready to serve for DSEL intepreter
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
+     * @return DSEL ELNode ready to serve for DSEL interpreter
      */
-    public ELNode convert(String tqlQuery, Map<String, String> fieldToType) throws TqlException {
-        DSELVisitor visitor = new DSELVisitor(fieldToType);
-        Expression exp = Tql.parse(tqlQuery);
-        ELNode raw = exp.accept(visitor);
+    public ELNode convert(final String tqlQuery, Map<String, String> fieldToType) throws TqlException {
+        final Expression tqlExpression = Tql.parse(tqlQuery);
+        return convert(tqlExpression, fieldToType);
+    }
 
+    /**
+     * Utility method to convert a TQL query to a DSEL query.
+     *
+     * @param tqlQuery TQL query
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
+     * @return DSEL ELNode ready to serve for DSEL interpreter
+     */
+    public static ELNode convert(final Expression tqlQuery, Map<String, String> fieldToType) throws TqlException {
+        DSELVisitor visitor = new DSELVisitor(fieldToType);
+        final ELNode raw = tqlQuery.accept(visitor);
         return wrapNode(raw);
     }
 
     /**
-     * Wraps an ELNode inside an ELNodeType.ROOT node
-     * (mendatory for interpreting)
-     * 
+     * Wraps an ELNode inside an {@link ELNodeType#ROOT} node
+     * (mandatory for interpreting)
+     *
      * @param node ELNode to be wrapped
      * @return ELNode wrapped
      */
@@ -46,8 +56,8 @@ public class DSELConverter {
 
     /**
      * Utility class to print the ELNode as a tree
-     * 
-     * @param tree
+     *
+     * @param tree ELNode to print
      */
     public static void printELNode(ELNode tree) {
         Logger LOGGER = LoggerFactory.getLogger(DSELVisitor.class);

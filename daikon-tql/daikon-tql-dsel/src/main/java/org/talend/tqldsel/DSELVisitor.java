@@ -23,7 +23,7 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
 
     /**
      *
-     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight representation of the schema
      */
     public DSELVisitor(Map<String, String> fieldToType) {
         this.fieldToType = fieldToType;
