@@ -1,19 +1,30 @@
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tqldsel.DSELConverter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DSELVisitorOrAndTest {
 
+
+    static Map<String, String> fieldToType;
+
+    @BeforeAll
+    static void setUp() {
+        final HashMap<String, String> ftot = new HashMap<>();
+        ftot.put("name", "STRING");
+        ftot.put("total", "INTEGER");
+        fieldToType = Collections.unmodifiableMap(ftot);
+    }
+
     @Test
     public void testParseSingleAnd() {
         final String query = "field1=123 and field2<124";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst = new ArrayList<ELNode>();
         lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
@@ -27,7 +38,7 @@ public class DSELVisitorOrAndTest {
     @Test
     public void testParseDoubleAnd() {
         final String query = "field1=123 and field2<124 and field3>125";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst = new ArrayList<ELNode>();
         lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
@@ -42,7 +53,7 @@ public class DSELVisitorOrAndTest {
     @Test
     public void testParseSingleOr() {
         final String query = "field1=123 or field2<124";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst = new ArrayList<ELNode>();
         lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
@@ -56,7 +67,7 @@ public class DSELVisitorOrAndTest {
     @Test
     public void testParseDoubleOr() {
         final String query = "field1=123 or field2<124 or field3>125";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst = new ArrayList<ELNode>();
         lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
@@ -71,7 +82,7 @@ public class DSELVisitorOrAndTest {
     @Test
     public void testParseAndOr() {
         final String query = "field1=123 and field2<124 or field3>125 and field4<=126";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst1 = new ArrayList<ELNode>();
         List<ELNode> lst2 = new ArrayList<ELNode>();

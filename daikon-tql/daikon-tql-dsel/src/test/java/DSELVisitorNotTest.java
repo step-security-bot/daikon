@@ -1,19 +1,29 @@
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tqldsel.DSELConverter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DSELVisitorNotTest {
 
+    static Map<String, String> fieldToType;
+
+    @BeforeAll
+    static void setUp() {
+        final HashMap<String, String> ftot = new HashMap<>();
+        ftot.put("name", "STRING");
+        ftot.put("total", "INTEGER");
+        fieldToType = Collections.unmodifiableMap(ftot);
+    }
+
     @Test
     public void testParseSingleNot() {
         final String query = "not (field1=123 and field2<124)";
-        ELNode actual = DSELConverter.convert(query);
+        ELNode actual = new DSELConverter().convert(query, fieldToType);
 
         List<ELNode> lst = new ArrayList<ELNode>();
         lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));

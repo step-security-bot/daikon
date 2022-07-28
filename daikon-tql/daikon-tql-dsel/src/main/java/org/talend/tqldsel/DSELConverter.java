@@ -8,9 +8,10 @@ import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
 
-public class DSELConverter {
+import java.util.HashMap;
+import java.util.Map;
 
-    private static DSELVisitor visitor = new DSELVisitor();
+public class DSELConverter {
 
     /**
      * Utility method to convert a TQL query to a DSEL query.
@@ -18,7 +19,8 @@ public class DSELConverter {
      * @param query TQL query as String
      * @return DSEL ELNode ready to serve for DSEL intepreter
      */
-    public static ELNode convert(String query) throws TqlException {
+    public ELNode convert(String query, Map<String, String> fieldToType) throws TqlException {
+        DSELVisitor visitor = new DSELVisitor(fieldToType);
         Expression exp = Tql.parse(query);
         ELNode raw = exp.accept(visitor);
 
