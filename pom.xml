@@ -79,7 +79,7 @@
         <s3mock.version>0.1.6</s3mock.version>
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <slf4j.version>1.7.26</slf4j.version>
-        <spring-boot.version>2.6.9</spring-boot.version>
+        <spring-boot.version>2.6.10</spring-boot.version>
         <spring-cloud-aws.version>2.3.2</spring-cloud-aws.version>
         <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
         <spring-cloud-zuul.version>2.2.10.RELEASE</spring-cloud-zuul.version>
