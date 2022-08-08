@@ -1,0 +1,10 @@
+= Daikon Release Notes (6.8.7) - 08/08/2022
+
+Thanks to @Mark Butko, @Gabriel Marquet, @msjian
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-18739[TPSVC-18739]: Replace oidc-client with daikon-spring-auth in IAM services (link:https://github.com/Talend/daikon/pull/878[#878])
+- link:https://jira.talendforge.org/browse/TDQ-20569[TDQ-20569]: migrate CipherSources.blowfish() from Daikon to DQ lib (link:https://github.com/Talend/daikon/pull/874[#874])
+
+== Other
+- Bump spring-boot.version to 2.6.10  (link:https://github.com/Talend/daikon/pull/877[#877])
