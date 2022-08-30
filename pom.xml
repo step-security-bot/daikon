@@ -70,6 +70,7 @@
         <mockito-core.version>4.4.0</mockito-core.version>
         <mongo-java-server.version>1.11.1</mongo-java-server.version>
         <nimbusds.version>9.37.2</nimbusds.version>
+        <nimbus-jose-jwt.version>9.22</nimbus-jose-jwt.version>
         <okhttp.version>4.10.0-RC1</okhttp.version>
         <openfeign.version>10.6.0</openfeign.version>
         <pax-url-aether.version>2.6.11</pax-url-aether.version>
@@ -193,6 +194,12 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito-core.version}</version>
+            </dependency>
+            <!-- override required for CVE fix, remove when we migrate to SB 2.7.x -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.skyscreamer</groupId>
