@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.talend.daikon</groupId>
     <artifactId>daikon-parent</artifactId>
-    <version>6.8.5-SNAPSHOT</version>
+    <version>6.8.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Daikon - parent pom</name>
     <url>https://github.com/Talend/daikon</url>
@@ -70,6 +70,7 @@
         <mockito-core.version>4.4.0</mockito-core.version>
         <mongo-java-server.version>1.11.1</mongo-java-server.version>
         <nimbusds.version>9.37.2</nimbusds.version>
+        <nimbus-jose-jwt.version>9.22</nimbus-jose-jwt.version>
         <okhttp.version>4.10.0-RC1</okhttp.version>
         <openfeign.version>10.6.0</openfeign.version>
         <pax-url-aether.version>2.6.11</pax-url-aether.version>
@@ -79,7 +80,7 @@
         <s3mock.version>0.1.6</s3mock.version>
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <slf4j.version>1.7.26</slf4j.version>
-        <spring-boot.version>2.6.9</spring-boot.version>
+        <spring-boot.version>2.6.10</spring-boot.version>
         <spring-cloud-aws.version>2.3.2</spring-cloud-aws.version>
         <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
         <spring-cloud-zuul.version>2.2.10.RELEASE</spring-cloud-zuul.version>
@@ -193,6 +194,12 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito-core.version}</version>
+            </dependency>
+            <!-- override required for CVE fix, remove when we migrate to SB 2.7.x -->
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.skyscreamer</groupId>

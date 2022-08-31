@@ -23,6 +23,9 @@ public class TalendBearerTokenAuthenticationEntryPoint implements Authentication
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public TalendBearerTokenAuthenticationEntryPoint(HandlerExceptionResolver handlerExceptionResolver) {
+        if (null == handlerExceptionResolver) {
+            LOGGER.warn("HandlerExceptionResolver is `null`, exceptions won't be handled properly"); // may happen in unit tests
+        }
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
