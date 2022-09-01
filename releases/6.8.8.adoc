@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.8) - 08/30/2022
+
+Thanks to @Colm O hEigeartaigh
+
+== Other
+- Overriding Nimbus version to fix CVE  (link:https://github.com/Talend/daikon/pull/881[#881])
