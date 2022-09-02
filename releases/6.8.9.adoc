@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.9) - 09/02/2022
+
+Thanks to @Antoine Nicolas
+
+== Other
+- Force nimbus-jose-jwt version because of CVEs  (link:https://github.com/Talend/daikon/pull/883[#883])
