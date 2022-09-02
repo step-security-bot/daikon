@@ -1072,4 +1072,9 @@ public class AmazonS3TestWrapper implements AmazonS3 {
         return delegate.upload(presignedUrlUploadRequest);
     }
 
+    @Override
+    public WriteGetObjectResponseResult writeGetObjectResponse(WriteGetObjectResponseRequest request) {
+        return delegate.writeGetObjectResponse(request);
+    }
+
 }
