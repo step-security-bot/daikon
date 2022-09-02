@@ -14,7 +14,7 @@ spec:
     - talend-registry
   containers:
     - name: veracode
-      image: artifactory.datapwn.com/tlnd-docker-prod/talend/common/tsbi/jdk8-svc-springboot-builder:2.9.21-2.3-20220210134026
+      image: artifactory.datapwn.com/tlnd-docker-prod/talend/common/tsbi/jdk8-svc-springboot-builder:3.0.4-20220729121854
       command:
       - cat
       tty: true
