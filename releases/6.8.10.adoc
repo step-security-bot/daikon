@@ -1,0 +1,14 @@
+= Daikon Release Notes (6.8.10) - 09/06/2022
+
+Thanks to @Axel MAUMONT, @Fabien Way, @Colm O hEigeartaigh
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDP-10867[TDP-10867]: [RunConv] Use filters with advanced criteria (validity or invalidity) (link:https://github.com/Talend/daikon/pull/882[#882])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-11256[TDP-11256]: [RunConv][Back] DSEL->TQL convertor (utility class) (link:https://github.com/Talend/daikon/pull/879[#879])
+
+== Other
+- Bump Spring Cloud AWS to 2.4.2 to fix CVE-2022-31159 (#880) (link:https://github.com/Talend/daikon/pull/880[#880])
+- Fixing Docker image for sourceclear  (link:https://github.com/Talend/daikon/pull/885[#885])
+- Switch to TSBI3 for Jenkins + maven 3.8.6  (link:https://github.com/Talend/daikon/pull/884[#884])
