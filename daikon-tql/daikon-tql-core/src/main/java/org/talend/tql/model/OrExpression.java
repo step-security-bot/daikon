@@ -30,6 +30,17 @@ public class OrExpression implements Expression {
     }
 
     @Override
+    public String toQueryString() {
+        StringBuilder sb = new StringBuilder();
+
+        Arrays.stream(expressions).limit(expressions.length - 1).map(expression -> expression.toQueryString() + " or ")
+                .forEach(sb::append);
+        Arrays.stream(expressions).skip(expressions.length - 1).map(TqlElement::toQueryString).forEach(sb::append);
+
+        return sb.toString();
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

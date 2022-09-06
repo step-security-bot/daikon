@@ -1,4 +1,8 @@
-package org.talend.tqldsel;
+package org.talend.tqldsel.tqltodsel;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,12 +11,31 @@ import org.talend.daikon.pattern.word.WordPatternToRegex;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
-import org.talend.tql.model.*;
+import org.talend.tql.model.AllFields;
+import org.talend.tql.model.AndExpression;
+import org.talend.tql.model.ComparisonExpression;
+import org.talend.tql.model.ComparisonOperator;
+import org.talend.tql.model.Expression;
+import org.talend.tql.model.FieldBetweenExpression;
+import org.talend.tql.model.FieldCompliesPattern;
+import org.talend.tql.model.FieldContainsExpression;
+import org.talend.tql.model.FieldInExpression;
+import org.talend.tql.model.FieldIsEmptyExpression;
+import org.talend.tql.model.FieldIsInvalidExpression;
+import org.talend.tql.model.FieldIsNullExpression;
+import org.talend.tql.model.FieldIsValidExpression;
+import org.talend.tql.model.FieldMatchesRegex;
+import org.talend.tql.model.FieldReference;
+import org.talend.tql.model.FieldWordCompliesPattern;
+import org.talend.tql.model.LiteralValue;
+import org.talend.tql.model.NotExpression;
+import org.talend.tql.model.OrExpression;
+import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
 
-public class DSELVisitor implements IASTVisitor<ELNode> {
+public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DSELVisitor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TqlToDselVisitor.class);
 
     @Override
     public ELNode visit(TqlElement elt) {
@@ -51,7 +74,7 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         case DECIMAL:
             return new ELNode(ELNodeType.DECIMAL_LITERAL, elt.getValue());
         case QUOTED_VALUE:
-            return new ELNode(ELNodeType.STRING_LITERAL, elt.getValue());
+            return new ELNode(ELNodeType.STRING_LITERAL, elt.toQueryString());
         default:
             throw new TqlException("Literal value type " + elt.getLiteral() + " not available in TQL");
         }
@@ -122,7 +145,15 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldInExpression elt) {
-        throw new TqlException("Needs implementation : visit(FieldInExpression elt)");
+        LOGGER.debug("Inside Visit FieldInExpression " + elt.toString());
+
+        List<ELNode> valueNodes = Arrays.stream(elt.getValues()).map(value -> value.accept(this)).collect(Collectors.toList());
+
+        ELNode inNode = new ELNode(ELNodeType.FUNCTION_CALL, "in");
+        inNode.addChild(elt.getField().accept(this));
+        inNode.addChildren(valueNodes);
+
+        return inNode;
     }
 
     @Override
@@ -130,7 +161,8 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit isEmpty " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode isEmptyNode = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        ELNode isEmptyNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.IsEmpty.NAME);
         isEmptyNode.addChild(ex.accept(this));
 
         return isEmptyNode;
@@ -151,7 +183,8 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit isNull " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode notNode = new ELNode(ELNodeType.FUNCTION_CALL, "isNull");
+        ELNode notNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.IsNull.NAME);
         notNode.addChild(ex.accept(this));
 
         return notNode;
@@ -162,9 +195,10 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit MatchesRegex " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
         regexNode.addChild(ex.accept(this));
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, elt.getRegex()));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getRegex() + "'"));
 
         return regexNode;
     }
@@ -174,10 +208,11 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit FieldCompliesPattern " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
         fieldCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
         final String regexp = CharPatternToRegex.toRegex(elt.getPattern());
-        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, regexp)); // Regexp
+        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + regexp + "'")); // Regexp
 
         return fieldCompliesNode;
     }
@@ -187,10 +222,11 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit FieldWordCompliesPattern " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
         fieldWordCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
         final String regexp = WordPatternToRegex.toRegex(elt.getPattern(), true);
-        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, regexp)); // regexp
+        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + regexp + "'")); // regexp
 
         return fieldWordCompliesNode;
     }
@@ -220,11 +256,12 @@ public class DSELVisitor implements IASTVisitor<ELNode> {
         if (ex == null || expressionValue == null) {
             throw new TqlException("DSEL \"Contains\" expression should have two arguments");
         } else {
-            ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
+            ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                    org.talend.maplang.el.interpreter.impl.function.builtin.Contains.NAME);
             containsNode.addChild(ex.accept(this));
-            containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, expressionValue));
-            if (elt.isCaseSensitive()) {
-                containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
+            containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + expressionValue + "'"));
+            if (!elt.isCaseSensitive()) {
+                containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
             }
             return containsNode;
         }

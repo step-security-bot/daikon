@@ -37,6 +37,16 @@ public class FieldInExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        StringBuilder sb = new StringBuilder();
+
+        Arrays.stream(values).limit(values.length - 1).map(expression -> expression.toQueryString() + ", ").forEach(sb::append);
+        Arrays.stream(values).skip(values.length - 1).map(TqlElement::toQueryString).forEach(sb::append);
+
+        return field.toQueryString() + " in [" + sb + "]";
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

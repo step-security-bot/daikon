@@ -29,4 +29,9 @@ public class AllFields implements TqlElement {
     public String toString() {
         return "AllFields{}";
     }
+
+    @Override
+    public String toQueryString() {
+        return "*";
+    }
 }

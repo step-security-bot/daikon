@@ -9,8 +9,9 @@ import org.talend.tql.visitor.IASTVisitor;
 /**
  * Created by gmzoughi on 23/06/16.
  */
-@FunctionalInterface
 public interface TqlElement {
 
     <T> T accept(IASTVisitor<T> visitor);
+
+    String toQueryString();
 }

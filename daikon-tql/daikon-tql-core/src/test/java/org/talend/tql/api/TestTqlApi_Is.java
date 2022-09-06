@@ -3,6 +3,7 @@ package org.talend.tql.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.talend.tql.api.TqlBuilder.isEmpty;
 import static org.talend.tql.api.TqlBuilder.isInvalid;
+import static org.talend.tql.api.TqlBuilder.isNull;
 import static org.talend.tql.api.TqlBuilder.isValid;
 
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,15 @@ public class TestTqlApi_Is extends TestTqlParser_Abstract {
         TqlElement expected = doTest("field1 is invalid");
         // TQL api query
         TqlElement tqlElement = isInvalid("field1");
+        assertEquals(expected.toString(), tqlElement.toString());
+    }
+
+    @Test
+    public void testApiIsNull() throws Exception {
+        // TQL native query
+        TqlElement expected = doTest("field1 is null");
+        // TQL api query
+        TqlElement tqlElement = isNull("field1");
         assertEquals(expected.toString(), tqlElement.toString());
     }
 

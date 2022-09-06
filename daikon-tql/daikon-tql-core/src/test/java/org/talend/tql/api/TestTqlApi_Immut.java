@@ -7,6 +7,7 @@ import static org.talend.tql.api.TqlBuilder.eq;
 import static org.talend.tql.api.TqlBuilder.eqFields;
 import static org.talend.tql.api.TqlBuilder.gt;
 import static org.talend.tql.api.TqlBuilder.lt;
+import static org.talend.tql.api.TqlBuilder.lte;
 import static org.talend.tql.api.TqlBuilder.not;
 import static org.talend.tql.api.TqlBuilder.or;
 
@@ -20,7 +21,7 @@ import org.talend.tql.model.Expression;
 public class TestTqlApi_Immut extends TestTqlParser_Abstract {
 
     @Test
-    public void testApiImmut1() throws Exception {
+    public void testApiImmut1() {
         // TQL
         Expression tqlExpr1 = eqFields("f1", "1");
         String tql1Str = tqlExpr1.toString();
@@ -35,12 +36,11 @@ public class TestTqlApi_Immut extends TestTqlParser_Abstract {
     }
 
     @Test
-    public void testApiImmut2() throws Exception {
+    public void testApiImmut2() {
         // TQL
         Expression tqlExpr1 = or(eqFields("f1", "1"), eqFields("f2", "2"), and(lt("f3", 3), gt("f4", 4.02)));
         String tql1Str = tqlExpr1.toString();
-        Expression tqlExpr2 = and(eq("f1", true), eqFields("f2", "2"),
-                and(between("f3", 3.4586, 7.45), TqlBuilder.lte("f4", 12)));
+        Expression tqlExpr2 = and(eq("f1", true), eqFields("f2", "2"), and(between("f3", 3.4586, 7.45), lte("f4", 12)));
         String tql2Str = tqlExpr2.toString();
         or(tqlExpr1, tqlExpr2);
         and(tqlExpr1, tqlExpr2);

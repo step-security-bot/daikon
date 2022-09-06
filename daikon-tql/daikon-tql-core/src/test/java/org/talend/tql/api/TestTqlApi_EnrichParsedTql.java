@@ -5,6 +5,8 @@ import static org.talend.tql.api.TqlBuilder.and;
 import static org.talend.tql.api.TqlBuilder.between;
 import static org.talend.tql.api.TqlBuilder.eq;
 import static org.talend.tql.api.TqlBuilder.isEmpty;
+import static org.talend.tql.api.TqlBuilder.isInvalid;
+import static org.talend.tql.api.TqlBuilder.isNull;
 import static org.talend.tql.api.TqlBuilder.isValid;
 import static org.talend.tql.api.TqlBuilder.or;
 
@@ -74,4 +76,15 @@ public class TestTqlApi_EnrichParsedTql extends TestTqlParser_Abstract {
         assertEquals(expected.toString(), tqlElement.toString());
     }
 
+    @Test
+    public void testApiEnrich6() throws Exception {
+        // Expected TQL
+        TqlElement expected = doTest(
+                "((f1=1 and (f2=2 or f2=22)) or f3=3) and (f3 between [1.2, 9.45] or (f4 is valid and f5 is empty) or (f4 is invalid and f5 is null))");
+        // TQL
+        TqlElement tqlExpr1 = doTest("(f1=1 and (f2=2 or f2=22)) or f3=3");
+        Expression tqlExpr2 = or(between("f3", 1.2, 9.45), and(isValid("f4"), isEmpty("f5")), and(isInvalid("f4"), isNull("f5")));
+        Expression tqlElement = and((Expression) tqlExpr1, tqlExpr2);
+        assertEquals(expected.toString(), tqlElement.toString());
+    }
 }

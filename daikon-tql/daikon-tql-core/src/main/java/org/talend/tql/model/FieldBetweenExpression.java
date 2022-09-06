@@ -58,6 +58,12 @@ public class FieldBetweenExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return field.toQueryString() + " between " + (isLowerOpen ? "]" : "[") + left.toQueryString() + ", "
+                + right.toQueryString() + (isUpperOpen ? "[" : "]");
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

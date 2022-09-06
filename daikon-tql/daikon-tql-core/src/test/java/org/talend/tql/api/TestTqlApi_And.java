@@ -49,9 +49,8 @@ public class TestTqlApi_And extends TestTqlParser_Abstract {
         TqlElement expected = doTest(
                 "field1=field(value1) and field2=field(value2) and field3=field(value3) and field4=field(value4) and field5=field(value5)");
         // TQL api query
-        TqlElement tqlElement = and(eqFields("field1", "value1"), //
-                eqFields("field2", "value2"), //
-                eqFields("field3", "value3"), eqFields("field4", "value4"), eqFields("field5", "value5"));
+        TqlElement tqlElement = and(eqFields("field1", "value1"), eqFields("field2", "value2"), eqFields("field3", "value3"),
+                eqFields("field4", "value4"), eqFields("field5", "value5"));
         assertEquals(expected.toString(), tqlElement.toString());
     }
 

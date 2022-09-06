@@ -35,6 +35,11 @@ public class LiteralValue implements TqlElement {
     }
 
     @Override
+    public String toQueryString() {
+        return literal.equals(Enum.QUOTED_VALUE) ? "'" + value + "'" : value;
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

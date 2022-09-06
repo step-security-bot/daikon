@@ -28,6 +28,11 @@ public class FieldReference implements TqlElement {
     }
 
     @Override
+    public String toQueryString() {
+        return path;
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

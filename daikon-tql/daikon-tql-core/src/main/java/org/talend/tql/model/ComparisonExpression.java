@@ -42,6 +42,11 @@ public class ComparisonExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return field.toQueryString() + " " + operator.toQueryString() + " " + valueOrField.toQueryString();
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

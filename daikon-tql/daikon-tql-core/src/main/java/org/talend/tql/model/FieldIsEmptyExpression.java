@@ -28,6 +28,11 @@ public class FieldIsEmptyExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return field.toQueryString() + " is empty";
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

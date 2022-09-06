@@ -49,6 +49,11 @@ public class FieldContainsExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return field.toQueryString() + (caseSensitive ? " contains " : " containsIgnoreCase ") + value;
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

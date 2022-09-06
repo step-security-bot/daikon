@@ -24,6 +24,11 @@ public class FieldIsValidExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return field.toQueryString() + " is valid";
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

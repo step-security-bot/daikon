@@ -28,6 +28,12 @@ public class NotExpression implements Atom {
     }
 
     @Override
+    public String toQueryString() {
+        return "not (" + expression.toQueryString() + ")";
+
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }

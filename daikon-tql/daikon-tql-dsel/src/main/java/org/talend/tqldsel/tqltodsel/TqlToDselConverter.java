@@ -1,16 +1,17 @@
-package org.talend.tqldsel;
+package org.talend.tqldsel.tqltodsel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.maplang.el.parser.model.ELNode;
+import org.talend.maplang.el.parser.model.ELNodePrinter;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
 
-public class DSELConverter {
+public class TqlToDselConverter {
 
-    private static final DSELVisitor visitor = new DSELVisitor();
+    private static final TqlToDselVisitor visitor = new TqlToDselVisitor();
 
     /**
      * Utility method to convert a TQL query to a DSEL query.
@@ -53,15 +54,12 @@ public class DSELConverter {
     /**
      * Utility class to print the ELNode as a tree
      *
-     * @param tree ELNode to print
+     * @param elNode ELNode to print
      */
-    public static void printELNode(ELNode tree) {
-        Logger LOGGER = LoggerFactory.getLogger(DSELVisitor.class);
+    public static void printELNode(ELNode elNode) {
+        Logger LOGGER = LoggerFactory.getLogger(TqlToDselConverter.class);
 
         final String TEST_TAB = "-";
-
-        StringBuilder buf = new StringBuilder();
-        tree.exportAsReadableString(buf, TEST_TAB, false);
-        LOGGER.debug(buf.toString());
+        LOGGER.debug(new ELNodePrinter(TEST_TAB, false).printAsTree(elNode));
     }
 }

@@ -26,6 +26,11 @@ public class FieldMatchesRegex implements Atom {
         return "FieldMatchesRegex{" + "field='" + field + '\'' + ", regex='" + regex + '\'' + '}';
     }
 
+    @Override
+    public String toQueryString() {
+        return field.toQueryString() + " ~ " + regex;
+    }
+
     public TqlElement getField() {
         return field;
     }

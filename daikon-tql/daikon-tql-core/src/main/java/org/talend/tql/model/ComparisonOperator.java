@@ -28,6 +28,28 @@ public class ComparisonOperator implements TqlElement {
     }
 
     @Override
+    public String toQueryString() {
+        switch (operator) {
+        case EQ:
+            return "=";
+        case LT:
+            return "<";
+        case GT:
+            return ">";
+        case NEQ:
+            return "!=";
+        case LET:
+            return "<=";
+        case GET:
+            return ">=";
+        case NOT:
+            return "!";
+        default:
+            throw new RuntimeException("Unknown comparison operator");
+        }
+    }
+
+    @Override
     public <T> T accept(IASTVisitor<T> visitor) {
         return visitor.visit(this);
     }
@@ -44,6 +66,7 @@ public class ComparisonOperator implements TqlElement {
         GT,
         NEQ,
         LET,
-        GET
+        GET,
+        NOT
     }
 }

@@ -7,8 +7,10 @@ import static org.talend.tql.api.TqlBuilder.eq;
 import static org.talend.tql.api.TqlBuilder.in;
 import static org.talend.tql.api.TqlBuilder.isEmpty;
 import static org.talend.tql.api.TqlBuilder.isInvalid;
+import static org.talend.tql.api.TqlBuilder.isNull;
 import static org.talend.tql.api.TqlBuilder.isValid;
 import static org.talend.tql.api.TqlBuilder.neqFields;
+import static org.talend.tql.api.TqlBuilder.not;
 import static org.talend.tql.api.TqlBuilder.or;
 
 import org.junit.jupiter.api.Test;
@@ -88,7 +90,7 @@ public class TestTqlApi_Complex extends TestTqlParser_Abstract {
     @Test
     public void testApiComplex6() throws Exception {
         // TQL native query
-        TqlElement expected = doTest("f1 is empty and (f2 is empty or f3 is invalid");
+        TqlElement expected = doTest("f1 is empty and (f2 is empty or f3 is invalid)");
         // TQL api query
         TqlElement tqlElement = and(isEmpty("f1"), or(isEmpty("f2"), isInvalid("f3")));
         assertEquals(expected.toString(), tqlElement.toString());
@@ -97,7 +99,7 @@ public class TestTqlApi_Complex extends TestTqlParser_Abstract {
     @Test
     public void testApiComplex7() throws Exception {
         // TQL native query
-        TqlElement expected = doTest("(f1 is empty or f2 is invalid) and (f3 is empty or f4 is valid");
+        TqlElement expected = doTest("(f1 is empty or f2 is invalid) and (f3 is empty or f4 is valid)");
         // TQL api query
         TqlElement tqlElement = and(or(isEmpty("f1"), isInvalid("f2")), or(isEmpty("f3"), isValid("f4")));
         assertEquals(expected.toString(), tqlElement.toString());
@@ -137,10 +139,22 @@ public class TestTqlApi_Complex extends TestTqlParser_Abstract {
     public void testApiComplex11() throws Exception {
         // TQL native query
         TqlElement expected = doTest(
-                "f1 is empty and (f2 is empty or (f3 is empty and (f4 is valid or (f5 is invalid and f6 between [1,2])))");
+                "f1 is empty and (f2 is empty or (f3 is empty and (f4 is valid or (f5 is invalid and f6 between [1,2]))))");
         // TQL api query
         TqlElement tqlElement = and(isEmpty("f1"),
                 or(isEmpty("f2"), and(isEmpty("f3"), or(isValid("f4"), and(isInvalid("f5"), between("f6", 1, 2))))));
+        assertEquals(expected.toString(), tqlElement.toString());
+    }
+
+    @Test
+    public void testApiComplex12() throws Exception {
+        // TQL native query
+        TqlElement expected = doTest(
+                "f1 is empty and f2 is null and (f3 is empty or (f4 is empty and (f5 is valid or (f6 is invalid and f7 between [1,2])))) and not(f8 is null)");
+        // TQL api query
+        TqlElement tqlElement = and(isEmpty("f1"), isNull("f2"),
+                or(isEmpty("f3"), and(isEmpty("f4"), or(isValid("f5"), and(isInvalid("f6"), between("f7", 1, 2))))),
+                not(isNull("f8")));
         assertEquals(expected.toString(), tqlElement.toString());
     }
 

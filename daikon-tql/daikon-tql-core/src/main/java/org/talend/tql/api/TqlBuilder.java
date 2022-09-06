@@ -17,6 +17,7 @@ import org.talend.tql.model.FieldContainsExpression;
 import org.talend.tql.model.FieldInExpression;
 import org.talend.tql.model.FieldIsEmptyExpression;
 import org.talend.tql.model.FieldIsInvalidExpression;
+import org.talend.tql.model.FieldIsNullExpression;
 import org.talend.tql.model.FieldIsValidExpression;
 import org.talend.tql.model.FieldMatchesRegex;
 import org.talend.tql.model.FieldReference;
@@ -453,6 +454,24 @@ public class TqlBuilder {
 
         // Adding it to a new AST
         AndExpression andExpression = new AndExpression(fieldIsValidExpressions);
+        return new OrExpression(andExpression);
+
+    }
+
+    /**
+     * Build a "is null" TQL expression
+     *
+     * @param fieldname field
+     * @return TQL Expression
+     */
+    public static Expression isNull(String fieldname) {
+
+        // Creating simple isNull expression
+        FieldIsNullExpression fieldIsNullExpression = new FieldIsNullExpression(new FieldReference(fieldname));
+        Expression[] fieldIsNullExpressions = new Expression[] { fieldIsNullExpression };
+
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(fieldIsNullExpressions);
         return new OrExpression(andExpression);
 
     }
