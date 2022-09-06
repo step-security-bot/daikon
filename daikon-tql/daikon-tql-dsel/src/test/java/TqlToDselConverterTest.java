@@ -1,17 +1,29 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.talend.tqldsel.tqltodsel.TqlToDselConverter.wrapNode;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
+import org.talend.tql.model.Expression;
+import org.talend.tql.parser.Tql;
 import org.talend.tqldsel.tqltodsel.TqlToDselConverter;
 
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.talend.tqldsel.tqltodsel.TqlToDselConverter.wrapNode;
+
 public class TqlToDselConverterTest {
+
+    static Map<String, String> fieldToType;
+
+    @BeforeAll
+    static void setUp() {
+        final HashMap<String, String> fToType = new HashMap<>();
+        fToType.put("name", "STRING");
+        fToType.put("total", "INTEGER");
+        fieldToType = Collections.unmodifiableMap(fToType);
+    }
 
     @Test
     public void testParseSingleNot() {
@@ -26,7 +38,17 @@ public class TqlToDselConverterTest {
         ELNode notNode = new ELNode(ELNodeType.NOT, "!");
         notNode.addChild(andNode);
 
-        assertEquals(TqlToDselConverter.wrapNode(notNode), actual);
+        assertEquals(wrapNode(notNode), actual);
+    }
+
+    @Test
+    public void testParseIsNullWithTqlExpression() {
+        final String tqlQuery = "field1 is null";
+        final Expression tqlExpression = Tql.parse(tqlQuery);
+        ELNode actual = TqlToDselConverter.convert(tqlExpression);
+        ELNode nullNode = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "field1", null);
+
+        assertEquals(wrapNode(nullNode), actual);
     }
 
     @Test
@@ -169,7 +191,7 @@ public class TqlToDselConverterTest {
         ELNode andNode = new ELNode(ELNodeType.AND, "&&");
         andNode.addChildren(lst);
 
-        assertEquals(TqlToDselConverter.wrapNode(andNode), actual);
+        assertEquals(wrapNode(andNode), actual);
     }
 
     @Test
@@ -184,7 +206,7 @@ public class TqlToDselConverterTest {
         ELNode andNode = new ELNode(ELNodeType.AND, "&&");
         andNode.addChildren(lst);
 
-        assertEquals(TqlToDselConverter.wrapNode(andNode), actual);
+        assertEquals(wrapNode(andNode), actual);
     }
 
     @Test
@@ -198,7 +220,7 @@ public class TqlToDselConverterTest {
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
         orNode.addChildren(lst);
 
-        assertEquals(TqlToDselConverter.wrapNode(orNode), actual);
+        assertEquals(wrapNode(orNode), actual);
     }
 
     @Test
@@ -213,7 +235,7 @@ public class TqlToDselConverterTest {
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
         orNode.addChildren(lst);
 
-        assertEquals(TqlToDselConverter.wrapNode(orNode), actual);
+        assertEquals(wrapNode(orNode), actual);
     }
 
     @Test
@@ -235,7 +257,7 @@ public class TqlToDselConverterTest {
         orNode.addChild(andNode1);
         orNode.addChild(andNode2);
 
-        assertEquals(TqlToDselConverter.wrapNode(orNode), actual);
+        assertEquals(wrapNode(orNode), actual);
     }
 
     @Test
@@ -306,7 +328,7 @@ public class TqlToDselConverterTest {
         inNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "99"));
         inNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "2"));
 
-        assertEquals(TqlToDselConverter.wrapNode(inNode), actual);
+        assertEquals(wrapNode(inNode), actual);
     }
 
     @Test
@@ -319,7 +341,7 @@ public class TqlToDselConverterTest {
         inNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value1'"));
         inNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value2'"));
 
-        assertEquals(TqlToDselConverter.wrapNode(inNode), actual);
+        assertEquals(wrapNode(inNode), actual);
     }
 
     @Test
@@ -334,7 +356,59 @@ public class TqlToDselConverterTest {
         inNode.addChild(new ELNode(ELNodeType.DOUBLE_LITERAL, "99.20"));
         inNode.addChild(new ELNode(ELNodeType.DOUBLE_LITERAL, "252.0"));
 
-        assertEquals(TqlToDselConverter.wrapNode(inNode).toString(), actual.toString());
+        assertEquals(wrapNode(inNode).toString(), actual.toString());
+    }
+
+    @Test
+    public void testParseIsValidWithTqlExpression() {
+        final String tqlQuery = "name is valid";
+        final Expression tqlExpression = Tql.parse(tqlQuery);
+        ELNode actual = TqlToDselConverter.convert(tqlExpression, fieldToType);
+
+        ELNode isValidNode = new ELNode(ELNodeType.FUNCTION_CALL, "isValid");
+        isValidNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "STRING"));
+
+        assertEquals(wrapNode(isValidNode), actual);
+    }
+
+    @Test
+    public void testParseIsValid() {
+        final String tqlQuery = "name is valid";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery, fieldToType);
+
+        ELNode isValidNode = new ELNode(ELNodeType.FUNCTION_CALL, "isValid");
+        isValidNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "STRING"));
+
+        assertEquals(wrapNode(isValidNode), actual);
+    }
+
+    @Test
+    public void testParseIsValidWithExpectedException() {
+        final String tqlQuery = "unknown is valid";
+
+        Exception exception = assertThrows(TqlException.class, () -> TqlToDselConverter.convert(tqlQuery, fieldToType));
+        assertEquals("Cannot find the type of the field 'unknown'", exception.getMessage());
+    }
+
+    @Test
+    public void testParseIsInvalid() {
+        final String tqlQuery = "name is invalid";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery, fieldToType);
+
+        ELNode isValidNode = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
+        isValidNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "STRING"));
+
+        assertEquals(wrapNode(isValidNode), actual);
+    }
+
+    @Test
+    public void testParseIsInvalidWithExpectedException() {
+        final String tqlQuery = "unknown is invalid";
+        Exception exception = assertThrows(TqlException.class, () -> TqlToDselConverter.convert(tqlQuery, fieldToType));
+        assertEquals("Cannot find the 'type' of the field 'unknown'", exception.getMessage());
     }
 
     private ELNode buildNode(ELNodeType type, String image, String name, String value) {

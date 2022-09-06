@@ -9,19 +9,47 @@ import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class TqlToDselConverter {
 
-    private static final TqlToDselVisitor visitor = new TqlToDselVisitor();
+    /**
+     * Utility method to convert a TQL tqlQuery to a DSEL tqlQuery.
+     *
+     * @param tqlQuery TQL tqlQuery as String
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema. <b>Required</b> for expressions containing: <code>isValid(...)</code>,
+     * <code>isInvalid(...)</code>
+     * @return DSEL ELNode ready to serve for DSEL interpreter
+     */
+    public static ELNode convert(final String tqlQuery, Map<String, String> fieldToType) throws TqlException {
+        final Expression tqlExpression = Tql.parse(tqlQuery);
+        return convert(tqlExpression, fieldToType);
+    }
 
     /**
      * Utility method to convert a TQL query to a DSEL query.
      *
-     * @param tqlQuery TQL query as String
+     * @param tqlQuery TQL query
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema
+     * @return DSEL ELNode ready to serve for DSEL interpreter
+     */
+    public static ELNode convert(final Expression tqlQuery, Map<String, String> fieldToType) throws TqlException {
+        TqlToDselVisitor visitor = new TqlToDselVisitor(fieldToType);
+        final ELNode raw = tqlQuery.accept(visitor);
+        return wrapNode(raw);
+    }
+
+    /**
+     * Utility method to convert a TQL query to a DSEL query.
+     *
+     * @param tqlQuery TQL query
      * @return DSEL ELNode ready to serve for DSEL interpreter
      */
     public static ELNode convert(final String tqlQuery) throws TqlException {
-        final Expression tqlExpression = Tql.parse(tqlQuery);
-        return convert(tqlExpression);
+        return convert(tqlQuery, Collections.emptyMap());
     }
 
     /**
@@ -31,8 +59,7 @@ public class TqlToDselConverter {
      * @return DSEL ELNode ready to serve for DSEL interpreter
      */
     public static ELNode convert(final Expression tqlQuery) throws TqlException {
-        final ELNode raw = tqlQuery.accept(visitor);
-        return wrapNode(raw);
+        return convert(tqlQuery, Collections.emptyMap());
     }
 
     /**

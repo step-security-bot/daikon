@@ -32,10 +32,25 @@ import org.talend.tql.model.NotExpression;
 import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
+import java.util.Map;
 
 public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TqlToDselVisitor.class);
+
+    /**
+     * Mapping from the field names to their corresponding type. Type can be a native type or a semantic type.
+     */
+    private final Map<String, String> fieldToType;
+
+    /**
+     *
+     * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
+     * representation of the schema
+     */
+    public TqlToDselVisitor(Map<String, String> fieldToType) {
+        this.fieldToType = fieldToType;
+    }
 
     @Override
     public ELNode visit(TqlElement elt) {
@@ -170,12 +185,36 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldIsValidExpression elt) {
-        throw new TqlException("Needs implementation : visit(FieldIsValidExpression elt)");
+        LOGGER.debug("Inside Visit IsValidExpression " + elt.toString());
+        final TqlElement ex = elt.getField();
+
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "isValid");
+        final ELNode node = ex.accept(this);
+        regexNode.addChild(node);
+        final String validFieldType = fieldToType.get(node.getImage());
+        if (validFieldType == null) {
+            throw new TqlException(String.format("Cannot find the type of the field '%s'", node.getImage()));
+        }
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, validFieldType));
+
+        return regexNode;
     }
 
     @Override
     public ELNode visit(FieldIsInvalidExpression elt) {
-        throw new TqlException("Needs implementation : visit(FieldIsInvalidExpression elt)");
+        LOGGER.debug("Inside Visit IsInvalidExpression " + elt.toString());
+        final TqlElement ex = elt.getField();
+
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
+        final ELNode node = ex.accept(this);
+        regexNode.addChild(node);
+        final String invalidFieldType = fieldToType.get(node.getImage());
+        if (invalidFieldType == null) {
+            throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
+        }
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, invalidFieldType));
+
+        return regexNode;
     }
 
     @Override
