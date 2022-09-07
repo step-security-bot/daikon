@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.11) - 09/07/2022
+
+Thanks to @Colm O hEigeartaigh
+
+== Other
+- Overriding Spring Cloud Context function to 3.2.6 to fix a CVE  (link:https://github.com/Talend/daikon/pull/886[#886])
