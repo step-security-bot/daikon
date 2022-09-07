@@ -83,6 +83,7 @@
         <spring-boot.version>2.6.10</spring-boot.version>
         <spring-cloud-aws.version>2.4.2</spring-cloud-aws.version>
         <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
+        <spring-cloud-function-context.version>3.2.6</spring-cloud-function-context.version>
         <spring-cloud-zuul.version>2.2.10.RELEASE</spring-cloud-zuul.version>
         <yaml.codegen.maven.plugin.version>0.0.6</yaml.codegen.maven.plugin.version>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
@@ -200,6 +201,12 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+            <!-- override required for CVE fix -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-function-context</artifactId>
+                <version>${spring-cloud-function-context.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.skyscreamer</groupId>
