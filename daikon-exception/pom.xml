@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.talend.daikon</groupId>
 		<artifactId>daikon-parent</artifactId>
-		<version>6.8.11-SNAPSHOT</version>
+		<version>6.8.11</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>daikon-exception</artifactId>
