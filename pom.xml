@@ -82,7 +82,7 @@
         <slf4j.version>1.7.26</slf4j.version>
         <spring-boot.version>2.6.10</spring-boot.version>
         <spring-cloud-aws.version>2.4.2</spring-cloud-aws.version>
-        <spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
         <spring-cloud-function-context.version>3.2.6</spring-cloud-function-context.version>
         <spring-cloud-zuul.version>2.2.10.RELEASE</spring-cloud-zuul.version>
         <yaml.codegen.maven.plugin.version>0.0.6</yaml.codegen.maven.plugin.version>
