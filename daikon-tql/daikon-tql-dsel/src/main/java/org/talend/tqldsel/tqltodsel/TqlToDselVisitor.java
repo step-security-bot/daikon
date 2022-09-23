@@ -272,7 +272,16 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldBetweenExpression elt) {
-        throw new TqlException("Needs implementation : visit(FieldBetweenExpression elt)");
+        LOGGER.debug("Inside Visit FieldBetweenExpression " + elt.toString());
+        final TqlElement ex = elt.getField();
+        ELNode fieldBetweenNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.Between.NAME);
+
+        fieldBetweenNode.addChild(ex.accept(this));
+        fieldBetweenNode.addChild(visit(elt.getLeft()));
+        fieldBetweenNode.addChild(visit(elt.getRight()));
+
+        return fieldBetweenNode;
     }
 
     @Override

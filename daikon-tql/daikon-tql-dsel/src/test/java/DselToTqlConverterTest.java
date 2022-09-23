@@ -288,7 +288,7 @@ public class DselToTqlConverterTest {
     }
 
     @Test
-    public void testParseBetweenForDoubleWithMix() {
+    public void testParseBetweenForDoubleWithMixAnnotations() {
         final String dselQuery = "between(field1, 9187.1892, 789d)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
         final TqlElement expectedTqlQuery = between("field1", 9187.1892, 789d);

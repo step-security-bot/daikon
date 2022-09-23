@@ -181,6 +181,58 @@ public class TqlToDselConverterTest {
     }
 
     @Test
+    public void testParseBetweenForString() {
+        final String tqlQuery = "field1 between ['value1', 'value4']";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery);
+
+        ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "between");
+        containsNode.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value1'"));
+        containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value4'"));
+
+        assertEquals(wrapNode(containsNode), actual);
+    }
+
+    @Test
+    public void testParseBetweenForInt() {
+        final String tqlQuery = "field1 between [2, 51]";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery);
+
+        ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "between");
+        containsNode.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        containsNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "2"));
+        containsNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "51"));
+
+        assertEquals(wrapNode(containsNode), actual);
+    }
+
+    @Test
+    public void testParseBetweenForDouble() {
+        final String tqlQuery = "field1 between [12.1822, 189.37]";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery);
+
+        ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "between");
+        containsNode.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        containsNode.addChild(new ELNode(ELNodeType.DOUBLE_LITERAL, "12.1822"));
+        containsNode.addChild(new ELNode(ELNodeType.DOUBLE_LITERAL, "189.37"));
+
+        assertEquals(wrapNode(containsNode).toString(), actual.toString());
+    }
+
+    @Test
+    public void testParseBetweenForMix() {
+        final String tqlQuery = "field1 between [3182, 4722.189]";
+        ELNode actual = TqlToDselConverter.convert(tqlQuery);
+
+        ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "between");
+        containsNode.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        containsNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "3182"));
+        containsNode.addChild(new ELNode(ELNodeType.DOUBLE_LITERAL, "4722.189"));
+
+        assertEquals(wrapNode(containsNode).toString(), actual.toString());
+    }
+
+    @Test
     public void testParseSingleAnd() {
         final String query = "field1=123 and field2<124";
         ELNode actual = TqlToDselConverter.convert(query);

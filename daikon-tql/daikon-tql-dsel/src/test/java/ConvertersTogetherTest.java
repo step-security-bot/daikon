@@ -122,8 +122,18 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseBetweenFunctionFailsBecauseNotImplemented() {
-        callConvertorsAndFailsWithTqlException("(field1 between ['value1', 'value2'])");
+    public void testParseBetweenFunctionForString() {
+        callConvertors("(field1 between ['value1', 'value2'])");
+    }
+
+    @Test
+    public void testParseBetweenFunctionForInt() {
+        callConvertors("(field1 between [3, 621])");
+    }
+
+    @Test
+    public void testParseBetweenFunctionForDouble() {
+        callConvertors("(field1 between [5.972, 991.27])");
     }
 
     @Test
