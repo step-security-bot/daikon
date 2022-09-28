@@ -71,7 +71,7 @@ public class ReactiveAuthenticationManagerFactory {
         if (StringUtils.hasText(oauth2Properties.getOpaquetoken().getIntrospectionUri())) {
             NimbusReactiveOpaqueTokenIntrospector nimbusReactiveOpaqueTokenIntrospector = new NimbusReactiveOpaqueTokenIntrospector(
                     oauth2Properties.getOpaquetoken().getIntrospectionUri(),
-                    Optional.ofNullable(oauth2Properties.getOpaquetoken().getClientId()).orElse(""),
+                    Optional.ofNullable(oauth2Properties.getOpaquetoken().getClientId()).orElse("fakeClientId"),
                     Optional.ofNullable(oauth2Properties.getOpaquetoken().getClientSecret()).orElse(""));
             return new OpaqueTokenReactiveAuthenticationManager(
                     new AuthUserDetailsConverterIntrospector(nimbusReactiveOpaqueTokenIntrospector));
