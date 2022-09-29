@@ -1,0 +1,12 @@
+= Daikon Release Notes (6.8.12) - 09/29/2022
+
+Thanks to @Fabien Way, @Colm O hEigeartaigh
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDP-11418[TDP-11418]: [RunConv] Range filter between doesn't work (link:https://github.com/Talend/daikon/pull/889[#889])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-10883[TDP-10883]: [RunConv][TCK functions] Apply filters on all columns (display rows with empty/invalid values) (link:https://github.com/Talend/daikon/pull/888[#888])
+
+== Other
+- Updating Spring Cloud to 2021.0.4  (link:https://github.com/Talend/daikon/pull/887[#887])
