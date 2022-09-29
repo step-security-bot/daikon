@@ -15,12 +15,16 @@ import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.maplang.el.parser.model.ExprModelVisitor;
 import org.talend.tql.api.TqlBuilder;
+import org.talend.tql.model.AllFields;
 import org.talend.tql.model.AndExpression;
 import org.talend.tql.model.ComparisonExpression;
 import org.talend.tql.model.ComparisonOperator;
 import org.talend.tql.model.Expression;
 import org.talend.tql.model.FieldBetweenExpression;
 import org.talend.tql.model.FieldInExpression;
+import org.talend.tql.model.FieldIsEmptyExpression;
+import org.talend.tql.model.FieldIsInvalidExpression;
+import org.talend.tql.model.FieldIsValidExpression;
 import org.talend.tql.model.FieldReference;
 import org.talend.tql.model.LiteralValue;
 import org.talend.tql.model.OrExpression;
@@ -29,6 +33,14 @@ import org.talend.tql.model.TqlElement;
 public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
 
     private final static String BUILTIN_FUNCTION_IN = "in";
+
+    private final static String BUILTIN_FUNCTION_IS_VALID = "isValid";
+
+    private final static String BUILTIN_FUNCTION_IS_INVALID = "isInvalid";
+
+    private final static String FAKE_FUNCTION_HAS_INVALID = "hasInvalid";
+
+    private final static String FAKE_FUNCTION_HAS_EMPTY = "hasEmpty";
 
     @Override
     public void setDslContent(DslContent dslContent) {
@@ -123,12 +135,7 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
             throw new IllegalStateException("Unsupported comparison operator: " + elNode.getImage());
         }
 
-        ComparisonExpression comparisonExpression = new ComparisonExpression(new ComparisonOperator(comparisonOpEnum),
-                leftTqlElement, rightTqlElement);
-
-        // Adding it to a new AST
-        AndExpression andExpression = new AndExpression(comparisonExpression);
-        return new OrExpression(andExpression);
+        return buildNewAST(new ComparisonExpression(new ComparisonOperator(comparisonOpEnum), leftTqlElement, rightTqlElement));
     }
 
     @Override
@@ -204,6 +211,14 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
         case BUILTIN_FUNCTION_IN: {
             return visitInFunction(elNode);
         }
+        case BUILTIN_FUNCTION_IS_VALID:
+            return visitValidFunction(elNode);
+        case BUILTIN_FUNCTION_IS_INVALID:
+            return visitInvalidFunction(elNode);
+        case FAKE_FUNCTION_HAS_INVALID:
+            return visitFakeInvalidFunction();
+        case FAKE_FUNCTION_HAS_EMPTY:
+            return visitFakeEmptyFunction();
         default:
             throw new IllegalStateException("Unsupported function: " + elNode.getImage());
         }
@@ -261,12 +276,7 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
         final LiteralValue literalValueOnLeft = (LiteralValue) visitLiteral(leftParameter);
         final LiteralValue literalValueOnRight = (LiteralValue) visitLiteral(rightParameter);
 
-        FieldBetweenExpression fieldBetweenExpression = new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight,
-                false, false);
-
-        // Adding it to a new AST
-        AndExpression andExpression = new AndExpression(fieldBetweenExpression);
-        return new OrExpression(andExpression);
+        return buildNewAST(new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight, false, false));
     }
 
     private TqlElement visitInFunction(ELNode elNode) {
@@ -284,15 +294,35 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
             literalValues.add((LiteralValue) visitLiteral(currChild));
         });
 
-        FieldInExpression fieldInExpression = new FieldInExpression(field, literalValues.toArray(new LiteralValue[] {}));
+        return buildNewAST(new FieldInExpression(field, literalValues.toArray(new LiteralValue[] {})));
+    }
 
-        // Adding it to a new AST
-        AndExpression andExpression = new AndExpression(fieldInExpression);
-        return new OrExpression(andExpression);
+    private TqlElement visitValidFunction(ELNode elNode) {
+        final TqlElement field = elNode.getChild(0).accept(this);
+        return buildNewAST(new FieldIsValidExpression(field));
+    }
+
+    private TqlElement visitInvalidFunction(ELNode elNode) {
+        final TqlElement field = elNode.getChild(0).accept(this);
+        return buildNewAST(new FieldIsInvalidExpression(field));
+    }
+
+    private TqlElement visitFakeInvalidFunction() {
+        return buildNewAST(new FieldIsInvalidExpression(new AllFields()));
+    }
+
+    private TqlElement visitFakeEmptyFunction() {
+        return buildNewAST(new FieldIsEmptyExpression(new AllFields()));
     }
 
     static boolean isLiteral(String tokenType) {
         return Arrays.asList(DSELConstants.LITERAL_TYPES).contains(tokenType)
                 || ELNodeType.BOOLEAN_LITERAL.name().equals(tokenType);
+    }
+
+    private OrExpression buildNewAST(Expression expr) {
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(expr);
+        return new OrExpression(andExpression);
     }
 }

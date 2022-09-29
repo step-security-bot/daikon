@@ -2,6 +2,7 @@ package org.talend.tqldsel.tqltodsel;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -32,23 +33,25 @@ import org.talend.tql.model.NotExpression;
 import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
-import java.util.Map;
 
-public class TqlToDselVisitor implements IASTVisitor<ELNode> {
+/**
+ * Abstract TQL to DSEL visitor
+ */
+abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TqlToDselVisitor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTqlToDselVisitor.class);
 
     /**
      * Mapping from the field names to their corresponding type. Type can be a native type or a semantic type.
      */
-    private final Map<String, String> fieldToType;
+    protected final Map<String, String> fieldToType;
 
     /**
      *
      * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
      * representation of the schema
      */
-    public TqlToDselVisitor(Map<String, String> fieldToType) {
+    public AbstractTqlToDselVisitor(Map<String, String> fieldToType) {
         this.fieldToType = fieldToType;
     }
 
@@ -80,7 +83,7 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(LiteralValue elt) {
-        LOGGER.debug("Inside Visit literalValue " + elt.toString());
+        LOGGER.debug("Inside Visit LiteralValue " + elt.toString());
         switch (elt.getLiteral()) {
         case INT:
             return new ELNode(ELNodeType.INTEGER_LITERAL, elt.getValue());
@@ -172,54 +175,31 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
     }
 
     @Override
-    public ELNode visit(FieldIsEmptyExpression elt) {
-        LOGGER.debug("Inside Visit isEmpty " + elt.toString());
-        final TqlElement ex = elt.getField();
-
-        ELNode isEmptyNode = new ELNode(ELNodeType.FUNCTION_CALL,
-                org.talend.maplang.el.interpreter.impl.function.builtin.IsEmpty.NAME);
-        isEmptyNode.addChild(ex.accept(this));
-
-        return isEmptyNode;
-    }
+    public abstract ELNode visit(FieldIsEmptyExpression elt);
 
     @Override
     public ELNode visit(FieldIsValidExpression elt) {
-        LOGGER.debug("Inside Visit IsValidExpression " + elt.toString());
+        LOGGER.debug("Inside Visit FieldIsValidExpression " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "isValid");
+        ELNode isValidNode = new ELNode(ELNodeType.FUNCTION_CALL, "isValid");
         final ELNode node = ex.accept(this);
-        regexNode.addChild(node);
+        isValidNode.addChild(node);
         final String validFieldType = fieldToType.get(node.getImage());
         if (validFieldType == null) {
             throw new TqlException(String.format("Cannot find the type of the field '%s'", node.getImage()));
         }
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, validFieldType));
+        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, validFieldType));
 
-        return regexNode;
+        return isValidNode;
     }
 
     @Override
-    public ELNode visit(FieldIsInvalidExpression elt) {
-        LOGGER.debug("Inside Visit IsInvalidExpression " + elt.toString());
-        final TqlElement ex = elt.getField();
-
-        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
-        final ELNode node = ex.accept(this);
-        regexNode.addChild(node);
-        final String invalidFieldType = fieldToType.get(node.getImage());
-        if (invalidFieldType == null) {
-            throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
-        }
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, invalidFieldType));
-
-        return regexNode;
-    }
+    public abstract ELNode visit(FieldIsInvalidExpression elt);
 
     @Override
     public ELNode visit(FieldIsNullExpression elt) {
-        LOGGER.debug("Inside Visit isNull " + elt.toString());
+        LOGGER.debug("Inside Visit FieldIsNullExpression " + elt.toString());
         final TqlElement ex = elt.getField();
 
         ELNode notNode = new ELNode(ELNodeType.FUNCTION_CALL,
@@ -231,7 +211,7 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldMatchesRegex elt) {
-        LOGGER.debug("Inside Visit MatchesRegex " + elt.toString());
+        LOGGER.debug("Inside Visit FieldMatchesRegex " + elt.toString());
         final TqlElement ex = elt.getField();
 
         ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL,
@@ -297,7 +277,7 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(FieldContainsExpression elt) {
-        LOGGER.debug("Inside Visit ContainsExpression " + elt.toString());
+        LOGGER.debug("Inside Visit FieldContainsExpression " + elt.toString());
         TqlElement ex = elt.getField();
         String expressionValue = elt.getValue();
 
