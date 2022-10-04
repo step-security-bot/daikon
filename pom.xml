@@ -109,6 +109,7 @@
         <module>daikon-bom</module>
         <module>daikon-statistic</module>
         <module>daikon-schema</module>
+        <module>daikon-dsel</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
