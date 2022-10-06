@@ -58,8 +58,8 @@ public class ConvertersTogetherTest {
         callConvertors("(field1 < 98.183)");
     }
 
-    // TODO : issue here, need investigations :
-    @Disabled
+    @Disabled("testParseTwoFieldComparisonLt() test currently disabled because an issue has occurred with it, need investigations")
+    @Test
     public void testParseTwoFieldComparisonLt() {
         callConvertors("(field1 < field2)");
     }
@@ -74,8 +74,8 @@ public class ConvertersTogetherTest {
         callConvertors("(field1 > 555.72)");
     }
 
-    // TODO : issue here, need investigations :
-    @Disabled
+    @Disabled("testParseTwoFieldComparisonGt() test currently disabled because an issue has occurred with it, need investigations")
+    @Test
     public void testParseTwoFieldComparisonGt() {
         callConvertors("(field1 > field2)");
     }
@@ -90,8 +90,8 @@ public class ConvertersTogetherTest {
         callConvertors("(field1 <= 9821.1972)");
     }
 
-    // TODO : issue here, need investigations
-    @Disabled
+    @Disabled("testParseTwoFieldComparisonLet() test currently disabled because an issue has occurred with it, need investigations")
+    @Test
     public void testParseTwoFieldComparisonLet() {
         callConvertors("(field1 <= field2)");
     }
@@ -106,8 +106,8 @@ public class ConvertersTogetherTest {
         callConvertors("(field1 >= 2.091)");
     }
 
-    // TODO : issue here, need investigations
-    @Disabled
+    @Disabled("testParseTwoFieldComparisonGet() test currently disabled because an issue has occurred with it, need investigations")
+    @Test
     public void testParseTwoFieldComparisonGet() {
         callConvertors("(field1 >= field2)");
     }
@@ -167,22 +167,18 @@ public class ConvertersTogetherTest {
         callConvertors("(field1 in [525.87, 12, 99.20, 252.0])");
     }
 
-    // TODO : Issue here, because the char pattern is converted to a regex and currently a regex
-    // TODO can't be reverted to a char pattern.
-    @Disabled
-    public void testParseFieldComply() throws Exception {
+    @Test
+    public void testParseFieldComplies() {
         callConvertors("(name complies 'Aaa Aaaa')");
     }
 
     @Test
-    public void testParseFieldMatchesRegex() throws Exception {
+    public void testParseFieldMatchesRegex() {
         callConvertors("(name ~ '^[A-Z][a-z]*$')");
     }
 
-    // TODO : Issue here, because the char pattern is converted to a regex and currently a regex
-    // TODO can't be reverted to a char pattern.
-    @Disabled
-    public void testParseFieldWordComplies() throws Exception {
+    @Test
+    public void testParseFieldWordComplies() {
         callConvertors("(name wordComplies '[Word] [word][digit]')");
     }
 

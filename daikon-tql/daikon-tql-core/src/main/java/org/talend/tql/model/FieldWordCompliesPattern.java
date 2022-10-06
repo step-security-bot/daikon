@@ -33,7 +33,7 @@ public class FieldWordCompliesPattern implements Atom {
 
     @Override
     public String toQueryString() {
-        return field.toQueryString() + " '" + pattern + "'";
+        return field.toQueryString() + " wordComplies '" + pattern + "'";
     }
 
     @Override

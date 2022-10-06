@@ -21,11 +21,13 @@ import org.talend.tql.model.ComparisonExpression;
 import org.talend.tql.model.ComparisonOperator;
 import org.talend.tql.model.Expression;
 import org.talend.tql.model.FieldBetweenExpression;
+import org.talend.tql.model.FieldCompliesPattern;
 import org.talend.tql.model.FieldInExpression;
 import org.talend.tql.model.FieldIsEmptyExpression;
 import org.talend.tql.model.FieldIsInvalidExpression;
 import org.talend.tql.model.FieldIsValidExpression;
 import org.talend.tql.model.FieldReference;
+import org.talend.tql.model.FieldWordCompliesPattern;
 import org.talend.tql.model.LiteralValue;
 import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
@@ -41,6 +43,10 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
     private final static String FAKE_FUNCTION_HAS_INVALID = "hasInvalid";
 
     private final static String FAKE_FUNCTION_HAS_EMPTY = "hasEmpty";
+
+    private final static String BUILTIN_FUNCTION_COMPLIES = "complies";
+
+    private final static String BUILTIN_FUNCTION_WORD_COMPLIES = "wordComplies";
 
     @Override
     public void setDslContent(DslContent dslContent) {
@@ -219,6 +225,10 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
             return visitFakeInvalidFunction();
         case FAKE_FUNCTION_HAS_EMPTY:
             return visitFakeEmptyFunction();
+        case BUILTIN_FUNCTION_COMPLIES:
+            return visitCompliesFunction(elNode);
+        case BUILTIN_FUNCTION_WORD_COMPLIES:
+            return visitWordCompliesFunction(elNode);
         default:
             throw new IllegalStateException("Unsupported function: " + elNode.getImage());
         }
@@ -313,6 +323,34 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
 
     private TqlElement visitFakeEmptyFunction() {
         return buildNewAST(new FieldIsEmptyExpression(new AllFields()));
+    }
+
+    private TqlElement visitCompliesFunction(ELNode elNode) {
+        final TqlElement field = elNode.getChild(0).accept(this);
+        final ELNode fieldTypeNode = elNode.getChild(1);
+
+        if (!ELNodeType.STRING_LITERAL.equals(fieldTypeNode.getType())) {
+            throw new IllegalArgumentException(
+                    "The second parameter is not a STRING literal, whereas the complies function can only accept a STRING literal as second parameter");
+        }
+
+        final LiteralValue fieldTypeLiteralValue = (LiteralValue) visitLiteral(fieldTypeNode);
+
+        return buildNewAST(new FieldCompliesPattern(field, fieldTypeLiteralValue.getValue()));
+    }
+
+    private TqlElement visitWordCompliesFunction(ELNode elNode) {
+        final TqlElement field = elNode.getChild(0).accept(this);
+        final ELNode fieldTypeNode = elNode.getChild(1);
+
+        if (!ELNodeType.STRING_LITERAL.equals(fieldTypeNode.getType())) {
+            throw new IllegalArgumentException(
+                    "The second parameter is not a STRING literal, whereas the wordComplies function can only accept a STRING literal as second parameter");
+        }
+
+        final LiteralValue fieldTypeLiteralValue = (LiteralValue) visitLiteral(fieldTypeNode);
+
+        return buildNewAST(new FieldWordCompliesPattern(field, fieldTypeLiteralValue.getValue()));
     }
 
     static boolean isLiteral(String tokenType) {

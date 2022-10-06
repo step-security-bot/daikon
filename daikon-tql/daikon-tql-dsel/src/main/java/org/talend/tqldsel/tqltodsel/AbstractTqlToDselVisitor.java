@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.daikon.pattern.character.CharPatternToRegex;
-import org.talend.daikon.pattern.word.WordPatternToRegex;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
@@ -227,11 +225,9 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit FieldCompliesPattern " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL,
-                org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
-        fieldCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
-        final String regexp = CharPatternToRegex.toRegex(elt.getPattern());
-        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + regexp + "'")); // Regexp
+        ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "complies");
+        fieldCompliesNode.addChild(ex.accept(this));
+        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getPattern() + "'"));
 
         return fieldCompliesNode;
     }
@@ -241,11 +237,9 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         LOGGER.debug("Inside Visit FieldWordCompliesPattern " + elt.toString());
         final TqlElement ex = elt.getField();
 
-        ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL,
-                org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
-        fieldWordCompliesNode.addChild(ex.accept(this)); // Value to parse with regexp
-        final String regexp = WordPatternToRegex.toRegex(elt.getPattern(), true);
-        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + regexp + "'")); // regexp
+        ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "wordComplies");
+        fieldWordCompliesNode.addChild(ex.accept(this));
+        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getPattern() + "'"));
 
         return fieldWordCompliesNode;
     }

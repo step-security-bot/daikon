@@ -166,9 +166,9 @@ public class TqlToDselConverterTest {
         final String tqlQuery = "name wordComplies '[word]'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
-        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "wordComplies");
         regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'^[\\p{Ll}]{2,}$'"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'[word]'"));
 
         assertEquals(wrapNode(regexNode), actual);
     }
@@ -178,10 +178,9 @@ public class TqlToDselConverterTest {
         final String tqlQuery = "name complies 'aaa'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
-        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "complies");
         regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL,
-                "'^([\\x{61}-\\x{7a}]|[\\x{DF}-\\x{F6}]|[\\x{F8}-\\x{FF}]|[\\x{FF41}-\\x{FF5A}]){3}$'"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'aaa'"));
 
         assertEquals(wrapNode(regexNode), actual);
     }
