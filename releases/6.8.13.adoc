@@ -1,0 +1,7 @@
+= Daikon Release Notes (6.8.13) - 10/06/2022
+
+Thanks to @Fabien Way
+
+== Other
+- Fway/feat/tdp 10523/filter complies word complies  (link:https://github.com/Talend/daikon/pull/891[#891])
+- Fway/feat/tdp 10867/filter valid invalid  (link:https://github.com/Talend/daikon/pull/890[#890])
