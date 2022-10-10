@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.14) - 10/10/2022
+
+Thanks to @Fabien Way
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDP-10867[TDP-10867]: [RunConv] Use filters with advanced criteria (validity or invalidity) (link:https://github.com/Talend/daikon/pull/895[#895])
