@@ -1,14 +1,13 @@
 package org.talend.dsel.functions.custom;
 
+import static java.util.Date.from;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
 
 import java.time.Instant;
-import java.util.Date;
 
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -55,7 +54,7 @@ public class IsOfTypeTest extends FunctionTest {
                     () -> assertFalse((Boolean) isOfType.call(context, "BLABLA", "UNKNOWN_CATEGORY")));
         }
 
-        @DisplayName("Integer category not prevalent on Integer native type")
+        @DisplayName("Integer category is not prevalent on Integer DataTypeEnum")
         @Test
         public void integerCategoryIgnored() {
             String value = "t";
@@ -73,234 +72,352 @@ public class IsOfTypeTest extends FunctionTest {
     }
 
     @Nested
-    class Integer {
+    class StringType {
 
-        @DisplayName("String int is of type Integer")
+        @DisplayName("String is of type String")
         @Test
-        public void intStringIsInteger() {
-            assertTrue((Boolean) isOfType.call(context, "12", "Integer"));
+        public void stringIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, "just a String value", "String"));
         }
 
-        @DisplayName("int is of type Integer")
+        @DisplayName("Integer is of type String")
         @Test
-        public void intIsInteger() {
+        public void integerIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, 12, "String"));
+        }
+
+        @DisplayName("Integer as String is of type String")
+        @Test
+        public void integerAsStringIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, "12", "String"));
+        }
+
+        @DisplayName("Double is of type String")
+        @Test
+        public void doubleIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, 12D, "String"));
+        }
+
+        @DisplayName("Double as String is of type String")
+        @Test
+        public void doubleAsStringIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, "12D", "String"));
+        }
+
+        @DisplayName("Float is of type String")
+        @Test
+        public void floatIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, 12f, "String"));
+        }
+
+        @DisplayName("Float as String is of type String")
+        @Test
+        public void floatAsStringIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, "12f", "String"));
+        }
+
+        @DisplayName("Boolean is of type String")
+        @Test
+        public void booleanIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, true, "String"));
+        }
+
+        @DisplayName("Boolean as String is of type String")
+        @Test
+        public void booleanAsStringIsNotOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, "true", "String"));
+        }
+
+        @DisplayName("Date is of type String")
+        @Test
+        public void dateIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, from(Instant.now()), "String"));
+        }
+
+        @DisplayName("Date as String is of type String")
+        @Test
+        public void dateAsStringIsOfTypeString() {
+            assertTrue((Boolean) isOfType.call(context, from(Instant.now()).toString(), "String"));
+        }
+    }
+
+    @Nested
+    class IntegerType {
+
+        @DisplayName("String is not of type Integer")
+        @Test
+        public void stringIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, "just a String value", "Integer"));
+        }
+
+        @DisplayName("Integer is of type Integer")
+        @Test
+        public void integerIsOfTypeInteger() {
             assertTrue((Boolean) isOfType.call(context, 12, "Integer"));
         }
 
-        @DisplayName("String double is not of type Integer")
+        @DisplayName("Integer as String is of type Integer")
         @Test
-        public void intDoubleNotInteger() {
-            assertFalse((Boolean) isOfType.call(context, "12.0", "Integer"));
+        public void integerAsStringIsOfTypeInteger() {
+            assertTrue((Boolean) isOfType.call(context, "12", "Integer"));
         }
 
-        @DisplayName("long is of type Integer")
+        @DisplayName("Double is not of type Integer")
         @Test
-        public void longIsInteger() {
-            assertTrue((Boolean) isOfType.call(context, 12L, "Integer"));
-        }
-
-        @DisplayName("double is not of type Integer")
-        @Test
-        public void doubleNotInteger() {
+        public void doubleIsNotOfTypeInteger() {
             assertFalse((Boolean) isOfType.call(context, 12D, "Integer"));
         }
 
-        @DisplayName("float is not of type Integer")
+        @DisplayName("Double as String is not of type Integer")
         @Test
-        public void floatNotInteger() {
+        public void doubleAsStringIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, "12D", "Integer"));
+        }
+
+        @DisplayName("Float is not of type Integer")
+        @Test
+        public void floatIsNotOfTypeInteger() {
             assertFalse((Boolean) isOfType.call(context, 12f, "Integer"));
         }
 
-        @DisplayName("boolean is not of type Integer")
+        @DisplayName("Float as String is not of type Integer")
         @Test
-        public void booleanNotInteger() {
+        public void floatAsStringIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, "12f", "Integer"));
+        }
+
+        @DisplayName("Boolean is not of type Integer")
+        @Test
+        public void booleanIsNotOfTypeInteger() {
             assertFalse((Boolean) isOfType.call(context, true, "Integer"));
         }
 
-        @DisplayName("date is not of type Integer")
+        @DisplayName("Boolean as String is not of type Integer")
         @Test
-        public void dateNotInteger() {
-            assertFalse((Boolean) isOfType.call(context, Date.from(Instant.now()), "Integer"));
+        public void booleanAsStringIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, "true", "Integer"));
+        }
+
+        @DisplayName("Date is not of type Integer")
+        @Test
+        public void dateIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()), "Integer"));
+        }
+
+        @DisplayName("Date as String is not of type Integer")
+        @Test
+        public void dateAsStringIsNotOfTypeInteger() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()).toString(), "Integer"));
         }
     }
 
     @Nested
-    class Decimal {
+    class DoubleType {
 
-        @DisplayName("String int is of type Decimal")
+        @DisplayName("String is not of type Double")
         @Test
-        public void intStringIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, "12", "Decimal"));
+        public void stringIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, "just a String value", "Double"));
         }
 
-        @DisplayName("String double is of type Decimal")
+        @DisplayName("Integer is of type Double")
         @Test
-        public void doubleStringIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, "12.0", "Decimal"));
+        public void integerIsOfTypeDouble() {
+            assertTrue((Boolean) isOfType.call(context, 12, "Double"));
         }
 
-        @DisplayName("int is of type Decimal")
+        @DisplayName("Integer as String is of type Double")
         @Test
-        public void intIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, 12, "Decimal"));
+        public void integerAsStringIsOfTypeDouble() {
+            assertTrue((Boolean) isOfType.call(context, "12", "Double"));
         }
 
-        @DisplayName("long is of type Decimal")
+        @DisplayName("Double is of type Double")
         @Test
-        public void longIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, 12L, "Decimal"));
+        public void doubleIsOfTypeDouble() {
+            assertTrue((Boolean) isOfType.call(context, 12D, "Double"));
         }
 
-        @DisplayName("double is of type Decimal")
+        @DisplayName("Double as String is nnot of type Double")
         @Test
-        public void doubleIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, 12D, "Decimal"));
+        public void doubleAsStringIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, "12D", "Double"));
         }
 
-        @DisplayName("float is of type Decimal")
+        @DisplayName("Float is of type Double")
         @Test
-        public void floatIsDecimal() {
-            assertTrue((Boolean) isOfType.call(context, 12f, "Decimal"));
+        public void floatIsOfTypeDouble() {
+            assertTrue((Boolean) isOfType.call(context, 12f, "Double"));
         }
 
-        @DisplayName("boolean is not of type Decimal")
+        @DisplayName("Float as String is not of type Double")
         @Test
-        public void booleanNotDecimal() {
-            assertFalse((Boolean) isOfType.call(context, true, "Decimal"));
+        public void floatAsStringIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, "12f", "Double"));
         }
 
-        @DisplayName("date is not of type Decimal")
+        @DisplayName("Boolean is not of type Double")
         @Test
-        public void dateNotDecimal() {
-            assertFalse((Boolean) isOfType.call(context, Date.from(Instant.now()), "Decimal"));
-        }
-    }
-
-    @Nested
-    class NativeDate {
-
-        @DisplayName("String int is not of type Date")
-        @Test
-        public void intStringNotDate() {
-            assertFalse((Boolean) isOfType.call(context, "12", "Date"));
+        public void booleanIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, true, "Double"));
         }
 
-        @DisplayName("String double is not of type Date")
+        @DisplayName("Boolean as String is not of type Double")
         @Test
-        public void doubleStringNotDate() {
-            assertFalse((Boolean) isOfType.call(context, "12.0", "Date"));
+        public void booleanAsStringIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, "true", "Double"));
         }
 
-        @DisplayName("String date is of type Date")
+        @DisplayName("Date is not of type Double")
         @Test
-        public void doubleStringIsDate() {
-            assertTrue((Boolean) isOfType.call(context, "2020-12-31", "Date"));
+        public void dateIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()), "Double"));
         }
 
-        @DisplayName("int is not of type Date")
+        @DisplayName("Date as String is not of type Double")
         @Test
-        public void intNotDate() {
-            assertFalse((Boolean) isOfType.call(context, 12, "Date"));
-        }
-
-        @DisplayName("long is not of type Date")
-        @Test
-        public void longNotDate() {
-            assertFalse((Boolean) isOfType.call(context, 12L, "Date"));
-        }
-
-        @DisplayName("double is not of type Date")
-        @Test
-        public void doubleNotDate() {
-            assertFalse((Boolean) isOfType.call(context, 12D, "Date"));
-        }
-
-        @DisplayName("float is not of type Date")
-        @Test
-        public void floatNotDate() {
-            assertFalse((Boolean) isOfType.call(context, 12f, "Date"));
-        }
-
-        @DisplayName("boolean is not of type Date")
-        @Test
-        public void booleanNotDate() {
-            assertFalse((Boolean) isOfType.call(context, true, "Date"));
-        }
-
-        @DisplayName("date is of type Date")
-        @Test
-        public void dateIsDate() {
-            assertTrue((Boolean) isOfType.call(context, Date.from(Instant.now()), "Date"));
-        }
-
-        @DisplayName("datetime is of type Date")
-        @Test
-        public void datetimeIsDate() {
-            assertTrue((Boolean) isOfType.call(context, DateTime.now(), "Date"));
-        }
-
-        @DisplayName("time is not of type Date")
-        @Test
-        public void timeNotDate() {
-            assertFalse((Boolean) isOfType.call(context, DateTime.now().toLocalTime(), "Date"));
+        public void dateAsStringIsNotOfTypeDouble() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()).toString(), "Double"));
         }
     }
 
     @Nested
-    class NativeBoolean {
+    class BooleanType {
 
-        @DisplayName("String int is not of type Boolean")
+        @DisplayName("String is not of type Boolean")
         @Test
-        public void intStringNotBoolean() {
-            assertFalse((Boolean) isOfType.call(context, "12", "Boolean"));
+        public void stringIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, "just a String value", "Boolean"));
         }
 
-        @DisplayName("String double is not of type Boolean")
+        @DisplayName("Integer is not of type Boolean")
         @Test
-        public void doubleStringNotBoolean() {
-            assertFalse((Boolean) isOfType.call(context, "12.0", "Boolean"));
-        }
-
-        @DisplayName("String boolean is of type Boolean")
-        @Test
-        public void booleanStringIsBoolean() {
-            assertTrue((Boolean) isOfType.call(context, "true", "Boolean"));
-        }
-
-        @DisplayName("int is not of type Boolean")
-        @Test
-        public void intNotBoolean() {
+        public void integerIsNotOfTypeBoolean() {
             assertFalse((Boolean) isOfType.call(context, 12, "Boolean"));
         }
 
-        @DisplayName("long is not of type Boolean")
+        @DisplayName("Integer as String is not of type Boolean")
         @Test
-        public void longNotBoolean() {
-            assertFalse((Boolean) isOfType.call(context, 12L, "Boolean"));
+        public void integerAsStringIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, "12", "Boolean"));
         }
 
-        @DisplayName("double is not of type Boolean")
+        @DisplayName("Double is not of type Boolean")
         @Test
-        public void doubleNotBoolean() {
+        public void doubleIsNotOfTypeBoolean() {
             assertFalse((Boolean) isOfType.call(context, 12D, "Boolean"));
         }
 
-        @DisplayName("float is not of type Boolean")
+        @DisplayName("Double as String is nnot of type Boolean")
         @Test
-        public void floatNotBoolean() {
+        public void doubleAsStringIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, "12D", "Boolean"));
+        }
+
+        @DisplayName("Float is not of type Boolean")
+        @Test
+        public void floatIsNotOfTypeBoolean() {
             assertFalse((Boolean) isOfType.call(context, 12f, "Boolean"));
         }
 
-        @DisplayName("boolean is of type Boolean")
+        @DisplayName("Float as String is not of type Boolean")
         @Test
-        public void booleanIsBoolean() {
+        public void floatAsStringIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, "12f", "Boolean"));
+        }
+
+        @DisplayName("Boolean is of type Boolean")
+        @Test
+        public void booleanIsOfTypeBoolean() {
             assertTrue((Boolean) isOfType.call(context, true, "Boolean"));
         }
 
-        @DisplayName("date is not of type Boolean")
+        @DisplayName("Boolean as String is of type Boolean")
         @Test
-        public void dateIsBoolean() {
-            assertFalse((Boolean) isOfType.call(context, Date.from(Instant.now()), "Boolean"));
+        public void booleanAsStringIsOfTypeBoolean() {
+            assertTrue((Boolean) isOfType.call(context, "true", "Boolean"));
+        }
+
+        @DisplayName("Date is not of type Boolean")
+        @Test
+        public void dateIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()), "Boolean"));
+        }
+
+        @DisplayName("Date as String is not of type Boolean")
+        @Test
+        public void dateAsStringIsNotOfTypeBoolean() {
+            assertFalse((Boolean) isOfType.call(context, from(Instant.now()).toString(), "Boolean"));
+        }
+    }
+
+    @Nested
+    class DateType {
+
+        @DisplayName("String is not of type Date")
+        @Test
+        public void stringIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, "just a String value", "Date"));
+        }
+
+        @DisplayName("Integer is not of type Date")
+        @Test
+        public void integerIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, 12, "Date"));
+        }
+
+        @DisplayName("Integer as String is not of type Date")
+        @Test
+        public void integerAsStringIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, "12", "Date"));
+        }
+
+        @DisplayName("Double is not of type Date")
+        @Test
+        public void doubleIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, 12D, "Date"));
+        }
+
+        @DisplayName("Double as String is nnot of type Date")
+        @Test
+        public void doubleAsStringIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, "12D", "Date"));
+        }
+
+        @DisplayName("Float is not of type Date")
+        @Test
+        public void floatIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, 12f, "Date"));
+        }
+
+        @DisplayName("Float as String is not of type Date")
+        @Test
+        public void floatAsStringIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, "12f", "Date"));
+        }
+
+        @DisplayName("Boolean is not of type Date")
+        @Test
+        public void booleanIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, true, "Date"));
+        }
+
+        @DisplayName("Boolean as String is not of type Date")
+        @Test
+        public void booleanAsStringIsNotOfTypeDate() {
+            assertFalse((Boolean) isOfType.call(context, "true", "Date"));
+        }
+
+        @DisplayName("Date is of type Date")
+        @Test
+        public void dateIsOfTypeDate() {
+            assertTrue((Boolean) isOfType.call(context, from(Instant.now()), "Date"));
+        }
+
+        @DisplayName("Date as String is of type Date")
+        @Test
+        public void dateAsStringIsOfTypeDate() {
+            assertTrue((Boolean) isOfType.call(context, from(Instant.now()).toString(), "Date"));
         }
     }
 

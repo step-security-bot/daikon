@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -31,8 +30,6 @@ public abstract class FunctionTest {
 
     @BeforeAll
     protected static void init() {
-        interpreter = ExprInterpreterFactory.create();
-
         SemanticProperties properties = new SemanticProperties(tempDir.toString());
         CategoryRegistryManager categoryRegistryManager = new CategoryRegistryManager(properties);
         DeletableDictionarySnapshotOpener opener = new DeletableDictionarySnapshotOpener(properties,
@@ -44,6 +41,8 @@ public abstract class FunctionTest {
 
         context = new ExprLangContext();
         context.setStore(store);
+
+        interpreter = ExprInterpreterFactory.create(context);
     }
 
     protected void testEvalExpressionThrowsFunctionException(String expression) {

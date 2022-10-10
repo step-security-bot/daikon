@@ -4,16 +4,14 @@ import static org.talend.dataquality.semantic.model.CategoryType.COMPOUND;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import org.apache.commons.lang3.EnumUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
-import org.talend.dataquality.statistics.type.TypeInferenceUtils;
+import org.talend.dataquality.statistics.quality.DataTypeQualityAnalyzer;
+import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dsel.exception.DQCategoryNotFoundException;
 import org.talend.dsel.exception.FunctionException;
-import org.talend.dsel.model.NativeType;
 import org.talend.maplang.el.interpreter.api.ExprLangContext;
 import org.talend.maplang.el.interpreter.api.ExprLangFunction;
 import org.talend.maplang.hpath.HPathStore;
@@ -41,64 +39,35 @@ public class IsOfType implements ExprLangFunction {
 
         String typeName = params[1].toString();
 
-        HPathStore store = exprLangContext.getStore();
-        if (store.get(typeName) != null) // the semantic type was a variable
-            typeName = store.get(typeName).toString();
-
-        Boolean isSemanticTypeNameAColumn = (Boolean) store.get("semanticTypeNameAsColumn");
-        if (isSemanticTypeNameAColumn != null && isSemanticTypeNameAColumn)
-            typeName = getDataTypeNameFromLabel(store, typeName);
-
         try {
-            NativeType nativeType = NativeType.valueOf(typeName.toUpperCase());
-            return isNativeType(nativeType, value);
+            return isDataType(typeName.toUpperCase(), value);
         } catch (IllegalArgumentException e) {
-            return isSemanticType(exprLangContext, typeName, value.toString(), isSemanticTypeNameAColumn);
+            return isSemanticType(exprLangContext, typeName, value.toString());
 
         }
     }
 
-    /**
-     * Get Semantic Name from Label
-     *
-     * @param store store containing the dictionary snapshot
-     * @param typeLabel label to search
-     * @return the corresponding name
-     */
-    private String getDataTypeNameFromLabel(HPathStore store, String typeLabel) {
-        DictionarySnapshot dictionarySnapshot = (DictionarySnapshot) store.get("dictionarySnapshot");
-        Optional<DQCategory> category = dictionarySnapshot.getMetadata().values().stream()
-                .filter(cat -> cat.getLabel().equals(typeLabel)).findFirst();
-        if (category.isPresent())
-            return category.get().getName();
-        else
-            return typeLabel; // it could be a Native type
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    private boolean isNativeType(NativeType nativeType, Object value) {
-        Set<String> possibleTypes = nativeType.getEquivalentJavaTypes();
-        String dataType = value.getClass().getSimpleName().toUpperCase();
-
-        if ("STRING".equals(dataType)) {
-            dataType = TypeInferenceUtils.getDataType((String) value).name();
+    private boolean isDataType(String dataType, Object value) {
+        if (EnumUtils.isValidEnum(DataTypeEnum.class, dataType)) {
+            try (DataTypeQualityAnalyzer analyzer = new DataTypeQualityAnalyzer(DataTypeEnum.valueOf(dataType))) {
+                analyzer.analyze(value.toString());
+                return analyzer.getResult().get(0).getInvalidCount() == 0;
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Invalid DQ dataType " + dataType + " for value " + value.toString());
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid DQ dataType " + dataType);
         }
-
-        return possibleTypes.contains(dataType);
     }
 
-    private Object isSemanticType(ExprLangContext exprLangContext, String semanticTypeName, String value,
-            Boolean isSemanticTypeNameAColumn) {
+    private Object isSemanticType(ExprLangContext exprLangContext, String semanticTypeName, String value) {
         HPathStore store = exprLangContext.getStore();
         DictionarySnapshot dictionarySnapshot = (DictionarySnapshot) store.get("dictionarySnapshot");
         DQCategory category = dictionarySnapshot.getDQCategoryByName(semanticTypeName); // category existence is checked
         // in the executor
 
         if (category == null)
-            if (isSemanticTypeNameAColumn != null && isSemanticTypeNameAColumn)
-                return null;
-            else
-                throw new DQCategoryNotFoundException(semanticTypeName);
+            throw new DQCategoryNotFoundException(semanticTypeName);
 
         if (COMPOUND == category.getType()) { // need to have information on children
             category.setChildren(completeChildren(dictionarySnapshot, category.getChildren()));

@@ -35,7 +35,7 @@ public class IsValidTest extends FunctionTest {
     @DisplayName("Custom 'isValid' Function is called via the DSEL interpreter")
     @Test
     public void isCalledViaDSELInterpreter() {
-        testEvalExpression(true, "isValid('671.0819', 'DEciMAl')");
+        testEvalExpression(true, "isValid(12f, 'dOuble')");
         testEvalExpression(false, "isValid('False', 'DATE')");
     }
 
