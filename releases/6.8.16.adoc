@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.16) - 10/11/2022
+
+Thanks to @Mark Butko
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-19224[TPSVC-19224]: [Middle name] Add support in authentication (JWT generation and validation) (link:https://github.com/Talend/daikon/pull/893[#893])
