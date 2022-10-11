@@ -28,6 +28,7 @@ public class UserDetailsConverter {
         claimToPropertySetter.put(EMAIL_CLAIM, (user, email) -> user.setEmail((String) email));
 
         claimToPropertySetter.put(GIVEN_NAME_CLAIM, (user, firstName) -> user.setFirstName((String) firstName));
+        claimToPropertySetter.put(MIDDLE_NAME_CLAIM, (user, middleName) -> user.setMiddleName((String) middleName));
         claimToPropertySetter.put(FAMILY_NAME_CLAIM, (user, lastName) -> user.setLastName((String) lastName));
         claimToPropertySetter.put(NAME_CLAIM, (user, name) -> user.setName((String) name));
 

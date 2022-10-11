@@ -48,6 +48,8 @@ public class AuthUserDetails extends User implements AuthIdProvider, OAuth2Authe
 
     private String firstName;
 
+    private String middleName;
+
     private String lastName;
 
     private String name;

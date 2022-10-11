@@ -28,6 +28,8 @@ public class JwtClaims {
 
     public static final String GIVEN_NAME_CLAIM = "given_name";
 
+    public static final String MIDDLE_NAME_CLAIM = "middle_name";
+
     public static final String FAMILY_NAME_CLAIM = "family_name";
 
     public static final String PREFERRED_LANGUAGE_CLAIM = "preferred_language";

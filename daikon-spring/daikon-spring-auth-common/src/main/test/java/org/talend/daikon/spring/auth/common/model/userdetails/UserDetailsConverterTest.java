@@ -1,6 +1,7 @@
 package org.talend.daikon.spring.auth.common.model.userdetails;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +39,28 @@ public class UserDetailsConverterTest {
                      result.getEntitlements());
         assertEquals(Arrays.asList("48e38a59-ce6f-497a-84b9-63598ff8304b", "914413da-6a86-4a5f-b753-a963d1916179"),
                             result.getGroupIds());
+        assertNull(result.getMiddleName());
+    }
+
+    @Test
+    @SneakyThrows
+    public void convertPatIntrospectionWithMiddleName() {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/converter/pat-introspection-success-with-middle-name.json");
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+
+        AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
+
+        assertEquals("befb746d-10b2-442e-974c-896d26379573", result.getId());
+        assertEquals("mbutko@mbutko01.us.talend.com", result.getUsername());
+        assertEquals("User Something Talend", result.getName());
+        assertEquals("Something", result.getMiddleName());
+        assertEquals("user@yopmails.com", result.getEmail());
+        assertEquals("9133741e-d49d-4cd8-a09e-9791fead2583", result.getTenantId());
+        assertEquals("mbutko01.us.talend.com", result.getTenantName());
+        assertEquals(new HashSet<>(Arrays.asList("CRAWLING_CREATE", "TMC_OPERATOR", "DATASET_READ")),
+                     result.getEntitlements());
+        assertEquals(Arrays.asList("48e38a59-ce6f-497a-84b9-63598ff8304b", "914413da-6a86-4a5f-b753-a963d1916179"),
+                            result.getGroupIds());
     }
 
     @Test
@@ -56,6 +79,7 @@ public class UserDetailsConverterTest {
         assertEquals("mbutko01.us.talend.com", result.getTenantName());
         assertTrue(result.getEntitlements().isEmpty());
         assertTrue(result.getGroupIds().isEmpty());
+        assertNull(result.getMiddleName());
     }
 
     @Test
