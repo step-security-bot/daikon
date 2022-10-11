@@ -1,0 +1,6 @@
+= Daikon Release Notes (6.8.15) - 10/11/2022
+
+Thanks to @jzhao
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDI-48610[TDI-48610]: Align crypto-utils to 6.8.11 (link:https://github.com/Talend/daikon/pull/896[#896])
