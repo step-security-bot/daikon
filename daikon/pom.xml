@@ -186,7 +186,7 @@
                                 <Bundle-Name>${project.name} lib</Bundle-Name>
                                 <DynamicImport-Package>*</DynamicImport-Package>
                                 <Import-Package>
-                                    com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
+                                    org.objectweb.asm.*;resolution:=optional,com.github.luben.zstd.*;resolution:=optional,org.tukaani.xz.*;resolution:=optional,org.brotli.*;resolution:=optional,com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
                                 </Import-Package>
                             </instructions>
                         </configuration>
@@ -233,7 +233,7 @@
                                 <Embed-Dependency>*;artifactId=paranamer|snappy-java|commons-compress|xz;inline=true
                                 </Embed-Dependency>
                                 <Import-Package>
-                                    com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
+                                    org.objectweb.asm.*;resolution:=optional,com.github.luben.zstd.*;resolution:=optional,org.tukaani.xz.*;resolution:=optional,org.brotli.*;resolution:=optional,com.cedarsoftware.*;resolution:=optional,com.fasterxml.*;resolution:=optional,org.apache.*;resolution:=optional,*
                                 </Import-Package>
                             </instructions>
                         </configuration>
