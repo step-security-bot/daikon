@@ -77,32 +77,11 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
 
         for (Map.Entry<String, String> field : fieldToType.entrySet()) {
-            ELNodeType childElNodeType;
-
-            switch (field.getValue()) {
-            case "INTEGER":
-                childElNodeType = ELNodeType.INTEGER_LITERAL;
-                break;
-            case "BOOLEAN":
-                childElNodeType = ELNodeType.BOOLEAN_LITERAL;
-                break;
-            case "DECIMAL":
-                childElNodeType = ELNodeType.DECIMAL_LITERAL;
-                break;
-            case "STRING":
-                childElNodeType = ELNodeType.STRING_LITERAL;
-                break;
-            default:
-                throw new TqlException(
-                        "Literal value type " + field.getKey() + " not available for the function " + functionName);
-            }
-
             ELNode functionNode = new ELNode(ELNodeType.FUNCTION_CALL, functionName);
-            functionNode.addChild(new ELNode(childElNodeType, field.getKey()));
+            functionNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, field.getKey()));
             if (isTypeProvided) {
                 functionNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + field.getValue() + "'"));
             }
-
             orNode.addChild(functionNode);
         }
 

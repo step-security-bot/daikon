@@ -28,6 +28,7 @@ public class TqlToDselConverterTest {
         fToType.put("total", "INTEGER");
         fToType.put("isActivated", "BOOLEAN");
         fToType.put("money", "DECIMAL");
+        fToType.put("special", "semanticType1");
         fieldToType = Collections.unmodifiableMap(fToType);
     }
 
@@ -118,21 +119,27 @@ public class TqlToDselConverterTest {
 
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
 
-        ELNode isEmptyNode1 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
-        isEmptyNode1.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "total"));
-        orNode.addChild(isEmptyNode1);
+        ELNode isInvalidNode1 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        isInvalidNode1.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "special"));
 
-        ELNode isEmptyNode2 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
-        isEmptyNode2.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "money"));
-        orNode.addChild(isEmptyNode2);
+        orNode.addChild(isInvalidNode1);
 
-        ELNode isEmptyNode3 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
-        isEmptyNode3.addChild(new ELNode(ELNodeType.STRING_LITERAL, "name"));
-        orNode.addChild(isEmptyNode3);
+        ELNode isInvalidNode2 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        isInvalidNode2.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "total"));
 
-        ELNode isEmptyNode4 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
-        isEmptyNode4.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "isActivated"));
-        orNode.addChild(isEmptyNode4);
+        orNode.addChild(isInvalidNode2);
+
+        ELNode isInvalidNode3 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        isInvalidNode3.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "money"));
+        orNode.addChild(isInvalidNode3);
+
+        ELNode isInvalidNode4 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        isInvalidNode4.addChild(new ELNode(ELNodeType.STRING_LITERAL, "name"));
+        orNode.addChild(isInvalidNode4);
+
+        ELNode isInvalidNode5 = new ELNode(ELNodeType.FUNCTION_CALL, "isEmpty");
+        isInvalidNode5.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "isActivated"));
+        orNode.addChild(isInvalidNode5);
 
         assertEquals(wrapNode(orNode).toString(), actual.toString());
     }
@@ -530,25 +537,31 @@ public class TqlToDselConverterTest {
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
 
         ELNode isInvalidNode1 = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
-        isInvalidNode1.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "total"));
-        isInvalidNode1.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("total") + "'"));
+        isInvalidNode1.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "special"));
+        isInvalidNode1.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("special") + "'"));
 
         orNode.addChild(isInvalidNode1);
 
         ELNode isInvalidNode2 = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
-        isInvalidNode2.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "money"));
-        isInvalidNode2.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("money") + "'"));
+        isInvalidNode2.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "total"));
+        isInvalidNode2.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("total") + "'"));
+
         orNode.addChild(isInvalidNode2);
 
         ELNode isInvalidNode3 = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
-        isInvalidNode3.addChild(new ELNode(ELNodeType.STRING_LITERAL, "name"));
-        isInvalidNode3.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("name") + "'"));
+        isInvalidNode3.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "money"));
+        isInvalidNode3.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("money") + "'"));
         orNode.addChild(isInvalidNode3);
 
         ELNode isInvalidNode4 = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
-        isInvalidNode4.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "isActivated"));
-        isInvalidNode4.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("isActivated") + "'"));
+        isInvalidNode4.addChild(new ELNode(ELNodeType.STRING_LITERAL, "name"));
+        isInvalidNode4.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("name") + "'"));
         orNode.addChild(isInvalidNode4);
+
+        ELNode isInvalidNode5 = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
+        isInvalidNode5.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "isActivated"));
+        isInvalidNode5.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("isActivated") + "'"));
+        orNode.addChild(isInvalidNode5);
 
         assertEquals(wrapNode(orNode).toString(), actual.toString());
     }
