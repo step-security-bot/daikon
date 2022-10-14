@@ -1,0 +1,10 @@
+= Daikon Release Notes (6.8.17) - 10/14/2022
+
+Thanks to @Fabien Way, @abenali-talend
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDP-11418[TDP-11418]: [RunConv] Range filter between doesn't work (link:https://github.com/Talend/daikon/pull/900[#900])
+- link:https://jira.talendforge.org/browse/TDP-11502[TDP-11502]: [RunConv] Use word pattern filters with special chars (link:https://github.com/Talend/daikon/pull/897[#897])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-11262[TDP-11262]: [RunConv][Back] Adapt TQL-DSEL convertor API to validity functions (link:https://github.com/Talend/daikon/pull/898[#898])
