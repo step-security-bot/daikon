@@ -1,10 +1,5 @@
 package org.talend.tqldsel.tqltodsel;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.maplang.el.parser.model.ELNode;
@@ -32,6 +27,11 @@ import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * Abstract TQL to DSEL visitor
  */
@@ -45,7 +45,6 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
     protected final Map<String, String> fieldToType;
 
     /**
-     *
      * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
      * representation of the schema
      */
@@ -90,7 +89,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         case DECIMAL:
             return new ELNode(ELNodeType.DECIMAL_LITERAL, elt.getValue());
         case QUOTED_VALUE:
-            return new ELNode(ELNodeType.STRING_LITERAL, elt.toQueryString());
+            return new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(elt.getValue()));
         default:
             throw new TqlException("Literal value type " + elt.getLiteral() + " not available in TQL");
         }
@@ -104,7 +103,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
     @Override
     public ELNode visit(Expression elt) {
-        throw new TqlException("Unsupported operation : visit(Expession elt)");
+        throw new TqlException("Unsupported operation : visit(Expression elt)");
     }
 
     @Override
@@ -215,7 +214,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL,
                 org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
         regexNode.addChild(ex.accept(this));
-        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getRegex() + "'"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(elt.getRegex())));
 
         return regexNode;
     }
@@ -227,7 +226,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
         ELNode fieldCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "complies");
         fieldCompliesNode.addChild(ex.accept(this));
-        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getPattern() + "'"));
+        fieldCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(elt.getPattern())));
 
         return fieldCompliesNode;
     }
@@ -239,7 +238,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
         ELNode fieldWordCompliesNode = new ELNode(ELNodeType.FUNCTION_CALL, "wordComplies");
         fieldWordCompliesNode.addChild(ex.accept(this));
-        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + elt.getPattern() + "'"));
+        fieldWordCompliesNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(elt.getPattern())));
 
         return fieldWordCompliesNode;
     }
@@ -281,7 +280,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
             ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL,
                     org.talend.maplang.el.interpreter.impl.function.builtin.Contains.NAME);
             containsNode.addChild(ex.accept(this));
-            containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + expressionValue + "'"));
+            containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(expressionValue)));
             if (!elt.isCaseSensitive()) {
                 containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
             }
@@ -292,5 +291,32 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
     @Override
     public ELNode visit(AllFields allFields) {
         throw new TqlException("Unsupported operation : visit(AllFields elt)");
+    }
+
+    /**
+     * The single quote can be used inside a literal.
+     * To avoid literals having confusing quotes when converting to DSEL, single quotes are escaped
+     *
+     * <pre>
+     * escapeSingleQuotes(null)       = null
+     * escapeSingleQuotes("O'Reilly")= "O\'Reilly"
+     *
+     * </pre>
+     *
+     * @param token the parsed token
+     * @return the token escaped for single quotes
+     */
+    private static String escapeSingleQuotes(String token) {
+        return token != null ? token.replaceAll("'", "\\\\'") : null;
+    }
+
+    /**
+     * Add single quotes to the beginning and the end of a string
+     * 
+     * @param token the string token we want to add quotes
+     * @return the token with single quotes added
+     */
+    private static String surroundWithSingleQuotes(String token) {
+        return "'" + escapeSingleQuotes(token) + "'";
     }
 }

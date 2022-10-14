@@ -145,6 +145,18 @@ public class TqlToDselConverterTest {
     }
 
     @Test
+    public void testParseTqlLiteralWithSingleQuote() {
+        final String tqlQuery = "name = 'abc\\'def'";
+        ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
+
+        ELNode regexNode = new ELNode(ELNodeType.EQUAL);
+        regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'abc\\'def'"));
+
+        assertEquals(wrapNode(regexNode), actual);
+    }
+
+    @Test
     public void testParseRegEx() {
         final String tqlQuery = "name ~ '^[A-Z][a-z]*$'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
@@ -169,6 +181,18 @@ public class TqlToDselConverterTest {
     }
 
     @Test
+    public void testParseRegExWithSingleQuote() {
+        final String tqlQuery = "name ~ '\\d\\'\\w'";
+        ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
+
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
+        regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'\\d\\'\\w'"));
+
+        assertEquals(wrapNode(regexNode), actual);
+    }
+
+    @Test
     public void testParseTqlWordComplies() {
         final String tqlQuery = "name wordComplies '[word]'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
@@ -176,6 +200,18 @@ public class TqlToDselConverterTest {
         ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "wordComplies");
         regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
         regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'[word]'"));
+
+        assertEquals(wrapNode(regexNode), actual);
+    }
+
+    @Test
+    public void testParseTqlWordCompliesWithSingleQuote() {
+        final String tqlQuery = "name wordComplies '[word]\\'[word]'";
+        ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
+
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "wordComplies");
+        regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'[word]\\'[word]'"));
 
         assertEquals(wrapNode(regexNode), actual);
     }
@@ -193,6 +229,18 @@ public class TqlToDselConverterTest {
     }
 
     @Test
+    public void testParseTqlCompliesWithSingleQuote() {
+        final String tqlQuery = "name complies 'aaa\\'aaa'";
+        ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
+
+        ELNode regexNode = new ELNode(ELNodeType.FUNCTION_CALL, "complies");
+        regexNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        regexNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'aaa\\'aaa'"));
+
+        assertEquals(wrapNode(regexNode), actual);
+    }
+
+    @Test
     public void testParseContains() {
         final String tqlQuery = "name contains 'am'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
@@ -200,6 +248,18 @@ public class TqlToDselConverterTest {
         ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
         containsNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
         containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'am'"));
+
+        assertEquals(wrapNode(containsNode), actual);
+    }
+
+    @Test
+    public void testParseContainsWithSingleQuote() {
+        final String tqlQuery = "name contains 'I\\'m'";
+        ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
+
+        ELNode containsNode = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
+        containsNode.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'I\\'m'"));
 
         assertEquals(wrapNode(containsNode), actual);
     }
