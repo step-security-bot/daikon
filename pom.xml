@@ -110,6 +110,7 @@
         <module>daikon-statistic</module>
         <module>daikon-schema</module>
         <module>daikon-dsel</module>
+        <module>daikon-collections</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
