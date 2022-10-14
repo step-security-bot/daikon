@@ -46,5 +46,7 @@ public class IsInvalidTest extends FunctionTest {
         testEvalExpressionThrowsFunctionException("isInvalid()");
         testEvalExpressionThrowsFunctionException("isInvalid('51')");
         testEvalExpressionThrowsFunctionException("isInvalid('28941', '', '')");
+        testEvalExpressionThrowsFunctionException("isInvalid('897', integer)");
+        testEvalExpressionThrowsFunctionException("isInvalid('897', 'integer', 'integer')");
     }
 }

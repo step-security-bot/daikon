@@ -1,5 +1,10 @@
 package org.talend.tqldsel.tqltodsel;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.maplang.el.parser.model.ELNode;
@@ -26,11 +31,6 @@ import org.talend.tql.model.NotExpression;
 import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Abstract TQL to DSEL visitor
@@ -186,7 +186,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         if (validFieldType == null) {
             throw new TqlException(String.format("Cannot find the type of the field '%s'", node.getImage()));
         }
-        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, validFieldType));
+        isValidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + validFieldType + "'"));
 
         return isValidNode;
     }
@@ -251,10 +251,31 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
                 org.talend.maplang.el.interpreter.impl.function.builtin.Between.NAME);
 
         fieldBetweenNode.addChild(ex.accept(this));
-        fieldBetweenNode.addChild(visit(elt.getLeft()));
-        fieldBetweenNode.addChild(visit(elt.getRight()));
+        fieldBetweenNode.addChild(fixLiteralNumberType(elt.getLeft()));
+        fieldBetweenNode.addChild(fixLiteralNumberType(elt.getRight()));
 
         return fieldBetweenNode;
+    }
+
+    private ELNode fixLiteralNumberType(LiteralValue literalValue) {
+        ELNode node;
+
+        if (literalValue.getLiteral().equals(LiteralValue.Enum.INT)) {
+            try {
+                Integer.valueOf(literalValue.getValue());
+                node = new ELNode(ELNodeType.INTEGER_LITERAL, literalValue.getValue());
+            } catch (NumberFormatException ignored) {
+                try {
+                    Long.valueOf(literalValue.getValue());
+                    node = new ELNode(ELNodeType.LONG_LITERAL, literalValue.getValue());
+                } catch (NumberFormatException ex) {
+                    node = visit(literalValue);
+                }
+            }
+        } else {
+            node = visit(literalValue);
+        }
+        return node;
     }
 
     @Override

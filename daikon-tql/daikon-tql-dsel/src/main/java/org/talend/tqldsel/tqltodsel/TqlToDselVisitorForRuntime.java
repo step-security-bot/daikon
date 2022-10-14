@@ -67,7 +67,7 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
                 throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
             }
 
-            elNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, invalidFieldType));
+            elNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + invalidFieldType + "'"));
         }
 
         return elNode;

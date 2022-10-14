@@ -45,5 +45,7 @@ public class IsValidTest extends FunctionTest {
         testEvalExpressionThrowsFunctionException("isValid()");
         testEvalExpressionThrowsFunctionException("isValid('113218')");
         testEvalExpressionThrowsFunctionException("isValid('54', '', '')");
+        testEvalExpressionThrowsFunctionException("isValid('False', DATE)");
+        testEvalExpressionThrowsFunctionException("isValid('False', 'date', 'date')");
     }
 }

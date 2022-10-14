@@ -67,7 +67,7 @@ public class TqlToDselVisitorForDb extends AbstractTqlToDselVisitor implements I
                 throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
             }
 
-            isInvalidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, invalidFieldType));
+            isInvalidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + invalidFieldType + "'"));
         }
 
         return isInvalidNode;

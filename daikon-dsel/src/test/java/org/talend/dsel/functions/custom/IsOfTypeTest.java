@@ -434,6 +434,8 @@ public class IsOfTypeTest extends FunctionTest {
         testEvalExpressionThrowsFunctionException("isOfType()");
         testEvalExpressionThrowsFunctionException("isOfType('113218')");
         testEvalExpressionThrowsFunctionException("isOfType('2022-10-04 09:12:02.918', '', '')");
+        testEvalExpressionThrowsFunctionException("isOfType('2901', INTEGER)");
+        testEvalExpressionThrowsFunctionException("isOfType('2901', 'integer', 'integer')");
     }
 
     private void setUpContextWithIntegerCategory() {

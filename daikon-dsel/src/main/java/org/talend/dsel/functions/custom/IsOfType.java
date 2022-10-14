@@ -3,7 +3,10 @@ package org.talend.dsel.functions.custom;
 import static org.talend.dataquality.semantic.model.CategoryType.COMPOUND;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.commons.lang3.EnumUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
@@ -29,8 +32,11 @@ public class IsOfType implements ExprLangFunction {
 
     @Override
     public Object call(ExprLangContext exprLangContext, Object... params) {
-        if (params.length != 2) {
-            throw new FunctionException(String.format("Wrong number of parameters (expected: 2, found: %d)", params.length));
+        long numberOfNonNullParams = Arrays.stream(params).filter(Objects::nonNull).count();
+
+        if (numberOfNonNullParams != 2) {
+            throw new FunctionException(
+                    String.format("Wrong number of parameters (expected: 2, found: %d)", numberOfNonNullParams));
         }
 
         Object value = params[0];

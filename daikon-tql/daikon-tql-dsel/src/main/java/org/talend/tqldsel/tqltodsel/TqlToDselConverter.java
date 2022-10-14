@@ -3,10 +3,7 @@ package org.talend.tqldsel.tqltodsel;
 import java.util.Collections;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.maplang.el.parser.model.ELNode;
-import org.talend.maplang.el.parser.model.ELNodePrinter;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
@@ -124,17 +121,5 @@ public class TqlToDselConverter {
         root.addChild(expBlk);
 
         return root;
-    }
-
-    /**
-     * Utility class to print the ELNode as a tree
-     *
-     * @param elNode ELNode to print
-     */
-    public static void printELNode(ELNode elNode) {
-        Logger LOGGER = LoggerFactory.getLogger(TqlToDselConverter.class);
-
-        final String TEST_TAB = "-";
-        LOGGER.debug(new ELNodePrinter(TEST_TAB, false).printAsTree(elNode));
     }
 }
