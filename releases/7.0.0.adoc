@@ -1,0 +1,10 @@
+= Daikon Release Notes (7.0.0) - 10/17/2022
+
+Thanks to @Fabien Abballe, @clesaec
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDKN-344[TDKN-344]: Iterator on AVL Tree (link:https://github.com/Talend/daikon/pull/903[#903])
+
+== Other
+- chore(): upgrade to spring-boot 2.7.3  (link:https://github.com/Talend/daikon/pull/904[#904])
+- Clesaec/tdkn 343 tree  (link:https://github.com/Talend/daikon/pull/899[#899])
