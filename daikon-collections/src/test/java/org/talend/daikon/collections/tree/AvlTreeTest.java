@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.collections.tree.file.BuilderFile;
 import org.talend.daikon.collections.tree.file.NodeFile;
-import org.talend.daikon.collections.tree.file.Serializer;
 import org.talend.daikon.collections.tree.memory.BuilderMemo;
 
 import java.io.File;
@@ -93,39 +92,4 @@ class AvlTreeTest {
         Assertions.assertEquals("Node 702", node702_Read.getData());
     }
 
-    static class SerializerInteger implements Serializer<Integer> {
-
-        @Override
-        public byte[] serialize(final Integer value) {
-            byte[] data = new byte[Integer.BYTES];
-            for (int i = 0; i < Integer.BYTES; i++) {
-                data[i] = (byte) ((value.intValue() >>> (Integer.BYTES - i - 1) * Byte.SIZE) & 0xFF);
-            }
-            return data;
-        }
-
-        @Override
-        public Integer deserialize(byte[] data) {
-            int value = 0;
-            for (int i = 0; i < Integer.BYTES; i++) {
-                int decal = (Integer.BYTES - i - 1) * Byte.SIZE;
-                int theData = (int) (data[i] & 0xFF);
-                value += theData << decal;
-            }
-            return Integer.valueOf(value);
-        }
-    }
-
-    static class SerializerString implements Serializer<String> {
-
-        @Override
-        public byte[] serialize(final String value) {
-            return value.getBytes();
-        }
-
-        @Override
-        public String deserialize(byte[] data) {
-            return new String(data);
-        }
-    }
 }

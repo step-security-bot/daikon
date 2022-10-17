@@ -10,6 +10,8 @@
  */
 package org.talend.daikon.collections.tree;
 
+import java.util.Iterator;
+
 /**
  * AVL Tree follow https://www.programiz.com/dsa/avl-tree.
  * This is for storing data in balanced tree (like Java TreeMap), ordered by K(ey).
@@ -33,6 +35,10 @@ public class AvlTree<K extends Comparable<K>, T> {
             return null;
         }
         return this.root.get(item);
+    }
+
+    public AvlTreeIterator.IteratorBuilder<K, T> iterator() {
+        return new AvlTreeIterator.IteratorBuilder<>(this.root);
     }
 
 }

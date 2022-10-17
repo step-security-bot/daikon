@@ -67,13 +67,24 @@ final INode<Key, Value> aNode = tree.get(aKey);
 Key k = aNode.getKey();
 Value v = aNode.getData();
 ```
-The tree is mostly 
 
+You can also iterate on tree
+```java
+Iterator<INode<Key, Value>> iterator = tree.iterator()
+    .startAt(minKey) // optional, iteration will begin at the smallest key that is >= minKey.
+    .endAt(maxKey) // optional, iteration will end at the largest key that is <= maxKey
+    .build();
+while (iterator.hasNext()) {
+    INode<Key, Value> node = iterator.next();
+    Key k = node.getKey();
+    Value v = node.getData();
+    ...
+}
+```
 ## Limitation
 
 - Once tree is build, it's immutable (but then support multi-threading).
 - No deletion on tree builder (would be complex to add).
-- Built tree only has "Value get(key)" method, no iteration from a key to another; but it would be easy to add if needed. 
 - There are no clever method for AvlTreeBuilder.build(...) to give a limit in term of memory usage (just in term of depth). Quite difficult to add if needed. 
 
 ## License

@@ -60,6 +60,7 @@ public class Node<K extends Comparable<K>, T> implements INode<K, T> {
         }
     }
 
+    @Override
     public Node<K, T> getChild(int num) {
         if (this.childs[num] == null) {
             return null;

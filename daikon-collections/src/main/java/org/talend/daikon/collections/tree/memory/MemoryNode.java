@@ -17,7 +17,7 @@ public class MemoryNode<K extends Comparable<K>, T> implements INode<K, T> {
 
     private final INode<K, T> delegate;
 
-    private final INode<K, T> left, right;
+    private final INode<K, T>[] childs = new INode[2];
 
     private final K key;
 
@@ -33,25 +33,28 @@ public class MemoryNode<K extends Comparable<K>, T> implements INode<K, T> {
             final INode<K, T> delegateRight = deleg.getChild(1);
             if (deep < limit) {
                 if (delegateLeft != null) {
-                    this.left = new MemoryNode<>(delegateLeft, deep + 1, limit);
+                    this.childs[0] = new MemoryNode<>(delegateLeft, deep + 1, limit);
                 } else {
-                    this.left = null;
+                    this.childs[0] = null;
                 }
                 if (delegateRight != null) {
-                    this.right = new MemoryNode<>(delegateRight, deep + 1, limit);
-                }
-
-                else {
-                    this.right = null;
+                    this.childs[1] = new MemoryNode<>(delegateRight, deep + 1, limit);
+                } else {
+                    this.childs[1] = null;
                 }
             } else {
-                this.left = delegateLeft;
-                this.right = delegateRight;
+                this.childs[0] = delegateLeft;
+                this.childs[1] = delegateRight;
             }
         } else {
-            this.left = null;
-            this.right = null;
+            this.childs[0] = null;
+            this.childs[1] = null;
         }
+    }
+
+    @Override
+    public INode<K, T> getChild(int num) {
+        return this.childs[num];
     }
 
     @Override
@@ -73,11 +76,11 @@ public class MemoryNode<K extends Comparable<K>, T> implements INode<K, T> {
         if (comp == 0) {
             return this;
         }
-        if (comp > 0 && this.left != null) {
-            return this.left.get(key);
+        if (comp > 0 && this.childs[0] != null) {
+            return this.childs[0].get(key);
         }
-        if (comp < 0 && this.right != null) {
-            return this.right.get(key);
+        if (comp < 0 && this.childs[1] != null) {
+            return this.childs[1].get(key);
         }
         return null;
     }

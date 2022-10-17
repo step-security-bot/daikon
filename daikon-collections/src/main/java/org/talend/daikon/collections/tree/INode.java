@@ -23,4 +23,6 @@ public interface INode<K extends Comparable<K>, T> {
     T getData();
 
     INode<K, T> get(final K key);
+
+    INode<K, T> getChild(int num);
 }
