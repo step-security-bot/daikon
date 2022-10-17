@@ -65,6 +65,14 @@ _Modules_                                                     |_Description_
 | Spring Cloud | 2021.0.0       |
 | Jackson      | 2.11.4         |
 
+### Daikon 7.x
+
+|              | *Daikon 7.0.x* |
+|--------------|----------------|
+| Spring Boot  | 2.7.3          |
+| Spring Cloud | 2021.0.4       |
+| Jackson      | 2.13.3         |
+
 ## Support
 
 You can ask for help on our [forum](https://community.talend.com/).
