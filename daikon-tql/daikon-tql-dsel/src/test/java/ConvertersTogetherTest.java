@@ -54,7 +54,7 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseLiteralComparisonLtForDouble() {
+    public void testParseLiteralComparisonLtForDecimal() {
         callConvertors("(field1 < 98.183)");
     }
 
@@ -70,7 +70,7 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseLiteralComparisonGtForDouble() {
+    public void testParseLiteralComparisonGtForDecimal() {
         callConvertors("(field1 > 555.72)");
     }
 
@@ -86,7 +86,7 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseLiteralComparisonLetForDouble() {
+    public void testParseLiteralComparisonLetForDecimal() {
         callConvertors("(field1 <= 9821.1972)");
     }
 
@@ -102,11 +102,11 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseLiteralComparisonGetForDouble() {
+    public void testParseLiteralComparisonGetForDecimal() {
         callConvertors("(field1 >= 2.091)");
     }
 
-    @Disabled("testParseTwoFieldComparisonGet() test currently disabled because an issue has occurred with it, need investigations")
+    @Disabled("testParseTwoFieldComparisonGte() test currently disabled because an issue has occurred with it, need investigations")
     @Test
     public void testParseTwoFieldComparisonGet() {
         callConvertors("(field1 >= field2)");
@@ -133,8 +133,13 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseBetweenFunctionForDouble() {
+    public void testParseBetweenFunctionForDecimal() {
         callConvertors("(field1 between [5.972, 991.27])");
+    }
+
+    @Test
+    public void testParseBetweenFunctionForLong() {
+        callConvertors("(field1 between [1665577759000, 1705577759000])");
     }
 
     @Test
@@ -163,7 +168,7 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseInForDouble() {
+    public void testParseInForDecimal() {
         callConvertors("(field1 in [525.87, 12, 99.20, 252.0])");
     }
 

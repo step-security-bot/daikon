@@ -34,7 +34,10 @@ import org.talend.tql.model.TqlElement;
 
 public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
 
-    private final static String BUILTIN_FUNCTION_IN = "in";
+    private final static String BUILTIN_FUNCTION_IS_PRESENT_IN = "isPresentIn";
+
+    // 'in' is a custom operator implemented thanks to the built-in 'isPresentIn' function
+    private final static String CUSTOM_OPERATOR_IN = "in";
 
     private final static String BUILTIN_FUNCTION_IS_VALID = "isValid";
 
@@ -89,6 +92,17 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
             return new LiteralValue(LiteralValue.Enum.DECIMAL, String.valueOf(elNode.getImage()));
         case DOUBLE_LITERAL:
             return new LiteralValue(LiteralValue.Enum.DECIMAL, String.valueOf(Double.valueOf(elNode.getImage())));
+        case LONG_LITERAL:
+            ELNode parent = elNode.getParent();
+            // Long literal are unsupported except for the Between function
+            // but need adaptation for TQL because TQL does not support the LONG type.
+            if (parent.getType().equals(ELNodeType.FUNCTION_CALL) && parent.getImage().equals(Between.NAME)) {
+                String image = elNode.getImage();
+                String finalImage = image.toLowerCase().endsWith("l") ? image.substring(0, image.length() - 1) : image;
+                return new LiteralValue(LiteralValue.Enum.INT, finalImage);
+            } else {
+                throw new IllegalStateException("Unsupported literal type : " + elNode.getType());
+            }
         case BOOLEAN_LITERAL:
             return new LiteralValue(LiteralValue.Enum.BOOLEAN, String.valueOf(elNode.getImage()));
         default:
@@ -214,8 +228,9 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
         case Between.NAME: {
             return visitBetweenFunction(elNode);
         }
-        case BUILTIN_FUNCTION_IN: {
-            return visitInFunction(elNode);
+        case CUSTOM_OPERATOR_IN:
+        case BUILTIN_FUNCTION_IS_PRESENT_IN: {
+            return visitForPresentInFunction(elNode);
         }
         case BUILTIN_FUNCTION_IS_VALID:
             return visitValidFunction(elNode);
@@ -289,7 +304,7 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
         return buildNewAST(new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight, false, false));
     }
 
-    private TqlElement visitInFunction(ELNode elNode) {
+    private TqlElement visitForPresentInFunction(ELNode elNode) {
         final TqlElement field = elNode.getChild(0).accept(this);
         final List<ELNode> children = elNode.getChildren();
 

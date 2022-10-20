@@ -1,6 +1,7 @@
 package org.talend.tql;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.TqlExpressionVisitor;
@@ -12,7 +13,7 @@ import org.talend.tql.parser.TqlExpressionVisitor;
 public abstract class TestTqlParser_Abstract {
 
     protected TqlElement doTest(String query) throws Exception {
-        ANTLRInputStream input = new ANTLRInputStream(query);
+        CharStream input = CharStreams.fromString(query);
         TqlLexer lexer = new TqlLexer(input);
         TqlParser parser = new TqlParser(new CommonTokenStream(lexer));
         TqlParser.ExpressionContext expression = parser.expression();

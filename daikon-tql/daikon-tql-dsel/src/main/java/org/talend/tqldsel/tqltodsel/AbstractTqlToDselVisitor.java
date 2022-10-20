@@ -164,7 +164,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
         List<ELNode> valueNodes = Arrays.stream(elt.getValues()).map(value -> value.accept(this)).collect(Collectors.toList());
 
-        ELNode inNode = new ELNode(ELNodeType.FUNCTION_CALL, "in");
+        ELNode inNode = new ELNode(ELNodeType.FUNCTION_CALL, "isPresentIn");
         inNode.addChild(elt.getField().accept(this));
         inNode.addChildren(valueNodes);
 
@@ -267,7 +267,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
             } catch (NumberFormatException ignored) {
                 try {
                     Long.valueOf(literalValue.getValue());
-                    node = new ELNode(ELNodeType.LONG_LITERAL, literalValue.getValue());
+                    node = new ELNode(ELNodeType.LONG_LITERAL, literalValue.getValue() + "L");
                 } catch (NumberFormatException ex) {
                     node = visit(literalValue);
                 }

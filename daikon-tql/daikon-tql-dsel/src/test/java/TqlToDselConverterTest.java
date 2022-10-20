@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.tqldsel.tqltodsel.TqlToDselConverter.wrapNode;
@@ -10,9 +11,14 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.talend.maplang.el.interpreter.api.DselHPathStore;
+import org.talend.maplang.el.interpreter.api.ExprInterpreter;
+import org.talend.maplang.el.interpreter.api.ExprInterpreterFactory;
+import org.talend.maplang.el.interpreter.api.ExprLangContext;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodePrinter;
 import org.talend.maplang.el.parser.model.ELNodeType;
+import org.talend.maplang.hpath.HPathStore;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.Expression;
 import org.talend.tql.parser.Tql;
@@ -21,6 +27,8 @@ import org.talend.tqldsel.tqltodsel.TqlToDselConverter;
 public class TqlToDselConverterTest {
 
     static Map<String, String> fieldToType;
+
+    static HPathStore store = new DselHPathStore();
 
     @BeforeAll
     static void setUp() {
@@ -31,75 +39,84 @@ public class TqlToDselConverterTest {
         fToType.put("money", "DECIMAL");
         fToType.put("special", "semanticType1");
         fieldToType = Collections.unmodifiableMap(fToType);
+
+        store.put("fieldLong1", "1680000000000L");
+        store.put("fieldInt1", "123");
+        store.put("fieldInt2", "124");
+        store.put("fieldInt3", "499");
+        store.put("fieldInt4", "978");
+        store.put("fieldDec1", "3500.057");
+        store.put("fieldString1", "value2");
+        store.put("fieldString2", "valueOther");
     }
 
     @Test
     public void testParseSingleNot() {
-        final String query = "not (field1=123 and field2<124)";
+        final String query = "not (fieldInt1=123 and fieldInt2<124)";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst = new ArrayList<>();
-        lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
+        lst.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
         ELNode andNode = new ELNode(ELNodeType.AND, "&&");
         andNode.addChildren(lst);
         ELNode expected = new ELNode(ELNodeType.NOT, "!");
         expected.addChild(andNode);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseIsNullWithTqlExpression() {
-        final String tqlQuery = "field1 is null";
+        final String tqlQuery = "fieldInt1 is null";
         final Expression tqlExpression = Tql.parse(tqlQuery);
         ELNode actual = TqlToDselConverter.convertForDb(tqlExpression);
-        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "field1", null);
+        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "fieldInt1", null);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseIsNull() {
-        final String tqlQuery = "field1 is null";
+        final String tqlQuery = "fieldInt1 is null";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
-        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "field1", null);
+        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "fieldInt1", null);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseNotIsNull() {
-        final String tqlQuery = "not(field1 is null)";
+        final String tqlQuery = "not(fieldInt1 is null)";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
-        ELNode nullNode = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "field1", null);
+        ELNode nullNode = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "fieldInt1", null);
         ELNode expected = new ELNode(ELNodeType.NOT, "!");
         expected.addChild(nullNode);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseIsEmpty() {
-        final String tqlQuery = "field1 is empty";
+        final String tqlQuery = "fieldString1 is empty";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
-        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isEmpty", "field1", null);
+        ELNode expected = buildNode(ELNodeType.FUNCTION_CALL, "isEmpty", "fieldString1", null);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseIsEmptyAnd() {
-        final String tqlQuery = "(field1 is empty) and ((field2 is null))";
+        final String tqlQuery = "(fieldString1 is empty) and ((fieldString2 is null))";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
-        ELNode isEmptyNode = buildNode(ELNodeType.FUNCTION_CALL, "isEmpty", "field1", null);
-        ELNode isNull = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "field2", null);
+        ELNode isEmptyNode = buildNode(ELNodeType.FUNCTION_CALL, "isEmpty", "fieldString1", null);
+        ELNode isNull = buildNode(ELNodeType.FUNCTION_CALL, "isNull", "fieldString2", null);
         ELNode expected = new ELNode(ELNodeType.AND, "&&");
         expected.addChild(isEmptyNode);
         expected.addChild(isNull);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
@@ -110,7 +127,7 @@ public class TqlToDselConverterTest {
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "hasEmpty");
         expected.addChild(new ELNode(ELNodeType.HPATH, "'*'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -142,7 +159,7 @@ public class TqlToDselConverterTest {
         isInvalidNode5.addChild(new ELNode(ELNodeType.STRING_LITERAL, "isActivated"));
         expected.addChild(isInvalidNode5);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -154,43 +171,43 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'abc\\'def'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseRegEx() {
-        final String tqlQuery = "name ~ '^[A-Z][a-z]*$'";
+        final String tqlQuery = "fieldString1 ~ '^[A-Z][a-z]*$'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'^[A-Z][a-z]*$'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseRegEx2() {
-        final String tqlQuery = "name ~ '\\d'";
+        final String tqlQuery = "fieldString1 ~ '\\d'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'\\d'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseRegExWithSingleQuote() {
-        final String tqlQuery = "name ~ '\\d\\'\\w'";
+        final String tqlQuery = "fieldString1 ~ '\\d\\'\\w'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "matches");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'\\d\\'\\w'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
@@ -202,7 +219,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'[word]'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -214,7 +231,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'[word]\\'[word]'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -226,7 +243,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'aaa'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -238,50 +255,50 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'aaa\\'aaa'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
     public void testParseContains() {
-        final String tqlQuery = "name contains 'am'";
+        final String tqlQuery = "fieldString1 contains 'am'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'am'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseContainsWithSingleQuote() {
-        final String tqlQuery = "name contains 'I\\'m'";
+        final String tqlQuery = "fieldString1 contains 'I\\'m'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'I\\'m'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseContainsWithExpectedException() {
-        final String tqlQuery = "name contains";
+        final String tqlQuery = "fieldString1 contains";
         assertThrows(TqlException.class, () -> TqlToDselConverter.convertForDb(tqlQuery));
     }
 
     @Test
     public void testParseContainsIgnoreCase() {
-        final String tqlQuery = "name containsIgnoreCase 'am'";
+        final String tqlQuery = "fieldString1 containsIgnoreCase 'am'";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'am'"));
         expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
@@ -292,125 +309,125 @@ public class TqlToDselConverterTest {
 
     @Test
     public void testParseBetweenForString() {
-        final String tqlQuery = "field1 between ['value1', 'value4']";
+        final String tqlQuery = "fieldString1 between ['value1', 'value4']";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value1'"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value4'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseBetweenForInt() {
-        final String tqlQuery = "field1 between [2, 51]";
+        final String tqlQuery = "fieldInt1 between [2, 187]";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldInt1"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "2"));
-        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "51"));
+        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "187"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseBetweenForLong() {
-        final String tqlQuery = "field1 between [1665577759000, 1705577759000]";
+        final String tqlQuery = "fieldLong1 between [1665577759000, 1705577759000]";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
-        expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1665577759000"));
-        expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1705577759000"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldLong1"));
+        expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1665577759000L"));
+        expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1705577759000L"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseBetweenForMix() {
-        final String tqlQuery = "field1 between [3182, 4722.189]";
+        final String tqlQuery = "fieldDec1 between [3182, 4722.189]";
         ELNode actual = TqlToDselConverter.convertForDb(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldDec1"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "3182"));
         expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "4722.189"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseSingleAnd() {
-        final String query = "field1=123 and field2<124";
+        final String query = "fieldInt1=123 and fieldInt2<124";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst = new ArrayList<>();
-        lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
+        lst.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
         ELNode expected = new ELNode(ELNodeType.AND, "&&");
         expected.addChildren(lst);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseDoubleAnd() {
-        final String query = "field1=123 and field2<124 and field3>125";
+        final String query = "fieldInt1=123 and fieldInt2<124 and fieldInt3>125";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst = new ArrayList<>();
-        lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
-        lst.add(buildNode(ELNodeType.GREATER_THAN, ">", "field3", "125"));
+        lst.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
+        lst.add(buildNode(ELNodeType.GREATER_THAN, ">", "fieldInt3", "125"));
         ELNode expected = new ELNode(ELNodeType.AND, "&&");
         expected.addChildren(lst);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseSingleOr() {
-        final String query = "field1=123 or field2<124";
+        final String query = "fieldInt1=123 or fieldInt2<124";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst = new ArrayList<>();
-        lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
+        lst.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
         ELNode expected = new ELNode(ELNodeType.OR, "||");
         expected.addChildren(lst);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseDoubleOr() {
-        final String query = "field1=123 or field2<124 or field3>125";
+        final String query = "fieldInt1=123 or fieldInt2<124 or fieldInt3>125";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst = new ArrayList<>();
-        lst.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
-        lst.add(buildNode(ELNodeType.GREATER_THAN, ">", "field3", "125"));
+        lst.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
+        lst.add(buildNode(ELNodeType.GREATER_THAN, ">", "fieldInt3", "125"));
         ELNode expected = new ELNode(ELNodeType.OR, "||");
         expected.addChildren(lst);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseAndOr() {
-        final String query = "field1=123 and field2<124 or field3>125 and field4<=126";
+        final String query = "fieldInt1=123 and fieldInt2<124 or fieldInt3>125 and fieldInt4<=126";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
         List<ELNode> lst1 = new ArrayList<>();
         List<ELNode> lst2 = new ArrayList<>();
-        lst1.add(buildNode(ELNodeType.EQUAL, "==", "field1", "123"));
-        lst1.add(buildNode(ELNodeType.LOWER_THAN, "<", "field2", "124"));
-        lst2.add(buildNode(ELNodeType.GREATER_THAN, ">", "field3", "125"));
-        lst2.add(buildNode(ELNodeType.LOWER_OR_EQUAL, "<=", "field4", "126"));
+        lst1.add(buildNode(ELNodeType.EQUAL, "==", "fieldInt1", "123"));
+        lst1.add(buildNode(ELNodeType.LOWER_THAN, "<", "fieldInt2", "124"));
+        lst2.add(buildNode(ELNodeType.GREATER_THAN, ">", "fieldInt3", "125"));
+        lst2.add(buildNode(ELNodeType.LOWER_OR_EQUAL, "<=", "fieldInt4", "126"));
         ELNode expected = new ELNode(ELNodeType.OR, "||");
         ELNode andNode1 = new ELNode(ELNodeType.AND, "&&");
         ELNode andNode2 = new ELNode(ELNodeType.AND, "&&");
@@ -419,113 +436,113 @@ public class TqlToDselConverterTest {
         expected.addChild(andNode1);
         expected.addChild(andNode2);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseLiteralComparisonEq() {
-        final String query = "field1=123";
+        final String query = "fieldInt1=123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.EQUAL, "==", "field1", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.EQUAL, "==", "fieldInt1", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonNeq() {
-        final String query = "field1!=123";
+        final String query = "fieldInt1!=123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.NOT_EQUAL, "!=", "field1", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.NOT_EQUAL, "!=", "fieldInt1", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonLt() {
-        final String query = "field1<123";
+        final String query = "fieldInt1<123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.LOWER_THAN, "<", "field1", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.LOWER_THAN, "<", "fieldInt1", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonGt() {
-        final String query = "field1>123";
+        final String query = "fieldInt1>123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.GREATER_THAN, ">", "field1", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.GREATER_THAN, ">", "fieldInt1", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonLet() {
-        final String query = "field4<=123";
+        final String query = "fieldInt4<=123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.LOWER_OR_EQUAL, "<=", "field4", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.LOWER_OR_EQUAL, "<=", "fieldInt4", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonGet() {
-        final String query = "field3>=123";
+        final String query = "fieldInt3>=123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.GREATER_OR_EQUAL, ">=", "field3", "123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.GREATER_OR_EQUAL, ">=", "fieldInt3", "123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseLiteralComparisonNegative() {
-        final String query = "field2=-123";
+        final String query = "fieldInt2=-123";
         ELNode actual = TqlToDselConverter.convertForDb(query);
-        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.EQUAL, "==", "field2", "-123");
+        ELNode expected = buildNodeIncludingRootAndExprBlock(ELNodeType.EQUAL, "==", "fieldInt2", "-123");
 
-        assertEqualsForELNodes(actual, expected, false);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, false);
     }
 
     @Test
     public void testParseInForInt() {
-        final String query = "field1 in [89178, 12, 99, 2]";
+        final String query = "fieldInt1 in [89178, 12, 123, 9]";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
-        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "in");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "isPresentIn");
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldInt1"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "89178"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "12"));
-        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "99"));
-        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "2"));
+        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "123"));
+        expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "9"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseInForString() {
-        final String query = "field1 in ['value1', 'value2']";
+        final String query = "fieldString1 in ['value1', 'value2']";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
-        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "in");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "isPresentIn");
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value1'"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value2'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseInForDecimal() {
-        final String query = "field1 in [525.87, 12.18928, 99.20, 252.0]";
+        final String query = "fieldDec1 in [525.87, 3500.057, 99.20, 252.0]";
         ELNode actual = TqlToDselConverter.convertForDb(query);
 
-        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "in");
-        expected.addChild(new ELNode(ELNodeType.HPATH, "field1"));
+        ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "isPresentIn");
+        expected.addChild(new ELNode(ELNodeType.HPATH, "fieldDec1"));
         expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "525.87"));
-        expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "12.18928"));
+        expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "3500.057"));
         expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "99.20"));
         expected.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, "252.0"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
@@ -538,7 +555,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'STRING'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -550,7 +567,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'STRING'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -571,7 +588,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'STRING'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -583,7 +600,7 @@ public class TqlToDselConverterTest {
         expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'STRING'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -594,7 +611,7 @@ public class TqlToDselConverterTest {
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "hasInvalid");
         expected.addChild(new ELNode(ELNodeType.HPATH, "'*'"));
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -631,7 +648,7 @@ public class TqlToDselConverterTest {
         isInvalidNode5.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + fieldToType.get("isActivated") + "'"));
         expected.addChild(isInvalidNode5);
 
-        assertEqualsForELNodes(actual, expected, true);
+        assertELNodesAreEquals(actual, expected, true, false);
     }
 
     @Test
@@ -652,7 +669,8 @@ public class TqlToDselConverterTest {
         return current;
     }
 
-    private ELNode buildNodeIncludingRootAndExprBlock(ELNodeType type, String image, String name, String value) {
+    private ELNode buildNodeIncludingRootAndExprBlock(final ELNodeType type, final String image, final String name,
+            final String value) {
         ELNode root = new ELNode(ELNodeType.ROOT);
         ELNode expBlk = new ELNode(ELNodeType.EXPR_BLOCK);
         ELNode eq = new ELNode(type, image);
@@ -664,7 +682,13 @@ public class TqlToDselConverterTest {
         return root;
     }
 
-    private static void assertEqualsForELNodes(ELNode actual, ELNode expected, boolean isExpectedMustBeWrapped) {
+    private static void assertELNodesAreEqualsAndExecutionIsOK(final ELNode actual, final ELNode expected,
+            final boolean isExpectedMustBeWrapped) {
+        assertELNodesAreEquals(actual, expected, isExpectedMustBeWrapped, true);
+    }
+
+    private static void assertELNodesAreEquals(final ELNode actual, final ELNode expected, final boolean isExpectedMustBeWrapped,
+            final boolean isExecutionChecked) {
         ELNodePrinter elNodePrinter = new ELNodePrinter("-", false);
 
         ELNode finalExpected = isExpectedMustBeWrapped ? wrapNode(expected) : expected;
@@ -673,6 +697,14 @@ public class TqlToDselConverterTest {
                 + " \nTree of actual:\n" + elNodePrinter.printAsTree(actual));
         assertEquals(expected.toString(), actual.toString(), "\nTree of expected:\n" + elNodePrinter.printAsTree(finalExpected)
                 + " \nTree of actual:\n" + elNodePrinter.printAsTree(actual));
+
+        if (isExecutionChecked) {
+            ExprLangContext context = new ExprLangContext();
+            context.setStore(store);
+            ExprInterpreter interpreter = ExprInterpreterFactory.create(context);
+            interpreter.setModel(actual);
+            assertDoesNotThrow(interpreter::eval, "DSEL expression should not throw an exception because it should be valid");
+        }
     }
 
 }
