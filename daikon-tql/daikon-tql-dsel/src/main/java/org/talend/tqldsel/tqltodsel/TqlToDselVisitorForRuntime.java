@@ -8,10 +8,17 @@ import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.AllFields;
+import org.talend.tql.model.ComparisonExpression;
+import org.talend.tql.model.ComparisonOperator;
 import org.talend.tql.model.FieldIsEmptyExpression;
 import org.talend.tql.model.FieldIsInvalidExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
+
+import static org.talend.tql.model.ComparisonOperator.Enum.GET;
+import static org.talend.tql.model.ComparisonOperator.Enum.GT;
+import static org.talend.tql.model.ComparisonOperator.Enum.LET;
+import static org.talend.tql.model.ComparisonOperator.Enum.LT;
 
 /**
  * TQL to DSEL visitor used for runtime
@@ -19,6 +26,21 @@ import org.talend.tql.visitor.IASTVisitor;
 public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TqlToDselVisitorForRuntime.class);
+
+    /**
+     * REGEX used to identify a number. Below the rules:
+     * - spaces are allowed at the beginning and at the end
+     * - we can have "+" or "-" or "(" or "(+" or "(-" at the beginning
+     * - we can have ")" or "%" or "%)" at the end
+     * - "." and "," are allowed
+     * - we cannot have "x."
+     * - we can have ".x"
+     * - we can have "e" or "E"
+     * - everything behind the "e" follow the previous rules
+     * - we cannot have "e-" but we can have "e-5"
+     *
+     */
+    public static final String NUMBER_REGEX_STRING_FORMAT = "\"[ ]*\\(?[-\\+]?(?:(?:(?:\\d*[\\.,]?\\d+)?[eE](:?[-\\+]\\d+)?(:?\\d*[\\.,]?\\d+)?)|(?:\\d*[\\.,]?\\d+))%?\\)?[ ]*\"";
 
     /**
      *
@@ -86,5 +108,39 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
         }
 
         return orNode;
+    }
+
+    /**
+     * We want to override all comparison operators: <, >, <=, >=
+     * Instead of having a filter A>B, we want to have isNumber(A) && A>B
+     *
+     * @param elt element to visit
+     * @return ELNode
+     */
+    @Override
+    public ELNode visit(ComparisonExpression elt) {
+        LOGGER.debug("Inside Visit ComparisonExpression for Runtime" + elt.toString());
+        TqlElement field = elt.getField();
+        ComparisonOperator operator = elt.getOperator();
+        TqlElement valueOrField = elt.getValueOrField();
+        ELNode fieldNode = field.accept(this);
+        ELNode opNode = operator.accept(this);
+        ELNode valueNode = valueOrField.accept(this);
+        opNode.addChild(fieldNode);
+        opNode.addChild(valueNode);
+        final ComparisonOperator.Enum comparisonOperator = operator.getOperator();
+        if (GT.equals(comparisonOperator) || LT.equals(comparisonOperator) || GET.equals(comparisonOperator)
+                || LET.equals(comparisonOperator)) {
+            ELNode matchNumberNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                    org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
+            matchNumberNode.addChild(new ELNode(ELNodeType.HPATH, fieldNode.getImage()));
+            matchNumberNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, NUMBER_REGEX_STRING_FORMAT));
+            final ELNode andNode = new ELNode(ELNodeType.AND);
+            andNode.addChild(matchNumberNode);
+            andNode.addChild(opNode);
+            return andNode;
+        } else {
+            return opNode;
+        }
     }
 }
