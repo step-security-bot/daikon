@@ -1,4 +1,3 @@
-org.talend.dsel.functions.custom.IsOfType
 org.talend.dsel.functions.custom.IsValid
 org.talend.dsel.functions.custom.IsInvalid
 org.talend.dsel.functions.custom.Complies
