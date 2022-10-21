@@ -222,7 +222,7 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
         case Contains.NAME:
             final String value = elNode.getChild(1).getImage();
             final ELNode isCaseSensitiveNode = elNode.getFirstChild(ELNodeType.BOOLEAN_LITERAL);
-            return (isCaseSensitiveNode != null && "false".equals(isCaseSensitiveNode.getImage()))
+            return (isCaseSensitiveNode != null && "true".equals(isCaseSensitiveNode.getImage()))
                     ? TqlBuilder.containsIgnoreCase(fieldName, value)
                     : TqlBuilder.contains(fieldName, value);
         case Between.NAME: {

@@ -270,7 +270,7 @@ public class DselToTqlConverterTest {
 
     @Test
     public void testParseContainsIgnoringCase() {
-        final String dselQuery = "contains(field1, 'aBcDE', false)";
+        final String dselQuery = "contains(field1, 'aBcDE', true)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
         final TqlElement expectedTqlQuery = containsIgnoreCase("field1", "'aBcDE'");
         assertTqlElementsAreEqualsAndExecutionIsOK(convertedTqlQuery, expectedTqlQuery);

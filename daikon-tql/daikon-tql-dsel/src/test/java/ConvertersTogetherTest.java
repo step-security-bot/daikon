@@ -1,8 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-import java.util.HashMap;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -13,6 +8,13 @@ import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.Tql;
 import org.talend.tqldsel.dseltotql.DselToTqlConverter;
 import org.talend.tqldsel.tqltodsel.TqlToDselConverter;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ConvertersTogetherTest {
 
@@ -118,6 +120,11 @@ public class ConvertersTogetherTest {
     }
 
     @Test
+    public void testParseContainsForRuntime() {
+        callConvertors("(field1 contains 'hello')", Collections.emptyMap(), true);
+    }
+
+    @Test
     public void testParseContainsIgnoreCase() {
         callConvertors("(field1 containsIgnoreCase 'HEllO')");
     }
@@ -194,7 +201,7 @@ public class ConvertersTogetherTest {
 
     @Test
     public void testParseIsEmptyWithAllFields() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         fToType.put("accountNumber", "INTEGER");
         callConvertors("(* is empty)", fToType, false);
@@ -202,7 +209,7 @@ public class ConvertersTogetherTest {
 
     @Test
     public void testParseIsEmptyWithAllFieldsForRuntime() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         fToType.put("accountNumber", "INTEGER");
         callConvertors("(* is empty)", fToType, true);
@@ -210,21 +217,21 @@ public class ConvertersTogetherTest {
 
     @Test
     public void testParseIsValidWithField() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         callConvertors("(field1 is valid)", fToType, false);
     }
 
     @Test
     public void testParseIsInvalidWithField() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         callConvertors("(field1 is invalid)", fToType, false);
     }
 
     @Test
     public void testParseIsInvalidWithAllFields() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         fToType.put("accountNumber", "INTEGER");
         callConvertors("(* is invalid)", fToType, false);
@@ -232,7 +239,7 @@ public class ConvertersTogetherTest {
 
     @Test
     public void testParseIsInvalidWithAllFieldsForRuntime() {
-        final HashMap<String, String> fToType = new HashMap<>();
+        final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
         fToType.put("accountNumber", "INTEGER");
         callConvertors("(* is invalid)", fToType, true);
@@ -259,10 +266,10 @@ public class ConvertersTogetherTest {
     }
 
     private void callConvertors(final String tqlQuery) {
-        callConvertors(tqlQuery, null, false);
+        callConvertors(tqlQuery, Collections.emptyMap(), false);
     }
 
-    private void callConvertors(final String tqlQuery, final HashMap<String, String> fieldToType, final boolean isForRuntime) {
+    private void callConvertors(final String tqlQuery, final Map<String, String> fieldToType, final boolean isForRuntime) {
         LOGGER.debug("- Original TQL query : " + tqlQuery);
 
         final TqlElement tqlElement = Tql.parse(tqlQuery);
@@ -270,9 +277,7 @@ public class ConvertersTogetherTest {
 
         final ELNode elNode;
 
-        if (fieldToType == null || fieldToType.isEmpty()) {
-            elNode = TqlToDselConverter.convertForDb(tqlQuery);
-        } else if (isForRuntime) {
+        if (isForRuntime) {
             elNode = TqlToDselConverter.convertForRuntime(tqlQuery, fieldToType);
         } else {
             elNode = TqlToDselConverter.convertForDb(tqlQuery, fieldToType);

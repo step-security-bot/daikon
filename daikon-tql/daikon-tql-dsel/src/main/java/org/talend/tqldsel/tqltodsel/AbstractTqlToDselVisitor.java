@@ -303,7 +303,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
             containsNode.addChild(ex.accept(this));
             containsNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, surroundWithSingleQuotes(expressionValue)));
             if (!elt.isCaseSensitive()) {
-                containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
+                containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
             }
             return containsNode;
         }

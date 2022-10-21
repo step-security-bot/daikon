@@ -1,13 +1,12 @@
 package org.talend.tqldsel.tqltodsel;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.maplang.el.parser.model.ELNode;
 import org.talend.maplang.el.parser.model.ELNodeType;
 import org.talend.tql.excp.TqlException;
 import org.talend.tql.model.AllFields;
+import org.talend.tql.model.FieldContainsExpression;
 import org.talend.tql.model.ComparisonExpression;
 import org.talend.tql.model.ComparisonOperator;
 import org.talend.tql.model.FieldIsEmptyExpression;
@@ -15,6 +14,7 @@ import org.talend.tql.model.FieldIsInvalidExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
 
+import java.util.Map;
 import static org.talend.tql.model.ComparisonOperator.Enum.GET;
 import static org.talend.tql.model.ComparisonOperator.Enum.GT;
 import static org.talend.tql.model.ComparisonOperator.Enum.LET;
@@ -95,6 +95,19 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
         return elNode;
     }
 
+    @Override
+    public ELNode visit(FieldContainsExpression elt) {
+        ELNode containsNode = super.visit(elt);
+        // for runtime we consider the contains function as containsIgnoreCase
+        // the condition below was added to avoid adding a new child with true attribute if already exists
+        // contains(field, 'value') -> 2 children (attribute 'true' does not exists)
+        // contains(field, 'value', true) -> 3 children (attribute 'true' already exists)
+        if (containsNode.getChildren().size() == 2) {
+            containsNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
+        }
+        return containsNode;
+    }
+
     private ELNode buildOrExpressionForFunctionWithAllFields(final String functionName, final Boolean isTypeProvided) {
         ELNode orNode = new ELNode(ELNodeType.OR, "||");
 
@@ -119,16 +132,9 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
      */
     @Override
     public ELNode visit(ComparisonExpression elt) {
-        LOGGER.debug("Inside Visit ComparisonExpression for Runtime" + elt.toString());
-        TqlElement field = elt.getField();
-        ComparisonOperator operator = elt.getOperator();
-        TqlElement valueOrField = elt.getValueOrField();
-        ELNode fieldNode = field.accept(this);
-        ELNode opNode = operator.accept(this);
-        ELNode valueNode = valueOrField.accept(this);
-        opNode.addChild(fieldNode);
-        opNode.addChild(valueNode);
-        final ComparisonOperator.Enum comparisonOperator = operator.getOperator();
+        ELNode opNode = super.visit(elt);
+        ELNode fieldNode = opNode.getChildren().get(0);
+        final ComparisonOperator.Enum comparisonOperator = elt.getOperator().getOperator();
         if (GT.equals(comparisonOperator) || LT.equals(comparisonOperator) || GET.equals(comparisonOperator)
                 || LET.equals(comparisonOperator)) {
             ELNode matchNumberNode = new ELNode(ELNodeType.FUNCTION_CALL,

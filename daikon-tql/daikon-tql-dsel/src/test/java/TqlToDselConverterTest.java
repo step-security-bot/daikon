@@ -293,7 +293,7 @@ public class TqlToDselConverterTest {
             ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
             expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
             expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'am'"));
-            expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
+            expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
 
             assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
         }
@@ -621,6 +621,19 @@ public class TqlToDselConverterTest {
 
     @Nested
     class ConverterForRuntime {
+
+        @Test
+        public void testParseContainsForRuntime() {
+            final String tqlQuery = "name contains 'am'";
+            ELNode actual = TqlToDselConverter.convertForRuntime(tqlQuery);
+
+            ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "contains");
+            expected.addChild(new ELNode(ELNodeType.HPATH, "name"));
+            expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'am'"));
+            expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
+
+            assertELNodesAreEquals(actual, expected, true, false);
+        }
 
         @Test
         public void testParseIsEmptyWithAllFields() {
