@@ -2,4 +2,4 @@
 
 ## Description
 
-The goal of this module is to extend DSEL by adding some custom functions.
+The goal of this module is to extend the Data Shaping Language (`DSEL`) by adding some custom functions.

@@ -12,7 +12,7 @@ import org.talend.tql.parser.Tql;
 public class TqlToDselConverter {
 
     /**
-     * Utility method to convert for a database a TQL tqlQuery as String to a DSEL tqlQuery.
+     * Utility method to convert for a database a TQL query as String to a DSEL query.
      *
      * @param tqlQuery TQL tqlQuery as String
      * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
@@ -60,7 +60,7 @@ public class TqlToDselConverter {
     }
 
     /**
-     * Utility method to convert for runtime a TQL tqlQuery as String to a DSEL tqlQuery.
+     * Utility method to convert for runtime a TQL query as String to a DSEL query.
      *
      * @param tqlQuery TQL tqlQuery as String
      * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight

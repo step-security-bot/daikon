@@ -8,12 +8,13 @@ TQL stands for Talend Query Language.
 
 This folder contains:
 
-_Modules_                                               |_Description_
---------------------------------------------------------|------------------------------------------
-[daikon-tql-bean](daikon-tql-bean)                      |*Talend Query Language Java visitor*
-[daikon-tql-client](daikon-tql-client)                  |*Talend Query Language JavaScript client to generate TQL from plain object*
-[daikon-tql-core](daikon-tql-core)                      |*Talend Query Language Java core and its generated JavaScript grammar and lexers*
-[daikon-tql-mongo](daikon-tql-mongo)                    |*Talend Query Language MongoDB implementation*
+| _Modules_                              | _Description_                                                                     |
+|----------------------------------------|-----------------------------------------------------------------------------------|
+| [daikon-tql-bean](daikon-tql-bean)     | *Talend Query Language Java visitor*                                              |
+| [daikon-tql-client](daikon-tql-client) | *Talend Query Language JavaScript client to generate TQL from plain object*       |
+| [daikon-tql-core](daikon-tql-core)     | *Talend Query Language Java core and its generated JavaScript grammar and lexers* |
+| [daikon-tql-dsel](daikon-tql-dsel)     | *Talend Query Language and Data Shaping Language two-ways converters*             |
+| [daikon-tql-mongo](daikon-tql-mongo)   | *Talend Query Language MongoDB implementation*                                    |
 
 
 ## Release TQL Javascript modules
