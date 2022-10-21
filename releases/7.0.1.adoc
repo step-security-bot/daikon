@@ -1,0 +1,14 @@
+= Daikon Release Notes (7.0.1) - 10/21/2022
+
+Thanks to @Mark Butko, @ngrange-talend, @abenali-talend, @Fabien Way
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDP-11450[TDP-11450]: [RunConv] Run prep and prep playground should use same insensitive filter (link:https://github.com/Talend/daikon/pull/908[#908])
+- link:https://jira.talendforge.org/browse/TDP-11463[TDP-11463]: [RunConv] invalid rows are filtered during run prep (link:https://github.com/Talend/daikon/pull/910[#910])
+- link:https://jira.talendforge.org/browse/TDP-11418[TDP-11418]: [RunConv] Range filter between doesn't work (link:https://github.com/Talend/daikon/pull/909[#909])
+
+== Feature
+- link:https://jira.talendforge.org/browse/TDP-11262[TDP-11262]: [RunConv] Use filters with advanced criteria (validity or invalidity) - TQL-DSEL convertor API (link:https://github.com/Talend/daikon/pull/912[#912])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPSVC-19267[TPSVC-19267]: Support internal M2M token (CC flow) in daikon-spring-auth (link:https://github.com/Talend/daikon/pull/907[#907])
