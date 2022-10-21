@@ -20,9 +20,17 @@ public class JwtClaims {
 
     public static final String JWT_ID_CLAIM = "jti";
 
+    public static final String LOGIN_CLAIM = "login";
+
     public static final String NAME_CLAIM = "name";
 
     public static final String USERNAME_CLAIM = "username";
+
+    public static final String PREFERRED_USERNAME_CLAIM = "preferred_username";
+
+    public static final String CLIENT_NAME_CLAIM = "client_name";
+
+    public static final String CLIENT_ID_CLAIM = "client_id";
 
     public static final String EMAIL_CLAIM = "email";
 
@@ -37,6 +45,8 @@ public class JwtClaims {
     public static final String TIMEZONE_CLAIM = "timezone";
 
     public static final String ENTITLEMENTS_CLAIM = "entitlements";
+
+    public static final String PERMISSIONS_CLAIM = "permissions";
 
     public static final String APPLICATIONS_CLAIM = "applications";
 
@@ -59,5 +69,7 @@ public class JwtClaims {
     public static final String SALES_FORCE_ACCOUNT_ID = "sales_force_account_id";
 
     public static final String IPC_ENABLED = "ipc_enabled";
+
+    public static final String GRANT_TYPE_CLAIM = "grant_type";
 
 }

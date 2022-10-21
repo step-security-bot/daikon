@@ -88,6 +88,34 @@ public class UserDetailsConverterTest {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/pat-introspection-fail.json");
         Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
 
-        assertThrows(IllegalArgumentException.class, () -> UserDetailsConverter.convert(introspectionResult));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                                                          () -> UserDetailsConverter.convert(introspectionResult));
+        assertEquals("Username not found", exception.getMessage());
+    }
+
+    @Test
+    @SneakyThrows
+    public void convertClientCredentialsJwtClaimsSuccess() {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-cc-claims-success.json");
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+
+        AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
+
+        assertEquals("qa-provisioner-client-id", result.getId());
+        assertEquals("QA Provisioner - Client Credentials Flow", result.getUsername());
+        assertEquals(new HashSet<>(Arrays.asList("TC_ACCOUNT_CREATE", "TC_ACCOUNT_READ", "TC_ACCOUNT_STATUS_READ")),
+                     result.getEntitlements());
+        assertNull(result.getTenantId());
+    }
+
+    @Test
+    @SneakyThrows
+    public void convertClientCredentialsJwtWithoutClientNameFails() {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-cc-claims-no-name.json");
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                                                          () -> UserDetailsConverter.convert(introspectionResult));
+        assertEquals("Client name not found", exception.getMessage());
     }
 }

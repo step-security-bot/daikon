@@ -1,0 +1,11 @@
+{
+  "jti": "3d0dc04715523a92bc4031e1223107490fad3fcf2fdd1b0be2e3e64ce77f37d7",
+  "client_id": "qa-provisioner-client-id",
+  "iat": 1666097779,
+  "exp": 1666099279,
+  "iss": "https://iam.int.cloud.talend.com/oidc",
+  "grant_type": "client_credentials",
+  "permissions": [
+    "TC_ACCOUNT_CREATE"
+  ]
+}

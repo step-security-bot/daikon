@@ -20,7 +20,9 @@ public class UserDetailsConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserDetailsConverter.class);
 
-    private static final List<String> USERNAME_CLAIMS = Arrays.asList("login", "username", "preferred_username");
+    private static final List<String> USERNAME_CLAIMS = Arrays.asList(LOGIN_CLAIM, USERNAME_CLAIM, PREFERRED_USERNAME_CLAIM);
+
+    private static final String CLIENT_CREDENTIALS_GRANT = "client_credentials";
 
     private static Map<String, BiConsumer<AuthUserDetails, Object>> claimToPropertySetter = new HashMap<>();
     static {
@@ -52,11 +54,15 @@ public class UserDetailsConverter {
     }
 
     public static AuthUserDetails convert(Map<String, Object> jwtClaims) {
-        AuthUserDetails authUserDetails = new AuthUserDetails(extractUserName(jwtClaims), "N/A", extractAuthorities(jwtClaims));
-        authUserDetails.setAttributes(jwtClaims);
-        setProperties(authUserDetails, jwtClaims);
-
-        return authUserDetails;
+        if (CLIENT_CREDENTIALS_GRANT.equals(jwtClaims.get(GRANT_TYPE_CLAIM))) {
+            return convertForCCGrant(jwtClaims);
+        } else {
+            AuthUserDetails authUserDetails = new AuthUserDetails(extractUserName(jwtClaims), "N/A",
+                    extractEntitlementsForUser(jwtClaims));
+            authUserDetails.setAttributes(jwtClaims);
+            setProperties(authUserDetails, jwtClaims);
+            return authUserDetails;
+        }
     }
 
     private static String extractUserName(Map<String, Object> jwtClaims) {
@@ -67,10 +73,14 @@ public class UserDetailsConverter {
                 });
     }
 
-    private static Collection<GrantedAuthority> extractAuthorities(Map<String, Object> attributes) {
-        String entitlements = (String) attributes.get(JwtClaims.ENTITLEMENTS_CLAIM);
-        return Arrays.stream(entitlements.split(",")).map(String::trim).filter(StringUtils::hasText)
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    private static Collection<GrantedAuthority> extractEntitlementsForUser(Map<String, Object> jwtClaims) {
+        String authoritiesString = (String) jwtClaims.get(ENTITLEMENTS_CLAIM);
+        if (StringUtils.hasText(authoritiesString)) {
+            return Arrays.stream(authoritiesString.split(",")).map(String::trim).filter(StringUtils::hasText)
+                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private static void setProperties(AuthUserDetails authUserDetails, Map<String, Object> jwtClaims) {
@@ -81,6 +91,29 @@ public class UserDetailsConverter {
             } else {
                 LOG.debug("No setter found for claim '{}'", claimAndValue.getKey());
             }
+        }
+    }
+
+    private static AuthUserDetails convertForCCGrant(Map<String, Object> jwtClaims) {
+        String clientName = (String) jwtClaims.get(CLIENT_NAME_CLAIM);
+        if (null == clientName) {
+            LOG.warn("Cannot create AuthUserDetails without client name: {}", jwtClaims);
+            throw new IllegalArgumentException("Client name not found");
+        }
+        AuthUserDetails authUserDetails = new AuthUserDetails(clientName + " - Client Credentials Flow", "N/A",
+                extractPermissionsForCCFlow(jwtClaims));
+        authUserDetails.setAttributes(jwtClaims);
+        authUserDetails.setId((String) jwtClaims.get(CLIENT_ID_CLAIM));
+        return authUserDetails;
+    }
+
+    private static Collection<GrantedAuthority> extractPermissionsForCCFlow(Map<String, Object> jwtClaims) {
+        Object permissionsClaim = jwtClaims.get(PERMISSIONS_CLAIM);
+        if (permissionsClaim instanceof Collection) {
+            return ((Collection<String>) permissionsClaim).stream().map(String::trim).filter(StringUtils::hasText)
+                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
         }
     }
 
