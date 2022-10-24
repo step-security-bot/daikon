@@ -14,3 +14,8 @@ auth.client.id:
   dashed_name: auth-client-id
   short: Id of OAuth2 client that is making the request.
   type: keyword
+
+auth.client.name:
+  dashed_name: auth-client-name
+  short: Name of OAuth2 client that is making the request.
+  type: keyword
