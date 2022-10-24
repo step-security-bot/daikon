@@ -1,0 +1,9 @@
+= Daikon Release Notes (7.0.2) - 10/24/2022
+
+Thanks to @Viacheslav Gagara, @Fabien Way
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19310[TPSVC-19310]: Add clientId into the logs (link:https://github.com/Talend/daikon/pull/901[#901])
+
+== Other
+- doc: {WIP} Document the specificities of the TQL<->DSEL converters  (link:https://github.com/Talend/daikon/pull/905[#905])
