@@ -38,7 +38,7 @@ This command will start a Spring Boot application on port 8080. In this setup, a
 talend.security.token.value=token1234
 ```
 
-To call Actuator endpoints, it means the following HTTP header needs to be set to call `GET http://localhost:8080/version`:
+To call Actuator endpoints, it means the following HTTP header needs to be set to call `GET http://localhost:8080/beans`:
 
 ```
 Authorization: Talend token1234

@@ -17,7 +17,7 @@ $ docker run -d -p 9411:9411 openzipkin/zipkin
 To start application, simply launch the `run` goal of the `spring-boot` maven plugin.
 
 ```
-$ mvn spring-boot:run
+$ mvn org.springframework.boot:spring-boot-maven-plugin:run
 ```
 
 Default configuration provides:
