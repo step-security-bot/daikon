@@ -38,6 +38,12 @@
             <artifactId>commons-configuration2</artifactId>
             <version>${commons-configuration2.version}</version>
         </dependency>
+        <!-- Can be removed when commons-configuration2 2.8.1+ is released -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.talend.daikon</groupId>
             <artifactId>daikon-exception</artifactId>
