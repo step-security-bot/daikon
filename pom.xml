@@ -110,7 +110,6 @@
         <module>daikon-bom</module>
         <module>daikon-statistic</module>
         <module>daikon-schema</module>
-        <module>daikon-dsel</module>
         <module>daikon-collections</module>
     </modules>
     <scm>
