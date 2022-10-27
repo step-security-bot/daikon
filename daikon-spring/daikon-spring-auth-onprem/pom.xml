@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>daikon-spring</artifactId>
+        <groupId>org.talend.daikon</groupId>
+        <version>7.0.4-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>daikon-spring-auth-onprem</artifactId>
+
+    <properties>
+        <talend_releases>https://artifacts-oss.talend.com/nexus/content/repositories/releases/
+        </talend_releases>
+        <tpsvc_releases>https://artifacts-oss.talend.com/nexus/content/repositories/tpsvc/
+        </tpsvc_releases>
+    </properties>
+    <dependencies>
+        <!--    Daikon dependencies    -->
+        <dependency>
+            <groupId>org.talend.daikon</groupId>
+            <artifactId>daikon-spring-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.platform.sdk</groupId>
+            <artifactId>scim-client</artifactId>
+            <version>${talend-platform-sdk.version}</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>releases</id>
+            <name>talend-release</name>
+            <url>${talend_releases}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>tpsvc</id>
+            <name>tpsvc-release</name>
+            <url>${tpsvc_releases}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>

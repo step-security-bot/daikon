@@ -91,6 +91,7 @@
         <json-schema-validator.version>1.0.64</json-schema-validator.version>
         <maven.enforcer.plugin.version>3.0.0</maven.enforcer.plugin.version>
         <junit-pioneer.version>1.6.2</junit-pioneer.version>
+        <talend-platform-sdk.version>3.7.0</talend-platform-sdk.version>
     </properties>
     <modules>
         <module>daikon</module>

@@ -27,6 +27,7 @@ import org.talend.daikon.spring.auth.common.model.userdetails.UserDetailsConvert
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
 import org.talend.daikon.spring.auth.introspection.AuthUserDetailsConverterIntrospector;
 import org.talend.daikon.spring.auth.introspection.CachedOpaqueTokenIntrospector;
+import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactory;
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 
 public class AuthenticationManagerFactory {
@@ -68,7 +69,7 @@ public class AuthenticationManagerFactory {
 
     // PAT
     public static AuthenticationManager opaqueTokenAuthenticationManager(OAuth2ResourceServerProperties iamOauth2Properties,
-            Cache patIntrospectionCache) {
+            Cache patIntrospectionCache, UserDetailsIntrospectorFactory userDetailsIntrospectorFactory) {
         if (!hasText(iamOauth2Properties.getOpaquetoken().getIntrospectionUri())) {
             throw new IllegalArgumentException("Property spring.security.oauth2.resourceserver.iam.opaque-token."
                     + "introspection-uri must be present in application properties");
@@ -83,7 +84,7 @@ public class AuthenticationManagerFactory {
         restTemplate.getInterceptors().add(new IpAllowListHeaderInterceptor());
 
         NimbusOpaqueTokenIntrospector delegate = new NimbusOpaqueTokenIntrospector(introspectionUri, restTemplate);
-        AuthUserDetailsConverterIntrospector converterIntrospector = new AuthUserDetailsConverterIntrospector(delegate);
+        OpaqueTokenIntrospector converterIntrospector = userDetailsIntrospectorFactory.build(delegate);
 
         if (null != patIntrospectionCache) {
             return opaqueTokenProviderManager(new CachedOpaqueTokenIntrospector(converterIntrospector, patIntrospectionCache));

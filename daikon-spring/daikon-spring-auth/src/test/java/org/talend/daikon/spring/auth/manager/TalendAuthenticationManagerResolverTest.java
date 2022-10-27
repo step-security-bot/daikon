@@ -26,6 +26,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
+import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactoryCloud;
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
@@ -59,7 +60,9 @@ public class TalendAuthenticationManagerResolverTest {
                         auth0JwtAuthenticationManager(auth0Properties, auth0AuthenticationProviders, jwkSetCache))
                 .auth0IssuerUri(auth0Properties.getJwt().getIssuerUri())
                 .iamJwtAuthenticationManager(iamJwtAuthenticationManager(iamProperties, jwkSetCache))
-                .opaqueTokenAuthenticationManager(opaqueTokenAuthenticationManager(iamProperties, null)).build();
+                .opaqueTokenAuthenticationManager(
+                        opaqueTokenAuthenticationManager(iamProperties, null, new UserDetailsIntrospectorFactoryCloud()))
+                .build();
     }
 
     @Test

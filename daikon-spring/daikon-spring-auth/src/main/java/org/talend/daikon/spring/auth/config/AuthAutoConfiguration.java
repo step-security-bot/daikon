@@ -35,6 +35,8 @@ import org.talend.daikon.spring.auth.exception.AuthExceptionHandler;
 import org.talend.daikon.spring.auth.exception.TalendBearerTokenAuthenticationEntryPoint;
 import org.talend.daikon.spring.auth.interceptor.BearerTokenInterceptor;
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
+import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactoryCloud;
+import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactory;
 import org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory;
 import org.talend.daikon.spring.auth.manager.TalendAuthenticationManagerResolver;
 import org.talend.daikon.spring.auth.multitenant.AccountSecurityContextIdentificationStrategy;
@@ -74,6 +76,7 @@ public class AuthAutoConfiguration {
     public AuthenticationManagerResolver<HttpServletRequest> authManagerResolver(
             @Qualifier("iamOauth2Properties") OAuth2ResourceServerProperties iamOauth2Properties,
             @Qualifier("auth0Oauth2Properties") OAuth2ResourceServerProperties auth0Oauth2Properties,
+            UserDetailsIntrospectorFactory userDetailsIntrospectorFactory,
             List<Auth0AuthenticationProvider> auth0AuthenticationProviders, Optional<CacheManager> cacheManager) {
 
         cacheManager.ifPresent(manager -> LOGGER.info("Cache manager {} is found", manager.getClass().getName()));
@@ -116,7 +119,7 @@ public class AuthAutoConfiguration {
                 .iamJwtAuthenticationManager(iamOauth2Properties, jwkSetCache);
 
         AuthenticationManager opaqueTokenAuthenticationManager = AuthenticationManagerFactory
-                .opaqueTokenAuthenticationManager(iamOauth2Properties, patIntrospectionCache);
+                .opaqueTokenAuthenticationManager(iamOauth2Properties, patIntrospectionCache, userDetailsIntrospectorFactory);
 
         return TalendAuthenticationManagerResolver.builder().auth0JwtAuthenticationManager(auth0JwtAuthenticationManager)
                 .auth0IssuerUri(auth0Oauth2Properties.getJwt().getIssuerUri())
@@ -141,6 +144,12 @@ public class AuthAutoConfiguration {
     @ConfigurationProperties(prefix = "spring.security.oauth2.resourceserver.auth0")
     public OAuth2ResourceServerProperties auth0Oauth2Properties() {
         return new OAuth2ResourceServerProperties();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserDetailsIntrospectorFactory.class)
+    public UserDetailsIntrospectorFactory userDetailsIntrospectorFactory() {
+        return new UserDetailsIntrospectorFactoryCloud();
     }
 
     // multitenacy
