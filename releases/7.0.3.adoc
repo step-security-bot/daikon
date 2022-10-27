@@ -1,0 +1,11 @@
+= Daikon Release Notes (7.0.3) - 10/27/2022
+
+Thanks to @Colm O hEigeartaigh, @Fabien Way
+
+== Fix
+- link:https://jira.talendforge.org/browse/TDP-11546[TDP-11546]: Move the Daikon DSEL module of DAIKON to DAIKON EE (link:https://github.com/Talend/daikon/pull/914[#914])
+
+== Other
+- Updating Jackson to 2.13.4  (link:https://github.com/Talend/daikon/pull/915[#915])
+- Test daikon-spring-examples and remove wildcard actuator endpoints  (link:https://github.com/Talend/daikon/pull/913[#913])
+- Updating commons-text to 1.10.0  (link:https://github.com/Talend/daikon/pull/911[#911])
