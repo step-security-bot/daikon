@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.0.4) - 10/27/2022
+
+Thanks to @Viacheslav Gagara
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19383[TPSVC-19383]: [iam on-prem]: NPE during opaque token introspection (link:https://github.com/Talend/daikon/pull/906[#906])
