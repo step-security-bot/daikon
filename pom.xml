@@ -55,7 +55,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <jackson.1x.version>1.9.16-TALEND</jackson.1x.version>
         <jackson.version.annotations>2.11.4</jackson.version.annotations>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.13.4</jackson.version>
         <javax.inject.version>1</javax.inject.version>
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <json-path-assert.version>2.2.0</json-path-assert.version>
