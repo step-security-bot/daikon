@@ -717,7 +717,7 @@ public class TqlToDselConverterTest {
 
                 final ELNode comparisonNode = new ELNode(elNodeType);
                 comparisonNode.addChild(new ELNode(ELNodeType.HPATH, leftElement));
-                comparisonNode.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, rightElement));
+                comparisonNode.addChild(new ELNode(ELNodeType.DECIMAL_LITERAL, rightElement));
 
                 ELNode expected = new ELNode(ELNodeType.AND, "&&");
                 expected.addChild(matchExpected);
@@ -733,8 +733,20 @@ public class TqlToDselConverterTest {
             }
 
             @Test
+            public void testParseGreaterThanWithQuotes() {
+                final String tqlQuery = "id > '1'";
+                testComparisonOperator(tqlQuery, "id", "1", ELNodeType.GREATER_THAN);
+            }
+
+            @Test
             public void testParseLowerThan() {
                 final String tqlQuery = "id < 1";
+                testComparisonOperator(tqlQuery, "id", "1", ELNodeType.LOWER_THAN);
+            }
+
+            @Test
+            public void testParseLowerThanWithQuotes() {
+                final String tqlQuery = "id < '1'";
                 testComparisonOperator(tqlQuery, "id", "1", ELNodeType.LOWER_THAN);
             }
 
@@ -745,8 +757,20 @@ public class TqlToDselConverterTest {
             }
 
             @Test
+            public void testParseLowerOrEqualThanWithQuotes() {
+                final String tqlQuery = "id <= '1'";
+                testComparisonOperator(tqlQuery, "id", "1", ELNodeType.LOWER_OR_EQUAL);
+            }
+
+            @Test
             public void testParseGreaterOrEqualThan() {
                 final String tqlQuery = "id >= 1";
+                testComparisonOperator(tqlQuery, "id", "1", ELNodeType.GREATER_OR_EQUAL);
+            }
+
+            @Test
+            public void testParseGreaterOrEqualThanWithQuotes() {
+                final String tqlQuery = "id >= '1'";
                 testComparisonOperator(tqlQuery, "id", "1", ELNodeType.GREATER_OR_EQUAL);
             }
         }

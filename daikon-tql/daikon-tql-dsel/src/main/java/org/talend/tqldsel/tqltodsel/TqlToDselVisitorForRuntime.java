@@ -137,16 +137,25 @@ public class TqlToDselVisitorForRuntime extends AbstractTqlToDselVisitor impleme
         final ComparisonOperator.Enum comparisonOperator = elt.getOperator().getOperator();
         if (GT.equals(comparisonOperator) || LT.equals(comparisonOperator) || GET.equals(comparisonOperator)
                 || LET.equals(comparisonOperator)) {
+            final ELNode comparisonWithDecimalValue = castComparisonNodeWithDecimalValue(opNode);
             ELNode matchNumberNode = new ELNode(ELNodeType.FUNCTION_CALL,
                     org.talend.maplang.el.interpreter.impl.function.builtin.Matches.NAME);
             matchNumberNode.addChild(new ELNode(ELNodeType.HPATH, fieldNode.getImage()));
             matchNumberNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, NUMBER_REGEX_STRING_FORMAT));
             final ELNode andNode = new ELNode(ELNodeType.AND);
             andNode.addChild(matchNumberNode);
-            andNode.addChild(opNode);
+            andNode.addChild(comparisonWithDecimalValue);
             return andNode;
         } else {
             return opNode;
         }
+    }
+
+    private ELNode castComparisonNodeWithDecimalValue(final ELNode comparisonNode) {
+        final ELNode stringValueNode = comparisonNode.getChildren().get(1);
+        final ELNode decimalValueNode = new ELNode(ELNodeType.DECIMAL_LITERAL, stringValueNode.getImage().replace("'", ""));
+        comparisonNode.getChildren().remove(stringValueNode);
+        comparisonNode.getChildren().add(decimalValueNode);
+        return comparisonNode;
     }
 }
