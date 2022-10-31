@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.0.5) - 10/31/2022
+
+Thanks to @ngrange-talend
+
+== Other
+- link:https://jira.talendforge.org/browse/TDP-11560[TDP-11560]: [RunConv][Back] Fix payload for comparison filters (link:https://github.com/Talend/daikon/pull/916[#916])
