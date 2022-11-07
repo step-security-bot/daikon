@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.0.6) - 11/07/2022
+
+Thanks to @Fabien Way
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-11536[TDP-11536]: [RunConv] Create a module for TQL-DSEL conversion in data-prep-common (link:https://github.com/Talend/daikon/pull/917[#917])
