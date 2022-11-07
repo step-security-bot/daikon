@@ -6,7 +6,7 @@
         <version>7.0.6-SNAPSHOT</version>
     </parent>
     <artifactId>daikon-tql-dsel</artifactId>
-    <name>Daikon TQL to DSEL library</name>
+    <name>Daikon library for conversions of TQL to DSEL and DSEL to TQL</name>
     <modelVersion>4.0.0</modelVersion>
 
     <properties>

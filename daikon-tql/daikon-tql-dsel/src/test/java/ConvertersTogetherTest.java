@@ -1,3 +1,9 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -8,13 +14,6 @@ import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.Tql;
 import org.talend.tqldsel.dseltotql.DselToTqlConverter;
 import org.talend.tqldsel.tqltodsel.TqlToDselConverter;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ConvertersTogetherTest {
 
@@ -120,11 +119,6 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseContainsForRuntime() {
-        callConvertors("(field1 contains 'hello')", Collections.emptyMap(), true);
-    }
-
-    @Test
     public void testParseContainsIgnoreCase() {
         callConvertors("(field1 containsIgnoreCase 'HEllO')");
     }
@@ -200,49 +194,17 @@ public class ConvertersTogetherTest {
     }
 
     @Test
-    public void testParseIsEmptyWithAllFields() {
-        final Map<String, String> fToType = new HashMap<>();
-        fToType.put("field1", "STRING");
-        fToType.put("accountNumber", "INTEGER");
-        callConvertors("(* is empty)", fToType, false);
-    }
-
-    @Test
-    public void testParseIsEmptyWithAllFieldsForRuntime() {
-        final Map<String, String> fToType = new HashMap<>();
-        fToType.put("field1", "STRING");
-        fToType.put("accountNumber", "INTEGER");
-        callConvertors("(* is empty)", fToType, true);
-    }
-
-    @Test
     public void testParseIsValidWithField() {
         final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
-        callConvertors("(field1 is valid)", fToType, false);
+        callConvertors("(field1 is valid)", fToType);
     }
 
     @Test
     public void testParseIsInvalidWithField() {
         final Map<String, String> fToType = new HashMap<>();
         fToType.put("field1", "STRING");
-        callConvertors("(field1 is invalid)", fToType, false);
-    }
-
-    @Test
-    public void testParseIsInvalidWithAllFields() {
-        final Map<String, String> fToType = new HashMap<>();
-        fToType.put("field1", "STRING");
-        fToType.put("accountNumber", "INTEGER");
-        callConvertors("(* is invalid)", fToType, false);
-    }
-
-    @Test
-    public void testParseIsInvalidWithAllFieldsForRuntime() {
-        final Map<String, String> fToType = new HashMap<>();
-        fToType.put("field1", "STRING");
-        fToType.put("accountNumber", "INTEGER");
-        callConvertors("(* is invalid)", fToType, true);
+        callConvertors("(field1 is invalid)", fToType);
     }
 
     @Test
@@ -266,10 +228,10 @@ public class ConvertersTogetherTest {
     }
 
     private void callConvertors(final String tqlQuery) {
-        callConvertors(tqlQuery, Collections.emptyMap(), false);
+        callConvertors(tqlQuery, Collections.emptyMap());
     }
 
-    private void callConvertors(final String tqlQuery, final Map<String, String> fieldToType, final boolean isForRuntime) {
+    private void callConvertors(final String tqlQuery, final Map<String, String> fieldToType) {
         LOGGER.debug("- Original TQL query : " + tqlQuery);
 
         final TqlElement tqlElement = Tql.parse(tqlQuery);
@@ -277,11 +239,7 @@ public class ConvertersTogetherTest {
 
         final ELNode elNode;
 
-        if (isForRuntime) {
-            elNode = TqlToDselConverter.convertForRuntime(tqlQuery, fieldToType);
-        } else {
-            elNode = TqlToDselConverter.convertForDb(tqlQuery, fieldToType);
-        }
+        elNode = TqlToDselConverter.convert(tqlQuery, fieldToType);
 
         LOGGER.debug("- DSEL ELNode converted from TQL query : " + elNode);
 
@@ -298,10 +256,6 @@ public class ConvertersTogetherTest {
         final String tqlQueryFromDselQuery = convertedTqlQueryFromDselQuery.toQueryString();
         LOGGER.debug("- Converted TQL query as String representation from DSEL query : " + tqlQueryFromDselQuery);
 
-        if (isForRuntime) {
-            assertNotEquals(tqlQuery, tqlQueryFromDselQuery);
-        } else {
-            assertEquals(tqlQuery, tqlQueryFromDselQuery);
-        }
+        assertEquals(tqlQuery, tqlQueryFromDselQuery);
     }
 }

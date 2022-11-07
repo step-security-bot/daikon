@@ -32,12 +32,9 @@ import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.visitor.IASTVisitor;
 
-/**
- * Abstract TQL to DSEL visitor
- */
-abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
+public class TqlToDselVisitor implements IASTVisitor<ELNode> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTqlToDselVisitor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TqlToDselVisitor.class);
 
     /**
      * Mapping from the field names to their corresponding type. Type can be a native type or a semantic type.
@@ -48,7 +45,7 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
      * @param fieldToType a Map object used to get a type (native or semantic type) from a field name, this is a lightweight
      * representation of the schema
      */
-    public AbstractTqlToDselVisitor(Map<String, String> fieldToType) {
+    public TqlToDselVisitor(Map<String, String> fieldToType) {
         this.fieldToType = fieldToType;
     }
 
@@ -171,8 +168,14 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         return inNode;
     }
 
-    @Override
-    public abstract ELNode visit(FieldIsEmptyExpression elt);
+    public ELNode visit(FieldIsEmptyExpression elt) {
+        final TqlElement ex = elt.getField();
+
+        final ELNode isEmptyNode = new ELNode(ELNodeType.FUNCTION_CALL,
+                org.talend.maplang.el.interpreter.impl.function.builtin.IsEmpty.NAME);
+        isEmptyNode.addChild(ex.accept(this));
+        return isEmptyNode;
+    }
 
     @Override
     public ELNode visit(FieldIsValidExpression elt) {
@@ -191,8 +194,23 @@ abstract class AbstractTqlToDselVisitor implements IASTVisitor<ELNode> {
         return isValidNode;
     }
 
-    @Override
-    public abstract ELNode visit(FieldIsInvalidExpression elt);
+    public ELNode visit(FieldIsInvalidExpression elt) {
+        final TqlElement ex = elt.getField();
+        final ELNode node = ex.accept(this);
+        final ELNode isInvalidNode = new ELNode(ELNodeType.FUNCTION_CALL, "isInvalid");
+
+        isInvalidNode.addChild(node);
+
+        final String invalidFieldType = fieldToType.get(node.getImage());
+        if (invalidFieldType == null) {
+            throw new TqlException(String.format("Cannot find the 'type' of the field '%s'", node.getImage()));
+        }
+
+        isInvalidNode.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'" + invalidFieldType + "'"));
+
+        return isInvalidNode;
+
+    }
 
     @Override
     public ELNode visit(FieldIsNullExpression elt) {
