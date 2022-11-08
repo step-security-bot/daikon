@@ -17,6 +17,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <scope>provided</scope>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.talend.daikon</groupId>
