@@ -16,16 +16,7 @@ package org.talend.daikon.crypto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.exception.TalendRuntimeException;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,6 +27,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.exception.TalendRuntimeException;
 
 public class PropertiesEncryptionTest {
 
@@ -123,10 +120,15 @@ public class PropertiesEncryptionTest {
 
         new PropertiesEncryption(encryption).encryptAndSave(tempFile.toString(), Collections.singleton("admin.password"));
 
+        String tempContent = FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            tempContent = tempContent.replaceAll("\r\n", "\n");
+        }
+
         assertEquals(
                 FileUtils.readFileToString(new File(getClass().getResource("keep-layout-test-expected.properties").getFile()),
                         StandardCharsets.UTF_8),
-                FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8));
+                tempContent);
     }
 
     @Test
@@ -139,10 +141,14 @@ public class PropertiesEncryptionTest {
         new PropertiesEncryption(encryption).encryptAndSave(tempFile.toString(),
                 new HashSet<>(Arrays.asList("admin.password", "unknown")));
 
+        String tempContent = FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            tempContent = tempContent.replaceAll("\r\n", "\n");
+        }
+
         assertEquals(
-                FileUtils.readFileToString(new File(getClass().getResource("keep-layout-test-expected.properties").getFile()),
-                        StandardCharsets.UTF_8),
-                FileUtils.readFileToString(tempFile.toFile(), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(new File(getClass().getResource("keep-layout-test-expected.properties").getFile())),
+                tempContent);
     }
 
     @Test

@@ -52,6 +52,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <exclusions>
+                <exclusion>
+                    <!-- TPRUN-4715 CVE-2022-31692-->
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- TPRUN-4715 CVE-2022-31692 This is to force library version to a safe one. To be removed when all libraries that includes it are updated to the below version or newest
+                    Cf exclusions -->
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security-web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
