@@ -1,0 +1,10 @@
+= Daikon Release Notes (7.0.7) - 11/15/2022
+
+Thanks to @Colm O hEigeartaigh, @Franck Zetule
+
+== Other
+- TPRUN-4715 CVE-2022-31692 Update spring-security-web
+- Updating to Scala 2.13.10  (link:https://github.com/Talend/daikon/pull/924[#924])
+- Aligning Jackson versions in logging-request-interceptor  (link:https://github.com/Talend/daikon/pull/921[#921])
+- Aligning Jackson versions in logging-kafka-interceptor  (link:https://github.com/Talend/daikon/pull/920[#920])
+- Updating to Jackson 2.14.0  (link:https://github.com/Talend/daikon/pull/919[#919])
