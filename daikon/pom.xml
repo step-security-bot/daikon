@@ -13,6 +13,10 @@
     <name>Daikon main shared library</name>
     <url>https://github.com/Talend/daikon</url>
 
+    <properties>
+        <zelib.version>0.0.1</zelib.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.talend.daikon</groupId>
@@ -117,7 +121,7 @@
                 loaded dynamically by the tests -->
             <groupId>org.talend.test</groupId>
             <artifactId>zeLib</artifactId>
-            <version>0.0.1</version>
+            <version>${zelib.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -140,6 +144,27 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.talend.test</groupId>
+                                    <artifactId>zeLib</artifactId>
+                                    <version>${zelib.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/test-classes/org/talend/daikon/sandbox</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <!-- this removes the test lib cause is it being loaded dynamically during the tests -->
                 <groupId>org.apache.maven.plugins</groupId>
