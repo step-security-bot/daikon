@@ -297,39 +297,44 @@ public class TqlToDselConverterTest {
 
     @Test
     public void testParseBetweenForString() {
-        final String tqlQuery = "fieldString1 between ['value1', 'value4']";
+        final String tqlQuery = "fieldString1 between ]'value1', 'value4']";
         ELNode actual = TqlToDselConverter.convert(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
         expected.addChild(new ELNode(ELNodeType.HPATH, "fieldString1"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value1'"));
         expected.addChild(new ELNode(ELNodeType.STRING_LITERAL, "'value4'"));
+        expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
 
         assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseBetweenForInt() {
-        final String tqlQuery = "fieldInt1 between [2, 187]";
+        final String tqlQuery = "fieldInt1 between ]2, 187[";
         ELNode actual = TqlToDselConverter.convert(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
         expected.addChild(new ELNode(ELNodeType.HPATH, "fieldInt1"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "2"));
         expected.addChild(new ELNode(ELNodeType.INTEGER_LITERAL, "187"));
+        expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
+        expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
 
         assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }
 
     @Test
     public void testParseBetweenForLong() {
-        final String tqlQuery = "fieldLong1 between [1665577759000, 1705577759000]";
+        final String tqlQuery = "fieldLong1 between [1665577759000, 1705577759000[";
         ELNode actual = TqlToDselConverter.convert(tqlQuery);
 
         ELNode expected = new ELNode(ELNodeType.FUNCTION_CALL, "between");
         expected.addChild(new ELNode(ELNodeType.HPATH, "fieldLong1"));
         expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1665577759000L"));
         expected.addChild(new ELNode(ELNodeType.LONG_LITERAL, "1705577759000L"));
+        expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "false"));
+        expected.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, "true"));
 
         assertELNodesAreEqualsAndExecutionIsOK(actual, expected, true);
     }

@@ -30,6 +30,12 @@ import org.junit.jupiter.api.Test;
 import org.talend.maplang.el.parser.ExprLangException;
 import org.talend.tql.TqlLexer;
 import org.talend.tql.TqlParser;
+import org.talend.tql.model.AndExpression;
+import org.talend.tql.model.Expression;
+import org.talend.tql.model.FieldBetweenExpression;
+import org.talend.tql.model.FieldReference;
+import org.talend.tql.model.LiteralValue;
+import org.talend.tql.model.OrExpression;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.TqlExpressionVisitor;
 import org.talend.tqldsel.dseltotql.DselToTqlConverter;
@@ -286,33 +292,73 @@ public class DselToTqlConverterTest {
 
     @Test
     public void testParseBetweenForDouble() {
-        final String dselQuery = "between(field1, 123d, 789d)";
+        final String dselQuery = "between(field1, 123d, 789d, true)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
-        final TqlElement expectedTqlQuery = between("field1", 123.0, 789.0);
+
+        LiteralValue left = new LiteralValue(LiteralValue.Enum.DECIMAL, "123.0");
+        LiteralValue right = new LiteralValue(LiteralValue.Enum.DECIMAL, "789.0");
+        FieldBetweenExpression fieldBetweenExpression = new FieldBetweenExpression(new FieldReference("field1"), left, right,
+                true, false);
+        Expression[] fieldBetweenExpressions = new Expression[] { fieldBetweenExpression };
+
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(fieldBetweenExpressions);
+        final TqlElement expectedTqlQuery = new OrExpression(andExpression);
+
         assertTqlElementsAreEqualsAndExecutionIsOK(convertedTqlQuery, expectedTqlQuery);
     }
 
     @Test
     public void testParseBetweenForMix() {
-        final String dselQuery = "between(field1, 9187.1892, 789d)";
+        final String dselQuery = "between(field1, 9187.1892, 789d, false, false)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
-        final TqlElement expectedTqlQuery = between("field1", 9187.1892, 789.0);
+
+        LiteralValue left = new LiteralValue(LiteralValue.Enum.DECIMAL, "9187.1892");
+        LiteralValue right = new LiteralValue(LiteralValue.Enum.DECIMAL, "789.0");
+        FieldBetweenExpression fieldBetweenExpression = new FieldBetweenExpression(new FieldReference("field1"), left, right,
+                false, false);
+        Expression[] fieldBetweenExpressions = new Expression[] { fieldBetweenExpression };
+
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(fieldBetweenExpressions);
+        final TqlElement expectedTqlQuery = new OrExpression(andExpression);
+
         assertTqlElementsAreEqualsAndExecutionIsOK(convertedTqlQuery, expectedTqlQuery);
     }
 
     @Test
     public void testParseBetweenForDecimal() {
-        final String dselQuery = "between(field1, 9187.1892, 789.0)";
+        final String dselQuery = "between(field1, 9187.1892, 789.0, true, true)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
-        final TqlElement expectedTqlQuery = between("field1", 9187.1892, 789.0);
+
+        LiteralValue left = new LiteralValue(LiteralValue.Enum.DECIMAL, "9187.1892");
+        LiteralValue right = new LiteralValue(LiteralValue.Enum.DECIMAL, "789.0");
+        FieldBetweenExpression fieldBetweenExpression = new FieldBetweenExpression(new FieldReference("field1"), left, right,
+                true, true);
+        Expression[] fieldBetweenExpressions = new Expression[] { fieldBetweenExpression };
+
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(fieldBetweenExpressions);
+        final TqlElement expectedTqlQuery = new OrExpression(andExpression);
+
         assertTqlElementsAreEqualsAndExecutionIsOK(convertedTqlQuery, expectedTqlQuery);
     }
 
     @Test
     public void testParseBetweenForString() {
-        final String dselQuery = "between(field1, '123', '789')";
+        final String dselQuery = "between(field1, '123', '789', false, true)";
         final TqlElement convertedTqlQuery = DselToTqlConverter.convert(dselQuery);
-        final TqlElement expectedTqlQuery = between("field1", "123", "789");
+
+        LiteralValue left = new LiteralValue(LiteralValue.Enum.QUOTED_VALUE, "123");
+        LiteralValue right = new LiteralValue(LiteralValue.Enum.QUOTED_VALUE, "789");
+        FieldBetweenExpression fieldBetweenExpression = new FieldBetweenExpression(new FieldReference("field1"), left, right,
+                false, true);
+        Expression[] fieldBetweenExpressions = new Expression[] { fieldBetweenExpression };
+
+        // Adding it to a new AST
+        AndExpression andExpression = new AndExpression(fieldBetweenExpressions);
+        final TqlElement expectedTqlQuery = new OrExpression(andExpression);
+
         assertTqlElementsAreEqualsAndExecutionIsOK(convertedTqlQuery, expectedTqlQuery);
     }
 

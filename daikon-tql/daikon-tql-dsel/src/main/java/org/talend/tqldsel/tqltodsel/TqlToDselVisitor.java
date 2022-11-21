@@ -271,7 +271,12 @@ public class TqlToDselVisitor implements IASTVisitor<ELNode> {
         fieldBetweenNode.addChild(ex.accept(this));
         fieldBetweenNode.addChild(fixLiteralNumberType(elt.getLeft()));
         fieldBetweenNode.addChild(fixLiteralNumberType(elt.getRight()));
-
+        if (elt.isLowerOpen() || elt.isUpperOpen()) {
+            fieldBetweenNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, Boolean.toString(elt.isLowerOpen())));
+        }
+        if (elt.isUpperOpen()) {
+            fieldBetweenNode.addChild(new ELNode(ELNodeType.BOOLEAN_LITERAL, Boolean.toString(elt.isUpperOpen())));
+        }
         return fieldBetweenNode;
     }
 

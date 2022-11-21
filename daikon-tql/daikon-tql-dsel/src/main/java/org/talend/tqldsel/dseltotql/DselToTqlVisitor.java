@@ -290,18 +290,42 @@ public class DselToTqlVisitor implements ExprModelVisitor<TqlElement> {
 
     private TqlElement visitBetweenFunction(ELNode elNode) {
         final TqlElement field = elNode.getChild(0).accept(this);
-        final ELNode leftParameter = elNode.getChild(1);
-        final ELNode rightParameter = elNode.getChild(2);
+        final ELNode minValue = elNode.getChild(1);
+        final ELNode maxValue = elNode.getChild(2);
 
-        if (!isLiteral(leftParameter.getType().name()) || !isLiteral(rightParameter.getType().name())) {
+        if (!isLiteral(minValue.getType().name()) || !isLiteral(maxValue.getType().name())) {
             throw new IllegalArgumentException(
-                    "One or two of the parameters is not a literal, whereas the between function can only accept literals");
+                    "Min and/or max parameters are not literals, whereas the between function can only accept literals for these parameters");
         }
 
-        final LiteralValue literalValueOnLeft = (LiteralValue) visitLiteral(leftParameter);
-        final LiteralValue literalValueOnRight = (LiteralValue) visitLiteral(rightParameter);
+        final LiteralValue literalValueOnLeft = (LiteralValue) visitLiteral(minValue);
+        final LiteralValue literalValueOnRight = (LiteralValue) visitLiteral(maxValue);
 
-        return buildNewAST(new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight, false, false));
+        if (elNode.getChildren().size() == 3) {
+            return buildNewAST(new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight, false, false));
+        }
+
+        boolean isMinExclusive;
+        boolean isMaxExclusive = false;
+
+        if (elNode.getChildren().size() == 4) {
+            isMinExclusive = getExclusiveParameterOfBetweenFunction(elNode, 3, "minExclusive");
+        } else {
+            isMinExclusive = getExclusiveParameterOfBetweenFunction(elNode, 3, "minExclusive");
+            isMaxExclusive = getExclusiveParameterOfBetweenFunction(elNode, 4, "maxExclusive");
+        }
+
+        return buildNewAST(
+                new FieldBetweenExpression(field, literalValueOnLeft, literalValueOnRight, isMinExclusive, isMaxExclusive));
+    }
+
+    private boolean getExclusiveParameterOfBetweenFunction(ELNode elNode, int index, String parameterName) {
+        if (!isLiteral(elNode.getChild(index).getType().name())) {
+            throw new IllegalArgumentException(parameterName
+                    + " parameter is not a literal, whereas the between function can only accept literal for this parameter");
+        }
+        LiteralValue literalValue = (LiteralValue) visitLiteral(elNode.getChild(index));
+        return Boolean.parseBoolean(literalValue.getValue());
     }
 
     private TqlElement visitForPresentInFunction(ELNode elNode) {
