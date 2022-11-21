@@ -1,0 +1,13 @@
+= Daikon Release Notes (7.0.8) - 11/21/2022
+
+Thanks to @Fabien Way, @Gnongo Patrick BEUGRE, @Colm O hEigeartaigh
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19490[TPSVC-19490]: Audit logs Collector: Error while creating an audit logs (link:https://github.com/Talend/daikon/pull/928[#928])
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TDP-11506[TDP-11506]: [RunConv] Update the TQL<>DSEL converters to support the DSEL BETWEEN function extension for exclusion of the values (link:https://github.com/Talend/daikon/pull/923[#923])
+
+== Other
+- Remove binary artifact from source control  (link:https://github.com/Talend/daikon/pull/927[#927])
+- Create SECURITY.md  (link:https://github.com/Talend/daikon/pull/925[#925])
