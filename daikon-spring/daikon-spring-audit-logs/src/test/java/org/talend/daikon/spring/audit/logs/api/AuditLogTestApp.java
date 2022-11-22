@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.talend.daikon.spring.audit.common.api.AuditLogScope;
 import org.talend.daikon.spring.audit.logs.service.AuditLogContextBuilder;
 
 @RestController

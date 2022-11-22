@@ -1,4 +1,4 @@
-package org.talend.daikon.spring.audit.logs.config;
+package org.talend.daikon.spring.audit.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

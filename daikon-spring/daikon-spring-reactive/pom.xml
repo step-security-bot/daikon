@@ -13,6 +13,7 @@
         <module>daikon-spring-reactive-auth</module>
         <module>daikon-spring-reactive-security</module>
         <module>daikon-spring-reactive-multitenant-mongo</module>
+        <module>daikon-spring-reactive-audit-logs</module>
     </modules>
 
 </project>

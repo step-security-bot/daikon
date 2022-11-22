@@ -1,7 +1,5 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.talend.daikon.spring.audit.logs.api.AuditLogScope.*;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -21,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
+
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.SUCCESS;
 
 @Aspect
 public class AuditLogGeneratorAspect {

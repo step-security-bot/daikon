@@ -50,6 +50,7 @@
         <module>daikon-spring-reactive</module>
         <module>daikon-spring-auth</module>
         <module>daikon-spring-auth-common</module>
+        <module>daikon-spring-audit-common</module>
         <module>daikon-spring-auth-onprem</module>
         <module>daikon-spring-license</module>
     </modules>

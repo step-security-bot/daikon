@@ -1,6 +1,6 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum.*;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 import org.talend.daikon.exception.ExceptionContext;
 import org.talend.daikon.exception.error.CommonErrorCodes;
-import org.talend.daikon.spring.audit.logs.exception.AuditLogException;
-import org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum;
+import org.talend.daikon.spring.audit.common.exception.AuditLogException;
+import org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.impl.DefaultContextImpl;
 

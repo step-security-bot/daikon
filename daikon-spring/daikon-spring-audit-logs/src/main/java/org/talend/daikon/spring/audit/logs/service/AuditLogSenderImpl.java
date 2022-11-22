@@ -1,24 +1,23 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum.*;
+import io.micrometer.core.instrument.Counter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.talend.daikon.spring.audit.common.exception.AuditLogException;
+import org.talend.daikon.spring.audit.logs.api.AuditContextFilter;
+import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
+import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
+import org.talend.daikon.spring.audit.service.AppAuditLogger;
+import org.talend.logging.audit.Context;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.talend.daikon.spring.audit.logs.api.AuditContextFilter;
-import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
-import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
-import org.talend.daikon.spring.audit.logs.exception.AuditLogException;
-import org.talend.logging.audit.Context;
-
-import io.micrometer.core.instrument.Counter;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
 
 public class AuditLogSenderImpl implements AuditLogSender {
 
@@ -26,7 +25,7 @@ public class AuditLogSenderImpl implements AuditLogSender {
 
     private final AuditUserProvider auditUserProvider;
 
-    private final AuditLogger auditLogger;
+    private final AppAuditLogger auditLogger;
 
     private final AuditLogIpExtractor auditLogIpExtractor;
 
@@ -34,7 +33,7 @@ public class AuditLogSenderImpl implements AuditLogSender {
 
     private final Counter auditLogsGeneratedCounter;
 
-    public AuditLogSenderImpl(AuditUserProvider auditUserProvider, AuditLogger auditLogger,
+    public AuditLogSenderImpl(AuditUserProvider auditUserProvider, AppAuditLogger auditLogger,
             AuditLogIpExtractor auditLogIpExtractor, AuditLogUrlExtractor auditLogUrlExtractor,
             Counter auditLogsGeneratedCounter) {
         this.auditUserProvider = auditUserProvider;

@@ -1,0 +1,151 @@
+= Daikon Spring Reactive Audit Logs support
+:toc:
+
+This module provides support for Audit Logs over Spring Reactive.
+
+== Introduction
+
+This module is built above Daikon link:../../daikon-audit/README.adoc[audit-kafka] module whose purpose is to send audit logs through Kafka.
+
+The purpose of the current module is to enhance context building using Spring leverage.
+
+== Usage
+
+To start using Audit Logging Spring support it is necessary to :
+
+. Add dependency
+. Configure the module
+. Use `@GenerateAuditLog` annotation
+
+== Adding dependency
+
+To start using Audit Logging client it’s necessary to add the next dependencies:
+
+```xml
+<dependency>
+    <groupId>org.talend.daikon</groupId>
+    <artifactId>daikon-spring-reactive-audit-logs</artifactId>
+    <version>${daikon.version}</version>
+</dependency>
+```
+
+== Configuration
+
+Then the module must be enabled and configured with Kafka information :
+
+```yaml
+audit:
+    enabled: true # Enable audit feature
+    kafka:
+        bootstrapServers: localhost:9092 # Kafka bootstrap server urls for audit logs sending
+        topic: audit-logs # Kafka topic for audit logs sending
+        partitionKeyName: accountId # Kafka partitionKey for audit logs sending
+        blockTimeoutMs: 10000 # Block timeout before considering audit log has not been sent to Kafka
+```
+
+== @GenerateAuditLog
+
+Finally the following `@GenerateAuditLog` annotation must be added on methods whose a call must generate an audit log :
+
+```java
+@GenerateAuditLog(application = "daikon", eventType = "security", eventCategory = "resource", eventOperation = "create", includeBodyResponse = true)
+@PostMapping("/resource")
+public ResponseEntity<Resource> creatResource(@RequestBody Resource resource) {
+    return this.resourceService.create(resource);
+}
+```
+
+A call to the `createResource` method will generate and send the following audit log through Kafka :
+
+```json
+{
+   "timestamp":"2020-04-07T13:26:09.741821Z",
+   "requestId":"009a511a-a71e-4b6c-8e0b-822a90c71e43",
+   "logId":"6bfbc27c-654a-41c2-a241-1cbe0e69c1c6",
+   "accountId":"81fd11b5-d0c2-479d-833c-85d67f79edd0",
+   "userId":"84dc9524-b9b6-4533-a849-606feba86720",
+   "username":"1510_3_int@trial01775.us.talend.com",
+   "email":"1510_3_int@yopmail.com",
+   "applicationId":"daikon",
+   "eventType":"security",
+   "eventCategory":"resource",
+   "eventOperation":"create",
+   "clientIp":"62.80.48.155",
+   "request":{
+      "url":"http://app.url/resource",
+      "method":"POST",
+      "user_agent":"{USER_AGENT}",
+      "body":"{REQUEST_BODY}"
+   },
+   "response":{
+      "code":"200",
+      "body":"{REQUEST_BODY}"
+   }
+}
+```
+
+It is possible to choose to include or not the body response in the generated log with the `includeBodyResponse` annotation parameter.
+
+
+Will generate an audit log enhanced with user information :
+
+```json
+{
+   "timestamp":"2020-04-07T13:26:09.741821Z",
+   "requestId":"009a511a-a71e-4b6c-8e0b-822a90c71e43",
+   "logId":"6bfbc27c-654a-41c2-a241-1cbe0e69c1c6",
+   "accountId":"account1",
+   "userId":"user1",
+   "username":"ejarvis",
+   "email":"edwin.jarvis@talend.com",
+   "applicationId":"daikon",
+   "eventType":"security",
+   "eventCategory":"resource",
+   "eventOperation":"create",
+   "clientIp":"62.80.48.155",
+   "request":{
+      "url":"http://app.url/resource",
+      "method":"POST",
+      "user_agent":"{USER_AGENT}",
+      "body":"{REQUEST_BODY}"
+   },
+   "response":{
+      "code":"200",
+      "body":"{REQUEST_BODY}"
+   }
+}
+```
+
+
+== AuditContextFilter
+
+In some cases, some information shouldn't be exposed through the audit logs.
+
+In order to filter context info before audit log generation, the module provides the `AuditContextFilter` interface.
+A custom filter can be created simply by implementing this interface :
+
+```java
+public class MyCustomAuditContextFilter implements AuditContextFilter {
+
+    public AuditLogContextBuilder filter(AuditLogContextBuilder builder, String requestBody, String responseBody) {
+
+    }
+}
+```
+
+> AuditContextFilter provide `Parse` and `toJson` methods
+
+Then the filter must be referenced in the `@GenerateAuditLog` annotation :
+
+```java
+@GenerateAuditLog([...], filter = MyCustomAuditContextFilter.class)
+```
+
+== Logger problem
+In order not to block the client application if a problem occurs on logger side (e.g. if Kafka is down), preventing the audit log generation, no exception is thrown, but a simple `WARNING` log is creating with the following format :
+```
+Error sending audit logs to Kafka : {timestamp=2021-04-29T18:28:09.723741+02:00, applicationId=Daikon, eventType=test type, eventCategory=test category, accountId=9bfdd9a0-7852-4cd5-94a0-6212ebe281b6}
+```
+
+== Prometheus Counter
+In order to have the number of audit logs covered, we need to know the number of audit logs generated. So, we need a way to count every single which is why we leveraged a prometheus counter to achieve this goal. *So each project integrating the audit logs daikon library must expose a prometheus endpoint.*

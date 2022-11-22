@@ -1,17 +1,5 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.talend.daikon.spring.audit.logs.api.AuditLogScope.*;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -26,6 +14,18 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ERROR;
 
 @Component
 public class AuditLogGeneratorInterceptor extends HandlerInterceptorAdapter {

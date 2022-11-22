@@ -1,4 +1,4 @@
-package org.talend.daikon.spring.audit.logs.api;
+package org.talend.daikon.spring.audit.common.api;
 
 import java.util.Arrays;
 

@@ -15,9 +15,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
+import org.talend.daikon.spring.audit.common.config.AuditKafkaProperties;
+import org.talend.daikon.spring.audit.common.config.AuditProperties;
 import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
 import org.talend.daikon.spring.audit.logs.api.NoOpAuditUserProvider;
 import org.talend.daikon.spring.audit.logs.service.*;
+import org.talend.daikon.spring.audit.service.AppAuditLogger;
 import org.talend.logging.audit.AuditLoggerFactory;
 import org.talend.logging.audit.LogAppenders;
 import org.talend.logging.audit.impl.*;
@@ -84,7 +87,7 @@ public class AuditLogAutoConfiguration implements WebMvcConfigurer {
     public AuditLogSender auditLogSender(Optional<AuditUserProvider> auditUserProvider, AuditLoggerBase auditLoggerBase,
             AuditLogIpExtractor auditLogIpExtractor, AuditLogUrlExtractor auditLogUrlExtractor,
             Counter auditLogsGeneratedCounter) {
-        AuditLogger auditLogger = AuditLoggerFactory.getEventAuditLogger(AuditLogger.class, auditLoggerBase);
+        AppAuditLogger auditLogger = AuditLoggerFactory.getEventAuditLogger(AppAuditLogger.class, auditLoggerBase);
         return new AuditLogSenderImpl(auditUserProvider.orElse(new NoOpAuditUserProvider()), auditLogger, auditLogIpExtractor,
                 auditLogUrlExtractor, auditLogsGeneratedCounter);
     }

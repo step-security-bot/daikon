@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.talend.daikon.spring.audit.logs.exception.AuditLogException;
+import org.talend.daikon.spring.audit.common.exception.AuditLogException;
 import org.talend.logging.audit.Context;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,12 +64,12 @@ public class AuditLogContextBuilderTest {
         contextBuilder.getContext().put("request", "request");
         contextBuilder.getContext().put("response", "response");
 
-        Assertions.assertThrows(AuditLogException.class, () -> contextBuilder.checkAuditContextIsValid());
+        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
 
         contextBuilder.withAccountId("null");
         contextBuilder.withUserId(UUID.randomUUID().toString());
 
-        Assertions.assertThrows(AuditLogException.class, () -> contextBuilder.checkAuditContextIsValid());
+        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
 
         contextBuilder.withAccountId(UUID.randomUUID().toString());
 
@@ -77,17 +77,17 @@ public class AuditLogContextBuilderTest {
 
         contextBuilder.getContext().put("accountId", "accountId");
 
-        Assertions.assertThrows(AuditLogException.class, () -> contextBuilder.checkAuditContextIsValid());
+        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
 
         contextBuilder.getContext().put("accountId", UUID.randomUUID().toString());
         contextBuilder.getRequest().put("userId", "userId");
 
-        Assertions.assertThrows(AuditLogException.class, () -> contextBuilder.checkAuditContextIsValid());
+        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
 
         contextBuilder.getRequest().put("userId", UUID.randomUUID().toString());
         contextBuilder.getResponse().put("userId", "userId");
 
-        Assertions.assertThrows(AuditLogException.class, () -> contextBuilder.checkAuditContextIsValid());
+        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
 
         contextBuilder.getResponse().put("userId", UUID.randomUUID().toString());
 

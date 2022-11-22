@@ -1,4 +1,4 @@
-package org.talend.daikon.spring.audit.logs.model;
+package org.talend.daikon.spring.audit.common.model;
 
 import java.util.Arrays;
 import java.util.List;

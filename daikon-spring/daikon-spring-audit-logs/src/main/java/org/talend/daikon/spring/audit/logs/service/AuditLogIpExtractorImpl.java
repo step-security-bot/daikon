@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
-import org.talend.daikon.spring.audit.logs.config.AuditProperties;
+import org.talend.daikon.spring.audit.common.config.AuditProperties;
 
 public class AuditLogIpExtractorImpl implements AuditLogIpExtractor {
 

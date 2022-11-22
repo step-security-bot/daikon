@@ -32,7 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.talend.daikon.spring.audit.logs.config.AuditLogTestConfig;
-import org.talend.daikon.spring.audit.logs.model.AuditLogFieldEnum;
+import org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum;
 import org.talend.daikon.spring.audit.logs.service.AuditLogSenderImpl;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.impl.AuditLoggerBase;

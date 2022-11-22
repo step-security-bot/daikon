@@ -1,4 +1,4 @@
-package org.talend.daikon.spring.audit.logs.exception;
+package org.talend.daikon.spring.audit.common.exception;
 
 import org.talend.daikon.exception.ExceptionContext;
 import org.talend.daikon.exception.TalendRuntimeException;
