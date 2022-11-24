@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.0.9) - 11/22/2022
+
+Thanks to @Laurent Meunier
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPRUN-4380[TPRUN-4380]: Use daikon-audit log in engine-runtime-provisioner (link:https://github.com/Talend/daikon/pull/918[#918])
