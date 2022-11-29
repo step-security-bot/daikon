@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>dynamic-log</artifactId>
-        <version>7.0.10</version>
+        <version>7.0.11-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>dynamic-log-core</artifactId>
