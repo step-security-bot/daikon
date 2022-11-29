@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-tql</artifactId>
-        <version>7.0.10-SNAPSHOT</version>
+        <version>7.0.10</version>
     </parent>
     <artifactId>daikon-tql-core</artifactId>
     <name>Daikon TQL core libraries.</name>
