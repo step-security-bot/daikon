@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.0.10) - 11/29/2022
+
+Thanks to @Mark Butko
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19544[TPSVC-19544]: UNEXPECTED_EXCEPTION audit log context has invalid UUID values (link:https://github.com/Talend/daikon/pull/930[#930])
