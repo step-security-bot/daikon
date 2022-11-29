@@ -1,5 +1,6 @@
 package org.talend.daikon.spring.audit.logs.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import lombok.AllArgsConstructor;
@@ -54,7 +55,7 @@ public class AuditLogContextBuilderTest {
     }
 
     @Test
-    public void testValidateContextFields() {
+    public void testValidateContextFieldsInvalidAccountId() {
 
         AuditLogContextBuilder contextBuilder = AuditLogContextBuilder.create().withRequestId(UUID.randomUUID())
                 .withAccountId(UUID.randomUUID().toString()).withTimestamp("timestamp").withUserId("userId")
@@ -64,38 +65,58 @@ public class AuditLogContextBuilderTest {
         contextBuilder.getContext().put("request", "request");
         contextBuilder.getContext().put("response", "response");
 
-        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
-
         contextBuilder.withAccountId("null");
-        contextBuilder.withUserId(UUID.randomUUID().toString());
-
-        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
-
-        contextBuilder.withAccountId(UUID.randomUUID().toString());
-
-        contextBuilder.checkAuditContextIsValid();
+        AuditLogException ex = Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
+        assertEquals("UNEXPECTED_EXCEPTION:{message=audit log context has invalid UUID values: [null]}", ex.getMessage());
 
         contextBuilder.getContext().put("accountId", "accountId");
-
-        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
+        ex = Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
+        assertEquals("UNEXPECTED_EXCEPTION:{message=audit log context has invalid UUID values: [accountId]}", ex.getMessage());
 
         contextBuilder.getContext().put("accountId", UUID.randomUUID().toString());
-        contextBuilder.getRequest().put("userId", "userId");
+        contextBuilder.getRequest().put("accountId", "accountId-1");
+        ex = Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
+        assertEquals("UNEXPECTED_EXCEPTION:{message=audit log context has invalid UUID values: [accountId-1]}", ex.getMessage());
 
-        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
+        contextBuilder.getContext().put("accountId", UUID.randomUUID().toString());
+        contextBuilder.getResponse().put("accountId", UUID.randomUUID().toString());
+        contextBuilder.getRequest().put("accountId", UUID.randomUUID().toString());
+        contextBuilder.withAccountId(UUID.randomUUID().toString());
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
 
+        contextBuilder.getResponse().put("accountId", null);
+        contextBuilder.getRequest().put("accountId", null);
+        contextBuilder.withAccountId(UUID.randomUUID().toString());
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
+    }
+
+    @Test
+    public void testValidateContextFieldsAnyUserIdAllowed() { // userId is allowed to be random string for SAT
+
+        AuditLogContextBuilder contextBuilder = AuditLogContextBuilder.create().withRequestId(UUID.randomUUID())
+                .withAccountId(UUID.randomUUID().toString()).withTimestamp("timestamp").withUserId("userId")
+                .withLogId(UUID.randomUUID()).withApplicationId("appid").withEventType("eventtype").withEventCategory("category")
+                .withEventOperation("operation").withClientIp("ip").withRequestUrl("url").withRequestMethod("GET")
+                .withResponseCode(200);
+        contextBuilder.getContext().put("request", "request");
+        contextBuilder.getContext().put("response", "response");
+
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
+
+        contextBuilder.withUserId(UUID.randomUUID().toString());
         contextBuilder.getRequest().put("userId", UUID.randomUUID().toString());
-        contextBuilder.getResponse().put("userId", "userId");
-
-        Assertions.assertThrows(AuditLogException.class, contextBuilder::checkAuditContextIsValid);
-
         contextBuilder.getResponse().put("userId", UUID.randomUUID().toString());
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
 
-        contextBuilder.checkAuditContextIsValid();
+        contextBuilder.withUserId("userId");
+        contextBuilder.getRequest().put("userId", "userId");
+        contextBuilder.getResponse().put("userId", "userId");
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
 
+        contextBuilder.withUserId(null);
         contextBuilder.getRequest().put("userId", null);
-
-        contextBuilder.checkAuditContextIsValid();
+        contextBuilder.getResponse().put("userId", null);
+        Assertions.assertDoesNotThrow(contextBuilder::checkAuditContextIsValid);
     }
 
 }

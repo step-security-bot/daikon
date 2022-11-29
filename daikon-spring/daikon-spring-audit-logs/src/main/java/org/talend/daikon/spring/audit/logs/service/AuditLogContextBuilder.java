@@ -4,6 +4,7 @@ import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,7 +34,7 @@ public class AuditLogContextBuilder {
 
     private HttpServletRequest httpServletRequest;
 
-    private static final List<String> UUID_FIELDS_TO_VALIDATE = Arrays.asList(ACCOUNT_ID.getId(), USER_ID.getId());
+    private static final List<String> UUID_FIELDS_TO_VALIDATE = Collections.singletonList(ACCOUNT_ID.getId());
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     static {
@@ -261,28 +262,9 @@ public class AuditLogContextBuilder {
     }
 
     private void validateUUIDFields() {
-        List<String> invalidUUIDs = new ArrayList<>();
-
-        List<String> contextUUIDToValidate = context.entrySet().stream()
-                .filter(ctx -> UUID_FIELDS_TO_VALIDATE.contains(ctx.getKey())).map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-
-        List<String> requestUUIDToValidate = request.entrySet().stream()
-                .filter(ctx -> UUID_FIELDS_TO_VALIDATE.contains(ctx.getKey())).map(entry -> (String) entry.getValue())
-                .collect(Collectors.toList());
-
-        List<String> responseUUIDToValidate = response.entrySet().stream()
-                .filter(ctx -> UUID_FIELDS_TO_VALIDATE.contains(ctx.getKey())).map(entry -> (String) entry.getValue())
-                .collect(Collectors.toList());
-
-        contextUUIDToValidate.addAll(requestUUIDToValidate);
-        contextUUIDToValidate.addAll(responseUUIDToValidate);
-
-        for (String fieldValue : contextUUIDToValidate) {
-            if (!this.isValidUUID(fieldValue)) {
-                invalidUUIDs.add(fieldValue);
-            }
-        }
+        Set<Object> invalidUUIDs = UUID_FIELDS_TO_VALIDATE.stream()
+                .flatMap(key -> Stream.of(context.get(key), request.get(key), response.get(key)))
+                .filter(value -> !isValidUUID(value)).collect(Collectors.toSet());
 
         if (!invalidUUIDs.isEmpty()) {
             throw new AuditLogException(CommonErrorCodes.UNEXPECTED_EXCEPTION, ExceptionContext.withBuilder()
@@ -291,14 +273,18 @@ public class AuditLogContextBuilder {
 
     }
 
-    private boolean isValidUUID(String fieldValue) {
+    private boolean isValidUUID(Object fieldValue) {
 
         if (Objects.isNull(fieldValue)) {
             return true;
         }
 
+        if (!(fieldValue instanceof String)) {
+            return false;
+        }
+
         try {
-            UUID.fromString(fieldValue);
+            UUID.fromString((String) fieldValue);
         } catch (IllegalArgumentException e) {
             return false;
         }
