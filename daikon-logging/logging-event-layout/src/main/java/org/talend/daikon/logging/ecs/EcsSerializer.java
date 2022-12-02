@@ -73,7 +73,7 @@ public class EcsSerializer {
                 .map(mdcEntry -> new AbstractMap.SimpleEntry<>(
                         metaFields.getOrDefault(mdcEntry.getKey(), (legacyMode ? LEGACY_MDC_PREFIX : "") + mdcEntry.getKey()),
                         mdcEntry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .filter(entry -> entry.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         final List<String> mdcNumericFields = filteredMdc.keySet().stream().filter(EcsFields::isNumber)
                 .collect(Collectors.toList());
