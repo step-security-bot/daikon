@@ -1,0 +1,6 @@
+= Daikon Release Notes (0.0.0) - 12/02/2022
+
+Thanks to @MAUGIN Thomas
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPOPS-5199[TPOPS-5199]: Drop in flow start (link:https://github.com/Talend/daikon/pull/931[#931])
