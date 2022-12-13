@@ -1,0 +1,10 @@
+= Daikon Release Notes (7.0.12) - 12/13/2022
+
+Thanks to @Franck Zetule, @dependabot[bot], @Colm O hEigeartaigh
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPRUN-4778[TPRUN-4778]: Remove usage of spring-security WebSecurityConfigurerAdapter
+
+== Other
+- chore(deps): bump express from 4.17.1 to 4.18.2 in /daikon-tql  (link:https://github.com/Talend/daikon/pull/935[#935])
+- Override Jettison to 1.5.2 to fix some CVE issues  (link:https://github.com/Talend/daikon/pull/934[#934])
