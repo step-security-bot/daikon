@@ -32,7 +32,7 @@ with `UserDetailsConverter` used for converting introspection response into `Aut
 
 == Exception handling
 
-By default Spring Security will return authentication error response without body, bu with the `WWW_AUTHENTICATE` header containing detailed description of the error.
+By default, Spring Security will return authentication error response without body, but with the `WWW_AUTHENTICATE` header containing detailed description of the error.
 To override this behavior the following classes were created `TalendBearerTokenAuthenticationEntryPoint` and `AuthExceptionHandler`. +
 `TalendBearerTokenAuthenticationEntryPoint` overrides response in case of failed authentication (by default it's handled by `BearerTokenAuthenticationEntryPoint`),
 it must be enabled explicitly (see configuration section). +
@@ -112,20 +112,20 @@ spring:
             introspection-uri: ${OIDC_URL:http://tpsvc-idp/oidc}/oauth2/introspect
 ```
 
-`ResourceServerConfigurerAdapter` usages should be replaced with `WebSecurityConfigurerAdapter`.
+`ResourceServerConfigurerAdapter` usages should be replaced with a bean with signature `public SecurityFilterChain filterChain(HttpSecurity http) throws Exception`.
 If you have two or more of those use `@Order(100+)` annotations to avoid conflicts.
-Please see link:https://github.com/spring-projects/spring-security/wiki/OAuth-2.0-Migration-Guide[OAuth 2.0 Migration Guide] for reference on other changes
+Please see link:https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter[Spring Security without the WebSecurityConfigurerAdapter] for reference on other changes
 
-Now when inside configuration class extending `WebSecurityConfigurerAdapter` next snippet should be added:
+Now when inside security configuration class next snippet should be added:
 ```
     @Autowired
     private AuthenticationManagerResolver<HttpServletRequest> authenticationManagerResolver;
 
     @Autowired
-    private TalendBearerTokenAuthenticationEntryPoint tokenAuthenticationEntryPoint;
+    private TalendBearerTokenAuthenticationEntryPoint tokenAuthenticationEntryPoint; // optional
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean("securityFilterChain.[New name for additionnal one or existing name than existing to overwrite]")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 ...
                 .and()
@@ -134,8 +134,8 @@ Now when inside configuration class extending `WebSecurityConfigurerAdapter` nex
                 .authenticationEntryPoint(tokenAuthenticationEntryPoint) // optional
                 .and()
                 ...
+        return http.build();
     }
 ```
 Note that usage of `TalendBearerTokenAuthenticationEntryPoint` is optional, it can be omitted or replaced with custom implementation
 
-Example of this library integrated into application can be found in the link:https://github.com/Talend/platform-services-audit-logs-api/pull/130[`audit-logs-api`] project

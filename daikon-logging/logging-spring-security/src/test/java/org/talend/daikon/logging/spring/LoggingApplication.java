@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.daikon.logging.spring;
 
+import java.util.concurrent.Callable;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +29,6 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.Callable;
 
 @SpringBootApplication
 public class LoggingApplication {
@@ -56,7 +56,7 @@ public class LoggingApplication {
             return (web) -> web.ignoring().antMatchers("/public/**");
         }
 
-        @Bean
+        @Bean("securityFilterChain.basic")
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
             return http.build();
@@ -111,7 +111,5 @@ public class LoggingApplication {
     public interface SampleRequestHandler {
 
         void onSampleRequestCalled();
-
     }
-
 }

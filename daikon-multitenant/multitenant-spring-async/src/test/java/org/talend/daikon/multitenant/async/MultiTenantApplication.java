@@ -12,6 +12,11 @@
 // ============================================================================
 package org.talend.daikon.multitenant.async;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.ServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,22 +36,13 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.talend.daikon.multitenant.context.DefaultTenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
-
-import javax.servlet.ServletRequest;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @Import(MultiTenantApplication.CustomSecurityConfiguration.class)
@@ -65,7 +61,7 @@ public class MultiTenantApplication {
             return (web) -> web.ignoring().antMatchers("/public/**");
         }
 
-        @Bean
+        @Bean("securityFilterChain.basic")
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
             return http.build();
@@ -135,7 +131,6 @@ public class MultiTenantApplication {
             String priority = null;
             if (requestAttributes != null) {
                 priority = (String) requestAttributes.getAttribute("priority", RequestAttributes.SCOPE_REQUEST);
-
             }
             String tenantId = String.valueOf(TenancyContextHolder.getContext().getTenant().getIdentity());
 
@@ -158,7 +153,6 @@ public class MultiTenantApplication {
     public interface MessagePublicationHandler {
 
         void onMessagePublished();
-
     }
 
     public static class Message {
@@ -194,5 +188,4 @@ public class MultiTenantApplication {
             return userId;
         }
     }
-
 }

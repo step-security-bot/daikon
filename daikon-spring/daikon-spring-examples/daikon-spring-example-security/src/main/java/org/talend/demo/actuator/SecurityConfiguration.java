@@ -3,7 +3,7 @@ package org.talend.demo.actuator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.talend.daikon.security.token.TokenProtectedPath;
 
 /**
@@ -17,14 +17,16 @@ import org.talend.daikon.security.token.TokenProtectedPath;
  * </p>
  */
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean("securityFilterChain.exposeSayHi")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // By default, inherits from daikon-spring-security configuration (see this class documentation)
 
         // Expose "/say/hi" path without authentication, to show that application can define its own security rules.
         http.authorizeRequests().antMatchers("/say/hi").permitAll();
+
+        return http.build();
     }
 
     @Bean

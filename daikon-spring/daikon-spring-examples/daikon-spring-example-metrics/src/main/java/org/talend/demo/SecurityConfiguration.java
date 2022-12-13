@@ -1,8 +1,9 @@
 package org.talend.demo;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * <p>
@@ -10,14 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * </p>
  */
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // Purpose is not show case security, allow all accesses
+    @Bean("securityFilterChain.disablesActuatorSecurity")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Purpose is not showcase security, allow all accesses
         http.authorizeRequests().antMatchers("/**").permitAll();
 
         // Disable CSRF to ease demo with POSTs requests
         http.cors().and().csrf().disable();
+
+        return http.build();
     }
 }

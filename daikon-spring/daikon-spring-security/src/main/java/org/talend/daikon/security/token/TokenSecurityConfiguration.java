@@ -16,12 +16,12 @@ import org.springframework.boot.actuate.endpoint.EndpointId;
 import org.springframework.boot.actuate.endpoint.web.PathMappedEndpoint;
 import org.springframework.boot.actuate.endpoint.web.PathMappedEndpoints;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -35,11 +35,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @see TokenAuthenticationFilter When configuration's token value is present.
  * @see #additionalProtectedEndpoints for list of protected paths.
  */
-@Configuration
 @EnableWebSecurity
-@Order(1)
 @ConditionalOnBean(PathMappedEndpoints.class)
-public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class TokenSecurityConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenSecurityConfiguration.class);
 
@@ -82,7 +80,9 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
     }
 
-    public void configure(HttpSecurity http) throws Exception {
+    @Bean("securityFilterChain.tokenConfiguration")
+    @Order(1)
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .requestMatcher(protectedPaths)//
                 .csrf() //
@@ -117,5 +117,6 @@ public class TokenSecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
         }
         registry.and().addFilterAfter(tokenAuthenticationFilter, BasicAuthenticationFilter.class);
+        return http.build();
     }
 }
