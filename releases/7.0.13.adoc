@@ -1,0 +1,8 @@
+= Daikon Release Notes (7.0.13) - 01/05/2023
+
+Thanks to @Colm O hEigeartaigh
+
+== Other
+- Updating Jettison to 1.5.3 to fix CVE-2022-45685 (#937) (link:https://github.com/Talend/daikon/pull/937[#937])
+- Updating Kafka clients from 2.8.1 to 2.8.2 to fix CVE-2022-34917 (#936) (link:https://github.com/Talend/daikon/pull/936[#936])
+- Updating Spring Boot to 2.7.7 and Spring Security to 5.7.6  (link:https://github.com/Talend/daikon/pull/938[#938])
