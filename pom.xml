@@ -81,6 +81,7 @@
         <scala-version>2.13.10</scala-version>
         <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
         <slf4j.version>1.7.26</slf4j.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
         <spring-boot.version>2.7.7</spring-boot.version>
         <spring-cloud-aws.version>2.4.2</spring-cloud-aws.version>
         <spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
@@ -361,6 +362,11 @@
                 <groupId>org.codehaus.jettison</groupId>
                 <artifactId>jettison</artifactId>
                 <version>${jettison.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
