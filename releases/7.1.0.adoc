@@ -1,0 +1,9 @@
+= Daikon Release Notes (7.1.0) - 01/25/2023
+
+Thanks to @Mark Butko, @Colm O hEigeartaigh
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19713[TPSVC-19713]: API call of /account/users/{id}/roles failed with 400 error when using token generated from Service Account (link:https://github.com/Talend/daikon/pull/941[#941])
+
+== Other
+- Force Snakeyaml to 1.33 to fix some CVEs  (link:https://github.com/Talend/daikon/pull/940[#940])
