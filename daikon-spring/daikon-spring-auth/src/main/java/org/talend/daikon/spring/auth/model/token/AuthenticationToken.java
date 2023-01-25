@@ -44,7 +44,7 @@ public abstract class AuthenticationToken implements Authentication {
     }
 
     private void computePrincipalFromJwt() {
-        if (decodedJwt.containsClaim(CLAIM_PERMISSIONS)) {
+        if (decodedJwt.hasClaim(CLAIM_PERMISSIONS)) {
             authorities = toAuthorities(decodedJwt.getClaimAsStringList(CLAIM_PERMISSIONS).stream());
         }
 
@@ -79,8 +79,8 @@ public abstract class AuthenticationToken implements Authentication {
 
     @Override
     public String getName() {
-        if (this.authUserDetails.getTenantId() != null) {
-            return this.authUserDetails.getUsername() + "@" + this.authUserDetails.getTenantId();
+        if (this.authUserDetails.getTenantName() != null) {
+            return this.authUserDetails.getUsername() + "@" + this.authUserDetails.getTenantName();
         } else {
             return this.authUserDetails.getUsername();
         }
@@ -116,7 +116,7 @@ public abstract class AuthenticationToken implements Authentication {
     }
 
     public static String getClaim(Jwt decodedJwt, String claimTenantId) {
-        return decodedJwt.containsClaim(claimTenantId) ? decodedJwt.getClaimAsString(claimTenantId) : null;
+        return decodedJwt.hasClaim(claimTenantId) ? decodedJwt.getClaimAsString(claimTenantId) : null;
     }
 
     private static Set<GrantedAuthority> toAuthorities(Stream<String> permissions) {

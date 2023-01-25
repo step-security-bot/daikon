@@ -1,9 +1,6 @@
 package org.talend.daikon.spring.auth.model.token;
 
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.*;
 
 import java.util.Collection;
 
@@ -26,23 +23,25 @@ public class SatAuthenticationToken extends AuthenticationToken {
             HttpServletRequest request) {
         String saName = request.getHeader(HEADER_SA_NAME);
         String tenantId = request.getHeader(HEADER_TENANT_ID);
+        String tenantName = request.getHeader(HEADER_TENANT_NAME);
 
-        return userDetails(clientId, authorities, tenantId, saName);
+        return userDetails(clientId, authorities, tenantId, tenantName, saName);
     }
 
     @Override
     protected AuthUserDetails computeUserDetails(String clientId, Collection<GrantedAuthority> authorities, Jwt jwt) {
         String saName = getClaim(jwt, CLAIM_SA_NAME);
         String tenantId = getClaim(jwt, CLAIM_TENANT_ID);
+        String tenantName = getClaim(jwt, CLAIM_TENANT_NAME);
 
-        return userDetails(clientId, authorities, tenantId, saName);
+        return userDetails(clientId, authorities, tenantId, tenantName, saName);
     }
 
     private static AuthUserDetails userDetails(String clientId, Collection<GrantedAuthority> authorities, String tenantId,
-            String saName) {
+            String tenantName, String saName) {
         AuthUserDetails authUserDetails = new AuthUserDetails(saName + USER_DETAILS_NAME_SA_SUFFIX, "", authorities);
         authUserDetails.setTenantId(tenantId);
-        authUserDetails.setTenantName(tenantId);
+        authUserDetails.setTenantName(tenantName != null ? tenantName : tenantId);
         authUserDetails.setId(clientId);
         return authUserDetails;
     }

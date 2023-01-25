@@ -14,9 +14,13 @@ public class SatAuthenticationProvider implements Auth0AuthenticationProvider {
 
     public static final String HEADER_TENANT_ID = "talend-tenant-id";
 
+    public static final String HEADER_TENANT_NAME = "talend-tenant-name";
+
     public static final String HEADER_SA_NAME = "talend-service-account-name";
 
     public static final String CLAIM_TENANT_ID = "https://talend.cloud/tenantId";
+
+    public static final String CLAIM_TENANT_NAME = "https://talend.cloud/tenantName";
 
     public static final String CLAIM_SA_NAME = "https://talend.cloud/serviceAccountName";
 
