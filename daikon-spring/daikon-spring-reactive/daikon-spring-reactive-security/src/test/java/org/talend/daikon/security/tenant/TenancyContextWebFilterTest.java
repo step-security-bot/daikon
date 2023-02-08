@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -21,13 +22,25 @@ public class TenancyContextWebFilterTest {
     @Test
     public void tenancyContextShouldBeLoadedWithJwt() {
         TenancyContextWebFilter tenancyContextWebFilter = new TenancyContextWebFilter();
+        String tenantId = UUID.randomUUID().toString();
+        Jwt jwt = Jwt.withTokenValue("token").header("alg", "none").claim("entitlements", "FAKE").build();
+
+        JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
+
+        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(jwtAuthenticationToken, tenantId).block();
+        assertEquals(tenantId, tenancyContext.getTenant().getIdentity());
+    }
+
+    @Test
+    public void tenancyContextShouldBeLoadedWithJwt2() {
+        TenancyContextWebFilter tenancyContextWebFilter = new TenancyContextWebFilter();
 
         Jwt jwt = Jwt.withTokenValue("token").header("alg", "none").claim("entitlements", "FAKE")
                 .claim("tenant_id", "FakeTenantId").build();
 
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
 
-        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(jwtAuthenticationToken).block();
+        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(jwtAuthenticationToken, null).block();
         assertEquals("FakeTenantId", tenancyContext.getTenant().getIdentity());
     }
 
@@ -40,7 +53,7 @@ public class TenancyContextWebFilterTest {
 
         Authentication authentication = new TestingAuthenticationToken(principal, null);
 
-        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(authentication).block();
+        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(authentication, null).block();
         assertEquals("FakeTenantId", tenancyContext.getTenant().getIdentity());
     }
 
@@ -52,7 +65,7 @@ public class TenancyContextWebFilterTest {
 
         Authentication authentication = new TestingAuthenticationToken(principal, null);
 
-        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(authentication).block();
+        TenancyContext tenancyContext = tenancyContextWebFilter.loadTenancyContext(authentication, null).block();
         assertEquals("FakeTenantId", tenancyContext.getTenant().getIdentity());
     }
 }
