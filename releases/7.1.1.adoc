@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.1) - 02/08/2023
+
+Thanks to @Laurent Meunier
+
+== Other
+- link:https://jira.talendforge.org/browse/TPRUN-5142[TPRUN-5142]: Remove cluster code (link:https://github.com/Talend/daikon/pull/942[#942])
