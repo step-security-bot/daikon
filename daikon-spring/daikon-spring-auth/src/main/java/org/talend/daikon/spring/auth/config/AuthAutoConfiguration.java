@@ -61,7 +61,7 @@ public class AuthAutoConfiguration {
     @Value("${spring.security.oauth2.resourceserver.iam.opaque-token.cache-name:oauthTokenInfoCache}")
     private String patIntrospectionCacheName;
 
-    @Value("${spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled:true}")
+    @Value("${spring.security.oauth2.resourceserver.iam.opaque-token.cache-enabled:false}")
     private boolean patIntrospectionCacheEnabled;
 
     @Bean
