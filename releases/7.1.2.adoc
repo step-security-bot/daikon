@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.2) - 02/20/2023
+
+Thanks to @Gnongo Patrick BEUGRE
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPSVC-19866[TPSVC-19866]: Introspection results permanently cached (link:https://github.com/Talend/daikon/pull/943[#943])
