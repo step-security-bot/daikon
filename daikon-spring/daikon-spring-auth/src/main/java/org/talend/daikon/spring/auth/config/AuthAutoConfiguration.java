@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,6 +31,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.talend.daikon.multitenant.provider.TenantProvider;
+import org.talend.daikon.multitenant.web.TenancyFiltersAutoConfiguration;
 import org.talend.daikon.multitenant.web.TenantIdentificationStrategy;
 import org.talend.daikon.spring.auth.exception.AuthExceptionHandler;
 import org.talend.daikon.spring.auth.exception.TalendBearerTokenAuthenticationEntryPoint;
@@ -51,6 +53,7 @@ import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 @ConditionalOnClass(value = { Jwt.class, OAuth2ResourceServerProperties.class })
 @Import(RedisCacheConfig.class)
 @EnableConfigurationProperties(OAuth2ResourceServerProperties.class)
+@AutoConfigureBefore(TenancyFiltersAutoConfiguration.class)
 public class AuthAutoConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthAutoConfiguration.class);
