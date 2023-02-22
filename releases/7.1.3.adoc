@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.3) - 02/22/2023
+
+Thanks to @François-Xavier Lebastard
+
+== Other
+- link:https://jira.talendforge.org/browse/TDOPS-2215[TDOPS-2215]: Public Observability API - add useful debug information in observability service log (link:https://github.com/Talend/daikon/pull/944[#944])
