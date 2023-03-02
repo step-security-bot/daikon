@@ -1,13 +1,26 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2023 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.daikon.spring.audit.logs.config;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping;
 import org.talend.daikon.spring.audit.common.config.AuditKafkaProperties;
 import org.talend.daikon.spring.audit.common.config.AuditProperties;
 import org.talend.daikon.spring.audit.logs.service.AuditLogCustomWebFilter;
@@ -18,7 +31,8 @@ import org.talend.logging.audit.AuditLoggerFactory;
 import org.talend.logging.audit.LogAppenders;
 import org.talend.logging.audit.impl.*;
 
-import java.util.Properties;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -27,8 +41,9 @@ import java.util.Properties;
 public class AuditLogAutoConfiguration {
 
     @Bean
-    public AuditLogCustomWebFilter auditLogCustomWebFilter(final AuditLogSender auditLogSender) {
-        return new AuditLogCustomWebFilter(auditLogSender);
+    public AuditLogCustomWebFilter auditLogCustomWebFilter(final AuditLogSender auditLogSender,
+            final RequestMappingHandlerMapping requestMappingHandlerMapping) {
+        return new AuditLogCustomWebFilter(auditLogSender, requestMappingHandlerMapping);
     }
 
     @Bean

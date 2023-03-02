@@ -1,6 +1,20 @@
 package org.talend.daikon.spring.audit.logs;
 
-import io.restassured.module.webtestclient.response.WebTestClientResponse;
+import static io.restassured.module.webtestclient.RestAssuredWebTestClient.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,17 +33,7 @@ import org.talend.daikon.spring.audit.logs.api.TestBody;
 import org.talend.logging.audit.impl.AuditLoggerBase;
 import org.talend.logging.audit.impl.DefaultContextImpl;
 
-import java.time.ZonedDateTime;
-import java.util.UUID;
-
-import static io.restassured.module.webtestclient.RestAssuredWebTestClient.given;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.reset;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.OK;
-import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+import io.restassured.module.webtestclient.response.WebTestClientResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = AppTestConfig.class)
 @AutoConfigureWebTestClient(timeout = "36000")
@@ -58,12 +62,12 @@ public class AuditLogTest {
     @Test
     @WithMockUser(username = TENANT_ID)
     public void testAuditLog() {
-
-        doNothing().when(auditLoggerBase).log(any(), any(), contextArgumentCaptor.capture(), any(), any());
-
         WebTestClientResponse r = given().webTestClient(webTestClient).header(CLIENT_IP.name(), "0.0.0.0.0")
                 .contentType(MediaType.APPLICATION_JSON_VALUE).body(testBody).post("/test");
 
+        assertEquals(OK.value(), r.getStatusCode());
+
+        Mockito.verify(auditLoggerBase).log(any(), any(), contextArgumentCaptor.capture(), any(), any());
         DefaultContextImpl context = contextArgumentCaptor.getValue();
         assertNotNull(context.get(LOG_ID.getId()));
         assertNotNull(context.get(TIMESTAMP.getId()));
@@ -79,22 +83,17 @@ public class AuditLogTest {
 
         assertFalse(context.get(REQUEST.getId()).contains("secret"));
         assertFalse(context.get(RESPONSE.getId()).contains("secret"));
-
-        assertEquals(OK.value(), r.getStatusCode());
-
-        Mockito.verify(auditLoggerBase).log(any(), any(), any(), any(), any());
-
     }
 
     @Test
     @WithMockUser(username = TENANT_ID)
     public void testAuditLogOnError() {
-
-        doNothing().when(auditLoggerBase).log(any(), any(), contextArgumentCaptor.capture(), any(), any());
-
         WebTestClientResponse r = given().webTestClient(webTestClient).header(CLIENT_IP.name(), "0.0.0.0.0")
                 .contentType(MediaType.APPLICATION_JSON_VALUE).body(testBody).put("/test");
 
+        assertEquals(INTERNAL_SERVER_ERROR.value(), r.getStatusCode());
+
+        Mockito.verify(auditLoggerBase).log(any(), any(), contextArgumentCaptor.capture(), any(), any());
         DefaultContextImpl context = contextArgumentCaptor.getValue();
         assertNotNull(context.get(LOG_ID.getId()));
         assertNotNull(context.get(TIMESTAMP.getId()));
@@ -107,11 +106,6 @@ public class AuditLogTest {
         assertEquals(TENANT_ID, context.get(ACCOUNT_ID.getId()));
         assertNotNull(context.get(REQUEST.getId()));
         assertNotNull(context.get(RESPONSE.getId()));
-
-        assertEquals(INTERNAL_SERVER_ERROR.value(), r.getStatusCode());
-
-        Mockito.verify(auditLoggerBase).log(any(), any(), any(), any(), any());
-
     }
 
 }

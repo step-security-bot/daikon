@@ -1,6 +1,7 @@
 package org.talend.daikon.spring.audit.logs.api;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.talend.daikon.security.tenant.ReactiveTenancyContextHolder.TENANCY_CONTEXT_KEY;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,17 +13,20 @@ import org.talend.daikon.multitenant.context.DefaultTenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.daikon.security.tenant.ReactiveTenancyContextHolder;
+
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 
-@Slf4j
+/**
+ * Inspired by {@link org.springframework.security.web.server.context.ReactorContextWebFilter}
+ */
 public class TenancyContextWebFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         return ReactiveSecurityContextHolder.getContext().filter(c -> c.getAuthentication() != null)
                 .map(SecurityContext::getAuthentication).flatMap(authentication -> chain.filter(exchange)
-                        .subscriberContext(c -> c.hasKey(TenancyContext.class) ? c : withTenancyContext(c, authentication)));
+                        .contextWrite(c -> c.hasKey(TENANCY_CONTEXT_KEY) ? c : withTenancyContext(c, authentication)));
     }
 
     private Context withTenancyContext(Context mainContext, Authentication authentication) {
@@ -37,5 +41,4 @@ public class TenancyContextWebFilter implements WebFilter {
         }
         return Mono.justOrEmpty(tenantContext);
     }
-
 }
