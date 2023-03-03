@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.4) - 03/02/2023
+
+Thanks to @Damien Rubio
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPRUN-5372[TPRUN-5372]: Actuator response body is empty (link:https://github.com/Talend/daikon/pull/945[#945])
