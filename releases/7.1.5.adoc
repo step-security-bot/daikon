@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.5) - 03/09/2023
+
+Thanks to @Viacheslav Gagara
+
+== Other
+- fix(): audit-logs: rid of of deprecated (and removed) spring HandlerInterceptorAdapter  (link:https://github.com/Talend/daikon/pull/948[#948])
