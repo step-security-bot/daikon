@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
@@ -28,7 +28,7 @@ import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
 import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ERROR;
 
 @Component
-public class AuditLogGeneratorInterceptor extends HandlerInterceptorAdapter {
+public class AuditLogGeneratorInterceptor implements HandlerInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuditLogGeneratorInterceptor.class);
 
@@ -66,8 +66,6 @@ public class AuditLogGeneratorInterceptor extends HandlerInterceptorAdapter {
             if (HttpStatus.valueOf(responseCode).isError()) {
                 this.auditLogSender.sendAuditLog(request, requestBody, responseCode, responseBodyString, generateAuditLog.get());
             }
-        } else {
-            super.afterCompletion(request, response, handler, ex);
         }
     }
 
