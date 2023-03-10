@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.6) - 03/10/2023
+
+Thanks to @Viacheslav Gagara
+
+== Other
+- fix(): audit-logs: migrate autoconfiguration from legacy to new approach  (link:https://github.com/Talend/daikon/pull/950[#950])
