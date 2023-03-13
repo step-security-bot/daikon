@@ -1,0 +1,9 @@
+= Daikon - Daikon cloud event extension
+v0.1
+:toc:
+
+== Introduction
+
+This module provide a CloudEvent extension which define a subset of attributes to complete an event according to a Talend ecosystem including tenant id and correlation id.
+
+All information can be found on link:https://github.com/Talend/policies/blob/master/official/kafka-application/README_event_specification.adoc#talend-cloudevents-extension[Talend kafka policy]
