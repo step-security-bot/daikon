@@ -1,0 +1,29 @@
+{
+  "type": "record",
+  "name": "Person",
+  "namespace": "org.talend.dq.processors",
+  "fields": [
+    {
+      "name": "title",
+      "type": [
+        {
+          "type": "string",
+          "dqType": "Title",
+          "dqTypeId": "TITLE",
+          "isForced": false,
+          "dqNativeType": "STRING",
+          "isNativeForced": false
+        },
+        "null"
+      ],
+      "originalFieldMetadata": {
+        "type": "varchar",
+        "size": 10,
+        "scale": 3,
+        "key": true,
+        "foreignKey": false,
+        "unique": true
+      }
+    }
+  ]
+}

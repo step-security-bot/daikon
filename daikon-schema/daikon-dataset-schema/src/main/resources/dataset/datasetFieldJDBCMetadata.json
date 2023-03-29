@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/dataset.field.jdbc.metadata.schema.json",
+  "title": "Dataset JDBC field metadata",
+  "description": "The JDBC metadata for a field, coming from the original JDBC object",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "the JDBC type of the field, for instance varchar"
+    },
+    "size": {
+      "type": "integer",
+      "description": "the size for the field, for instance 10"
+    },
+    "scale": {
+      "type": "integer",
+      "description": "number of digits to the right of the numeric field"
+    },
+    "key": {
+      "type": "boolean",
+      "description": "indicates if the field is part of the primary key"
+    },
+    "foreignKey": {
+      "type": "boolean",
+      "description": "indicates if the field is a foreign key"
+    },
+    "unique": {
+      "type": "boolean",
+      "description": "indicates if the field is unique"
+    }
+  }
+}

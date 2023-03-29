@@ -1,15 +1,19 @@
 package org.talend.daikon.schema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.schema.dataset.DatasetSchema;
 import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
+import org.talend.daikon.schema.dataset.metadata.JDBCMetadata;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerDatasetSchemaTest {
 
@@ -32,6 +36,43 @@ public class DeserializerDatasetSchemaTest {
                 DatasetSchema.class);
 
         assertNotNull(data);
+    }
+
+    @Test
+    public void givenValidDatasetInput3_whenDeserialize_thenNoError() throws IOException {
+        DatasetSchema data = objectMapper.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_metadata.json"), DatasetSchema.class);
+
+        assertNotNull(data);
+        assertEquals("record", data.getType());
+        assertEquals("Person", data.getName());
+        assertTrue(data.getFields().get(0).getOriginalFieldMetadata() instanceof JDBCMetadata);
+        JDBCMetadata jdbcMetadata = (JDBCMetadata) data.getFields().get(0).getOriginalFieldMetadata();
+        assertEquals("varchar", jdbcMetadata.getType());
+        assertEquals(10, jdbcMetadata.getSize());
+        assertEquals(3, jdbcMetadata.getScale());
+        assertTrue(jdbcMetadata.getKey());
+        assertFalse(jdbcMetadata.getForeignKey());
+        assertTrue(jdbcMetadata.getUnique());
+    }
+
+    @Test
+    public void givenValidDatasetInput4_whenDeserialize_thenNoError() throws IOException {
+        DatasetSchema data = objectMapper.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_partial_metadata.json"),
+                DatasetSchema.class);
+
+        assertNotNull(data);
+        assertEquals("record", data.getType());
+        assertEquals("Person", data.getName());
+        assertTrue(data.getFields().get(0).getOriginalFieldMetadata() instanceof JDBCMetadata);
+        JDBCMetadata jdbcMetadata = (JDBCMetadata) data.getFields().get(0).getOriginalFieldMetadata();
+        assertEquals("varchar", jdbcMetadata.getType());
+        assertEquals(10, jdbcMetadata.getSize());
+        assertNull(jdbcMetadata.getScale());
+        assertNull(jdbcMetadata.getKey());
+        assertNull(jdbcMetadata.getForeignKey());
+        assertNull(jdbcMetadata.getUnique());
     }
 
     @Test

@@ -38,6 +38,14 @@
     "description": {
       "description": "Description of the field",
       "type": "string"
+    },
+    "originalFieldMetadata": {
+      "description": "Metadata of the original field, coming from the data source",
+      "type": {
+        "oneOf": [
+          { "$ref": "https://org.talend.daikon/dataset.field.jdbc.metadata.schema.json" }
+        ]
+      }
     }
   },
   "required" : ["name", "type"]
