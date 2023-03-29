@@ -1,0 +1,11 @@
+= Daikon Release Notes (7.1.7) - 03/29/2023
+
+Thanks to @Aurélien F, @dependabot[bot], @Gabriel Marquet, @Fabien Abballe
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPGOV-584[TPGOV-584]: Read schema API is available for empty datasets and return component metadata (link:https://github.com/Talend/daikon/pull/953[#953])
+- link:https://jira.talendforge.org/browse/ARCH-680[ARCH-680]: Deploy schema registry and document usage (link:https://github.com/Talend/daikon/pull/951[#951])
+
+== Other
+- chore(deps): bump json-smart from 2.4.7 to 2.4.9  (link:https://github.com/Talend/daikon/pull/957[#957])
+- security(): Restrict semgrep workflow github token permissions  (link:https://github.com/Talend/daikon/pull/958[#958])
