@@ -1,15 +1,15 @@
 package org.talend.daikon.collections.tree;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.URL;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.collections.tree.file.BuilderFile;
 import org.talend.daikon.collections.tree.file.NodeFile;
 import org.talend.daikon.collections.tree.memory.BuilderMemo;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.net.URL;
 
 class AvlTreeTest {
 

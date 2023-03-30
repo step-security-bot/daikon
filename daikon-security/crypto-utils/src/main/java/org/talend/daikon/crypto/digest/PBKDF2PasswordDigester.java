@@ -1,5 +1,8 @@
 package org.talend.daikon.crypto.digest;
 
+import static java.lang.String.valueOf;
+import static java.util.Arrays.stream;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,9 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.talend.daikon.crypto.EncodingUtils;
 import org.talend.daikon.crypto.KeySource;
 import org.talend.daikon.crypto.KeySources;
-
-import static java.lang.String.valueOf;
-import static java.util.Arrays.stream;
 
 /**
  * An implementation of PasswordDigester that uses PBKDF2 with HMAC-SHA256.

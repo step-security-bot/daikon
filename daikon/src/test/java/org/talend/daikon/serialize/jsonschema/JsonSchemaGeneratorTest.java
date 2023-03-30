@@ -3,7 +3,6 @@ package org.talend.daikon.serialize.jsonschema;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assertj.core.api.BDDSoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -18,6 +17,8 @@ import org.talend.daikon.properties.property.PropertyFactory;
 import org.talend.daikon.properties.property.StringProperty;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
 import org.talend.daikon.serialize.FullExampleProperties;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @ExtendWith(SoftAssertionsExtension.class)
 public class JsonSchemaGeneratorTest extends AbstractSchemaGenerator {

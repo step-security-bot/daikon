@@ -116,7 +116,7 @@ public class LogBackJSONLayoutTest extends AbstractLayoutTest {
         event.setThreadName(logDetails.getThreadName());
         event.setTimeStamp(logDetails.getTimeMillis());
         event.setMDCPropertyMap(logDetails.getMdc());
-        event.setMarker(logDetails.getMarker());
+        event.addMarker(logDetails.getMarker());
         final StackTraceElement callerData = new StackTraceElement(logDetails.getClassName(), logDetails.getMethodName(),
                 logDetails.getFileName(), logDetails.getLineNumber());
         event.setCallerData(new StackTraceElement[] { callerData });

@@ -5,13 +5,11 @@ import static org.talend.daikon.spring.auth.config.RedisCacheConfig.wrapRedisCac
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +21,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
@@ -37,8 +34,8 @@ import org.talend.daikon.spring.auth.exception.AuthExceptionHandler;
 import org.talend.daikon.spring.auth.exception.TalendBearerTokenAuthenticationEntryPoint;
 import org.talend.daikon.spring.auth.interceptor.BearerTokenInterceptor;
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
-import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactoryCloud;
 import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactory;
+import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactoryCloud;
 import org.talend.daikon.spring.auth.manager.AuthenticationManagerFactory;
 import org.talend.daikon.spring.auth.manager.TalendAuthenticationManagerResolver;
 import org.talend.daikon.spring.auth.multitenant.AccountSecurityContextIdentificationStrategy;
@@ -46,10 +43,13 @@ import org.talend.daikon.spring.auth.multitenant.UserDetailsTenantProvider;
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;
 import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+
 /**
  * Enables Service Account Token authentication
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(value = { Jwt.class, OAuth2ResourceServerProperties.class })
 @Import(RedisCacheConfig.class)
 @EnableConfigurationProperties(OAuth2ResourceServerProperties.class)

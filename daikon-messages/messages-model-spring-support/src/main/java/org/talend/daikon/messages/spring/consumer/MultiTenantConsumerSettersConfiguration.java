@@ -3,15 +3,14 @@ package org.talend.daikon.messages.spring.consumer;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.talend.daikon.messages.header.consumer.TenantIdSetter;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.core.Tenant;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty("iam.accounts.url")
 @AutoConfigureBefore({ DefaultConsumerSettersConfiguration.class })
 public class MultiTenantConsumerSettersConfiguration {

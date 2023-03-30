@@ -1,13 +1,13 @@
 package org.talend.daikon.spring.audit.logs.service;
 
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.SUCCESS;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,8 +20,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
 
-import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
-import static org.talend.daikon.spring.audit.common.api.AuditLogScope.SUCCESS;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Aspect
 public class AuditLogGeneratorAspect {

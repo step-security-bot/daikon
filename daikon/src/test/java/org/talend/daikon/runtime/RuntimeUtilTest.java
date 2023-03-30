@@ -3,11 +3,11 @@ package org.talend.daikon.runtime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.junit.jupiter.api.Test;
 
 public class RuntimeUtilTest {
 

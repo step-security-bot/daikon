@@ -1,5 +1,9 @@
 package org.talend.logging.audit.log4j1;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Layout;
@@ -17,10 +21,6 @@ import org.talend.logging.audit.impl.EventFields;
 import org.talend.logging.audit.impl.LogAppendersSet;
 import org.talend.logging.audit.impl.LogTarget;
 import org.talend.logging.audit.impl.PropagateExceptions;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *

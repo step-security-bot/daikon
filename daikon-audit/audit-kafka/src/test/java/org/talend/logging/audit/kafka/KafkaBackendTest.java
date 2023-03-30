@@ -6,16 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Future;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.talend.logging.audit.LogLevel;
 import org.talend.logging.audit.impl.AuditConfiguration;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Future;
 
 public class KafkaBackendTest {
 

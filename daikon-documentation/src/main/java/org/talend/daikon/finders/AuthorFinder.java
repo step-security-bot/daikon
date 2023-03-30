@@ -1,8 +1,8 @@
 package org.talend.daikon.finders;
 
-import org.talend.daikon.model.Author;
-
 import java.util.stream.Stream;
+
+import org.talend.daikon.model.Author;
 
 public interface AuthorFinder {
 

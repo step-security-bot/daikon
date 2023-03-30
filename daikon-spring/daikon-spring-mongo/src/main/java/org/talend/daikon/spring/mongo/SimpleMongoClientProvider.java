@@ -4,9 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
 
 /**
  * A very simple implementation of {@link MongoClientProvider}.

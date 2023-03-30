@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -32,6 +30,8 @@ import org.talend.daikon.spring.auth.provider.SatAuthenticationProvider;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.PlainJWT;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class TalendAuthenticationManagerResolverTest {
 

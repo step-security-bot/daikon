@@ -1,9 +1,9 @@
 package org.talend.daikon.messages.avro;
 
+import java.util.IdentityHashMap;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
-
-import java.util.IdentityHashMap;
 
 public class SecuredData extends GenericData {
 

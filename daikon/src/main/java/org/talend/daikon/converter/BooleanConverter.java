@@ -1,8 +1,8 @@
 package org.talend.daikon.converter;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.nio.ByteBuffer;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class BooleanConverter extends Converter<Boolean> {
 

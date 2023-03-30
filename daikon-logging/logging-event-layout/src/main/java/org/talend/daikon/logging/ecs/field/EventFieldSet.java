@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.talend.daikon.logging.ecs.EcsFields;
 import org.talend.daikon.logging.ecs.EcsFieldsMarker;
+
+import jakarta.annotation.Nullable;
 
 /**
  * Allows to represent a ECS field set Event.

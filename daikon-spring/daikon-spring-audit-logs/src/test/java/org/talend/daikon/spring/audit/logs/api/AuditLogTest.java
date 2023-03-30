@@ -1,11 +1,17 @@
 package org.talend.daikon.spring.audit.logs.api;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.talend.daikon.spring.audit.logs.api.AuditLogTest.TRUSTED_PROXIES;
 
 import java.util.stream.IntStream;
@@ -31,8 +37,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.talend.daikon.spring.audit.logs.config.AuditLogTestConfig;
 import org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum;
+import org.talend.daikon.spring.audit.logs.config.AuditLogTestConfig;
 import org.talend.daikon.spring.audit.logs.service.AuditLogSenderImpl;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.impl.AuditLoggerBase;

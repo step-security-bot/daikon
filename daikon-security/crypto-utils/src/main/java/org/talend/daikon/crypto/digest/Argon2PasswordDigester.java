@@ -1,10 +1,6 @@
 package org.talend.daikon.crypto.digest;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**

@@ -1,13 +1,15 @@
 package org.talend.daikon.spring.mongo.info;
 
+import java.util.Objects;
+
+import org.talend.daikon.spring.mongo.TenantInformation;
+
 import com.mongodb.MongoClientSettings;
+
+import jakarta.annotation.Nonnull;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.talend.daikon.spring.mongo.TenantInformation;
-
-import javax.annotation.Nonnull;
-import java.util.Objects;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

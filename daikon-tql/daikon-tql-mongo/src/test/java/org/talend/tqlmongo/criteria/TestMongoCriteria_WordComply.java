@@ -2,12 +2,12 @@ package org.talend.tqlmongo.criteria;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.bson.Document;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
-
-import java.util.List;
 
 public class TestMongoCriteria_WordComply extends TestMongoCriteria_Abstract {
 

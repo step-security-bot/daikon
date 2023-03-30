@@ -1,22 +1,23 @@
 package org.talend.daikon.statistic.deserializer;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import org.talend.daikon.statistic.pojo.HistogramStatistic;
-import org.talend.daikon.statistic.pojo.KeyValueStatistic;
-import org.talend.daikon.statistic.pojo.SimpleStatistic;
-import org.talend.daikon.statistic.pojo.Statistic;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.daikon.statistic.pojo.HistogramStatistic;
+import org.talend.daikon.statistic.pojo.KeyValueStatistic;
+import org.talend.daikon.statistic.pojo.SimpleStatistic;
+import org.talend.daikon.statistic.pojo.Statistic;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 public class StatisticDeserializer extends StdDeserializer<Statistic> {
 

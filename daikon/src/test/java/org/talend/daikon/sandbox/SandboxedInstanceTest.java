@@ -21,16 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.talend.daikon.sandbox.SandboxControl.CLASSLOADER_REUSABLE;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collections;
+import java.util.Properties;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.sandbox.properties.ClassLoaderIsolatedSystemProperties;
 import org.talend.daikon.token.TokenGenerator;
-
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collections;
-import java.util.Properties;
 
 public class SandboxedInstanceTest {
 

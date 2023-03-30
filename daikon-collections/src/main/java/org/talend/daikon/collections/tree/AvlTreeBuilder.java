@@ -10,9 +10,9 @@
  */
 package org.talend.daikon.collections.tree;
 
-import org.talend.daikon.collections.tree.memory.MemoryNode;
-
 import java.util.function.Supplier;
+
+import org.talend.daikon.collections.tree.memory.MemoryNode;
 
 /**
  * Tree builder.

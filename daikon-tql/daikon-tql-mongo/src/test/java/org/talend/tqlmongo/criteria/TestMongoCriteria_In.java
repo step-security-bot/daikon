@@ -2,12 +2,12 @@ package org.talend.tqlmongo.criteria;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.talend.tql.excp.TqlException;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by gmzoughi on 06/07/16.

@@ -1,10 +1,10 @@
 package org.talend.logging.audit.impl;
 
+import java.util.Map;
+
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.ContextBuilder;
 import org.talend.logging.audit.LogLevel;
-
-import java.util.Map;
 
 /**
  *

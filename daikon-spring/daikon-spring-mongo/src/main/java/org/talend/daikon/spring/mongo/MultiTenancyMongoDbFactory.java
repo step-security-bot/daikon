@@ -1,8 +1,5 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.ClientSessionOptions;
-import com.mongodb.client.ClientSession;
-import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -11,6 +8,10 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.util.Assert;
+
+import com.mongodb.ClientSessionOptions;
+import com.mongodb.client.ClientSession;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * A {@link MongoDatabaseFactory} that allows external code to choose which MongoDB database should be accessed.

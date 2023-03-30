@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.output.ProxyOutputStream;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
+
+import io.micrometer.tracing.annotation.NewSpan;
 
 public class SpanOutputStream extends ProxyOutputStream {
 

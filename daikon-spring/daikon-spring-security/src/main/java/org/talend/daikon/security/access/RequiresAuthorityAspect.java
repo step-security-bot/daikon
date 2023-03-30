@@ -29,8 +29,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -40,7 +40,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 /**
  * The aspect configuration that takes care of {@link RequiresAuthority} annotations.
  */
-@Configuration
+@AutoConfiguration
 @EnableAspectJAutoProxy
 @Aspect
 public class RequiresAuthorityAspect {

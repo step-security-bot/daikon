@@ -17,8 +17,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -30,7 +30,7 @@ import org.springframework.util.concurrent.ListenableFuture;
  * Asynchronous services which need to be aware of the request context have to declare this executor
  * with @Async("contextAwarePoolExecutor")
  */
-@Configuration
+@AutoConfiguration
 @Import({ RequestContextPropagationConfiguration.class, TenancyContextPropagationConfiguration.class,
         SecurityContextPropagationConfiguration.class })
 @EnableAsync

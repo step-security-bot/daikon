@@ -15,9 +15,9 @@ package org.talend.daikon.logging.spring;
 import java.util.concurrent.Callable;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
@@ -43,7 +43,7 @@ public class LoggingApplication {
         SpringApplication.run(LoggingApplication.class, args); // NOSONAR
     }
 
-    @Configuration
+    @AutoConfiguration
     public class CustomSecurityConfiguration {
 
         @Bean
@@ -53,12 +53,12 @@ public class LoggingApplication {
 
         @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
-            return (web) -> web.ignoring().antMatchers("/public/**");
+            return (web) -> web.ignoring().requestMatchers("/public/**");
         }
 
         @Bean("securityFilterChain.basic")
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+            http.csrf().disable().authorizeHttpRequests().anyRequest().authenticated().and().httpBasic();
             return http.build();
         }
 
@@ -79,7 +79,7 @@ public class LoggingApplication {
             this.sampleRequestHandler = sampleRequestHandler;
         }
 
-        @RequestMapping
+        @RequestMapping(path = "/")
         public String sampleGet() {
             this.sampleRequestHandler.onSampleRequestCalled();
             return MESSAGE;

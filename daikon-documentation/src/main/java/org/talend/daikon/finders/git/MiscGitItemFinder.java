@@ -3,12 +3,13 @@ package org.talend.daikon.finders.git;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.talend.daikon.finders.ItemFinder;
 import org.talend.daikon.model.GitCommit;
 import org.talend.daikon.model.MiscReleaseNoteItem;
 import org.talend.daikon.model.ReleaseNoteItem;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Finds Git commit for release notes <b>NOT</b> linked to any Jira.

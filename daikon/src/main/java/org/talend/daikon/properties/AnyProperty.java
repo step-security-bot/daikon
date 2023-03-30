@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.daikon.properties;
 
+import java.io.Serializable;
+
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.properties.property.Property;
-
-import java.io.Serializable;
 
 /**
  * A common interface for the members of a {@link Properties} object.

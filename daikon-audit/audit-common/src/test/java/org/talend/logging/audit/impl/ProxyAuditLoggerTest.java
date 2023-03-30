@@ -1,11 +1,17 @@
 package org.talend.logging.audit.impl;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 import java.lang.reflect.Proxy;
 
 import org.junit.jupiter.api.Test;
-import org.talend.logging.audit.*;
+import org.talend.logging.audit.AuditLogger;
+import org.talend.logging.audit.AuditLoggerFactory;
+import org.talend.logging.audit.Context;
+import org.talend.logging.audit.ContextBuilder;
+import org.talend.logging.audit.LogLevel;
 
 public class ProxyAuditLoggerTest {
 

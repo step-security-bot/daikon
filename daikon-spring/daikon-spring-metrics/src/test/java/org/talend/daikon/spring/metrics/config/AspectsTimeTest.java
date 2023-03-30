@@ -15,12 +15,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import brave.ScopedSpan;
-import brave.Tracer;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.tracing.ScopedSpan;
+import io.micrometer.tracing.Tracer;
 
+@ExtendWith(MockitoExtension.class)
 public class AspectsTimeTest {
 
     private Aspects aspects;
@@ -36,10 +39,10 @@ public class AspectsTimeTest {
     private ScopedSpan span;
 
     @BeforeEach
-    public void setUp() throws NoSuchMethodException {
+    public void setUp() {
         final MeterRegistry meterRegistry = mock(MeterRegistry.class);
         counter = mock(Counter.class);
-        when(meterRegistry.counter(anyString(), any(String.class))).thenReturn(counter);
+        when(meterRegistry.counter(anyString(), any(String[].class))).thenReturn(counter);
 
         tracer = mock(Tracer.class);
         span = mock(ScopedSpan.class);
@@ -50,7 +53,6 @@ public class AspectsTimeTest {
         point = mock(ProceedingJoinPoint.class);
         methodSignature = mock(MethodSignature.class);
         when(methodSignature.getDeclaringType()).thenReturn(this.getClass());
-        when(methodSignature.getMethod()).thenReturn(this.getClass().getMethod("testMethod"));
         when(methodSignature.getReturnType()).thenReturn(Void.class);
         when(point.getSignature()).thenReturn(methodSignature);
     }
@@ -67,7 +69,7 @@ public class AspectsTimeTest {
         verify(counter, times(1)).increment(anyDouble());
         verify(counter, times(1)).increment();
         verify(tracer, times(1)).startScopedSpan(anyString());
-        verify(span, times(1)).finish();
+        verify(span, times(1)).end();
     }
 
     @Test
@@ -89,7 +91,7 @@ public class AspectsTimeTest {
         verify(counter, times(1)).increment(anyDouble());
         verify(counter, times(1)).increment();
         verify(tracer, times(1)).startScopedSpan(anyString());
-        verify(span, times(1)).finish();
+        verify(span, times(1)).end();
     }
 
     public void testMethod() {

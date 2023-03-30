@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
-import org.apache.avro.Schema;
-import org.apache.avro.generic.IndexedRecord;
-import org.talend.daikon.avro.visitor.path.TraversalPath;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.IndexedRecord;
+import org.talend.daikon.avro.visitor.path.TraversalPath;
 
 /**
  * Main entry point of the Avro visitable API.

@@ -13,7 +13,11 @@
 
 package org.talend.daikon.serialize.javadefault;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;

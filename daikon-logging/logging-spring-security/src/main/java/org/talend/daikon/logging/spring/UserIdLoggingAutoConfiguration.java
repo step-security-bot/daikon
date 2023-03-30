@@ -12,12 +12,12 @@
 // ============================================================================
 package org.talend.daikon.logging.spring;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -26,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  *
  * It works with both synchronous and asynchronous endpoints.
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(SecurityContextHolder.class)
 public class UserIdLoggingAutoConfiguration {
 

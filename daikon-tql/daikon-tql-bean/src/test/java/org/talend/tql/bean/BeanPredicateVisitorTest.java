@@ -4,16 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.junit.jupiter.api.Test;
-import org.talend.tql.model.Expression;
-import org.talend.tql.parser.Tql;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import org.junit.jupiter.api.Test;
+import org.talend.tql.model.Expression;
+import org.talend.tql.parser.Tql;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BeanPredicateVisitorTest {
 

@@ -15,10 +15,10 @@ package org.talend.daikon.i18n;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.Locale;
 import java.util.MissingResourceException;
+
+import org.junit.jupiter.api.Test;
 
 public class I18nMessagesTest {
 

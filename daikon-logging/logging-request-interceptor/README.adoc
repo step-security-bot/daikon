@@ -29,7 +29,7 @@ Maven style:
 
 [source,java]
 ----
-@Configuration
+@AutoConfiguration
 public class MyConfigService {
 
     @Bean

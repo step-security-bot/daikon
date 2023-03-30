@@ -1,14 +1,19 @@
 package org.talend.daikon.spring.auth.model.token;
 
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.*;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_NAME;
 
 import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class SatAuthenticationToken extends AuthenticationToken {
 

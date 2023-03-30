@@ -10,10 +10,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.amazonaws.services.s3.AmazonS3;
+import java.net.URI;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 
 public class S3ContentServiceConfigurationTest {
 
@@ -46,10 +50,12 @@ public class S3ContentServiceConfigurationTest {
                 .thenReturn(true);
 
         // when
-        final AmazonS3 amazonS3 = configuration.amazonS3(environment, context);
+        final S3Client s3Client = configuration.amazonS3(environment, context);
 
-        // then
-        final String fileUrl = amazonS3.getUrl("mybucket", "file.csv").toString();
+        GetUrlRequest request = GetUrlRequest.builder().endpoint(URI.create("http://fake.io:9001")).bucket("mybucket")
+                .key("file.csv").build();
+
+        final String fileUrl = s3Client.utilities().getUrl(request).toString();
         assertEquals("http://fake.io:9001/mybucket/file.csv", fileUrl);
     }
 

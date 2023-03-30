@@ -13,14 +13,14 @@
 package org.talend.daikon.multitenant.async;
 
 import org.slf4j.MDC;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.talend.daikon.logging.event.field.MdcKeys;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(TenancyContextHolder.class)
 public class TenancyContextPropagationConfiguration {
 

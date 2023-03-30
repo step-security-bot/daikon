@@ -15,10 +15,10 @@ package org.talend.daikon.spring.audit.logs.config;
 import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping;
 import org.talend.daikon.spring.audit.common.config.AuditKafkaProperties;
@@ -29,12 +29,16 @@ import org.talend.daikon.spring.audit.logs.service.AuditLogSenderImpl;
 import org.talend.daikon.spring.audit.service.AppAuditLogger;
 import org.talend.logging.audit.AuditLoggerFactory;
 import org.talend.logging.audit.LogAppenders;
-import org.talend.logging.audit.impl.*;
+import org.talend.logging.audit.impl.AuditConfiguration;
+import org.talend.logging.audit.impl.AuditConfigurationMap;
+import org.talend.logging.audit.impl.AuditLoggerBase;
+import org.talend.logging.audit.impl.Backends;
+import org.talend.logging.audit.impl.SimpleAuditLoggerBase;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
-@Configuration
+@AutoConfiguration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableConfigurationProperties({ AuditProperties.class, AuditKafkaProperties.class })
 @ConditionalOnProperty(value = "audit.enabled", havingValue = "true", matchIfMissing = true)

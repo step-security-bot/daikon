@@ -2,11 +2,10 @@ package org.talend.tqlmongo.criteria;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.util.List;
 
 /**
  * Created by gmzoughi on 06/07/16.

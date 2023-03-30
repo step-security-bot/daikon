@@ -1,9 +1,9 @@
 package org.talend.daikon.spring.license.client.autoconfigure;
 
-import javax.validation.constraints.NotBlank;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
+
+import jakarta.validation.constraints.NotBlank;
 
 @ConfigurationProperties("iam.license")
 @Validated

@@ -3,11 +3,11 @@ package org.talend.daikon.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.exception.TalendRuntimeException;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.exception.TalendRuntimeException;
 
 /**
  * To find more test, please refer to TypeConverterTest

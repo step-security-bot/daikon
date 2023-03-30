@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeHost;
 import static org.talend.daikon.spring.mongo.TestMultiTenantConfiguration.changeTenant;
 
-import de.bwaldvogel.mongo.MongoServer;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
@@ -13,8 +15,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.List;
-import java.util.Map;
+import de.bwaldvogel.mongo.MongoServer;
 
 @TestPropertySource(properties = "multi-tenancy.mongodb.active=true")
 public class MultiTenantMongoDbFactoryTest extends AbstractMultiTenantMongoDbTest {

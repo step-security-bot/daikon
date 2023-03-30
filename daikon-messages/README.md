@@ -1,4 +1,4 @@
-# Talend Daikon messages
+# Talend Daikon messages (DEPRECATED: Please use Talend Cloud Event instead)
 
 ## Overview
 
@@ -237,7 +237,7 @@ spring.cloud.stream.kafka.bindings.topic1.consumer.configuration.key.deserialize
 Applications should declare AvroSchemaMessageConverter like this:
 
 ```
-@Configuration
+@AutoConfiguration
 @EnableBinding(...)
 public class GlobalKafkaConfiguration {
 

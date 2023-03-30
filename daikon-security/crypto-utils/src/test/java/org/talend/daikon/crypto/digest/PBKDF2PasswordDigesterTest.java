@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.crypto.EncodingUtils;
 import org.talend.daikon.crypto.KeySource;
 import org.talend.daikon.crypto.KeySources;
-
-import java.util.Arrays;
 
 public class PBKDF2PasswordDigesterTest {
 

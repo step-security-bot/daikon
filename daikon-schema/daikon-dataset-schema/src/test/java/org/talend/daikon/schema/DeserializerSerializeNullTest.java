@@ -3,6 +3,18 @@ package org.talend.daikon.schema;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.talend.daikon.schema.dataset.mapper.DatasetFieldTypeDeserializer;
+import org.talend.daikon.schema.dataset.mapper.NullTypeStringSerializer;
+
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -13,17 +25,6 @@ import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.talend.daikon.schema.dataset.mapper.DatasetFieldTypeDeserializer;
-import org.talend.daikon.schema.dataset.mapper.NullTypeStringSerializer;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class DeserializerSerializeNullTest {
 

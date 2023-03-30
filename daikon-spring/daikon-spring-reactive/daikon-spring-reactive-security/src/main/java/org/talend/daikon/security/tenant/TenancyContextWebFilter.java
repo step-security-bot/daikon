@@ -1,5 +1,9 @@
 package org.talend.daikon.security.tenant;
 
+import static org.talend.daikon.security.tenant.ReactiveTenancyContextHolder.TENANCY_CONTEXT_KEY;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -14,12 +18,9 @@ import org.talend.daikon.multitenant.context.DefaultTenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
+
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
-
-import java.util.Optional;
-
-import static org.talend.daikon.security.tenant.ReactiveTenancyContextHolder.TENANCY_CONTEXT_KEY;
 
 /**
  * Inspired by {@link org.springframework.security.web.server.context.ReactorContextWebFilter}

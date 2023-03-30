@@ -1,5 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.talend.daikon.spring.auth.config.AuthAutoConfiguration
-
 org.springframework.context.ApplicationListener=\
 org.talend.daikon.spring.auth.config.ExcludeOAuth2ResourceServerApplicationListener

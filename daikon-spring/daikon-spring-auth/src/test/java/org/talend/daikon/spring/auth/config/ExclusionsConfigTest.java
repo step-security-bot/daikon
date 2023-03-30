@@ -28,7 +28,7 @@ public class ExclusionsConfigTest {
         private Environment environment;
 
         @Test
-        public void testYamlList() throws Exception {
+        public void testYamlList() {
             assertTrue(environment.containsProperty(EXCLUDE_PROPERTY));
             assertEquals("org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration,"
                     + "org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration",
@@ -47,7 +47,7 @@ public class ExclusionsConfigTest {
         private Environment environment;
 
         @Test
-        public void testCommaSeparated() throws Exception {
+        public void testCommaSeparated() {
             assertTrue(environment.containsProperty(EXCLUDE_PROPERTY));
             assertEquals("org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration,"
                     + "org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration,"

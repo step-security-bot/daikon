@@ -3,7 +3,6 @@ package org.talend.daikon.content.journal;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import io.micrometer.core.annotation.Timed;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,8 @@ import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.exception.TalendRuntimeException;
 import org.talend.daikon.exception.error.CommonErrorCodes;
+
+import io.micrometer.core.annotation.Timed;
 
 /**
  * An implementation of {@link ResourceJournal} that uses a MongoDB database as backend.

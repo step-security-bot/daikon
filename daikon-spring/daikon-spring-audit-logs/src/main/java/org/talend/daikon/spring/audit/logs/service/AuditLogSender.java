@@ -4,7 +4,7 @@ import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
 import org.talend.logging.audit.Context;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Audit log sender interface

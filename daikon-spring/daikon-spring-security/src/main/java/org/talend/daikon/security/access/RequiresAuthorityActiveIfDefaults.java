@@ -1,8 +1,8 @@
 package org.talend.daikon.security.access;
 
-import org.springframework.context.ApplicationContext;
-
 import java.util.function.Function;
+
+import org.springframework.context.ApplicationContext;
 
 public class RequiresAuthorityActiveIfDefaults {
 

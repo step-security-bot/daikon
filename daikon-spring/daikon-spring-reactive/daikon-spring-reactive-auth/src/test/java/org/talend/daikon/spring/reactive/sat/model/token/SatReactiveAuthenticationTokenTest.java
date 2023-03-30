@@ -12,9 +12,12 @@ import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAu
 import static org.talend.daikon.spring.reactive.sat.authentication.SatReactiveAuthenticationProvider.HEADER_TENANT_ID;
 import static org.talend.daikon.spring.reactive.sat.model.token.SatReactiveAuthenticationToken.USER_DETAILS_NAME_SA_SUFFIX;
 
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.PlainJWT;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +27,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.PlainJWT;
 
 public class SatReactiveAuthenticationTokenTest {
 

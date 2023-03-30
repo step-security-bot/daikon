@@ -17,10 +17,10 @@ package org.talend.logging.audit.impl.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
-
-import java.nio.charset.StandardCharsets;
 
 @SetSystemProperty(key = "org.talend.logging.audit.impl.http.HttpEventSender.username", value = "system-prop-user")
 @SetSystemProperty(key = "org.talend.logging.audit.impl.http.HttpEventSender.encoding", value = "UTF-16")

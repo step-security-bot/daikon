@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.daikon.content;
 
-import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 import java.util.Collection;
 

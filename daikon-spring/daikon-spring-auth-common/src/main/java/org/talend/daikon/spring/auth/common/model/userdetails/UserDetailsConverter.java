@@ -1,8 +1,40 @@
 package org.talend.daikon.spring.auth.common.model.userdetails;
 
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.*;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.APPLICATIONS_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.CLIENT_ID_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.CLIENT_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.EMAIL_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.ENTITLEMENTS_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.FAMILY_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GIVEN_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GRANT_TYPE_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GROUP_IDS_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.IPC_ENABLED;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.LOGIN_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.MIDDLE_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_COMPANY_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_DATACENTER_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_USER_ID_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PERMISSIONS_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PREFERRED_LANGUAGE_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PREFERRED_USERNAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SALES_FORCE_ACCOUNT_ID;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SALES_FORCE_CONTACT_ID;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SUBJECT_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SUBSCRIPTION_TYPE;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TENANT_ID_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TENANT_NAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TIMEZONE_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.USERNAME_CLAIM;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 

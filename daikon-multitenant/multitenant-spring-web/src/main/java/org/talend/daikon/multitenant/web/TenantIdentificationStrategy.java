@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * A strategy for identifying tenants from a {@link HttpServletRequest}.

@@ -4,21 +4,12 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-parent</artifactId>
-        <version>7.1.8-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>daikon-scala</artifactId>
     <name>daikon-scala</name>
     <packaging>pom</packaging>
-
-    <properties>
-        <scala-plugin-version>3.3.2</scala-plugin-version>
-        <scala-binary-version>2.13</scala-binary-version>
-        <play2-version>2.8.16</play2-version>
-        <akka-version>2.6.19</akka-version>
-        <slick-version>3.3.2</slick-version>
-        <scalatest-junit-runner-version>0.1.10</scalatest-junit-runner-version>
-    </properties>
 
     <modules>
         <module>dynamic-log</module>

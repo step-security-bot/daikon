@@ -15,12 +15,10 @@ package org.talend.daikon.multitenant.async;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.ServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +34,12 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.talend.daikon.multitenant.context.DefaultTenancyContext;
@@ -44,11 +47,13 @@ import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
+import jakarta.servlet.ServletRequest;
+
 @SpringBootApplication
 @Import(MultiTenantApplication.CustomSecurityConfiguration.class)
 public class MultiTenantApplication {
 
-    @Configuration
+    @AutoConfiguration
     public class CustomSecurityConfiguration {
 
         @Bean
@@ -58,7 +63,7 @@ public class MultiTenantApplication {
 
         @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
-            return (web) -> web.ignoring().antMatchers("/public/**");
+            return (web) -> web.ignoring().requestMatchers("/public/**");
         }
 
         @Bean("securityFilterChain.basic")

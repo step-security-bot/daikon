@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.daikon.multitenant.context;
 
-import org.talend.daikon.multitenant.core.Tenant;
-
 import java.io.Serializable;
 import java.util.Optional;
+
+import org.talend.daikon.multitenant.core.Tenant;
 
 /**
  * a context in which tenancy can be defined

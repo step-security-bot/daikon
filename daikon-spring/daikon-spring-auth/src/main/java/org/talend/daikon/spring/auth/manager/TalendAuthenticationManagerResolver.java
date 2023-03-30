@@ -5,8 +5,6 @@ import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_
 import java.text.ParseException;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Builder;
 
 /**

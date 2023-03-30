@@ -12,13 +12,13 @@
 // ============================================================================
 package org.talend.daikon.messages.header.consumer;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.specific.SpecificData;
 import org.talend.daikon.messages.MessageHeader;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Utility class to access normalized message header

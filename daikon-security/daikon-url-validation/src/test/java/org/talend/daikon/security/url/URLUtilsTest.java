@@ -3,11 +3,11 @@ package org.talend.daikon.security.url;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-
 import java.net.Inet6Address;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.junit.jupiter.api.Test;
 
 public class URLUtilsTest {
 

@@ -7,14 +7,14 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 
+import java.util.UUID;
+
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.IndexedRecord;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.avro.converter.IndexedRecordConverter;
-
-import java.util.UUID;
 
 /**
  * Unit tests for {AvroRegistry}.

@@ -1,14 +1,12 @@
 package org.talend.daikon.content.journal;
 
 import org.mockito.Mockito;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.talend.daikon.content.ResourceResolver;
 
-@Profile("mock")
-@Configuration
+@AutoConfiguration
 public class ResourceResolverTestConfiguration {
 
     @Bean

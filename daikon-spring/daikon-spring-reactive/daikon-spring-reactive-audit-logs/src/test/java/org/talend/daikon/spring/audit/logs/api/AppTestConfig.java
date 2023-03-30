@@ -1,6 +1,7 @@
 package org.talend.daikon.spring.audit.logs.api;
 
-import io.micrometer.core.instrument.Counter;
+import java.util.Properties;
+
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.talend.daikon.spring.audit.logs.config.AuditLogAutoConfiguration;
 import org.talend.logging.audit.impl.AuditLoggerBase;
 
-import java.util.Properties;
+import io.micrometer.core.instrument.Counter;
 
 @TestConfiguration
 public class AppTestConfig extends AuditLogAutoConfiguration {

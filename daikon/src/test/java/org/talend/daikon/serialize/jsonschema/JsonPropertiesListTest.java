@@ -14,6 +14,9 @@ package org.talend.daikon.serialize.jsonschema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.PropertiesList;
 import org.talend.daikon.properties.TestPropertiesList.TestComponentProperties;
@@ -21,9 +24,6 @@ import org.talend.daikon.properties.TestPropertiesList.TestEnum;
 import org.talend.daikon.properties.TestPropertiesList.TestProperties;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.serialize.FullExampleTestUtil;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 /**
  * created by dmytro.chmyga on Jul 13, 2017

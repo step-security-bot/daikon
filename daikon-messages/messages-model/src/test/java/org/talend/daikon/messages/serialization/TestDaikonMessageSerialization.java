@@ -2,11 +2,11 @@ package org.talend.daikon.messages.serialization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.messages.MessageKey;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.messages.MessageKey;
 
 public class TestDaikonMessageSerialization {
 

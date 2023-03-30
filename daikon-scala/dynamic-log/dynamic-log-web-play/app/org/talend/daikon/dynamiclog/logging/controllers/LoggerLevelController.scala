@@ -1,6 +1,5 @@
 package org.talend.daikon.dynamiclog.logging.controllers
 
-import javax.inject.{Inject, Named}
 import akka.actor.ActorRef
 import akka.cluster.pubsub.DistributedPubSubMediator.Publish
 import ch.qos.logback.classic
@@ -13,8 +12,8 @@ import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 
+import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
-import org.talend.daikon.dynamiclog.logging.common.LoggerLevelBindables._
 
 class LoggerLevelController @Inject()(
                                        override val controllerComponents: ControllerComponents,

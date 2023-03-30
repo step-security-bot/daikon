@@ -23,7 +23,7 @@ public enum ${className} {
     * Example: ${fields[key].example?c}
         <#else>
     <#-- Remove all non ASCII characters -->
-    * Example: ${fields[key].example?replace("[^\\p{ASCII}]", "", "r")}
+    * Example: ${fields[key].example?string?replace("[^\\p{ASCII}]", "", "r")}
         </#if>
     </#if>
     */

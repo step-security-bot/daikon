@@ -1,9 +1,10 @@
 package org.talend.daikon.mongo;
 
-import com.mongodb.MongoClientSettings;
-import lombok.Getter;
-
 import java.util.Objects;
+
+import com.mongodb.MongoClientSettings;
+
+import lombok.Getter;
 
 @Getter
 public class TenantInformation {

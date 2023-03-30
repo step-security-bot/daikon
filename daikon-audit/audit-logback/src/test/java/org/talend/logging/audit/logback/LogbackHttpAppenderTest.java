@@ -7,12 +7,13 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.Layout;
 import org.junit.jupiter.api.Test;
 import org.talend.logging.audit.impl.http.HttpAppenderException;
 import org.talend.logging.audit.impl.http.HttpEventSender;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.Layout;
 
 public class LogbackHttpAppenderTest {
 

@@ -14,7 +14,7 @@ package org.talend.daikon.exception.error;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Common error code for a backend service application that also implents a REST API.

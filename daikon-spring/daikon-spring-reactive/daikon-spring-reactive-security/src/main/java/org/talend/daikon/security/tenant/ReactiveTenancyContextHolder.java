@@ -1,13 +1,14 @@
 package org.talend.daikon.security.tenant;
 
+import java.util.function.Function;
+
 import org.talend.daikon.multitenant.context.DefaultTenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.core.Tenant;
+
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 import reactor.util.context.ContextView;
-
-import java.util.function.Function;
 
 /**
  * Inspired by {@link org.springframework.security.core.context.ReactiveSecurityContextHolder}

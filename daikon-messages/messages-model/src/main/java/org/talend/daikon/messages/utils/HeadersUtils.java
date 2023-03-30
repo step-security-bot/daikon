@@ -1,11 +1,11 @@
 package org.talend.daikon.messages.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.talend.daikon.messages.MessageHeader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Kafka headers helpers

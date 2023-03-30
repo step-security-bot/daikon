@@ -3,18 +3,18 @@ package org.talend.daikon.statistic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.talend.daikon.statistic.pojo.HistogramStatistic;
-import org.talend.daikon.statistic.pojo.HistogramUnit;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.talend.daikon.statistic.pojo.HistogramStatistic;
+import org.talend.daikon.statistic.pojo.HistogramUnit;
 
 public class HistogramStatisticDeserializeTest {
 

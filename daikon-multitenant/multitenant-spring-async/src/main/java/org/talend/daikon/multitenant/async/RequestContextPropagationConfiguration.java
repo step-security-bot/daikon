@@ -12,17 +12,18 @@
 // ============================================================================
 package org.talend.daikon.multitenant.async;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import java.util.Set;
+
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import java.util.Set;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(RequestContextHolder.class)
 public class RequestContextPropagationConfiguration {
 

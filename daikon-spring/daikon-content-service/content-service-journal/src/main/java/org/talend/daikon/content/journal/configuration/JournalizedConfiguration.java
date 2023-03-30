@@ -2,17 +2,17 @@ package org.talend.daikon.content.journal.configuration;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.diagnostics.FailureAnalyzer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.content.journal.JournalizedResourceResolver;
 import org.talend.daikon.content.journal.ResourceJournal;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(name = "content-service.journalized", havingValue = "true")
 public class JournalizedConfiguration implements ApplicationContextAware {
 

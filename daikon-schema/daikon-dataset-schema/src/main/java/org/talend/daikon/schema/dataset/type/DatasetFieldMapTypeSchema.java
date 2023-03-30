@@ -1,14 +1,16 @@
 package org.talend.daikon.schema.dataset.type;
 
+import java.util.List;
+
+import org.talend.daikon.schema.dataset.DatasetFieldSchema;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import org.talend.daikon.schema.dataset.DatasetFieldSchema;
-
-import java.util.List;
 
 /**
  * Pojo representation of {@link dataset/datasetFieldTypeSchema.json}

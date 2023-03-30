@@ -1,10 +1,11 @@
 package org.talend.logging.audit.logback;
 
+import org.talend.logging.audit.impl.http.HttpAppenderException;
+import org.talend.logging.audit.impl.http.HttpEventSender;
+
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.Layout;
-import org.talend.logging.audit.impl.http.HttpAppenderException;
-import org.talend.logging.audit.impl.http.HttpEventSender;
 
 /**
  *

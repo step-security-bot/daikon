@@ -1,18 +1,20 @@
 package org.talend.daikon.schema.dataset.type;
 
+import java.util.List;
+import java.util.Map;
+
+import org.talend.daikon.schema.dataset.DatasetFieldSchema;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
-import org.talend.daikon.schema.dataset.DatasetFieldSchema;
-
-import java.util.List;
-import java.util.Map;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", include = JsonTypeInfo.As.EXISTING_PROPERTY, defaultImpl = DatasetFieldTypeSchema.class, visible = true)
 @JsonSubTypes({ @JsonSubTypes.Type(value = DatasetFieldArrayTypeSchema.class, name = "array"),

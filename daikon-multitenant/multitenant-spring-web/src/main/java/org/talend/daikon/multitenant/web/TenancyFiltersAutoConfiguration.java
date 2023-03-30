@@ -12,17 +12,17 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
+import java.util.List;
+
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.AllNestedConditions;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
 import org.talend.daikon.multitenant.provider.TenantProvider;
 
-import java.util.List;
-
-@Configuration
+@AutoConfiguration
 public class TenancyFiltersAutoConfiguration {
 
     private static final int SPRING_SECURITY_FILTERS_ORDER = 5;

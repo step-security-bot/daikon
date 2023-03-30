@@ -3,16 +3,16 @@ package org.talend.daikon.crypto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import javax.crypto.IllegalBlockSizeException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.crypto.IllegalBlockSizeException;
 
 public class EncryptionTest {
 
     public static final String DECRYPTED_URI = "mongodb://toto:truc@talend.org/talend-db?ssl=toto&truc=machin";
 
-    public static final String ENCRYPTED_URI = "mongodb://toto:qxjQWF%2FZsuzzeLzKIop2pQ==@talend.org/talend-db?ssl=toto&truc=machin";
+    public static final String ENCRYPTED_URI = "mongodb://toto:qxjQWF%2FZsuzzeLzKIop2pQ%3D%3D@talend.org/talend-db?ssl=toto&truc=machin";
 
     private Encryption encryption;
 

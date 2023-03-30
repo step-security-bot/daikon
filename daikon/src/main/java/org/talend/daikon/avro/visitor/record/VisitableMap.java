@@ -12,11 +12,15 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.avro.Schema;
 import org.apache.avro.util.Utf8;
 import org.talend.daikon.avro.visitor.path.TraversalPath;
-
-import java.util.*;
 
 /**
  * Wrapper for maps.

@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.daikon.i18n;
 
-import org.talend.daikon.i18n.LocaleProvider;
-
 /**
  * Global context that provides I18n service.
  */

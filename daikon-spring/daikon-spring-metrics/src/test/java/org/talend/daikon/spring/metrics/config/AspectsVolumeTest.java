@@ -15,17 +15,20 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-import javax.servlet.http.Part;
+import jakarta.servlet.http.Part;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.talend.daikon.spring.metrics.io.Metered;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
+@ExtendWith(MockitoExtension.class)
 public class AspectsVolumeTest {
 
     private Aspects aspects;
@@ -38,7 +41,7 @@ public class AspectsVolumeTest {
     public void setUp() throws Throwable {
         final MeterRegistry meterRegistry = mock(MeterRegistry.class);
         counter = mock(Counter.class);
-        when(meterRegistry.counter(anyString(), any(String.class))).thenReturn(counter);
+        when(meterRegistry.counter(anyString(), any(String[].class))).thenReturn(counter);
 
         aspects = new Aspects(null, meterRegistry);
 
@@ -46,12 +49,9 @@ public class AspectsVolumeTest {
         MethodSignature methodSignature = mock(MethodSignature.class);
         final Method testMethod = this.getClass().getMethod("testMethod", OutputStream.class, InputStream.class, Part.class);
         when(methodSignature.getDeclaringType()).thenReturn(this.getClass());
-        when(methodSignature.getMethod()).thenReturn(testMethod);
-        when(methodSignature.getReturnType()).thenReturn(OutputStream.class);
         when(methodSignature.getDeclaringType()).thenReturn(this.getClass());
         when(point.getArgs()).thenReturn(new Object[] { mock(OutputStream.class), mock(InputStream.class), mock(Part.class) });
         when(point.getSignature()).thenReturn(methodSignature);
-        when(point.proceed()).thenReturn(mock(OutputStream.class));
     }
 
     @Test

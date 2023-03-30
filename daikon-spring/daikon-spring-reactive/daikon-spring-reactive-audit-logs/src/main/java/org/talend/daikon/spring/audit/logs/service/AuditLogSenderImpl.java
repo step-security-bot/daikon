@@ -12,15 +12,21 @@
 // ============================================================================
 package org.talend.daikon.spring.audit.logs.service;
 
-import io.micrometer.core.instrument.Counter;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.talend.daikon.spring.audit.common.exception.AuditLogException;
-import org.talend.daikon.spring.audit.logs.api.AuditContextFilter;
-import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
-import org.talend.daikon.spring.audit.service.AppAuditLogger;
-import org.talend.logging.audit.Context;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.ACCOUNT_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.APPLICATION_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.CLIENT_IP;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_CATEGORY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_OPERATION;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_TYPE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.LOG_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.METHOD;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST_BODY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE_BODY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE_CODE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.TIMESTAMP;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.URL;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.USER_AGENT;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.OffsetDateTime;
@@ -28,7 +34,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.talend.daikon.spring.audit.common.exception.AuditLogException;
+import org.talend.daikon.spring.audit.logs.api.AuditContextFilter;
+import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
+import org.talend.daikon.spring.audit.service.AppAuditLogger;
+import org.talend.logging.audit.Context;
+
+import io.micrometer.core.instrument.Counter;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @AllArgsConstructor

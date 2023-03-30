@@ -14,10 +14,16 @@ package org.talend.daikon.messages.spring.consumer;
 
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.talend.daikon.messages.header.consumer.*;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
+import org.talend.daikon.messages.header.consumer.ExecutionContextUpdater;
+import org.talend.daikon.messages.header.consumer.ExecutionContextUpdaterImpl;
+import org.talend.daikon.messages.header.consumer.SecurityTokenSetter;
+import org.talend.daikon.messages.header.consumer.ServiceAccountIdSetter;
+import org.talend.daikon.messages.header.consumer.TenantIdSetter;
+import org.talend.daikon.messages.header.consumer.UserIdSetter;
 
-@Configuration
+@AutoConfiguration
 @AutoConfigureBefore({ DefaultConsumerSettersConfiguration.class })
 public class ExecutionContextUpdaterConfiguration {
 

@@ -1,7 +1,7 @@
 package org.talend.daikon.content.s3;
 
-import static org.talend.daikon.content.s3.LocationUtils.toS3Location;
 import static org.talend.daikon.content.s3.LocationUtils.S3PathBuilder.builder;
+import static org.talend.daikon.content.s3.LocationUtils.toS3Location;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,11 +16,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
 import org.talend.daikon.content.DeletableResource;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CopyObjectRequest;
-import com.amazonaws.services.s3.model.CopyObjectResult;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.awscore.exception.AwsServiceException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
+import software.amazon.awssdk.services.s3.model.CopyObjectResponse;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 
 class S3DeletableResource implements DeletableResource {
 
@@ -28,7 +28,7 @@ class S3DeletableResource implements DeletableResource {
 
     private final WritableResource resource;
 
-    private final AmazonS3 amazonS3;
+    private final S3Client s3Client;
 
     private final String location;
 
@@ -38,9 +38,9 @@ class S3DeletableResource implements DeletableResource {
 
     private boolean isDeleted;
 
-    protected S3DeletableResource(WritableResource resource, AmazonS3 amazonS3, String location, String bucket, String root) {
+    protected S3DeletableResource(WritableResource resource, S3Client s3Client, String location, String bucket, String root) {
         this.resource = resource;
-        this.amazonS3 = amazonS3;
+        this.s3Client = s3Client;
         this.location = location;
         this.bucket = bucket;
         this.root = root;
@@ -49,9 +49,9 @@ class S3DeletableResource implements DeletableResource {
     @Override
     public void delete() throws IOException {
         try {
-            amazonS3.deleteObject(new DeleteObjectRequest(bucket, location));
+            s3Client.deleteObject(DeleteObjectRequest.builder().bucket(bucket).key(location).build());
             isDeleted = true;
-        } catch (AmazonClientException e) {
+        } catch (AwsServiceException e) {
             throw new IOException("Unable to delete '" + location + "' in bucket '" + bucket + "'.", e);
         }
     }
@@ -59,7 +59,8 @@ class S3DeletableResource implements DeletableResource {
     @Override
     public void move(String location) throws IOException {
         final String moveLocation = builder().append(root).append(toS3Location(location)).build().substring(1);
-        final CopyObjectResult result = amazonS3.copyObject(new CopyObjectRequest(bucket, this.location, bucket, moveLocation));
+        final CopyObjectResponse result = s3Client.copyObject(CopyObjectRequest.builder().sourceBucket(bucket)
+                .sourceKey(this.location).destinationBucket(bucket).destinationKey(moveLocation).build());
         if (result == null) {
             LOGGER.error("Unable to move {} to {}", this.location, moveLocation);
         } else {
@@ -112,7 +113,7 @@ class S3DeletableResource implements DeletableResource {
     public Resource createRelative(String relativePath) throws IOException {
         final Resource relative = resource.createRelative(relativePath);
         if (relative instanceof WritableResource) {
-            return new S3DeletableResource((WritableResource) relative, amazonS3, location, bucket, root);
+            return new S3DeletableResource((WritableResource) relative, s3Client, location, bucket, root);
         } else {
             return relative;
         }

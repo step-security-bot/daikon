@@ -1,18 +1,18 @@
 package org.talend.daikon.dynamiclog.logging.actors
 
-import java.util.concurrent.TimeUnit
-
-import javax.inject.{Inject, Named}
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.cluster.pubsub.DistributedPubSubMediator.{Subscribe, SubscribeAck}
 import akka.pattern._
 import akka.util.Timeout
+
 import ch.qos.logback.classic
 import ch.qos.logback.classic.Level
 import org.slf4j.LoggerFactory
 import org.talend.daikon.dynamiclog.logging.actors.LoggerLevelActor._
 import play.api.Configuration
 
+import java.util.concurrent.TimeUnit
+import javax.inject.{Inject, Named}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 

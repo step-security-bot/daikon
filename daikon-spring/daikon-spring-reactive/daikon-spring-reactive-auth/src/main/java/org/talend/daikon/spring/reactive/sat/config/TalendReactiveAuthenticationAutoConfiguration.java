@@ -3,13 +3,13 @@ package org.talend.daikon.spring.reactive.sat.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManagerResolver;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.server.ServerWebExchange;
@@ -20,7 +20,7 @@ import org.talend.daikon.spring.reactive.sat.authentication.TalendReactiveAuthen
 /**
  * Enables Service Account Token authentication
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(value = { Jwt.class, OAuth2ResourceServerProperties.class })
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class TalendReactiveAuthenticationAutoConfiguration {

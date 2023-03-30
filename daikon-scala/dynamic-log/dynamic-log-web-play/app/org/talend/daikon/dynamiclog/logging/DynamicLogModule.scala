@@ -3,11 +3,12 @@ package org.talend.daikon.dynamiclog.logging
 import akka.actor.{ActorRef, ActorSystem}
 import akka.cluster.pubsub.DistributedPubSub
 import com.google.inject.Provides
-import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
 import org.talend.daikon.dynamiclog.logging.actors.LoggerLevelActor
 import org.talend.daikon.dynamiclog.logging.common.ActorNames._
 import play.api.libs.concurrent.AkkaGuiceSupport
+
+import javax.inject.Named
 
 class DynamicLogModule extends ScalaModule with AkkaGuiceSupport {
 

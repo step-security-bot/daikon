@@ -1,8 +1,9 @@
 package org.talend.daikon.model;
 
+import org.eclipse.jgit.revwalk.RevCommit;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.eclipse.jgit.revwalk.RevCommit;
 
 @Getter
 @AllArgsConstructor

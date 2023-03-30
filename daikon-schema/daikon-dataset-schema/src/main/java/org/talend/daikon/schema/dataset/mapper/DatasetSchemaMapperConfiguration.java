@@ -1,5 +1,7 @@
 package org.talend.daikon.schema.dataset.mapper;
 
+import org.talend.daikon.schema.dataset.type.DatasetFieldTypeSchema;
+
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -9,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.talend.daikon.schema.dataset.type.DatasetFieldTypeSchema;
 
 public class DatasetSchemaMapperConfiguration {
 

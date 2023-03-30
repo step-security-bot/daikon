@@ -2,9 +2,9 @@ package org.talend.daikon.spring.audit.logs.service;
 
 import static java.util.Optional.ofNullable;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.web.util.UriComponentsBuilder;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AuditLogUrlExtractorImpl implements AuditLogUrlExtractor {
 

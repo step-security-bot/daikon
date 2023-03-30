@@ -17,15 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.multitenant.context.DefaultTenancyContext;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.multitenant.context.DefaultTenancyContext;
+import org.talend.daikon.multitenant.provider.DefaultTenant;
 
 /**
  * Test serialization of tenancy components

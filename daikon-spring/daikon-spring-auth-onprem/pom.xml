@@ -3,7 +3,7 @@
     <parent>
         <artifactId>daikon-spring</artifactId>
         <groupId>org.talend.daikon</groupId>
-        <version>7.1.8-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,12 +20,10 @@
         <dependency>
             <groupId>org.talend.daikon</groupId>
             <artifactId>daikon-spring-auth</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.talend.platform.sdk</groupId>
             <artifactId>scim-client</artifactId>
-            <version>${talend-platform-sdk.version}</version>
         </dependency>
     </dependencies>
     <repositories>

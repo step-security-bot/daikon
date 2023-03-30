@@ -1,0 +1,28 @@
+= DAIKON 8 UPGRADE GUIDELINE
+
+== Why ?
+
+Daikon 8 is the first release based on Spring Boot 3 and Java 17. This two upgrade comes with a lot of breaking changes.
+
+== What are the changes ?
+
+* Replacing all `javax.\*` imports to `jakarta.*` imports
+** Be aware that only Java EE `javax` packages are replaced by `jakarta` packages. For plain JDK packages such as `javax.sql.\*` and `javax.crypto.*` they do not need to get replaced.
+
+* Moving to Spring Boot 3:
+** https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide
+** https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Configuration-Changelog
+
+* Moving to Spring Security 6:
+** https://docs.spring.io/spring-security/reference/migration/index.html
+
+* Upgrading Amazon SDK to version 2.x
+** https://github.com/awspring/spring-cloud-aws
+
+* Moving from `de.flapdoodle` to `testcontainer` for DB testing
+
+* Moving from Sleuth to micrometer
+** https://docs.spring.io/spring-cloud-sleuth/docs/current-SNAPSHOT/reference/html/
+** https://openvalue.blog/posts/2022/12/16/tracing-in-spring-boot-2-and-3/
+
+* Removing Zuul dependencis

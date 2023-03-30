@@ -1,13 +1,13 @@
 package org.talend.logging.audit.log4j1;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.talend.logging.audit.LogLevel;
 import org.talend.logging.audit.impl.AbstractBackend;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;
-
-import java.util.Map;
 
 /**
  *

@@ -1,12 +1,12 @@
 package org.talend.daikon.content.s3;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.talend.daikon.content.DeletableResource;
-import org.talend.daikon.content.DeletableResourceLoaderTest;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.springframework.boot.SpringBootConfiguration;
+import org.talend.daikon.content.DeletableResource;
+import org.talend.daikon.content.DeletableResourceLoaderTest;
 
 @SpringBootConfiguration
 public class S3DeletablePathResolverTest extends DeletableResourceLoaderTest {

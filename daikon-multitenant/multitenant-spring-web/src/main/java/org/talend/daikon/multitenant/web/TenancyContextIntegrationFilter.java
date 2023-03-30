@@ -12,9 +12,13 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import org.slf4j.MDC;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.async.CallableProcessingInterceptorAdapter;
+import org.springframework.web.context.request.async.CallableProcessingInterceptor;
 import org.springframework.web.context.request.async.WebAsyncManager;
 import org.springframework.web.context.request.async.WebAsyncUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,13 +28,10 @@ import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.core.Tenant;
 import org.talend.daikon.multitenant.provider.TenantProvider;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.Callable;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Responsible for setting and removing the {@link TenancyContext tenancy context} for the scope of every request. This
@@ -118,7 +119,7 @@ public class TenancyContextIntegrationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private static class TenancyContextCallableProcessingInterceptor extends CallableProcessingInterceptorAdapter {
+    private static class TenancyContextCallableProcessingInterceptor implements CallableProcessingInterceptor {
 
         private TenancyContext tenancyContext;
 

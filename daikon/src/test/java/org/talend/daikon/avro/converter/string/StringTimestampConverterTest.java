@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.avro.AvroUtils;
-import org.talend.daikon.crypto.digest.BCryptPasswordDigester;
 
 /**
  * Unit tests for {@link StringTimestampConverter}

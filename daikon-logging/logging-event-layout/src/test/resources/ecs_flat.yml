@@ -126,3 +126,15 @@ log.origin.file.line:
   dashed_name: log-origin-file-line
   short: The line number.
   type: long
+message:
+  dashed_name: message
+  short: Log message optimized for viewing in a log viewer.
+  type: match_only_text
+trace.id:
+  dashed_name: trace-id
+  short: Unique identifier of the trace.
+  type: keyword
+span.id:
+  dashed_name: span-id
+  short: Unique identifier of the span within the scope of its trace.
+  type: keyword

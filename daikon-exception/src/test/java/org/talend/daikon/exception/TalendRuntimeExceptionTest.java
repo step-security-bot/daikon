@@ -20,17 +20,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.talend.daikon.exception.error.CommonErrorCodes;
-import org.talend.daikon.exception.error.ErrorCode;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.talend.daikon.exception.error.CommonErrorCodes;
+import org.talend.daikon.exception.error.ErrorCode;
 
 public class TalendRuntimeExceptionTest {
 

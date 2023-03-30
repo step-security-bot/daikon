@@ -1,10 +1,12 @@
 package org.talend.daikon.mongo;
 
-import com.mongodb.reactivestreams.client.MongoDatabase;
 import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.security.tenant.ReactiveTenancyContextHolder;
+
+import com.mongodb.reactivestreams.client.MongoDatabase;
+
 import reactor.core.publisher.Mono;
 
 /**

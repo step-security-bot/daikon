@@ -2,15 +2,12 @@ package org.talend.daikon.finders.git;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.atlassian.jira.rest.client.api.RestClientException;
-import com.atlassian.jira.rest.client.api.domain.SearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.daikon.finders.ItemFinder;
@@ -19,7 +16,9 @@ import org.talend.daikon.model.PullRequest;
 import org.talend.daikon.model.ReleaseNoteItem;
 
 import com.atlassian.jira.rest.client.api.JiraRestClient;
+import com.atlassian.jira.rest.client.api.RestClientException;
 import com.atlassian.jira.rest.client.api.domain.Issue;
+import com.atlassian.jira.rest.client.api.domain.SearchResult;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

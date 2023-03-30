@@ -1,9 +1,9 @@
 package org.talend.logging.audit;
 
-import org.talend.logging.audit.impl.DefaultContextImpl;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.talend.logging.audit.impl.DefaultContextImpl;
 
 /**
  * Factory class for audit logging context.

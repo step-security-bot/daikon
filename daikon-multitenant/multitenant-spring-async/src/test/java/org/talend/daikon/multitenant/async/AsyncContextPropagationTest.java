@@ -12,16 +12,19 @@
 // ============================================================================
 package org.talend.daikon.multitenant.async;
 
-import com.jayway.restassured.RestAssured;
-import org.apache.log4j.MDC;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
@@ -30,8 +33,7 @@ import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
-import static com.jayway.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import io.restassured.RestAssured;
 
 @ExtendWith(SpringExtension.class)
 @Import(AsyncContextPropagationTest.MessagePublicationHandlerConfiguration.class)
@@ -45,7 +47,7 @@ public class AsyncContextPropagationTest {
     private MessagePublicationHandlerConfiguration handlerConfiguration;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.port = port;
         handlerConfiguration.verifier = () -> {
         };
@@ -71,8 +73,8 @@ public class AsyncContextPropagationTest {
         MultiTenantApplication.Message message = messagingService.receiveMessage();
         assertEquals(content, message.getContent());
         assertEquals(tenantId, message.getTenantId());
-        assertEquals(null, message.getPriority());
-        assertEquals(null, message.getUserId());
+        assertNull(message.getPriority());
+        assertNull(message.getUserId());
     }
 
     @Test
@@ -80,13 +82,13 @@ public class AsyncContextPropagationTest {
         String content = "test";
         String tenantId = "tenantId";
         String priority = "urgent";
-        given().content(content).post("/public/{tenant}?priority={priority}", tenantId, priority).then().statusCode(200);
+        given().body(content).post("/public/{tenant}?priority={priority}", tenantId, priority).then().statusCode(200);
 
         MultiTenantApplication.Message message = messagingService.receiveMessage();
         assertEquals(content, message.getContent());
         assertEquals(tenantId, message.getTenantId());
         assertEquals(priority, message.getPriority());
-        assertEquals(null, message.getUserId());
+        assertNull(message.getUserId());
     }
 
     @Test
@@ -100,16 +102,16 @@ public class AsyncContextPropagationTest {
             assertEquals(user, MDC.get(MdcKeys.USER_ID));
         };
 
-        given().content(content).auth().basic(user, "password").post("/private/{tenant}", tenantId).then().statusCode(200);
+        given().body(content).auth().basic(user, "password").post("/private/{tenant}", tenantId).then().statusCode(200);
 
         MultiTenantApplication.Message message = messagingService.receiveMessage();
         assertEquals(content, message.getContent());
         assertEquals(tenantId, message.getTenantId());
-        assertEquals(null, message.getPriority());
+        assertNull(message.getPriority());
         assertEquals(user, message.getUserId());
     }
 
-    @Configuration
+    @AutoConfiguration
     public static class MessagePublicationHandlerConfiguration {
 
         public Runnable verifier = () -> {

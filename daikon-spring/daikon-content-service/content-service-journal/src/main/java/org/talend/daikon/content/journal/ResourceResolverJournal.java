@@ -1,12 +1,12 @@
 package org.talend.daikon.content.journal;
 
+import java.io.IOException;
+import java.util.stream.Stream;
+
 import org.springframework.core.io.Resource;
 import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.exception.TalendRuntimeException;
 import org.talend.daikon.exception.error.CommonErrorCodes;
-
-import java.io.IOException;
-import java.util.stream.Stream;
 
 class ResourceResolverJournal implements ResourceJournal {
 

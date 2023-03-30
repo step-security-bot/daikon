@@ -14,14 +14,14 @@ package org.talend.daikon.sandbox.properties;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.talend.daikon.runtime.RuntimeInfo;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.talend.daikon.runtime.RuntimeInfo;
 
 public class ClassLoaderIsolatedSystemPropertiesStaticInitTest {
 

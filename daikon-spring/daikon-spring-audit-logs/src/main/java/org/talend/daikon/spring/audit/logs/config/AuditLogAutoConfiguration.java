@@ -19,22 +19,33 @@ import org.talend.daikon.spring.audit.common.config.AuditKafkaProperties;
 import org.talend.daikon.spring.audit.common.config.AuditProperties;
 import org.talend.daikon.spring.audit.logs.api.AuditUserProvider;
 import org.talend.daikon.spring.audit.logs.api.NoOpAuditUserProvider;
-import org.talend.daikon.spring.audit.logs.service.*;
+import org.talend.daikon.spring.audit.logs.service.AuditLogGeneratorAspect;
+import org.talend.daikon.spring.audit.logs.service.AuditLogGeneratorInterceptor;
+import org.talend.daikon.spring.audit.logs.service.AuditLogIpExtractor;
+import org.talend.daikon.spring.audit.logs.service.AuditLogIpExtractorImpl;
+import org.talend.daikon.spring.audit.logs.service.AuditLogSender;
+import org.talend.daikon.spring.audit.logs.service.AuditLogSenderImpl;
+import org.talend.daikon.spring.audit.logs.service.AuditLogUrlExtractor;
+import org.talend.daikon.spring.audit.logs.service.AuditLogUrlExtractorImpl;
+import org.talend.daikon.spring.audit.logs.service.ResponseExtractor;
 import org.talend.daikon.spring.audit.service.AppAuditLogger;
 import org.talend.logging.audit.AuditLoggerFactory;
 import org.talend.logging.audit.LogAppenders;
-import org.talend.logging.audit.impl.*;
+import org.talend.logging.audit.impl.AuditConfiguration;
+import org.talend.logging.audit.impl.AuditConfigurationMap;
+import org.talend.logging.audit.impl.AuditLoggerBase;
+import org.talend.logging.audit.impl.Backends;
+import org.talend.logging.audit.impl.SimpleAuditLoggerBase;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.servlet.Filter;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)

@@ -1,12 +1,10 @@
 package org.talend.daikon.collections.tree;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.collections.tree.memory.BuilderMemo;
-
-import java.util.Iterator;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AvlTreeIteratorTest {
 

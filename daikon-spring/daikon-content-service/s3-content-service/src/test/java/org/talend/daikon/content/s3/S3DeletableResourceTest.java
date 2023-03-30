@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.OutputStream;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.DeletableResourceTest;
-
-import java.io.OutputStream;
 
 public class S3DeletableResourceTest extends DeletableResourceTest {
 
@@ -66,7 +66,7 @@ public class S3DeletableResourceTest extends DeletableResourceTest {
 
     @Test
     public void shouldGetDescription() {
-        assertEquals("Amazon s3 resource [bucket='s3-content-service1' and object='app1/file.txt']", resource.getDescription());
+        assertEquals("Location{bucket='s3-content-service1', object='app1/file.txt', version='null'}", resource.getDescription());
     }
 
     @Test
@@ -76,21 +76,23 @@ public class S3DeletableResourceTest extends DeletableResourceTest {
         final Resource resource1 = resolver.getResource(LOCATION);
 
         // Then
-        assertEquals("Amazon s3 resource [bucket='s3-content-service1' and object='app1/file.txt']", resource1.getDescription());
+        assertEquals("Location{bucket='s3-content-service1', object='app1/file.txt', version='null'}",
+                resource1.getDescription());
 
         // Given
         TestConfiguration.clientNumber.set(1);
         final Resource resource2 = resolver.getResource(LOCATION);
 
         // Then
-        assertEquals("Amazon s3 resource [bucket='s3-content-service2' and object='app2/file.txt']", resource2.getDescription());
+        assertEquals("Location{bucket='s3-content-service2', object='app2/file.txt', version='null'}",
+                resource2.getDescription());
 
         // Given
         TestConfiguration.clientNumber.set(2);
         final Resource resource3 = resolver.getResource(LOCATION);
 
         // Then
-        assertEquals("Amazon s3 resource [bucket='s3-content-service2' and object='file.txt']", resource3.getDescription());
+        assertEquals("Location{bucket='s3-content-service2', object='file.txt', version='null'}", resource3.getDescription());
     }
 
     @Test

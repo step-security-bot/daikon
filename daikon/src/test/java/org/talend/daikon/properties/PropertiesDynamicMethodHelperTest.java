@@ -21,13 +21,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import java.lang.reflect.Method;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.presentation.Widget;
 import org.talend.daikon.properties.runtime.RuntimeContext;
 import org.talend.daikon.properties.service.Repository;
-
-import java.lang.reflect.Method;
 
 /**
  * Unit-tests for {@link PropertiesDynamicMethodHelper}

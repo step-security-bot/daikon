@@ -18,18 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +39,11 @@ import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.provider.DefaultTenantProvider;
 import org.talend.daikon.multitenant.provider.TenantProvider;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @SpringBootApplication
 @Import({ MultiTenantApplication.TenancyConfiguration.class,
         MultiTenantApplication.CleanContextCheckerFilterConfiguration.class })
@@ -57,7 +57,7 @@ public class MultiTenantApplication {
         SpringApplication.run(MultiTenantApplication.class, args); // NOSONAR
     }
 
-    @Configuration
+    @AutoConfiguration
     public static class TenancyConfiguration {
 
         @Bean
@@ -73,7 +73,7 @@ public class MultiTenantApplication {
         }
     }
 
-    @Configuration
+    @AutoConfiguration
     public static class CleanContextCheckerFilterConfiguration {
 
         @Bean
@@ -98,12 +98,12 @@ public class MultiTenantApplication {
         }
 
         @RequestMapping(path = "/sync", method = RequestMethod.GET)
-        public String sayHelloSync() throws Exception {
+        public String sayHelloSync() {
             return sayHello();
         }
 
         @RequestMapping(path = "/async", method = RequestMethod.GET)
-        public Callable<String> sayHelloAsync() throws Exception {
+        public Callable<String> sayHelloAsync() {
             return this::sayHello;
         }
 

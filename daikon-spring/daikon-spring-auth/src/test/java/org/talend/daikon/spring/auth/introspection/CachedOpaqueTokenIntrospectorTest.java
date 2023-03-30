@@ -2,10 +2,12 @@ package org.talend.daikon.spring.auth.introspection;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor.X_FORWARDED_FOR;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +26,8 @@ import org.springframework.security.oauth2.server.resource.introspection.OpaqueT
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
 public class CachedOpaqueTokenIntrospectorTest {

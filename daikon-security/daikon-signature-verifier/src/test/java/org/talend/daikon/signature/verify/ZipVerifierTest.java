@@ -15,8 +15,14 @@ package org.talend.daikon.signature.verify;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.cert.CertPathValidatorException;
+
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.signature.exceptions.MissingEntryException;
@@ -24,13 +30,6 @@ import org.talend.daikon.signature.exceptions.NoValidCertificateException;
 import org.talend.daikon.signature.exceptions.UnsignedArchiveException;
 import org.talend.daikon.signature.exceptions.UnsignedEntryException;
 import org.talend.daikon.signature.exceptions.VerifyFailedException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.cert.CertPathValidatorException;
 
 public class ZipVerifierTest {
 
@@ -53,7 +52,7 @@ public class ZipVerifierTest {
         generater.generateSignedFiles();
     }
 
-    @AfterAll
+    // @AfterAll
     public static void afterClass() throws IOException {
         FileUtils.deleteDirectory(workingFolder);
     }
@@ -187,7 +186,7 @@ public class ZipVerifierTest {
         }
     }
 
-    private static String getPathFromWorkingFolder(String fileName) {
+    private static String getPathFromWorkingFolder(String fileName) throws IOException {
         File file = new File(workingFolder, fileName);
         return file.getAbsolutePath();
     }

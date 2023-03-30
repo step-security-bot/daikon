@@ -1,16 +1,16 @@
 package org.talend.daikon.content.s3;
 
-import io.awspring.cloud.core.io.s3.PathMatchingSimpleStorageResourcePatternResolver;
-import io.awspring.cloud.core.io.s3.SimpleStorageProtocolResolver;
+import java.net.URI;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.diagnostics.FailureAnalyzer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -18,16 +18,18 @@ import org.talend.daikon.content.ResourceResolver;
 import org.talend.daikon.content.s3.provider.AmazonS3Provider;
 import org.talend.daikon.content.s3.provider.S3BucketProvider;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import io.awspring.cloud.s3.S3PathMatchingResourcePatternResolver;
+import io.awspring.cloud.s3.S3ProtocolResolver;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.S3Configuration;
 
-@Configuration
+@AutoConfiguration
 @SuppressWarnings("InsufficientBranchCoverage")
 @ConditionalOnProperty(name = "content-service.store", havingValue = "s3")
 public class S3ContentServiceConfiguration {
@@ -48,17 +50,17 @@ public class S3ContentServiceConfiguration {
 
     public static final String CONTENT_SERVICE_STORE_AUTHENTICATION = "content-service.store.s3.authentication";
 
-    private static AmazonS3ClientBuilder configureEC2Authentication(AmazonS3ClientBuilder builder) {
+    private static S3ClientBuilder configureEC2Authentication(S3ClientBuilder builder) {
         LOGGER.info("Using EC2 authentication");
-        return builder.withCredentials(new EC2ContainerCredentialsProviderWrapper());
+        return builder.credentialsProvider(InstanceProfileCredentialsProvider.create());
     }
 
-    private static AmazonS3ClientBuilder configureTokenAuthentication(Environment environment, AmazonS3ClientBuilder builder) {
+    private static S3ClientBuilder configureTokenAuthentication(Environment environment, S3ClientBuilder builder) {
         LOGGER.info("Using Token authentication");
         final String key = environment.getProperty("content-service.store.s3.accessKey");
         final String secret = environment.getProperty("content-service.store.s3.secretKey");
-        AWSCredentials awsCredentials = new BasicAWSCredentials(key, secret);
-        return builder.withCredentials(new AWSStaticCredentialsProvider(awsCredentials));
+        AwsCredentials awsCredentials = AwsBasicCredentials.create(key, secret);
+        return builder.credentialsProvider(StaticCredentialsProvider.create(awsCredentials));
     }
 
     private static boolean isMultiTenancyEnabled(Environment environment) {
@@ -66,11 +68,11 @@ public class S3ContentServiceConfiguration {
     }
 
     @Bean
-    public AmazonS3 amazonS3(Environment environment, ApplicationContext applicationContext) {
+    public S3Client amazonS3(Environment environment, ApplicationContext applicationContext) {
         // Configure authentication
         final String authentication = environment.getProperty(CONTENT_SERVICE_STORE_AUTHENTICATION, EC2_AUTHENTICATION)
                 .toUpperCase();
-        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
+        S3ClientBuilder builder = S3Client.builder();
         switch (authentication) {
         case EC2_AUTHENTICATION:
             builder = configureEC2Authentication(builder);
@@ -90,7 +92,7 @@ public class S3ContentServiceConfiguration {
         case CUSTOM_AUTHENTICATION:
             try {
                 final AmazonS3Provider amazonS3Provider = applicationContext.getBean(AmazonS3Provider.class);
-                return amazonS3Provider.getAmazonS3Client();
+                return amazonS3Provider.getS3Client();
             } catch (NoSuchBeanDefinitionException e) {
                 throw new InvalidConfigurationMissingBean("No S3 client provider in context", AmazonS3Provider.class, e);
             }
@@ -99,38 +101,37 @@ public class S3ContentServiceConfiguration {
         }
 
         // Configure region (optional)
-        final String region = environment.getProperty("content-service.store.s3.region", Regions.US_EAST_1.name());
-        if (environment.containsProperty("content-service.store.s3.region")) {
-            builder = builder.withRegion(region);
+        String strRegion = environment.getProperty("content-service.store.s3.region");
+        if (StringUtils.isEmpty(strRegion)) {
+            strRegion = Region.US_EAST_1.id();
         }
+        builder = builder.region(Region.of(strRegion));
 
         // Configure endpoint url (optional)
         final String endpointUrl = environment.getProperty(S3_ENDPOINT_URL);
         if (StringUtils.isNotBlank(endpointUrl)) {
-            builder = builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpointUrl, region));
-        } else if (builder.getRegion() == null) {
-            // Need a default region if nothing is set
-            builder.setRegion(Regions.US_EAST_1.name());
+            builder = builder.endpointOverride(URI.create(endpointUrl));
         }
 
         // All set
         return builder.build();
     }
 
-    private static AmazonS3ClientBuilder configurePathStyleAccess(Environment environment, AmazonS3ClientBuilder builder,
+    private static S3ClientBuilder configurePathStyleAccess(Environment environment, S3ClientBuilder builder,
             boolean defaultValue) {
         final boolean enablePathStyle = environment.getProperty(S3_ENABLE_PATH_STYLE, Boolean.class, defaultValue);
-        builder = builder.withPathStyleAccessEnabled(enablePathStyle);
+        S3Configuration confBuilder = S3Configuration.builder().pathStyleAccessEnabled(enablePathStyle).build();
+        builder.serviceConfiguration(confBuilder);
         return builder;
     }
 
     @Bean
-    public ResourceResolver s3PathResolver(AmazonS3 amazonS3, Environment environment, ApplicationContext applicationContext,
-            PathMatchingSimpleStorageResourcePatternResolver resolver) {
+    public ResourceResolver s3PathResolver(S3Client s3Client, Environment environment, ApplicationContext applicationContext,
+            S3PathMatchingResourcePatternResolver resolver) {
         if (isMultiTenancyEnabled(environment)) {
             try {
                 final S3BucketProvider s3BucketProvider = applicationContext.getBean(S3BucketProvider.class);
-                return new S3ResourceResolver(resolver, amazonS3, s3BucketProvider, environment);
+                return new S3ResourceResolver(resolver, s3Client, s3BucketProvider, environment);
             } catch (NoSuchBeanDefinitionException e) {
                 throw new InvalidConfigurationMissingBean("No S3 bucket name provider in context", S3BucketProvider.class, e);
             }
@@ -148,21 +149,19 @@ public class S3ContentServiceConfiguration {
                     return StringUtils.EMPTY;
                 }
             };
-            return new S3ResourceResolver(resolver, amazonS3, provider, environment);
+            return new S3ResourceResolver(resolver, s3Client, provider, environment);
         }
     }
 
     @Bean
-    public PathMatchingSimpleStorageResourcePatternResolver getPathMatchingResourcePatternResolver(AmazonS3 amazonS3,
+    public S3PathMatchingResourcePatternResolver getPathMatchingResourcePatternResolver(S3Client s3Client,
             ApplicationContext context) {
-        return new PathMatchingSimpleStorageResourcePatternResolver(amazonS3, simpleStorageResourceLoader(context));
+        return new S3PathMatchingResourcePatternResolver(s3Client, simpleStorageResourceLoader(context));
     }
 
     private PathMatchingResourcePatternResolver simpleStorageResourceLoader(ApplicationContext context) {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
-        SimpleStorageProtocolResolver resolver = new SimpleStorageProtocolResolver();
-        resolver.setBeanFactory(context);
-        resolver.afterPropertiesSet();
+        S3ProtocolResolver resolver = new S3ProtocolResolver();
         resourceLoader.addProtocolResolver(resolver);
         return new PathMatchingResourcePatternResolver(resourceLoader);
     }

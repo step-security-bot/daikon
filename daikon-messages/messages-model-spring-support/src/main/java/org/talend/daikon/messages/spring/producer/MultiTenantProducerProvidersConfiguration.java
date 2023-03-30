@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.talend.daikon.messages.header.producer.TenantIdProvider;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.core.Tenant;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty("iam.accounts.url")
 @AutoConfigureBefore({ DefaultProducerProvidersConfiguration.class })
 public class MultiTenantProducerProvidersConfiguration {

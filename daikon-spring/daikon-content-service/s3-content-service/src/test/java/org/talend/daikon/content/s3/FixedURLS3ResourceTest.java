@@ -5,12 +5,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.content.DeletableResource;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.content.DeletableResource;
 
 public class FixedURLS3ResourceTest {
 

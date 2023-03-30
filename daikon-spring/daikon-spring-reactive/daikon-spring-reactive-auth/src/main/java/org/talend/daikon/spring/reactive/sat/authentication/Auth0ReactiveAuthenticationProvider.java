@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.talend.daikon.spring.reactive.sat.model.token.ReactiveAuthenticationToken;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
+import org.talend.daikon.spring.reactive.sat.model.token.ReactiveAuthenticationToken;
 
 /**
  * Provides info about mandatory claims/headers in case of authentication with different Auth0 JWT tokens

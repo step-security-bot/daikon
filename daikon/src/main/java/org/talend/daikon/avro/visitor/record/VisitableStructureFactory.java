@@ -12,16 +12,16 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.util.Utf8;
 import org.talend.daikon.avro.AvroUtils;
 import org.talend.daikon.avro.visitor.path.TraversalPath;
-
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Internal utility class to create visitable structures.

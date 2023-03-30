@@ -2,11 +2,6 @@ package org.talend.daikon.statistic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.talend.daikon.statistic.pojo.SimpleStatistic;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -15,6 +10,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.talend.daikon.statistic.pojo.SimpleStatistic;
 
 public class SimpleStatisticDeserializeTest {
 

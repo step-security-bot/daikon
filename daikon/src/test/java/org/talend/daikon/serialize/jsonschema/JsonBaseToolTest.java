@@ -2,7 +2,6 @@ package org.talend.daikon.serialize.jsonschema;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,13 +12,6 @@ import static org.talend.daikon.properties.property.PropertyFactory.newInteger;
 import static org.talend.daikon.properties.property.PropertyFactory.newString;
 import static org.talend.daikon.properties.property.PropertyFactory.newStringList;
 
-import org.apache.avro.Schema;
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.properties.Properties;
-import org.talend.daikon.properties.PropertiesImpl;
-import org.talend.daikon.properties.property.Property;
-import org.talend.daikon.serialize.FullExampleProperties;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,6 +20,13 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.avro.Schema;
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.properties.Properties;
+import org.talend.daikon.properties.PropertiesImpl;
+import org.talend.daikon.properties.property.Property;
+import org.talend.daikon.serialize.FullExampleProperties;
 
 public class JsonBaseToolTest {
 

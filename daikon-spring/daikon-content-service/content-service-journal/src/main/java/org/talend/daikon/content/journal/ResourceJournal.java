@@ -1,8 +1,8 @@
 package org.talend.daikon.content.journal;
 
-import org.talend.daikon.content.ResourceResolver;
-
 import java.util.stream.Stream;
+
+import org.talend.daikon.content.ResourceResolver;
 
 public interface ResourceJournal {
 

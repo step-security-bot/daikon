@@ -10,11 +10,11 @@
  */
 package org.talend.daikon.collections.tree.memory;
 
+import java.util.function.Supplier;
+
 import org.talend.daikon.collections.tree.Node;
 import org.talend.daikon.collections.tree.NodeBuilder;
 import org.talend.daikon.collections.tree.NodeLink;
-
-import java.util.function.Supplier;
 
 public class BuilderMemo<K extends Comparable<K>, T> implements NodeBuilder<K, T> {
 

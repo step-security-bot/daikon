@@ -2,16 +2,16 @@ package org.talend.daikon.statistic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.talend.daikon.statistic.pojo.KeyValueStatistic;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.talend.daikon.statistic.pojo.KeyValueStatistic;
 
 public class KeyValueStatisticDeserializeTest {
 

@@ -1,19 +1,18 @@
 package org.talend.daikon.spring.mongo;
 
-import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_TENANT;
-
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
-
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
+
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
 
 public class SynchronizedMongoClientProviderTest {
 

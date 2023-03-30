@@ -3,14 +3,15 @@ package org.talend.daikon.schema;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.schema.dataset.DatasetFieldSchema;
 import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
 import org.talend.daikon.schema.dataset.type.DatasetFieldArrayTypeSchema;
 import org.talend.daikon.schema.dataset.type.DatasetFieldType;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerDatasetFieldSchemaTest {
 

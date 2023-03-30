@@ -6,6 +6,11 @@ def jiraCredentials = usernamePassword(
     credentialsId: 'jira-credentials',
     passwordVariable: 'JIRA_PASSWORD',
     usernameVariable: 'JIRA_LOGIN')
+final def dockerRegistryCredentials = usernamePassword(
+        credentialsId: 'artifactory-datapwn-credentials',
+        passwordVariable: 'DOCKER_REGISTRY_PASSWORD',
+        usernameVariable: 'DOCKER_REGISTRY_USERNAME')
+
 def currentBranch = env.BRANCH_NAME
 if (BRANCH_NAME.startsWith("PR-")) {
     currentBranch = env.CHANGE_BRANCH
@@ -37,7 +42,7 @@ kind: Pod
 spec:
   containers:
     - name: maven
-      image: artifactory.datapwn.com/tlnd-docker-prod/talend/common/tsbi/jdk8-builder-base:3.0.4-20220729121854
+      image: artifactory.datapwn.com/tlnd-docker-prod/talend/common/tsbi/jdk17-builder-base:3.1.10-20230315171124
       command:
       - cat
       tty: true
@@ -45,7 +50,17 @@ spec:
       - name: docker
         mountPath: /var/run/docker.sock
       - name: m2
-        mountPath: /root/daikon/.m2/repository
+        mountPath: /root/.m2/repository
+      env:
+        - name: DOCKER_HOST
+          value: tcp://localhost:2375
+    - name: docker-daemon
+      image: artifactory.datapwn.com/docker-io-remote/docker:19.03.1-dind
+      env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ""
+      securityContext:
+        privileged: true        
   imagePullSecrets:
     - talend-registry
   volumes:
@@ -61,6 +76,8 @@ spec:
 
   environment {
     MAVEN_OPTS = '-Dmaven.artifact.threads=128 -Dorg.slf4j.simpleLogger.showThreadName=true -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss'
+    TESTCONTAINERS_RYUK_DISABLED = true // See https://github.com/testcontainers/testcontainers-java/issues/3609
+    TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX = 'artifactory.datapwn.com/docker-io-remote/library/' // Avoid rate limits on Docker hub
   }
 
   options {
@@ -82,6 +99,21 @@ spec:
                 git tag ci-kuke-test && git push --tags
                 git push --delete origin ci-kuke-test && git tag --delete ci-kuke-test
             """
+          }
+        }
+      }
+    }
+
+    stage('Prepare build') {
+      steps {
+        container('maven') {
+          script {
+            echo 'Login to Docker registry'
+            withCredentials([dockerRegistryCredentials]) {
+              sh """\
+                  docker login artifactory.datapwn.com --username "${DOCKER_REGISTRY_USERNAME}" --password "${DOCKER_REGISTRY_PASSWORD}"
+              """.stripIndent()
+            }
           }
         }
       }

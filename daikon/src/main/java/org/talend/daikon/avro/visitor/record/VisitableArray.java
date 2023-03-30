@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
-import org.talend.daikon.avro.visitor.path.TraversalPath;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.talend.daikon.avro.visitor.path.TraversalPath;
 
 /**
  * Wrapper for arrays.

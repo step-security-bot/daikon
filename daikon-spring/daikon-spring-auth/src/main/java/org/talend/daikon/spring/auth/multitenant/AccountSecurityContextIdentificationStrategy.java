@@ -2,10 +2,10 @@ package org.talend.daikon.spring.auth.multitenant;
 
 import java.security.Principal;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.talend.daikon.multitenant.web.TenantIdentificationStrategy;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Retrieves the account name from the current Spring Security Context.

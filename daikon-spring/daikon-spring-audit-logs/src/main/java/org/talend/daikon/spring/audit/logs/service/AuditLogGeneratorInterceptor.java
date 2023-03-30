@@ -1,6 +1,14 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
+import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ERROR;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +23,10 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ALL;
-import static org.talend.daikon.spring.audit.common.api.AuditLogScope.ERROR;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuditLogGeneratorInterceptor implements HandlerInterceptor {
@@ -42,8 +43,7 @@ public class AuditLogGeneratorInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // Retrieve @GenerateAuditLog annotation from method if any
         Optional<GenerateAuditLog> generateAuditLog = Optional.of(handler).filter(h -> h instanceof HandlerMethod)
                 .map(HandlerMethod.class::cast).map(HandlerMethod::getMethod).map(m -> m.getAnnotation(GenerateAuditLog.class));
@@ -78,11 +78,7 @@ public class AuditLogGeneratorInterceptor implements HandlerInterceptor {
             rawContent = ((ContentCachingResponseWrapper) wrapper).getContentAsByteArray();
         }
         if (rawContent != null) {
-            try {
-                stringContent = IOUtils.toString(rawContent, StandardCharsets.UTF_8.toString());
-            } catch (IOException e) {
-                LOGGER.warn("Wrapper content can't be read", e);
-            }
+            stringContent = IOUtils.toString(rawContent, StandardCharsets.UTF_8.toString());
         }
         return stringContent.isEmpty() ? null : stringContent;
     }

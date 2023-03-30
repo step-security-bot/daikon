@@ -1,6 +1,8 @@
 package org.talend.daikon.logging.ecs;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Singleton which checks :

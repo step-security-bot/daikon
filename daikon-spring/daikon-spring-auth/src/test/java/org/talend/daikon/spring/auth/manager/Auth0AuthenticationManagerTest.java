@@ -14,7 +14,12 @@ import static org.mockito.Mockito.verify;
 import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.CLAIM_PERMISSIONS;
 import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_CLIENT_ID;
 import static org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider.HEADER_PERMISSIONS;
-import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.*;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.CLAIM_TENANT_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_SA_NAME;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_ID;
+import static org.talend.daikon.spring.auth.provider.SatAuthenticationProvider.HEADER_TENANT_NAME;
 
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;

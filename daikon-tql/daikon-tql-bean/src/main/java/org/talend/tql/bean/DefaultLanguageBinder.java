@@ -3,7 +3,11 @@ package org.talend.tql.bean;
 import static org.talend.tql.bean.MethodAccessorFactory.build;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;

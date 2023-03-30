@@ -28,7 +28,7 @@ Maven style:
 [source,java]
 ----
 
-@Configuration
+@AutoConfiguration
 @EnableKafka
 public class KafkaConfiguration  {
 
@@ -55,7 +55,7 @@ public class KafkaConfiguration  {
 [source,java]
 ----
 
-@Configuration
+@AutoConfiguration
 @EnableKafka
 public class KafkaConfiguration  {
 

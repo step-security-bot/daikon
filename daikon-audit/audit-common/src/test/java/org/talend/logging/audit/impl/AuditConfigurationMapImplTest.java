@@ -6,10 +6,10 @@ import static org.talend.logging.audit.impl.AuditConfiguration.APPENDER_FILE_PAT
 import static org.talend.logging.audit.impl.AuditConfiguration.APPLICATION_NAME;
 import static org.talend.logging.audit.impl.AuditConfiguration.LOG_APPENDER;
 
+import java.util.Properties;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Properties;
 
 public class AuditConfigurationMapImplTest {
 

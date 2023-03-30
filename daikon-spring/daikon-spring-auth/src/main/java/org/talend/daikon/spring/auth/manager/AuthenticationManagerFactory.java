@@ -25,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import org.talend.daikon.spring.auth.common.model.userdetails.AuthUserDetails;
 import org.talend.daikon.spring.auth.common.model.userdetails.UserDetailsConverter;
 import org.talend.daikon.spring.auth.interceptor.IpAllowListHeaderInterceptor;
-import org.talend.daikon.spring.auth.introspection.AuthUserDetailsConverterIntrospector;
 import org.talend.daikon.spring.auth.introspection.CachedOpaqueTokenIntrospector;
 import org.talend.daikon.spring.auth.introspection.factory.UserDetailsIntrospectorFactory;
 import org.talend.daikon.spring.auth.provider.Auth0AuthenticationProvider;

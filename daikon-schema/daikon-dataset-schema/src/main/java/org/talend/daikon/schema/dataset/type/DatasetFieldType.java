@@ -1,6 +1,7 @@
 package org.talend.daikon.schema.dataset.type;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

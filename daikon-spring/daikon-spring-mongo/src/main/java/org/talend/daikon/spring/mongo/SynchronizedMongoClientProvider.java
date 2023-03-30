@@ -1,14 +1,15 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.client.MongoClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mongodb.client.MongoClient;
 
 /**
  * A {@link MongoClientProvider} implementation that provides thread safety around the

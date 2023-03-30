@@ -4,67 +4,55 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-logging</artifactId>
-        <version>7.1.8-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
 	<artifactId>logging-event-layout</artifactId>
 	<name>logging-event-layout</name>
+
+	<properties>
+			<ecs.version>8.6.1</ecs.version>
+	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<version>${jsr305.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${log4j2.version}</version>
     	  	<optional>true</optional>
 		</dependency>
 	    <dependency>
     	  	<groupId>org.apache.logging.log4j</groupId>
     	  	<artifactId>log4j-core</artifactId>
-    	  	<version>${log4j2.version}</version>
     	  	<optional>true</optional>
-		</dependency>
-		<dependency>
-    	<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-classic</artifactId>
-    		<version>${logback.version}</version>
-    		<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-access</artifactId>
-			<version>${logback.version}</version>
-			<optional>true</optional>
 		</dependency>
 	    <dependency>
 	      	<groupId>org.apache.commons</groupId>
 	      	<artifactId>commons-lang3</artifactId>
-	      	<version>${commons-lang3.version}</version>
 	    </dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax.servlet-api.version}</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>co.elastic.logging</groupId>
 			<artifactId>ecs-logging-core</artifactId>
-			<version>${elastic.ecs.logging.version}</version>
 		</dependency>
 		<!-- Tests -->
 		<dependency>
@@ -78,28 +66,51 @@
 	    <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito-core.version}</version>
             <scope>test</scope>
 		</dependency>
 	    <dependency>
     		<groupId>org.hamcrest</groupId>
     		<artifactId>hamcrest-all</artifactId>
-    		<version>${hamcrest-all.version}</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>
     		<groupId>uk.co.datumedge</groupId>
     		<artifactId>hamcrest-json</artifactId>
-    		<version>${hamcrest-json.version}</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path-assert</artifactId>
-			<version>${json-path-assert.version}</version>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-access</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<!-- Read and load properties from logging.properties file during INITIALIZE phase -->
@@ -152,7 +163,7 @@
 							<outputs>
 								<output>
 									<tmpl>${project.basedir}/src/main/resources/ecs_flat.ftl</tmpl>
-									<dst>${project.build.directory}/generated-sources/java/org/talend/daikon/logging/ecs/EcsFields.java</dst>
+									<dst>${project.build.directory}/generated-sources/org/talend/daikon/logging/ecs/EcsFields.java</dst>
 								</output>
 							</outputs>
 						</model>
@@ -161,7 +172,7 @@
 							<outputs>
 								<output>
 									<tmpl>${project.basedir}/src/main/resources/ecs_flat.ftl</tmpl>
-									<dst>${project.build.directory}/generated-sources/java/org/talend/daikon/logging/ecs/CustomFields.java</dst>
+									<dst>${project.build.directory}/generated-sources/org/talend/daikon/logging/ecs/CustomFields.java</dst>
 								</output>
 							</outputs>
 						</model>
@@ -170,7 +181,7 @@
 							<outputs>
 								<output>
 									<tmpl>${project.basedir}/src/main/resources/ecs_flat.ftl</tmpl>
-									<dst>${project.build.directory}/generated-test-sources/java/org/talend/daikon/logging/ecs/EcsFields.java</dst>
+									<dst>${project.build.directory}/generated-test-sources/org/talend/daikon/logging/ecs/EcsFields.java</dst>
 								</output>
 							</outputs>
 						</model>
@@ -179,7 +190,7 @@
 							<outputs>
 								<output>
 									<tmpl>${project.basedir}/src/main/resources/ecs_flat.ftl</tmpl>
-									<dst>${project.build.directory}/generated-test-sources/java/org/talend/daikon/logging/ecs/RealEcsFields.java</dst>
+									<dst>${project.build.directory}/generated-test-sources/org/talend/daikon/logging/ecs/RealEcsFields.java</dst>
 								</output>
 							</outputs>
 						</model>

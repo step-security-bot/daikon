@@ -19,7 +19,7 @@ import org.apache.avro.AvroRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.talend.daikon.messages.envelope.MessageConverter;
 import org.talend.daikon.messages.envelope.MessageConverterRegistry;
 import org.talend.daikon.messages.envelope.MessageConverterRegistryImpl;
@@ -27,7 +27,7 @@ import org.talend.daikon.messages.envelope.MessageEnvelopeHandler;
 import org.talend.daikon.messages.envelope.MessageEnvelopeHandlerImpl;
 import org.talend.daikon.messages.header.producer.*;
 
-@Configuration
+@AutoConfiguration
 @AutoConfigureBefore({ DefaultProducerProvidersConfiguration.class })
 public class MessageHeaderFactoryConfiguration {
 

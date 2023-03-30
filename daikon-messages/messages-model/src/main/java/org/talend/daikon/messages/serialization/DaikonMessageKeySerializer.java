@@ -1,5 +1,8 @@
 package org.talend.daikon.messages.serialization;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Map;
+
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumWriter;
@@ -9,9 +12,6 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.daikon.messages.MessageKey;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 /**
  * Daikon Avro Message Key serializer.

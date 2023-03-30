@@ -2,6 +2,20 @@ package org.talend.logging.audit.logback;
 
 import static java.util.Objects.requireNonNull;
 
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.talend.daikon.logging.event.layout.LogbackJSONLayout;
+import org.talend.logging.audit.AuditLoggingException;
+import org.talend.logging.audit.LogAppenders;
+import org.talend.logging.audit.impl.AuditConfiguration;
+import org.talend.logging.audit.impl.AuditConfigurationMap;
+import org.talend.logging.audit.impl.EventFields;
+import org.talend.logging.audit.impl.LogAppendersSet;
+import org.talend.logging.audit.impl.LogTarget;
+import org.talend.logging.audit.impl.PropagateExceptions;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -20,14 +34,6 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 import ch.qos.logback.core.spi.PreSerializationTransformer;
 import ch.qos.logback.core.util.FileSize;
-import org.talend.daikon.logging.event.layout.LogbackJSONLayout;
-import org.talend.logging.audit.AuditLoggingException;
-import org.talend.logging.audit.LogAppenders;
-import org.talend.logging.audit.impl.*;
-
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -111,7 +117,7 @@ public final class LogbackConfigurer {
                     copy.setLevel(e.getLevel());
                     copy.setMessage(e.getMessage());
                     copy.setArgumentArray(e.getArgumentArray());
-                    copy.setMarker(e.getMarker());
+                    copy.addMarker(e.getMarker());
                     copy.setMDCPropertyMap(mdc);
                     copy.setTimeStamp(e.getTimeStamp());
                     if (ThrowableProxy.class.isInstance(e.getThrowableProxy())) {

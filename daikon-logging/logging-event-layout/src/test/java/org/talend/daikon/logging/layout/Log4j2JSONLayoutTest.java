@@ -5,6 +5,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,9 +21,6 @@ import org.apache.logging.log4j.message.SimpleMessage;
 import org.apache.logging.log4j.util.StringMap;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.logging.event.layout.Log4j2JSONLayout;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Log4j2JSONLayoutTest extends AbstractLayoutTest {
 

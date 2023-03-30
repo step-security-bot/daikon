@@ -126,7 +126,7 @@ public class EcsSerializerTest {
     public void testSerializeEcsVersion() {
         final StringBuilder builder = new StringBuilder();
         EcsSerializer.serializeEcsVersion(builder);
-        assertThat(builder.toString(), containsString("\"ecs.version\":\"4.2.0\""));
+        assertThat(builder.toString(), containsString("\"ecs.version\":\"8.6.1\""));
     }
 
     @Test

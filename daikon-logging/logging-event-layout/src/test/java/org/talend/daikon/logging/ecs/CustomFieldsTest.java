@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
 
 public class CustomFieldsTest {
 

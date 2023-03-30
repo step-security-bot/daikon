@@ -1,8 +1,5 @@
 package org.talend.daikon.crypto;
 
-import org.apache.commons.lang3.StringUtils;
-import org.talend.daikon.crypto.digest.PasswordDigester;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +17,9 @@ import java.util.logging.Logger;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+
+import org.apache.commons.lang3.StringUtils;
+import org.talend.daikon.crypto.digest.PasswordDigester;
 
 /**
  * A collection of {@link KeySource} helpers to ease use of {@link Encryption}.

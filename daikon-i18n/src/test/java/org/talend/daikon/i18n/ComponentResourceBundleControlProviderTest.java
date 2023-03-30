@@ -18,11 +18,11 @@ package org.talend.daikon.i18n;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(CustomExtension.class)
 public class ComponentResourceBundleControlProviderTest {

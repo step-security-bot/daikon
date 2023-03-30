@@ -1,12 +1,36 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.ACCOUNT_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.APPLICATION_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.CLIENT_IP;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EMAIL;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_CATEGORY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_OPERATION;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_TYPE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.LOG_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.METHOD;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST_BODY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE_BODY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE_CODE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.TIMESTAMP;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.URL;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.USERNAME;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.USER_AGENT;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.USER_ID;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 import org.talend.daikon.exception.ExceptionContext;
@@ -19,6 +43,8 @@ import org.talend.logging.audit.impl.DefaultContextImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AuditLogContextBuilder {
 

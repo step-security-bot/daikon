@@ -15,9 +15,7 @@ package org.talend.daikon.multitenant.web;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Required;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * A {@link TenantIdentificationStrategy strategy} which matches a request URI against a provided regular expression.
@@ -45,7 +43,6 @@ public class UrlTenantIdentifcationStrategy implements TenantIdentificationStrat
      * 
      * @param urlPattern
      */
-    @Required
     public void setUrlPattern(String urlPattern) {
         this.pattern = Pattern.compile(urlPattern);
     }

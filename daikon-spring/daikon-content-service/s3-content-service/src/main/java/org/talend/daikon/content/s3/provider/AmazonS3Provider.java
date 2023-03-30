@@ -1,6 +1,6 @@
 package org.talend.daikon.content.s3.provider;
 
-import com.amazonaws.services.s3.AmazonS3;
+import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * An interface to be implemented to supply Amazon S3 clients. Examples of implementation include:
@@ -13,7 +13,7 @@ import com.amazonaws.services.s3.AmazonS3;
 public interface AmazonS3Provider {
 
     /**
-     * @return A configured {@link AmazonS3 S3 client} ready for use.
+     * @return A configured {@link S3Client S3 client} ready for use.
      */
-    AmazonS3 getAmazonS3Client();
+    S3Client getS3Client();
 }

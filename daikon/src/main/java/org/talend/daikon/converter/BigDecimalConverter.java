@@ -1,12 +1,12 @@
 package org.talend.daikon.converter;
 
-import org.talend.daikon.exception.TalendRuntimeException;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+
+import org.talend.daikon.exception.TalendRuntimeException;
 
 public class BigDecimalConverter extends Converter<BigDecimal> {
 

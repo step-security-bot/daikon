@@ -7,7 +7,6 @@ https://www.talend.com
 
 ![Talend](https://www.talend.com/wp-content/uploads/2016/07/talend-logo.png "Talend")
 
-
 ## Contents
 
 This repository contains commonly used classes that are expected to be shared across all Talend products.
@@ -72,6 +71,16 @@ _Modules_                                                     |_Description_
 | Spring Boot  | 2.7.3          |
 | Spring Cloud | 2021.0.4       |
 | Jackson      | 2.13.3         |
+
+### Daikon 8.x
+
+|              | *Daikon 8.0.x* |
+|--------------|----------------|
+| Spring Boot  | 3.0.4          |
+| Spring Cloud | 2022.0.1       |
+| Jackson      | 2.14.1         |
+
+**Daikon 8 is the first Daikon based on Spring Boot 3 and Java 17. Please read the [migration guide](./DAIKON_8_UPGRADE.adoc) for upgrading tips**
 
 ## Support
 

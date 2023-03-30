@@ -13,15 +13,15 @@
 package org.talend.daikon.multitenant.async;
 
 import org.slf4j.MDC;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.talend.daikon.logging.event.field.MdcKeys;
 
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(SecurityContextHolder.class)
 public class SecurityContextPropagationConfiguration {
 

@@ -4,8 +4,6 @@ import static org.springframework.boot.actuate.autoconfigure.security.servlet.En
 
 import java.util.List;
 
-import javax.servlet.Filter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +18,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import jakarta.servlet.Filter;
 
 /**
  * A Spring Security configuration class that ensures the Actuator (as well as paths in
@@ -83,13 +83,13 @@ public class TokenSecurityConfiguration {
     @Bean("securityFilterChain.tokenConfiguration")
     @Order(1)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
-                .requestMatcher(protectedPaths)//
+        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry = http
+                .securityMatcher(protectedPaths) //
                 .csrf() //
                 .disable() //
-                .authorizeRequests();
+                .authorizeHttpRequests();
         for (TokenProtectedPath protectedPath : additionalProtectedEndpoints) {
-            registry = registry.antMatchers(protectedPath.getProtectedPath()).hasRole(TokenAuthentication.ROLE);
+            registry = registry.requestMatchers(protectedPath.getProtectedPath()).hasRole(TokenAuthentication.ROLE);
         }
         // Configure actuator
         final PathMappedEndpoint prometheus = actuatorEndpoints.getEndpoint(EndpointId.of("prometheus"));
@@ -108,8 +108,8 @@ public class TokenSecurityConfiguration {
                 enforceTokenUsage = true;
             }
 
-            final ExpressionUrlAuthorizationConfigurer<HttpSecurity>.AuthorizedUrl matcher = registry
-                    .antMatchers(webEndpointProperties.getBasePath() + "/" + rootPath + "/**");
+            final AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl matcher = registry
+                    .requestMatchers(webEndpointProperties.getBasePath() + "/" + rootPath + "/**");
             if (enforceTokenUsage) {
                 registry = matcher.hasRole(TokenAuthentication.ROLE);
             } else {

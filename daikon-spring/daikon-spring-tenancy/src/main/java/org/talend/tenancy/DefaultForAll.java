@@ -1,12 +1,13 @@
 package org.talend.tenancy;
 
+import java.util.function.Supplier;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.function.Supplier;
+import jakarta.annotation.PostConstruct;
 
 /**
  * A fall back implementation of {@link ForAll} in case code is running with no tenancy enabled.

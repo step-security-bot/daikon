@@ -1,9 +1,9 @@
 package org.talend.daikon.pattern.word;
 
-import org.talend.daikon.pattern.character.CharPatternToRegexConstants;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.talend.daikon.pattern.character.CharPatternToRegexConstants;
 
 /**
  * Define the set of all supported word patterns (both case-insensitive and case-sensitive)

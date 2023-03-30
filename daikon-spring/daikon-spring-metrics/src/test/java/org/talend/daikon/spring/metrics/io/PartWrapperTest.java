@@ -10,7 +10,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.http.Part;
+import jakarta.servlet.http.Part;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,15 +55,6 @@ public class PartWrapperTest {
 
         // then
         verify(delegate, times(1)).getName();
-    }
-
-    @Test
-    public void shouldCallDelegateSubmittedFileName() {
-        // when
-        partWrapper.getSubmittedFileName();
-
-        // then
-        verify(delegate, times(1)).getSubmittedFileName();
     }
 
     @Test

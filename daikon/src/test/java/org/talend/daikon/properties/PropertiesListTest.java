@@ -15,6 +15,9 @@ package org.talend.daikon.properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.TestPropertiesList.TestEnum;
@@ -23,9 +26,6 @@ import org.talend.daikon.properties.presentation.Form;
 import org.talend.daikon.properties.service.PropertiesService;
 import org.talend.daikon.properties.service.PropertiesServiceImpl;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PropertiesListTest {
 

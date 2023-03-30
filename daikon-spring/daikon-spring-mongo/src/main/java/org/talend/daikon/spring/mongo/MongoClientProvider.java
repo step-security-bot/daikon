@@ -1,8 +1,8 @@
 package org.talend.daikon.spring.mongo;
 
-import com.mongodb.client.MongoClient;
-
 import java.io.Closeable;
+
+import com.mongodb.client.MongoClient;
 
 /**
  * Implement this interface to obtain a {@link MongoClient client} for a tenant (with information available through

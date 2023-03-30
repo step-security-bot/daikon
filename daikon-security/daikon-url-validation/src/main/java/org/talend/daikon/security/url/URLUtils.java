@@ -1,8 +1,5 @@
 package org.talend.daikon.security.url;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.URL;
@@ -10,6 +7,9 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A utility class to validate URLs

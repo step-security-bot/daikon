@@ -1,24 +1,24 @@
 package org.talend.daikon.spring.mongo;
 
-import static org.talend.daikon.spring.mongo.ConnectionStrategy.ONE_PER_TENANT;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import de.bwaldvogel.mongo.MongoServer;
-import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.talend.daikon.spring.mongo.info.MultiSchemaTenantInformation;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 
-@Configuration
+import de.bwaldvogel.mongo.MongoServer;
+import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
+
+@AutoConfiguration
 public class TestMultiTenantConfiguration {
 
     private static final ThreadLocal<String> dataBaseName = ThreadLocal.withInitial(() -> "default");

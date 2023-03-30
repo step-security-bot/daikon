@@ -13,6 +13,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,28 +25,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.ResourceResolver;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-@ActiveProfiles("mock")
-@ExtendWith(SpringExtension.class)
 @DataMongoTest
-@ContextConfiguration
-@ComponentScan("org.talend.daikon.content.journal")
-public class MongoResourceJournalResolverTest {
+@ExtendWith(SpringExtension.class)
+@Testcontainers
+public class MongoResourceJournalResolverTest extends MongoDBConfiguration {
 
     /**
      * Resource resolver use to get the resource
@@ -370,7 +367,7 @@ public class MongoResourceJournalResolverTest {
         return mongoTemplate.count(new Query(), ResourceJournalEntry.class, collectionName);
     }
 
-    @Configuration
+    @AutoConfiguration
     @ComponentScan("org.talend.daikon.content.journal")
     public static class SpringConfig {
     }

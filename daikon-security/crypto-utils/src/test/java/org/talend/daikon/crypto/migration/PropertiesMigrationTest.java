@@ -3,11 +3,6 @@ package org.talend.daikon.crypto.migration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.crypto.CipherSources;
-import org.talend.daikon.crypto.Encryption;
-import org.talend.daikon.crypto.KeySources;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -15,6 +10,11 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Properties;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.crypto.CipherSources;
+import org.talend.daikon.crypto.Encryption;
+import org.talend.daikon.crypto.KeySources;
 
 public class PropertiesMigrationTest {
 

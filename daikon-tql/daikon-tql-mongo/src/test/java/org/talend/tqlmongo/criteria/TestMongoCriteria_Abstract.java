@@ -2,15 +2,14 @@ package org.talend.tqlmongo.criteria;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
-import de.flapdoodle.embed.mongo.config.Net;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -26,15 +25,12 @@ import org.talend.tql.TqlParser;
 import org.talend.tql.model.TqlElement;
 import org.talend.tql.parser.TqlExpressionVisitor;
 import org.talend.tqlmongo.ASTVisitor;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 
-import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 
 public abstract class TestMongoCriteria_Abstract {
 
@@ -48,22 +44,16 @@ public abstract class TestMongoCriteria_Abstract {
                     new AbstractMap.SimpleEntry<>("+?'n$", 28.8d))
             .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
+    @Container
+    public static MongoDBContainer container = new MongoDBContainer(DockerImageName.parse("mongo:5"));
+
     public static MongoTemplate mongoTemplate;
 
-    private static MongodExecutable mongodExecutable;
-
     @BeforeAll
-    public static void setUpClass() throws IOException {
-        MongodStarter starter = MongodStarter.getDefaultInstance();
+    public static void setUpClass() {
+        container.start();
 
-        String bindIp = "localhost";
-        int port = 12345;
-        MongodConfig mongodConfig = MongodConfig.builder().version(Version.Main.V3_4)
-                .net(new Net(bindIp, port, Network.localhostIsIPv6())).build();
-        mongodExecutable = starter.prepare(mongodConfig);
-        mongodExecutable.start();
-
-        MongoClient mongo = MongoClients.create(new ConnectionString("mongodb://" + bindIp + ":" + port));
+        MongoClient mongo = MongoClients.create(container.getConnectionString());
         mongoTemplate = new MongoTemplate(mongo, DB_NAME);
     }
 
@@ -81,7 +71,7 @@ public abstract class TestMongoCriteria_Abstract {
 
     @AfterAll
     public static void tearDown() {
-        mongodExecutable.stop();
+        container.stop();
     }
 
     private void insertData() {

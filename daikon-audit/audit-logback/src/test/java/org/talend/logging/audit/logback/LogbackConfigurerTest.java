@@ -7,6 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.Test;
+import org.talend.daikon.logging.event.layout.LogbackJSONLayout;
+import org.talend.logging.audit.impl.AuditConfiguration;
+import org.talend.logging.audit.impl.AuditConfigurationMap;
+
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
@@ -20,18 +33,6 @@ import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.net.AbstractSocketAppender;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
-import org.junit.jupiter.api.Test;
-import org.talend.daikon.logging.event.layout.LogbackJSONLayout;
-import org.talend.logging.audit.impl.AuditConfiguration;
-import org.talend.logging.audit.impl.AuditConfigurationMap;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.CountDownLatch;
 
 public class LogbackConfigurerTest {
 

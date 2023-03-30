@@ -5,14 +5,14 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Proxy;
+
 import org.junit.jupiter.api.Test;
 import org.talend.logging.audit.AuditEvent;
 import org.talend.logging.audit.AuditLoggerFactory;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.ContextBuilder;
 import org.talend.logging.audit.LogLevel;
-
-import java.lang.reflect.Proxy;
 
 public class ProxyEventAuditLoggerTest {
 

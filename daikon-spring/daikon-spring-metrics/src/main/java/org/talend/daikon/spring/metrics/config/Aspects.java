@@ -12,8 +12,6 @@
 
 package org.talend.daikon.spring.metrics.config;
 
-import brave.ScopedSpan;
-import brave.Tracer;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -39,7 +37,9 @@ import org.talend.daikon.spring.metrics.io.ReleasableOutputStream;
 import org.talend.daikon.spring.metrics.io.SpanOutputStream;
 import org.talend.daikon.spring.metrics.util.VariableLevelLog;
 
-import javax.servlet.http.Part;
+import io.micrometer.tracing.ScopedSpan;
+import io.micrometer.tracing.Tracer;
+import jakarta.servlet.http.Part;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Duration;
@@ -88,7 +88,7 @@ public class Aspects {
                     long time = System.currentTimeMillis() - start;
                     repository.counter(metricName(pjp), "type", "sum").increment(time);
                     repository.counter(metricName(pjp), "type", "count").increment();
-                    span.finish();
+                    span.end();
                 }
             };
         } else {
@@ -100,7 +100,7 @@ public class Aspects {
                 long time = System.currentTimeMillis() - start;
                 repository.counter(metricName(pjp), "type", "sum").increment(time);
                 repository.counter(metricName(pjp), "type", "count").increment();
-                span.finish();
+                span.end();
             }
         }
     }

@@ -4,18 +4,40 @@
     <parent>
         <groupId>org.talend.daikon</groupId>
         <artifactId>daikon-scala</artifactId>
-        <version>7.1.8-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>scala-play2-dependencies</artifactId>
     <name>scala-play2-dependencies</name>
     <packaging>pom</packaging>
 
-    <properties>
-        <silhouette-version>7.0.0</silhouette-version>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>net.codingwell</groupId>
+                <artifactId>scala-guice_${scala-binary-version}</artifactId>
+                <version>${guice-version}</version>
+            </dependency>
+
+            <!-- test dependencies -->
+            <dependency>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest_${scala-binary-version}</artifactId>
+                <version>${scalatest_2.13.version}</version>
+                <scope>test</scope>
+            </dependency>
 
             <dependency>
                 <groupId>com.typesafe.play</groupId>

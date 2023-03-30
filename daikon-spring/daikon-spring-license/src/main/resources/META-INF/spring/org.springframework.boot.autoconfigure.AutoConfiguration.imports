@@ -1,0 +1,2 @@
+org.talend.daikon.spring.license.client.autoconfigure.LicenseConfiguration
+org.talend.daikon.spring.license.zuul.autoconfigure.ZuulConfiguration

@@ -50,7 +50,7 @@ Application may need to also use token based authentication for securing non-Act
 
 NOTE: It is important to note declaring custom Actuator endpoint should **always** be preferred to custom endpoint authentication.
 
-To include a protected path in your application, simply add a `@Bean` declaration in any `@Configuration` class:
+To include a protected path in your application, simply add a `@Bean` declaration in any `@AutoConfiguration` class:
 
 ```java
     @Bean

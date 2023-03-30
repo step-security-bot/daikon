@@ -1,8 +1,8 @@
 package org.talend.daikon.mongo;
 
-import com.mongodb.reactivestreams.client.MongoClient;
-
 import java.io.Closeable;
+
+import com.mongodb.reactivestreams.client.MongoClient;
 
 public interface ReactiveMongoClientProvider extends Closeable {
 

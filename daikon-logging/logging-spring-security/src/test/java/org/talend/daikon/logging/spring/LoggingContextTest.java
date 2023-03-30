@@ -12,22 +12,24 @@
 // ============================================================================
 package org.talend.daikon.logging.spring;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.jayway.restassured.RestAssured;
-import org.apache.log4j.MDC;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
+
+import io.restassured.RestAssured;
 
 @SpringBootTest(classes = { LoggingApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(LoggingContextTest.SampleRequestHandlerConfiguration.class)
@@ -41,7 +43,7 @@ public class LoggingContextTest {
     private SampleRequestHandlerConfiguration sampleRequestHandler;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.port = port;
         sampleRequestHandler.verifier = () -> {
         };
@@ -65,7 +67,7 @@ public class LoggingContextTest {
     @Test
     public void testSyncPublic() {
         sampleRequestHandler.verifier = () -> {
-            assertEquals(null, MDC.get(MdcKeys.USER_ID));
+            assertNull(MDC.get(MdcKeys.USER_ID));
         };
         String result = given().get("/public").then().statusCode(200).extract().asString();
         assertEquals(LoggingApplication.MESSAGE, result);
@@ -88,14 +90,14 @@ public class LoggingContextTest {
         final String userId = LoggingApplication.USER_ID;
 
         sampleRequestHandler.verifier = () -> {
-            assertEquals(null, MDC.get(MdcKeys.USER_ID));
+            assertNull(MDC.get(MdcKeys.USER_ID));
         };
         String result = given().auth().basic(userId, LoggingApplication.PASSWORD).get("/public/async").then().statusCode(200)
                 .extract().asString();
         assertEquals(LoggingApplication.MESSAGE, result);
     }
 
-    @Configuration
+    @AutoConfiguration
     public static class SampleRequestHandlerConfiguration {
 
         public Runnable verifier = () -> {

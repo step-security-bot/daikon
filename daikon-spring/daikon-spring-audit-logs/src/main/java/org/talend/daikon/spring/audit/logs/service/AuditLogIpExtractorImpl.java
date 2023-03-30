@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.talend.daikon.spring.audit.common.config.AuditProperties;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AuditLogIpExtractorImpl implements AuditLogIpExtractor {
 

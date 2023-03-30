@@ -1,6 +1,18 @@
 package org.talend.daikon.spring.audit.logs.service;
 
-import io.micrometer.core.instrument.Counter;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.ACCOUNT_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.APPLICATION_ID;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_CATEGORY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_OPERATION;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.EVENT_TYPE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.TIMESTAMP;
+
+import java.lang.reflect.InvocationTargetException;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.daikon.spring.audit.common.exception.AuditLogException;
@@ -10,14 +22,8 @@ import org.talend.daikon.spring.audit.logs.api.GenerateAuditLog;
 import org.talend.daikon.spring.audit.service.AppAuditLogger;
 import org.talend.logging.audit.Context;
 
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
-import java.time.OffsetDateTime;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+import io.micrometer.core.instrument.Counter;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AuditLogSenderImpl implements AuditLogSender {
 

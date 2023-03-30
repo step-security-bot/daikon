@@ -1,6 +1,8 @@
 package org.talend.daikon.schema;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,8 +11,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.talend.daikon.schema.dataset.DatasetSchema;
 import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerSerializerTest {
 

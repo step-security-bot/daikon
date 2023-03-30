@@ -1,6 +1,8 @@
 package org.talend.daikon.spring.reactive.sat.model.token;
 
-import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.*;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.CLAIM_PERMISSIONS;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.HEADER_CLIENT_ID;
+import static org.talend.daikon.spring.reactive.sat.authentication.Auth0ReactiveAuthenticationProvider.HEADER_PERMISSIONS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +33,7 @@ public abstract class ReactiveAuthenticationToken implements Authentication {
     }
 
     public static String getClaim(Jwt decodedJwt, String claimTenantId) {
-        return decodedJwt.containsClaim(claimTenantId) ? decodedJwt.getClaimAsString(claimTenantId) : null;
+        return decodedJwt.hasClaim(claimTenantId) ? decodedJwt.getClaimAsString(claimTenantId) : null;
     }
 
     private static Set<GrantedAuthority> toAuthorities(List<String> permissions) {
@@ -47,7 +49,7 @@ public abstract class ReactiveAuthenticationToken implements Authentication {
     }
 
     private void computePrincipalFromJwt() {
-        if (decodedJwt.containsClaim(CLAIM_PERMISSIONS)) {
+        if (decodedJwt.hasClaim(CLAIM_PERMISSIONS)) {
             authorities = toAuthorities(decodedJwt.getClaimAsStringList(CLAIM_PERMISSIONS));
         }
         String clientId = decodedJwt.getSubject().split("@")[0];

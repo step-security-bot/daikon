@@ -12,10 +12,10 @@
 
 package org.talend.daikon.security.access;
 
+import java.util.function.Function;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-import java.util.function.Function;
 
 @Component
 public class RequiresTestComponent {

@@ -1,5 +1,11 @@
 package org.talend.daikon.statistic.deserializer;
 
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
+
+import org.talend.daikon.statistic.pojo.Statistic;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -8,11 +14,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.talend.daikon.statistic.pojo.Statistic;
-
-import java.io.IOException;
-import java.time.LocalTime;
-import java.util.concurrent.TimeUnit;
 
 public class StatisticsModule extends SimpleModule {
 

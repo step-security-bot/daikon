@@ -12,12 +12,13 @@
 // ============================================================================
 package org.talend.daikon.spring.audit.logs.model;
 
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
-import reactor.core.publisher.Flux;
 
-import java.nio.charset.StandardCharsets;
+import reactor.core.publisher.Flux;
 
 public class BodyCaptureRequest extends ServerHttpRequestDecorator {
 

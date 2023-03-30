@@ -1,12 +1,13 @@
 package org.talend.daikon.converter;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.talend.daikon.exception.ExceptionContext;
 import org.talend.daikon.exception.TalendRuntimeException;
 import org.talend.daikon.exception.error.ErrorCode;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collection;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Error codes for the converters.

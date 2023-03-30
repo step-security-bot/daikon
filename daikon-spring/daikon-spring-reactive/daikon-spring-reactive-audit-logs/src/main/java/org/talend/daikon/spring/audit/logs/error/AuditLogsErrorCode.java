@@ -14,10 +14,10 @@ package org.talend.daikon.spring.audit.logs.error;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.talend.daikon.exception.error.DefaultErrorCode;
 import org.talend.daikon.exception.error.ErrorCode;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Error codes for Properties

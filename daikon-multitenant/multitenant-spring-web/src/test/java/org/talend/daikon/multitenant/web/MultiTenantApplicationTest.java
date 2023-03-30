@@ -12,27 +12,28 @@
 // ============================================================================
 package org.talend.daikon.multitenant.web;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.talend.daikon.multitenant.web.MultiTenantApplication.MESSAGE;
 
-import com.jayway.restassured.RestAssured;
-import org.apache.log4j.MDC;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.talend.daikon.logging.event.field.MdcKeys;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
+
+import io.restassured.RestAssured;
 
 @ExtendWith(SpringExtension.class)
 @Import(MultiTenantApplicationTest.SampleRequestHandlerConfiguration.class)
@@ -46,7 +47,7 @@ public class MultiTenantApplicationTest {
     private SampleRequestHandlerConfiguration handlerConfiguration;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.port = port;
         handlerConfiguration.verifier = () -> {
         };
@@ -68,8 +69,8 @@ public class MultiTenantApplicationTest {
             assertEquals(tenantId, TenancyContextHolder.getContext().getTenant().getIdentity());
             assertEquals(tenantId, MDC.get(MdcKeys.ACCOUNT_ID));
         };
-        given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/sync").then().statusCode(200)
-                .body(Matchers.equalTo(MESSAGE));
+        given().log().all().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/sync").then().log().all()
+                .statusCode(200).body(Matchers.equalTo(MESSAGE));
     }
 
     @Test
@@ -116,7 +117,7 @@ public class MultiTenantApplicationTest {
         given().header(MultiTenantApplication.TENANT_HTTP_HEADER, tenantId).get("/async").then().statusCode(500);
     }
 
-    @Configuration
+    @AutoConfiguration
     public static class SampleRequestHandlerConfiguration {
 
         public Runnable verifier = () -> {

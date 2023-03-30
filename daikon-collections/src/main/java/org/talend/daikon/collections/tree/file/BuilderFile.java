@@ -10,10 +10,10 @@
  */
 package org.talend.daikon.collections.tree.file;
 
+import java.util.function.Supplier;
+
 import org.talend.daikon.collections.tree.Node;
 import org.talend.daikon.collections.tree.NodeBuilder;
-
-import java.util.function.Supplier;
 
 public class BuilderFile<K extends Comparable<K>, T> implements NodeBuilder<K, T> {
 

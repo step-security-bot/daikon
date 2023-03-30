@@ -21,6 +21,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+
 import org.assertj.core.api.BDDSoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.definition.Definition;
@@ -29,8 +31,6 @@ import org.talend.daikon.definition.service.DefinitionRegistryService;
 import org.talend.daikon.i18n.I18nMessages;
 import org.talend.daikon.properties.test.PropertiesTestUtils;
 import org.talend.daikon.properties.testproperties.TestProperties;
-
-import java.util.Collections;
 
 public class TestPropertiesTestUtils {
 

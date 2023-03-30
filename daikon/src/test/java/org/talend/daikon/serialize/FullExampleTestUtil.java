@@ -17,18 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.avro.SchemaBuilder;
-import org.talend.daikon.NamedThing;
-import org.talend.daikon.avro.SchemaConstants;
-import org.talend.daikon.properties.Properties;
-import org.talend.daikon.properties.property.Property;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
+
+import org.apache.avro.SchemaBuilder;
+import org.talend.daikon.NamedThing;
+import org.talend.daikon.avro.SchemaConstants;
+import org.talend.daikon.properties.Properties;
+import org.talend.daikon.properties.property.Property;
 
 public class FullExampleTestUtil {
 

@@ -1,7 +1,9 @@
 package org.talend.daikon.spring.reactive.sat.authentication;
 
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;

@@ -26,6 +26,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.talend.daikon.properties.property.PropertyFactory.newProperty;
 import static org.talend.daikon.properties.property.PropertyFactory.newString;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import org.apache.commons.lang3.reflect.TypeLiteral;
 import org.assertj.core.api.BDDSoftAssertions;
 import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
@@ -55,10 +59,6 @@ import org.talend.daikon.security.CryptoHelper;
 import org.talend.daikon.serialize.PostDeserializeSetup;
 import org.talend.daikon.serialize.SerializerDeserializer;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 @ExtendWith(SoftAssertionsExtension.class)
 public class PropertiesTest {
 
@@ -66,7 +66,7 @@ public class PropertiesTest {
 
     private final static class StringListProperties extends PropertiesImpl {
 
-        public Property<List<String>> listString = newProperty(new TypeLiteral<List<String>>() {
+        public Property<List<String>> listString = newProperty(new TypeLiteral<>() {
         }, "listString");
 
         private StringListProperties(String name) {

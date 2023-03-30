@@ -12,9 +12,9 @@
 // ============================================================================
 package org.talend.daikon.avro.visitor.record;
 
-import org.talend.daikon.avro.visitor.path.TraversalPath;
-
 import java.nio.ByteBuffer;
+
+import org.talend.daikon.avro.visitor.path.TraversalPath;
 
 /**
  * Wrapper implementation for Bytes Avro type

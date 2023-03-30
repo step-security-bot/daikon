@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.NamedThing;
 import org.talend.daikon.SimpleNamedThing;
@@ -28,10 +32,6 @@ import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.Property.Flags;
 import org.talend.daikon.properties.property.StringProperty;
 import org.talend.daikon.security.CryptoHelper;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class StringPropertyTest {
 

@@ -2,14 +2,14 @@ package org.talend.daikon.properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.properties.ValidationResult.Result;
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.property.PropertyFactory;
 import org.talend.daikon.properties.validation.ValidationHelper;
 import org.talend.daikon.properties.validation.Validator;
-
-import java.util.Map;
 
 /**
  * Created by dmytro.sylaiev on 5/29/2017.

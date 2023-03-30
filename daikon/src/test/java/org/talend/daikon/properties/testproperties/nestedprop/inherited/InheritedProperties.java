@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.daikon.properties.testproperties.nestedprop.inherited;
 
-import static org.talend.daikon.properties.property.PropertyFactory.*;
+import static org.talend.daikon.properties.property.PropertyFactory.newProperty;
 
 import org.talend.daikon.properties.property.Property;
 import org.talend.daikon.properties.testproperties.nestedprop.NestedProperties;

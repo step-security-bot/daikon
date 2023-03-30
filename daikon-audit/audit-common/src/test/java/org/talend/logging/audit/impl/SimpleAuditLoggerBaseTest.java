@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.talend.logging.audit.LogLevel.INFO;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.Collections;
-import java.util.Map;
 
 @ExtendWith(EasyMockExtension.class)
 public class SimpleAuditLoggerBaseTest {

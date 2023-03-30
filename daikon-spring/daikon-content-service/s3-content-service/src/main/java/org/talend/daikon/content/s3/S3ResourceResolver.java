@@ -1,7 +1,11 @@
 package org.talend.daikon.content.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
-import io.micrometer.core.annotation.Timed;
+import static org.talend.daikon.content.s3.LocationUtils.S3PathBuilder.builder;
+import static org.talend.daikon.content.s3.LocationUtils.toS3Location;
+import static org.talend.daikon.content.s3.S3ContentServiceConfiguration.EC2_AUTHENTICATION;
+
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.WritableResource;
@@ -10,23 +14,21 @@ import org.talend.daikon.content.AbstractResourceResolver;
 import org.talend.daikon.content.DeletableResource;
 import org.talend.daikon.content.s3.provider.S3BucketProvider;
 
-import java.io.IOException;
-
-import static org.talend.daikon.content.s3.LocationUtils.S3PathBuilder.builder;
-import static org.talend.daikon.content.s3.LocationUtils.toS3Location;
-import static org.talend.daikon.content.s3.S3ContentServiceConfiguration.EC2_AUTHENTICATION;
+import io.awspring.cloud.s3.S3Resource;
+import io.micrometer.core.annotation.Timed;
+import software.amazon.awssdk.services.s3.S3Client;
 
 public class S3ResourceResolver extends AbstractResourceResolver {
 
-    private final AmazonS3 amazonS3;
+    private final S3Client s3Client;
 
     private final S3BucketProvider bucket;
 
     private final Environment environment;
 
-    S3ResourceResolver(ResourcePatternResolver delegate, AmazonS3 amazonS3, S3BucketProvider bucket, Environment environment) {
+    S3ResourceResolver(ResourcePatternResolver delegate, S3Client s3Client, S3BucketProvider bucket, Environment environment) {
         super(delegate);
-        this.amazonS3 = amazonS3;
+        this.s3Client = s3Client;
         this.bucket = bucket;
         this.environment = environment;
     }
@@ -72,11 +74,16 @@ public class S3ResourceResolver extends AbstractResourceResolver {
         final String authentication = environment
                 .getProperty(S3ContentServiceConfiguration.CONTENT_SERVICE_STORE_AUTHENTICATION, EC2_AUTHENTICATION)
                 .toUpperCase();
-        final String filename = writableResource.getFilename();
+        String filename;
+        if (writableResource instanceof io.awspring.cloud.s3.S3Resource) {
+            filename = ((S3Resource) writableResource).getLocation().getObject();
+        } else {
+            filename = writableResource.getFilename();
+        }
         final String bucketName = bucket.getBucketName();
         final String bucketRoot = bucket.getRoot();
 
-        final S3DeletableResource resource = new S3DeletableResource(writableResource, amazonS3, filename, bucketName,
+        final S3DeletableResource resource = new S3DeletableResource(writableResource, s3Client, filename, bucketName,
                 bucketRoot);
         switch (authentication) {
         case S3ContentServiceConfiguration.MINIO_AUTHENTICATION:

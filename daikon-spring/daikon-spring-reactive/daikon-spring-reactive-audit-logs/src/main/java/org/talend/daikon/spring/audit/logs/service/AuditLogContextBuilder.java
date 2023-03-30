@@ -12,11 +12,17 @@
 // ============================================================================
 package org.talend.daikon.spring.audit.logs.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.REQUEST_BODY;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE;
+import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.RESPONSE_BODY;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.StringUtils;
 import org.talend.daikon.exception.ExceptionContext;
@@ -26,9 +32,16 @@ import org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum;
 import org.talend.logging.audit.Context;
 import org.talend.logging.audit.impl.DefaultContextImpl;
 
-import java.util.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import static org.talend.daikon.spring.audit.common.model.AuditLogFieldEnum.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Builder

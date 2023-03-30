@@ -1,9 +1,8 @@
 package org.talend.daikon.dynamiclog.logging.actors
 
-import java.util.concurrent.TimeUnit
+import akka.actor.ActorSystem
 import akka.cluster.pubsub.DistributedPubSubMediator.{Subscribe, SubscribeAck}
 import akka.pattern.AskSupport
-import akka.actor.ActorSystem
 import akka.testkit.{TestKitBase, TestProbe}
 import akka.util.Timeout
 import ch.qos.logback.classic
@@ -12,11 +11,12 @@ import org.slf4j.LoggerFactory
 import org.specs2.mutable.SpecificationLike
 import org.specs2.specification.AfterAll
 import org.talend.daikon.dynamiclog.logging.actors.LoggerLevelActor._
-import play.api.test.WithApplication
-
-import scala.concurrent.duration.FiniteDuration
-import play.api.{Application, Configuration}
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.WithApplication
+import play.api.{Application, Configuration}
+
+import java.util.concurrent.TimeUnit
+import scala.concurrent.duration.FiniteDuration
 
 class LoggerLevelActorSpec
   extends TestKitBase

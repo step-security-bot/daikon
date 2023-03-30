@@ -10,13 +10,13 @@
  */
 package org.talend.daikon.collections.tree.file;
 
-import org.talend.daikon.collections.tree.Node;
-import org.talend.daikon.collections.tree.NodeLink;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UncheckedIOException;
 import java.util.function.Supplier;
+
+import org.talend.daikon.collections.tree.Node;
+import org.talend.daikon.collections.tree.NodeLink;
 
 /**
  * Manipulate tree node on file.

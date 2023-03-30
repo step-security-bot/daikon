@@ -1,6 +1,6 @@
 package org.talend.logging.audit.logback;
 
-import ch.qos.logback.classic.LoggerContext;
+import java.util.Map;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.talend.logging.audit.impl.AbstractBackend;
 import org.talend.logging.audit.impl.AuditConfiguration;
 import org.talend.logging.audit.impl.AuditConfigurationMap;
 
-import java.util.Map;
+import ch.qos.logback.classic.LoggerContext;
 
 /**
  * Backend for Logback.
