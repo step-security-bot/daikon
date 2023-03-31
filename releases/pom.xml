@@ -31,22 +31,22 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.talend.daikon</groupId>
-                        <artifactId>daikon-documentation</artifactId>
-                        <version>${project.version}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-release-notes</id>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>release-notes</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+<!--                <plugins>-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.talend.daikon</groupId>-->
+<!--                        <artifactId>daikon-documentation</artifactId>-->
+<!--                        <version>${project.version}</version>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>generate-release-notes</id>-->
+<!--                                <phase>compile</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>release-notes</goal>-->
+<!--                                </goals>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
             </build>
         </profile>
     </profiles>
