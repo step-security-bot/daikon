@@ -198,7 +198,6 @@ spec:
                     cd releases/
                     git add -A .
                     git commit -m "chore(release) Add ${params.release_version} release notes"
-                    cat ${params.release_version}.adoc
                     git push
                     git push --tags
                     cd ..
