@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.talend.daikon</groupId>
 		<artifactId>daikon-security</artifactId>
-		<version>8.0.0-RC1</version>
+		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>daikon-url-validation</artifactId>
 	<name>Utilities to validate URLs</name>
