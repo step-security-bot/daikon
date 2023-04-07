@@ -15,7 +15,7 @@
 # all other events.
 root.logger=audit
 
-# Configures logging backend to be used. Can be either auto, logback or log4j1. If it's auto then audit library will
+# Configures logging backend to be used. Can be either auto or logback
 # try to detect which logging library is present and use it. By default it's auto.
 #backend=logback
 

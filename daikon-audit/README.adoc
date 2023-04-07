@@ -9,7 +9,6 @@ Audit Logging client library provides unified API for logging and processing aud
 It's uses conventional logging frameworks to process audit events.
 
 .Currently supported logging frameworks:
-* log4j 1.x
 * logback 1.x
 
 === Usage
@@ -41,29 +40,6 @@ To start using Audit Logging client it's necessary to add the next dependencies.
     <version>1.2.3</version>
 </dependency>
 ----
-
-.For log4j 1.x:
-[source,xml]
-----
-<dependency>
-    <groupId>org.talend.daikon</groupId>
-    <artifactId>audit-log4j1</artifactId>
-    <version>${audit.version}</version>
-</dependency>
-
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-log4j12</artifactId>
-    <version>1.7.25</version>
-</dependency>
-
-<dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
-</dependency>
-----
-
 
 === Configuration
 
@@ -98,7 +74,7 @@ NOTE: Platform Service team provides LogServer with LogStash which is pre-config
 
 ==== HTTP Configuration
 
-HTTP appenders (logback and log4j1) share the following configuration:
+HTTP appenders (logback) share the following configuration:
 
 // org.talend.logging.audit.impl.http.HttpEventSender:documentation:start
 

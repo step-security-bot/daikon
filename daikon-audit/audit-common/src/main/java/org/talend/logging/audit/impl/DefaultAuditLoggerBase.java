@@ -7,8 +7,6 @@ public class DefaultAuditLoggerBase extends AbstractAuditLoggerBase {
 
     private static final String SYSPROP_CONFIG_FILE = "talend.logging.audit.config";
 
-    private static final String LOG4J1_BACKEND = "org.talend.logging.audit.log4j1.Log4j1Backend";
-
     private static final String LOG4J2_BACKEND = "org.talend.logging.audit.log4j2.Log4j2Backend";
 
     private static final String LOGBACK_BACKEND = "org.talend.logging.audit.logback.LogbackBackend";
@@ -30,8 +28,6 @@ public class DefaultAuditLoggerBase extends AbstractAuditLoggerBase {
         case AUTO:
             if (Utils.isLogbackPresent()) {
                 this.logger = loadBackend(LOGBACK_BACKEND, config);
-            } else if (Utils.isLog4j1Present()) {
-                this.logger = loadBackend(LOG4J1_BACKEND, config);
             } else if (Utils.isLog4j2Present()) {
                 this.logger = loadBackend(LOG4J2_BACKEND, config);
             } else {
@@ -44,13 +40,6 @@ public class DefaultAuditLoggerBase extends AbstractAuditLoggerBase {
                 throw new IllegalArgumentException("Selected backend is " + backend + " and it is not available on classpath");
             }
             this.logger = loadBackend(LOGBACK_BACKEND, config);
-            break;
-
-        case LOG4J1:
-            if (!Utils.isLog4j1Present()) {
-                throw new IllegalArgumentException("Selected backend is " + backend + " and it is not available on classpath");
-            }
-            this.logger = loadBackend(LOG4J1_BACKEND, config);
             break;
 
         case LOG4J2:

@@ -58,7 +58,6 @@
         <jsonassert.version>1.5.1</jsonassert.version>
         <jsr305.version>3.0.2</jsr305.version>
         <kafka-clients.version>3.4.0</kafka-clients.version>
-        <log4j1.version>1.2.17</log4j1.version>
         <log4j2.version>2.20.0</log4j2.version>
         <logback.version>1.4.6</logback.version>
         <lombok.version>1.18.26</lombok.version>
@@ -540,12 +539,6 @@
                 <artifactId>hamcrest-all</artifactId>
                 <version>${hamcrest-all.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j1.version}</version>
-                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>

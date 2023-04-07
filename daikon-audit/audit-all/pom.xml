@@ -15,10 +15,6 @@
         </dependency>
         <dependency>
             <groupId>org.talend.daikon</groupId>
-            <artifactId>audit-log4j1</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.talend.daikon</groupId>
             <artifactId>audit-log4j2</artifactId>
         </dependency>
         <dependency>
