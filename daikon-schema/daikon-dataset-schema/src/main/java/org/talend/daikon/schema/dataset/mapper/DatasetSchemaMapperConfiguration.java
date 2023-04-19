@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.deser.BuilderBasedDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.talend.daikon.schema.dataset.metadata.JDBCMetadata;
 import org.talend.daikon.schema.dataset.type.DatasetFieldTypeSchema;
 
 public class DatasetSchemaMapperConfiguration {
@@ -27,6 +28,11 @@ public class DatasetSchemaMapperConfiguration {
                         .contains(DatasetFieldTypeSchema.DatasetFieldTypeSchemaBuilder.class.getName())) {
                     return new DatasetFieldTypeDeserializer((BuilderBasedDeserializer) deserializer);
                 }
+
+                if (beanDesc.getBeanClass().getName().contains(JDBCMetadata.JDBCMetadataBuilder.class.getName())) {
+                    return new JDBCMetadataDeserializer((BuilderBasedDeserializer) deserializer);
+                }
+
                 return deserializer;
             }
         });
