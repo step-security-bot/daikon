@@ -85,4 +85,13 @@ public class DeserializerDatasetSchemaTest {
         assertTrue((data.getFields().get(8).getType().get(1)).getDatetime());
 
     }
+
+    @Test
+    public void givenOriginalFieldMetadataAsNull_whenDeserialize_thenNoError() throws IOException {
+        DatasetSchema data = objectMapper.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_partial_metadata.json"),
+                DatasetSchema.class);
+
+        assertNull(data.getFields().get(1).getOriginalFieldMetadata());
+    }
 }

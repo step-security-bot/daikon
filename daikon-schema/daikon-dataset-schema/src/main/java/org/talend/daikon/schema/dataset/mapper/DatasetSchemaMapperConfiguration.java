@@ -1,5 +1,6 @@
 package org.talend.daikon.schema.dataset.mapper;
 
+import org.talend.daikon.schema.dataset.metadata.JDBCMetadata;
 import org.talend.daikon.schema.dataset.type.DatasetFieldTypeSchema;
 
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -28,6 +29,11 @@ public class DatasetSchemaMapperConfiguration {
                         .contains(DatasetFieldTypeSchema.DatasetFieldTypeSchemaBuilder.class.getName())) {
                     return new DatasetFieldTypeDeserializer((BuilderBasedDeserializer) deserializer);
                 }
+
+                if (beanDesc.getBeanClass().getName().contains(JDBCMetadata.JDBCMetadataBuilder.class.getName())) {
+                    return new JDBCMetadataDeserializer((BuilderBasedDeserializer) deserializer);
+                }
+
                 return deserializer;
             }
         });

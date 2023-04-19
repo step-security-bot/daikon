@@ -20,6 +20,18 @@
         "type": "varchar",
         "size": 10
       }
+    },
+    {
+      "name": "Firstname",
+      "type": [
+        null,
+        {
+          "type": "string",
+          "isForced": false,
+          "isNativeForced": false
+        }
+      ],
+      "originalFieldMetadata": "null"
     }
   ]
 }
