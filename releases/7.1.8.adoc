@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.8) - 04/19/2023
+
+Thanks to @gabriel-cpereira
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPGOV-2098[TPGOV-2098]: Add a new deserializer on Daikon in order to handle the JDBCMetadata deserialization (link:https://github.com/Talend/daikon/pull/963[#963])
