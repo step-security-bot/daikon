@@ -2,6 +2,7 @@ package org.talend.daikon.spring.auth.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Order(-100) // this handler must have higher priority than ones defined in services
 public class AuthExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthExceptionHandler.class);
