@@ -197,7 +197,6 @@ spec:
                     mvn -B -s $MAVEN_SETTINGS -Darguments='-P release-notes -DskipTests -Duser=${JIRA_LOGIN} -Dpassword=${JIRA_PASSWORD} -Dversion=${params.release_version} -Doutput=.' -Dtag=${params.release_version} -DreleaseVersion=${params.release_version} -DdevelopmentVersion=${params.next_version} release:prepare install
                     git push
                     git push --tags
-                    cd ..
                     mvn -e -B -s $MAVEN_SETTINGS -Darguments='-DskipTests' -DlocalCheckout=true -Dusername=${GIT_LOGIN} -Dpassword=${GIT_PASSWORD} release:perform
                   """
                 }
