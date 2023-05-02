@@ -18,7 +18,8 @@ public class DeserializerSerializerTest {
     private static ObjectMapper objectMapper = DatasetSchemaMapperConfiguration.datasetSchemaObjectMapper();
 
     @ParameterizedTest
-    @ValueSource(strings = { "/dataset_valid.json", "/dataset_valid2.json", "/dataset_datetime.json" })
+    @ValueSource(strings = { "/dataset_valid.json", "/dataset_valid2.json", "/dataset_datetime.json",
+            "/dataset_valid_JDBC_partial_metadata.json" })
     public void givenADatasetSchema_whenDeserializeAndSerialize_thenContentIsTheSame(String file)
             throws IOException, JSONException {
 
