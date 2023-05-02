@@ -6,6 +6,7 @@
     {
       "name": "title",
       "type": [
+        "null",
         {
           "type": "string",
           "dqType": "Title",
@@ -13,8 +14,7 @@
           "isForced": false,
           "dqNativeType": "STRING",
           "isNativeForced": false
-        },
-        "null"
+        }
       ],
       "originalFieldMetadata": {
         "type": "varchar",
@@ -24,14 +24,13 @@
     {
       "name": "Firstname",
       "type": [
-        null,
+        "null",
         {
           "type": "string",
           "isForced": false,
           "isNativeForced": false
         }
-      ],
-      "originalFieldMetadata": "null"
+      ]
     }
   ]
 }

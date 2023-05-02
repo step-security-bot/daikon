@@ -44,7 +44,6 @@ public class DatasetFieldSchema {
     @Singular
     Map<String, Object> additionalProperties;
 
-    @JsonSerialize(nullsUsing = NullTypeStringSerializer.class)
     AbstractOriginalFieldMetadata originalFieldMetadata;
 
     @JsonAnyGetter
