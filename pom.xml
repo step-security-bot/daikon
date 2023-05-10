@@ -84,7 +84,7 @@
         <graalvm.js.version>22.3.1</graalvm.js.version>
         <json-io.version>4.14.0</json-io.version>
         <logback-access-spring-boot-starter.version>3.4.3</logback-access-spring-boot-starter.version>
-        <cloudevents-core.version>2.4.2</cloudevents-core.version>
+        <cloudevents.version>2.4.2</cloudevents.version>
         <antlr.version>4.12.0</antlr.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
@@ -124,6 +124,8 @@
 
 
         <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
+        <kafka-confluent>7.3.3</kafka-confluent>
+
     </properties>
     <modules>
         <module>daikon</module>
@@ -143,6 +145,7 @@
         <module>daikon-statistic</module>
         <module>daikon-schema</module>
         <module>daikon-collections</module>
+        <module>daikon-kafka</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/Talend/daikon.git</connection>
@@ -172,6 +175,11 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>confluent</id>
+            <name>Confluent</name>
+            <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -341,6 +349,17 @@
                 <version>${log4j2.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-json-schema-serializer</artifactId>
+                <version>${kafka-confluent}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry-client</artifactId>
+                <version>${kafka-confluent}</version>
+            </dependency>
+
             <!-- include fasterxml jackson's bom -->
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
@@ -364,7 +383,17 @@
             <dependency>
                 <groupId>io.cloudevents</groupId>
                 <artifactId>cloudevents-core</artifactId>
-                <version>${cloudevents-core.version}</version>
+                <version>${cloudevents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cloudevents</groupId>
+                <artifactId>cloudevents-kafka</artifactId>
+                <version>${cloudevents.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cloudevents</groupId>
+                <artifactId>cloudevents-json-jackson</artifactId>
+                <version>${cloudevents.version}</version>
             </dependency>
             <dependency>
                 <groupId>dev.akkinoc.spring.boot</groupId>

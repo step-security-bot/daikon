@@ -21,12 +21,12 @@ public class TalendCloudEventExtensionTest {
         UUID randomUUID = UUID.randomUUID();
 
         talendCloudEventExtension.setCorrelationid("correlationId");
-        talendCloudEventExtension.setTenantid(randomUUID);
+        talendCloudEventExtension.setTenantid(randomUUID.toString());
 
         CloudEvent event = CloudEventBuilder.v03().withId("aaa").withSource(URI.create("http://localhost")).withType("example")
                 .withExtension(talendCloudEventExtension).build();
 
-        assertEquals(randomUUID, event.getExtension(TalendCloudEventExtension.TENANTID));
+        assertEquals(randomUUID.toString(), event.getExtension(TalendCloudEventExtension.TENANTID));
         assertEquals("correlationId", event.getExtension(TalendCloudEventExtension.CORRELATIONID));
 
     }
@@ -47,7 +47,7 @@ public class TalendCloudEventExtensionTest {
 
         assertNotNull(talendCloudEventExtension);
         assertEquals("correlationId", talendCloudEventExtension.getCorrelationid());
-        assertEquals(randomUUID, talendCloudEventExtension.getTenantid());
+        assertEquals(randomUUID.toString(), talendCloudEventExtension.getTenantid());
 
     }
 }

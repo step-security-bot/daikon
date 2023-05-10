@@ -32,7 +32,7 @@ public class TalendCloudEventExtension implements CloudEventExtension {
 
     private static final Set<String> KEY_SET = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(TENANTID, CORRELATIONID)));
 
-    private UUID tenantid;
+    private String tenantid;
 
     private String correlationid;
 
@@ -40,7 +40,7 @@ public class TalendCloudEventExtension implements CloudEventExtension {
     public void readFrom(CloudEventExtensions cloudEventExtensions) {
         Object tp = cloudEventExtensions.getExtension(TENANTID);
         if (tp != null) {
-            this.tenantid = UUID.fromString(tp.toString());
+            this.tenantid = tp.toString();
         }
         Object ts = cloudEventExtensions.getExtension(CORRELATIONID);
         if (ts != null) {
@@ -64,11 +64,11 @@ public class TalendCloudEventExtension implements CloudEventExtension {
         return KEY_SET;
     }
 
-    public UUID getTenantid() {
+    public String getTenantid() {
         return tenantid;
     }
 
-    public void setTenantid(UUID tenantid) {
+    public void setTenantid(String tenantid) {
         this.tenantid = tenantid;
     }
 

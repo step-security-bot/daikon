@@ -234,6 +234,16 @@
                 <artifactId>s3-content-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-cloudevent-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-cloudevent-kafka</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

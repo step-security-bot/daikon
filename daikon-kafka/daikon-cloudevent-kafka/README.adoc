@@ -1,0 +1,18 @@
+= Daikon Cloud Event Kafka
+
+== Overview
+
+Daikon Cloud Event Kafka library provides a simple way to send and receive events using Kafka based on Talend Kafka Policy.
+
+It provides a serializer and a deserializer for CloudEvent (binary content mode) + schema based content.
+
+== Example
+
+Please look at `daikon-cloud-event-example-consumer` and `daikon-cloud-event-example-producer` for a complete example.
+
+Be careful that by default confluent serializer do not activate failure on invalid schema. You need to set the following properties to true to activate it:
+
+[source,java]
+----
+    configProps.put("json.fail.invalid.schema", true);
+----

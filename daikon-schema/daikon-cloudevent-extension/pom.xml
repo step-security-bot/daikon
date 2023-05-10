@@ -7,12 +7,7 @@
         <version>8.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.talend.kafka</groupId>
     <artifactId>daikon-cloudevent-extension</artifactId>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
