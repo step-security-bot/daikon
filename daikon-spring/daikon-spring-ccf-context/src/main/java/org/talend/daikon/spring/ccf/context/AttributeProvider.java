@@ -13,7 +13,6 @@ public class AttributeProvider {
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = signature.getMethod();
         M2MFunctionalContext m2MFunctionalContextAnnotation = method.getAnnotation(M2MFunctionalContext.class);
-        return Arrays.stream(m2MFunctionalContextAnnotation.userContext())
-                .map(UserContextConstant::getValue).toList();
+        return Arrays.stream(m2MFunctionalContextAnnotation.userContext()).map(UserContextConstant::getValue).toList();
     }
 }

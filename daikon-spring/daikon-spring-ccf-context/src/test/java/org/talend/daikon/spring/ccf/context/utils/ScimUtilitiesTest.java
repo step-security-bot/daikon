@@ -23,6 +23,7 @@ import org.talend.iam.scim.model.User;
 class ScimUtilitiesTest {
 
     private static final String USER_ID = UUID.randomUUID().toString();
+
     @Mock
     private UserClient userClient;
 
@@ -51,8 +52,6 @@ class ScimUtilitiesTest {
         Mockito.when(userClient.find(Mockito.any())).thenThrow(new SCIMException("error"));
         List<String> userContextConstants = List.of(UserContextConstant.GROUPS.getValue());
 
-        Assertions.assertThrows(CcfContextError.class,
-                () -> scimUtilities.getUserWithAttributes(USER_ID, userContextConstants)
-        );
+        Assertions.assertThrows(CcfContextError.class, () -> scimUtilities.getUserWithAttributes(USER_ID, userContextConstants));
     }
 }

@@ -39,11 +39,11 @@ public class M2MFunctionalContextAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String requestURI = request.getRequestURI();
 
-        String tenantId = Optional.ofNullable(tenantParameterExtractor.extractAccountId(requestURI))
-                .filter(UUIDValidator::isUUID).orElseThrow(CcfContextTenantIdNotFoundException::new);
+        String tenantId = Optional.ofNullable(tenantParameterExtractor.extractAccountId(requestURI)).filter(UUIDValidator::isUUID)
+                .orElseThrow(CcfContextTenantIdNotFoundException::new);
 
-        String userId = Optional.ofNullable(tenantParameterExtractor.extractUserId(requestURI))
-                .filter(UUIDValidator::isUUID).orElse(null);
+        String userId = Optional.ofNullable(tenantParameterExtractor.extractUserId(requestURI)).filter(UUIDValidator::isUUID)
+                .orElse(null);
         if (userId == null && requestURI.contains("/user/")) {
             log.warn("Invalid use of @M2MFunctionalContext: /user/ is in the path but no userId found.");
         }

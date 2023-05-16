@@ -29,32 +29,46 @@ import jakarta.servlet.http.HttpServletRequest;
 class M2MFunctionalContextAspectTest {
 
     private static final String TENANT_ID = UUID.randomUUID().toString();
+
     private static final String USER_ID = UUID.randomUUID().toString();
+
     private static final String PATH_WITH_TENANT = "/my/service/tenant/" + TENANT_ID + "/resource/resourceId";
 
-    private static final String PATH_WITH_TENANT_AND_USER =
-            "/my/service/tenant/" + TENANT_ID + "/resource/resourceId" + "/user/" + USER_ID;
+    private static final String PATH_WITH_TENANT_AND_USER = "/my/service/tenant/" + TENANT_ID + "/resource/resourceId" + "/user/"
+            + USER_ID;
 
     private static final String PATH_WITHOUT_TENANT = "/my/service/resource/resourceId";
+
     private static final MockedStatic<AttributeProvider> attributeProviderMocked = Mockito.mockStatic(AttributeProvider.class);
+
     @Mock
     private M2MContextManager m2MContextManager;
+
     @Mock
     private TenantParameterExtractor tenantParameterExtractor;
+
     private TenantParameterExtractorImpl tenantParameterExtractorImpl = new TenantParameterExtractorImpl();
+
     @Mock
     private ScimUtilities scimUtilities;
+
     @Mock
     private ProceedingJoinPoint proceedingJoinPoint;
+
     @Mock
     private MethodSignature signature;
+
     private Method methodSignature;
+
     @Mock
     private M2MFunctionalContext m2MFunctionalContextAnnotation;
+
     @Mock
     private ServletRequestAttributes attrs;
+
     @Mock
     private HttpServletRequest request;
+
     @InjectMocks
     private M2MFunctionalContextAspect m2MFunctionalContextAspect;
 
@@ -62,8 +76,8 @@ class M2MFunctionalContextAspectTest {
     void setUp() {
         when(attrs.getRequest()).thenReturn(request);
         RequestContextHolder.setRequestAttributes(attrs);
-        when(tenantParameterExtractor.extractAccountId(anyString())).then(
-                (i) -> tenantParameterExtractorImpl.extractAccountId(i.getArgument(0)));
+        when(tenantParameterExtractor.extractAccountId(anyString()))
+                .then((i) -> tenantParameterExtractorImpl.extractAccountId(i.getArgument(0)));
     }
 
     @Test
@@ -85,7 +99,6 @@ class M2MFunctionalContextAspectTest {
 
     }
 
-
     @Test
     void whenTenantIdAndUserIdInPathContextPopulated() throws Throwable {
         changeScenario(List.of(UserContextConstant.GROUPS.getValue()), PATH_WITH_TENANT_AND_USER, true);
@@ -97,14 +110,12 @@ class M2MFunctionalContextAspectTest {
     }
 
     private void changeScenario(List<String> userConstants, String uri, boolean mockUserId) {
-        attributeProviderMocked.when(() -> AttributeProvider.getAttributes(any()))
-                .thenReturn(userConstants);
+        attributeProviderMocked.when(() -> AttributeProvider.getAttributes(any())).thenReturn(userConstants);
         if (mockUserId) {
-            when(tenantParameterExtractor.extractUserId(anyString())).then(
-                    (i) -> tenantParameterExtractorImpl.extractUserId(i.getArgument(0)));
+            when(tenantParameterExtractor.extractUserId(anyString()))
+                    .then((i) -> tenantParameterExtractorImpl.extractUserId(i.getArgument(0)));
         }
         when(request.getRequestURI()).thenReturn(uri);
     }
-
 
 }
