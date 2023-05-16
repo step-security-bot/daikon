@@ -35,7 +35,7 @@ public class M2MFunctionalContextConfig {
         return new ConcurrentMapCacheManager(cacheName);
     }
 
-    @CacheEvict(allEntries = true, cacheNames = { "${spring.ccf.context.cache.name:ccfScimCache}" })
+    @CacheEvict(allEntries = true, cacheNames = {"${spring.ccf.context.cache.name:ccfScimCache}"})
     @Scheduled(fixedDelayString = "${spring.ccf.context.cache.ttl:5}", timeUnit = TimeUnit.DAYS)
     public void reportCacheEvict() {
         log.info("Flushing CCF Scim Cache");

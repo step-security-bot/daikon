@@ -6,5 +6,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface M2MFunctionalContext {
 
-    UserContextConstant[] userContext() default { UserContextConstant.NONE };
+    UserContextConstant[] userContext() default {UserContextConstant.NONE};
 }

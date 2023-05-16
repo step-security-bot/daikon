@@ -11,7 +11,9 @@ import org.springframework.web.client.ResourceAccessException;
 import org.talend.daikon.spring.ccf.context.exception.CcfContextError;
 import org.talend.iam.im.scim.client.UserClient;
 import org.talend.iam.scim.exception.SCIMException;
-import org.talend.iam.scim.model.*;
+import org.talend.iam.scim.model.SearchRequest;
+import org.talend.iam.scim.model.SearchResponse;
+import org.talend.iam.scim.model.User;
 
 import lombok.extern.slf4j.Slf4j;
 

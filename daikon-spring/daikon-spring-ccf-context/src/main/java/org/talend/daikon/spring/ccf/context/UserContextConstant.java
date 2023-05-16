@@ -25,13 +25,13 @@ public enum UserContextConstant {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public static List<String> allConstantsList() {
         List<String> listValue = new ArrayList<>();
         Arrays.stream(UserContextConstant.values()).forEach(userContextConstant -> listValue.add(userContextConstant.getValue()));
         return listValue;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

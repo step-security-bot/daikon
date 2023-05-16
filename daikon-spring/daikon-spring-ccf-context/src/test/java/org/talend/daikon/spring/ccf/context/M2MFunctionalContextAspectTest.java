@@ -13,7 +13,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,38 +32,29 @@ class M2MFunctionalContextAspectTest {
     private static final String USER_ID = UUID.randomUUID().toString();
     private static final String PATH_WITH_TENANT = "/my/service/tenant/" + TENANT_ID + "/resource/resourceId";
 
-    private static final String PATH_WITH_TENANT_AND_USER = "/my/service/tenant/" + TENANT_ID + "/resource/resourceId" + "/user/" + USER_ID;
+    private static final String PATH_WITH_TENANT_AND_USER =
+            "/my/service/tenant/" + TENANT_ID + "/resource/resourceId" + "/user/" + USER_ID;
 
     private static final String PATH_WITHOUT_TENANT = "/my/service/resource/resourceId";
-
-
+    private static final MockedStatic<AttributeProvider> attributeProviderMocked = Mockito.mockStatic(AttributeProvider.class);
     @Mock
     private M2MContextManager m2MContextManager;
-
     @Mock
     private TenantParameterExtractor tenantParameterExtractor;
     private TenantParameterExtractorImpl tenantParameterExtractorImpl = new TenantParameterExtractorImpl();
-
     @Mock
     private ScimUtilities scimUtilities;
     @Mock
     private ProceedingJoinPoint proceedingJoinPoint;
-
     @Mock
     private MethodSignature signature;
-
-
     private Method methodSignature;
-
     @Mock
     private M2MFunctionalContext m2MFunctionalContextAnnotation;
-
     @Mock
     private ServletRequestAttributes attrs;
     @Mock
     private HttpServletRequest request;
-
-    private static final MockedStatic<AttributeProvider> attributeProviderMocked = Mockito.mockStatic(AttributeProvider.class);
     @InjectMocks
     private M2MFunctionalContextAspect m2MFunctionalContextAspect;
 
@@ -68,15 +62,16 @@ class M2MFunctionalContextAspectTest {
     void setUp() {
         when(attrs.getRequest()).thenReturn(request);
         RequestContextHolder.setRequestAttributes(attrs);
-        when(tenantParameterExtractor.extractAccountId(anyString())).then((i) -> tenantParameterExtractorImpl.extractAccountId(i.getArgument(0)));
-     }
+        when(tenantParameterExtractor.extractAccountId(anyString())).then(
+                (i) -> tenantParameterExtractorImpl.extractAccountId(i.getArgument(0)));
+    }
 
     @Test
     void whenTenantIdInPathContextPopulated() throws Throwable {
-        changeScenario(List.of(UserContextConstant.NONE.getValue()), PATH_WITH_TENANT,true);
+        changeScenario(List.of(UserContextConstant.NONE.getValue()), PATH_WITH_TENANT, true);
 
         m2MFunctionalContextAspect.buildTenantContext(proceedingJoinPoint);
-        verify(scimUtilities,times(0)).getUserWithAttributes(any(),any());
+        verify(scimUtilities, times(0)).getUserWithAttributes(any(), any());
         verify(m2MContextManager).injectContext(eq(TENANT_ID), isNull(), eq(Optional.empty()));
         verify(m2MContextManager).clearContext();
     }
@@ -96,16 +91,17 @@ class M2MFunctionalContextAspectTest {
         changeScenario(List.of(UserContextConstant.GROUPS.getValue()), PATH_WITH_TENANT_AND_USER, true);
 
         m2MFunctionalContextAspect.buildTenantContext(proceedingJoinPoint);
-        verify(scimUtilities,times(1)).getUserWithAttributes(any(),any());
-        verify(m2MContextManager).injectContext(eq(TENANT_ID),eq(USER_ID), eq(Optional.empty()));
+        verify(scimUtilities, times(1)).getUserWithAttributes(any(), any());
+        verify(m2MContextManager).injectContext(eq(TENANT_ID), eq(USER_ID), eq(Optional.empty()));
         verify(m2MContextManager).clearContext();
     }
 
     private void changeScenario(List<String> userConstants, String uri, boolean mockUserId) {
         attributeProviderMocked.when(() -> AttributeProvider.getAttributes(any()))
                 .thenReturn(userConstants);
-        if(mockUserId) {
-            when(tenantParameterExtractor.extractUserId(anyString())).then((i) -> tenantParameterExtractorImpl.extractUserId(i.getArgument(0)));
+        if (mockUserId) {
+            when(tenantParameterExtractor.extractUserId(anyString())).then(
+                    (i) -> tenantParameterExtractorImpl.extractUserId(i.getArgument(0)));
         }
         when(request.getRequestURI()).thenReturn(uri);
     }

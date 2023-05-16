@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.talend.daikon.spring.ccf.context.exception.CcfContextTenantIdNotFoundException;
-import org.talend.daikon.spring.ccf.context.exception.CcfContextUserIdNotFoundException;
 import org.talend.daikon.spring.ccf.context.utils.ScimUtilities;
 import org.talend.daikon.spring.ccf.context.utils.UUIDValidator;
 import org.talend.iam.scim.model.User;
