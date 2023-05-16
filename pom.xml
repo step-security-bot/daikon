@@ -281,6 +281,11 @@
                 <version>${talend-platform-sdk.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.talend.platform.sdk</groupId>
+                <artifactId>scim-common</artifactId>
+                <version>${talend-platform-sdk.version}</version>
+            </dependency>
+            <dependency>
                 <!-- this is actually excluded from the test class path because it is being
                     loaded dynamically by the tests -->
                 <groupId>org.talend.test</groupId>
