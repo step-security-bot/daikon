@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.schema.dataset.DatasetFieldSchema;
-import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
 import org.talend.daikon.schema.dataset.type.DatasetFieldArrayTypeSchema;
 import org.talend.daikon.schema.dataset.type.DatasetFieldType;
 
@@ -15,12 +14,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerDatasetFieldSchemaTest {
 
-    private static ObjectMapper objectMapper = DatasetSchemaMapperConfiguration.datasetSchemaObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Test
     public void givenValidDatasetFieldInput_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetFieldSchema data = objectMapper.readValue(
+        DatasetFieldSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/fields/datasetField_valid.json"),
                 DatasetFieldSchema.class);
 
@@ -36,7 +35,7 @@ public class DeserializerDatasetFieldSchemaTest {
     @Test
     public void givenValidDatasetFieldInputWithExtraParam_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetFieldSchema data = objectMapper.readValue(
+        DatasetFieldSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/fields/datasetField_withExtraProperties_valid.json"),
                 DatasetFieldSchema.class);
 
@@ -50,7 +49,7 @@ public class DeserializerDatasetFieldSchemaTest {
     @Test
     public void givenValidDatasetFieldInputWithNull_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetFieldSchema data = objectMapper.readValue(
+        DatasetFieldSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/fields/datasetField_withNull_valid.json"),
                 DatasetFieldSchema.class);
 
@@ -62,7 +61,7 @@ public class DeserializerDatasetFieldSchemaTest {
     @Test
     public void givenValidDatasetFieldInputWithHierarchicalField_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetFieldSchema data = objectMapper.readValue(
+        DatasetFieldSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/fields/datasetField_hierarchical_valid.json"),
                 DatasetFieldSchema.class);
 
@@ -76,7 +75,7 @@ public class DeserializerDatasetFieldSchemaTest {
     @Test
     public void givenValidDatasetFieldInputWithArrayField_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetFieldSchema data = objectMapper.readValue(
+        DatasetFieldSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/fields/datasetField_withArray_valid.json"),
                 DatasetFieldSchema.class);
 

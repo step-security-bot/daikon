@@ -10,18 +10,17 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.talend.daikon.schema.dataset.DatasetSchema;
-import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
 import org.talend.daikon.schema.dataset.metadata.JDBCMetadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerDatasetSchemaTest {
 
-    private static ObjectMapper objectMapper = DatasetSchemaMapperConfiguration.datasetSchemaObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Test
     public void givenValidDatasetInput_whenDeserialize_thenNoError() throws IOException {
-        DatasetSchema data = objectMapper.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid.json"),
+        DatasetSchema data = OBJECT_MAPPER.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid.json"),
                 DatasetSchema.class);
 
         assertNotNull(data);
@@ -32,7 +31,7 @@ public class DeserializerDatasetSchemaTest {
     @Test
     public void givenValidDatasetInput2_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetSchema data = objectMapper.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid2.json"),
+        DatasetSchema data = OBJECT_MAPPER.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid2.json"),
                 DatasetSchema.class);
 
         assertNotNull(data);
@@ -40,7 +39,7 @@ public class DeserializerDatasetSchemaTest {
 
     @Test
     public void givenValidDatasetInput3_whenDeserialize_thenNoError() throws IOException {
-        DatasetSchema data = objectMapper.readValue(
+        DatasetSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_metadata.json"), DatasetSchema.class);
 
         assertNotNull(data);
@@ -58,7 +57,7 @@ public class DeserializerDatasetSchemaTest {
 
     @Test
     public void givenValidDatasetInput4_whenDeserialize_thenNoError() throws IOException {
-        DatasetSchema data = objectMapper.readValue(
+        DatasetSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_partial_metadata.json"),
                 DatasetSchema.class);
 
@@ -78,7 +77,7 @@ public class DeserializerDatasetSchemaTest {
     @Test
     public void givenValidDatasetInputWithDatetimeField_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetSchema data = objectMapper
+        DatasetSchema data = OBJECT_MAPPER
                 .readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_datetime.json"), DatasetSchema.class);
 
         assertNotNull(data);
@@ -88,7 +87,7 @@ public class DeserializerDatasetSchemaTest {
 
     @Test
     public void givenOriginalFieldMetadataAsNull_whenDeserialize_thenNoError() throws IOException {
-        DatasetSchema data = objectMapper.readValue(
+        DatasetSchema data = OBJECT_MAPPER.readValue(
                 DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_partial_metadata.json"),
                 DatasetSchema.class);
 
