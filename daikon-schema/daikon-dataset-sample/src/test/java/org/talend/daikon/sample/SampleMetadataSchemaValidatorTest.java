@@ -52,7 +52,7 @@ public class SampleMetadataSchemaValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/sampleMetadata/sampleMetadata.json"})
+    @ValueSource(strings = { "/sampleMetadata/sampleMetadata.json" })
     public void givenValidSampleMetadata_whenValidating_thenValid(String jsonFile) throws IOException {
 
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
@@ -69,7 +69,7 @@ public class SampleMetadataSchemaValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/sampleMetadata/sampleMetadataInvalid.json"})
+    @ValueSource(strings = { "/sampleMetadata/sampleMetadataInvalid.json" })
     public void givenInvaliValidSampleMetadata_whenValidating_thenInValid(String jsonFile) throws IOException {
 
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
@@ -103,17 +103,15 @@ public class SampleMetadataSchemaValidatorTest {
 
     @Test
     public void givenSampleMetadata_thenSerialize() throws IOException, JSONException {
-        RecordFieldQuality recordFieldQuality = RecordFieldQuality.builder().aggregated(QualityStatus.VALID).dqType(
-                QualityStatus.EMPTY).dqRules(Arrays.asList(DqRuleQuality.builder().id("123").result(
-                RuleQualityStatus.VALID).build())).build();
+        RecordFieldQuality recordFieldQuality = RecordFieldQuality.builder().aggregated(QualityStatus.VALID)
+                .dqType(QualityStatus.EMPTY)
+                .dqRules(Arrays.asList(DqRuleQuality.builder().id("123").result(RuleQualityStatus.VALID).build())).build();
         RecordField field = RecordField.builder().name("price").quality(recordFieldQuality).fields(new ArrayList<>()).build();
 
         SampleMetadata sampleMetadata = SampleMetadata.builder().fields(Arrays.asList(field)).build();
         String expectedSampleMetadata = "{ \"fields\": [ { \"name\": \"price\", \"quality\": { \"aggregated\": \"VALID\", \"dqType\": \"EMPTY\", \"dqRules\": [ { \"id\": \"123\", \"result\": \"VALID\"}]}, \"fields\": []}]} ";
-        JSONAssert.assertEquals(expectedSampleMetadata,
-                objectMapper.writeValueAsString(sampleMetadata),
+        JSONAssert.assertEquals(expectedSampleMetadata, objectMapper.writeValueAsString(sampleMetadata),
                 JSONCompareMode.NON_EXTENSIBLE);
     }
-
 
 }
