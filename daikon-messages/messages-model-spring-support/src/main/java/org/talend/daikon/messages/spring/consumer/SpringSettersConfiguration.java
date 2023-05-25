@@ -15,6 +15,7 @@ package org.talend.daikon.messages.spring.consumer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.talend.daikon.messages.header.consumer.CorrelationIdSetter;
 
@@ -25,6 +26,7 @@ import io.micrometer.tracing.Tracer;
 @AutoConfiguration
 @ConditionalOnClass({ Tracer.class })
 @AutoConfigureBefore({ DefaultConsumerSettersConfiguration.class })
+@ConditionalOnProperty(prefix = "management.tracing", name = "enabled", matchIfMissing = true)
 public class SpringSettersConfiguration {
 
     @Bean

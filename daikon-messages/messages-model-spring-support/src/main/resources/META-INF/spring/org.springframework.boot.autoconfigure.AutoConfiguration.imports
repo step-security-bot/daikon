@@ -8,4 +8,4 @@ org.talend.daikon.messages.spring.producer.MessageHeaderFactoryConfiguration
 org.talend.daikon.messages.spring.producer.MessageKeysConfiguration
 org.talend.daikon.messages.spring.producer.MultiTenantProducerProvidersConfiguration
 org.talend.daikon.messages.spring.producer.security.SpringSecurityProvidersConfiguration
-org.talend.daikon.messages.spring.producer.sleuth.SpringSleuthProvidersConfiguration
+org.talend.daikon.messages.spring.producer.CorrelationIdProvidersConfiguration
