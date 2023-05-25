@@ -1,0 +1,36 @@
+{
+  "fields": [
+    {
+      "prop": "Id",
+      "quality": {
+        "aggregated": "INVALID",
+        "dqType": "ERROR",
+        "dqRules": [
+          {
+            "id": "UUID_instance_data_quality_rule_1",
+            "result": "VALID"
+          }
+        ]
+      }
+    },
+    {
+      "name": "First_Name",
+      "quality": {
+        "aggregated": "INVALID",
+        "dqType": "EMPTY"
+      }
+    },
+    {
+      "name": "Location",
+      "fields": [
+        {
+          "name": "City",
+          "quality": {
+            "aggregated": "INVALID",
+            "dqType": "EMPTY"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/record.field.quality.schema.json",
+  "title": "Record field quality schema",
+  "description": "Record field quality on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "aggregated": {
+      "description": "aggregated",
+      "type": "string",
+      "enum": [
+        "VALID",
+        "INVALID",
+        "EMPTY"
+      ]
+    },
+    "dqType": {
+      "description": "dqType",
+      "type": "string",
+      "enum": [
+        "VALID",
+        "INVALID",
+        "EMPTY"
+      ]
+    },
+    "dqRules": {
+      "description": "dqRules",
+      "type": "array",
+      "items": {
+        "$ref": "https://org.talend.daikon/dqRule.quality.schema.json"
+      }
+    }
+  },
+  "required": [
+    "aggregated",
+    "dqType"
+  ]
+}
+

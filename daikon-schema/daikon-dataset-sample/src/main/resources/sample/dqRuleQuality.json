@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/dqRule.quality.schema.json",
+  "title": "Dq Rule quality schema",
+  "description": "Dq Rule quality on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "rule uuid",
+      "type": "string",
+      "format": "uuid"
+    },
+    "result": {
+      "description": "Validity",
+      "type": "string",
+      "enum": ["VALID","INVALID","EMPTY"]
+    }
+  },
+  "required" : ["id", "result"]
+}
+
