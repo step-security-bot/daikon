@@ -20,40 +20,17 @@ Small adjustments have been made to the original DQ-Runtime Schema:
 * `talend.component.dqType` is removed
 * `talend.component.qualityAggregate` is removed
 
-Some properties comming from TCK are also impacted:
+Some properties coming from TCK are also impacted:
 
 * `talend.component.label` is renamed `originalFieldName`
 * `talend.component.DATETIME` is renamed `isDatetime`
 
 
-## JSON serializer/deserializer
+## Serialization/deserialization
 
-In order to be able to serialize/deserialize the JSON payload with `"null"` avro format. We need to use a custom `ObjectMapper`.
+Any specificities of the serialization/deserialization should be handled via Jackson annotations wherever possible. Let's try to avoid using a custom object mapper because users of this module might not be able to use a specific mapper in their context, or it might be hard to configure. Sometimes, the web framework handles things behind the scenes for example.
 
-This custom mapper is defined like that:
-
-```java
-public class DatasetSchemaMapperConfiguration {
-
-    public static ObjectMapper datasetSchemaObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.setDeserializerModifier(new BeanDeserializerModifier() {
-            @Override
-            public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config, BeanDescription beanDesc, JsonDeserializer<?> deserializer) {
-                if (beanDesc.getBeanClass() == DatasetFieldTypeSchema.DatasetFieldTypeSchemaBuilder.class){
-                    return new DatasetFieldTypeDeserializer((BuilderBasedDeserializer)deserializer);
-                }
-                return deserializer;
-            }
-        });
-        objectMapper.getSerializerProvider().setNullValueSerializer(new NullTypeStringSerializer());
-        objectMapper.registerModule(module);
-        return objectMapper;
-    }
-
-}
-```
+There are currently some specific use-cases that are handled by classes in the [mapper package](./src/main/java/org/talend/daikon/schema/dataset/mapper) and documented in the Javadocs.
 
 ## Validate payload based on JSON Schema
 

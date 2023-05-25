@@ -1,20 +1,21 @@
 package org.talend.daikon.schema;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.talend.daikon.schema.dataset.DatasetSchema;
-import org.talend.daikon.schema.dataset.mapper.DatasetSchemaMapperConfiguration;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DeserializerSerializerTest {
 
-    private static ObjectMapper objectMapper = DatasetSchemaMapperConfiguration.datasetSchemaObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @ParameterizedTest
     @ValueSource(strings = { "/dataset_valid.json", "/dataset_valid2.json", "/dataset_datetime.json",
@@ -22,13 +23,13 @@ public class DeserializerSerializerTest {
     public void givenADatasetSchema_whenDeserializeAndSerialize_thenContentIsTheSame(String file)
             throws IOException, JSONException {
 
-        String expected = IOUtils.toString(DeserializerSerializerTest.class.getResourceAsStream(file),
-                StandardCharsets.UTF_8.name());
+        String expected = IOUtils.toString(Objects.requireNonNull(DeserializerSerializerTest.class.getResourceAsStream(file)),
+                StandardCharsets.UTF_8);
 
-        DatasetSchema data = objectMapper.readValue(DeserializerSerializerTest.class.getResourceAsStream(file),
+        DatasetSchema data = OBJECT_MAPPER.readValue(DeserializerSerializerTest.class.getResourceAsStream(file),
                 DatasetSchema.class);
 
-        String result = objectMapper.writeValueAsString(data);
+        String result = OBJECT_MAPPER.writeValueAsString(data);
         JSONAssert.assertEquals(expected, result, false);
     }
 }
