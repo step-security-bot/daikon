@@ -1,0 +1,16 @@
+= Daikon Release Notes (7.1.10) - 05/26/2023
+
+Thanks to @Fabien Abballe, @bjacobtalend, @gabriel-cpereira
+
+== Fix
+- link:https://jira.talendforge.org/browse/TPGOV-2168[TPGOV-2168]: [GET /Schema] the attribute type is not being serialized as defined by Common Schema (link:https://github.com/Talend/daikon/pull/976[#976])
+
+== Feature
+- link:https://jira.talendforge.org/browse/TPGOV-2071[TPGOV-2071]: Implement GET /v2/datasets/{datasetId}/sample-metadata (+data) endpoint (link:https://github.com/Talend/daikon/pull/981[#981])
+- link:https://jira.talendforge.org/browse/TPGOV-2071[TPGOV-2071]: Implement GET /v2/datasets/{datasetId}/sample-metadata (+data) endpoint (link:https://github.com/Talend/daikon/pull/979[#979])
+- link:https://jira.talendforge.org/browse/TPGOV-2071[TPGOV-2071]: Implement GET /v2/datasets/{datasetId}/sample-metadata (+data) endpoint (link:https://github.com/Talend/daikon/pull/973[#973])
+- link:https://jira.talendforge.org/browse/TPGOV-2111[TPGOV-2111]: Adequate serialization/deserialization of DatasetSchema's attribute originalFieldMetadata  (link:https://github.com/Talend/daikon/pull/967[#967])
+- link:https://jira.talendforge.org/browse/TPGOV-2098[TPGOV-2098]: [Daikon] Add a new deserializer on Daikon in order to handle the JDBCMetadata deserialization (link:https://github.com/Talend/daikon/pull/963[#963])
+
+== Other
+- Bjacob/tpgov 2071 fix test format  (link:https://github.com/Talend/daikon/pull/980[#980])
