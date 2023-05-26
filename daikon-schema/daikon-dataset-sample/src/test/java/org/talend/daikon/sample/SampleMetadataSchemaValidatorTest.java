@@ -46,20 +46,17 @@ public class SampleMetadataSchemaValidatorTest {
         Map<String, String> uriMappings = new HashMap<>();
         uriMappings.put("https://org.talend.daikon/dqRule.quality.schema.json", "resource:/sample/dqRuleQuality.json");
         uriMappings.put("https://org.talend.daikon/record.field.schema.json", "resource:/sample/recordField.json");
-        uriMappings.put("https://org.talend.daikon/record.field.quality.schema.json",
-                "resource:/sample/recordFieldQuality.json");
-        uriMappings.put("https://org.talend.daikon/sample.metadata.schema.json",
-                "resource:/sample/sampleMetadata.json");
+        uriMappings.put("https://org.talend.daikon/record.field.quality.schema.json", "resource:/sample/recordFieldQuality.json");
+        uriMappings.put("https://org.talend.daikon/sample.metadata.schema.json", "resource:/sample/sampleMetadata.json");
         config.setUriMappings(uriMappings);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/sampleMetadata/sampleMetadata.json"})
+    @ValueSource(strings = { "/sampleMetadata/sampleMetadata.json" })
     public void givenValidSampleMetadata_whenValidating_thenValid(String jsonFile) throws IOException {
 
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
-                .getSchema(SampleMetadataSchemaValidatorTest.class.getResourceAsStream(
-                        "/sample/sampleMetadata.json"), config);
+                .getSchema(SampleMetadataSchemaValidatorTest.class.getResourceAsStream("/sample/sampleMetadata.json"), config);
 
         JsonNode data = objectMapper.readTree(SampleMetadataSchemaValidatorTest.class.getResourceAsStream(jsonFile));
         Set<ValidationMessage> result = jsonSchema.validate(data);
@@ -72,12 +69,11 @@ public class SampleMetadataSchemaValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/sampleMetadata/sampleMetadataInvalid.json"})
+    @ValueSource(strings = { "/sampleMetadata/sampleMetadataInvalid.json" })
     public void givenInvaliValidSampleMetadata_whenValidating_thenInValid(String jsonFile) throws IOException {
 
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
-                .getSchema(SampleMetadataSchemaValidatorTest.class.getResourceAsStream(
-                        "/sample/sampleMetadata.json"), config);
+                .getSchema(SampleMetadataSchemaValidatorTest.class.getResourceAsStream("/sample/sampleMetadata.json"), config);
 
         JsonNode data = objectMapper.readTree(SampleMetadataSchemaValidatorTest.class.getResourceAsStream(jsonFile));
         Set<ValidationMessage> result = jsonSchema.validate(data);
@@ -93,8 +89,7 @@ public class SampleMetadataSchemaValidatorTest {
     public void givenValidSampleMetadata_whenDeserialize_thenNoError() throws IOException {
 
         SampleMetadata data = objectMapper.readValue(
-                SampleMetadataSchemaValidatorTest.class.getResourceAsStream(
-                        "/sampleMetadata/sampleMetadata.json"),
+                SampleMetadataSchemaValidatorTest.class.getResourceAsStream("/sampleMetadata/sampleMetadata.json"),
                 SampleMetadata.class);
 
         assertNotNull(data);
@@ -110,16 +105,12 @@ public class SampleMetadataSchemaValidatorTest {
     public void givenSampleMetadata_thenSerialize() throws IOException, JSONException {
         RecordFieldQuality recordFieldQuality = RecordFieldQuality.builder().aggregated(QualityStatus.VALID)
                 .dqType(QualityStatus.EMPTY)
-                .dqRules(Arrays.asList(DqRuleQuality.builder().id("123").
-                        result(RuleQualityStatus.VALID).build())).build();
-        RecordField field = RecordField.builder().name("price").
-                quality(recordFieldQuality).fields(new ArrayList<>()).build();
+                .dqRules(Arrays.asList(DqRuleQuality.builder().id("123").result(RuleQualityStatus.VALID).build())).build();
+        RecordField field = RecordField.builder().name("price").quality(recordFieldQuality).fields(new ArrayList<>()).build();
 
         SampleMetadata sampleMetadata = SampleMetadata.builder().fields(Arrays.asList(field)).build();
-        String expectedSampleMetadata =
-                "{ \"fields\": [ { \"name\": \"price\", \"quality\": { \"aggregated\": \"VALID\"," +
-                        " \"dqType\": \"EMPTY\", \"dqRules\": [ { \"id\": \"123\", \"result\": \"VALID\"}]}," +
-                        " \"fields\": []}]} ";
+        String expectedSampleMetadata = "{ \"fields\": [ { \"name\": \"price\", \"quality\": { \"aggregated\": \"VALID\","
+                + " \"dqType\": \"EMPTY\", \"dqRules\": [ { \"id\": \"123\", \"result\": \"VALID\"}]}," + " \"fields\": []}]} ";
         JSONAssert.assertEquals(expectedSampleMetadata, objectMapper.writeValueAsString(sampleMetadata),
                 JSONCompareMode.NON_EXTENSIBLE);
     }
