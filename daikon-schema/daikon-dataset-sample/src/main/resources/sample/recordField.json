@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/record.field.schema.json",
+  "title": "Record field schema",
+  "description": "Record field on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "name",
+      "type": "string"
+    },
+    "quality": {
+      "$ref": "https://org.talend.daikon/record.field.quality.schema.json"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "https://org.talend.daikon/record.field.schema.json"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
+

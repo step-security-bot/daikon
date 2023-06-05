@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://org.talend.daikon/sample.metadata.schema.json",
+  "title": "Sample metadata schema",
+  "description": "Sample metadata on Talend ecosystem",
+  "type": "object",
+  "properties": {
+    "fields": {
+      "description": "list of fields inside the dataset",
+      "items": {
+        "$ref": "https://org.talend.daikon/record.field.schema.json"
+      }
+    }
+  },
+  "required" : ["fields"]
+}
+

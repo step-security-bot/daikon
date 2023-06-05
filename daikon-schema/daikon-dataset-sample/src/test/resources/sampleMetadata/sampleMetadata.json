@@ -1,0 +1,36 @@
+{
+  "fields": [
+    {
+      "name": "Id",
+      "quality": {
+        "aggregated": "INVALID",
+        "dqType": "EMPTY",
+        "dqRules": [
+          {
+            "id": "c43d6c76-268e-4ee0-923b-04d5714ebf5a",
+            "result": "VALID"
+          }
+        ]
+      }
+    },
+    {
+      "name": "First_Name",
+      "quality": {
+        "aggregated": "INVALID",
+        "dqType": "EMPTY"
+      }
+    },
+    {
+      "name": "Location",
+      "fields": [
+        {
+          "name": "City",
+          "quality": {
+            "aggregated": "INVALID",
+            "dqType": "EMPTY"
+          }
+        }
+      ]
+    }
+  ]
+}

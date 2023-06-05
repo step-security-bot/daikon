@@ -12,6 +12,7 @@
 
     <modules>
         <module>daikon-dataset-schema</module>
+        <module>daikon-dataset-sample</module>
         <module>daikon-cloudevent-extension</module>
     </modules>
 
