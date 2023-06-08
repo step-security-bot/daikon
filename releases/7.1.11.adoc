@@ -1,0 +1,7 @@
+= Daikon Release Notes (7.1.11) - 06/08/2023
+
+Thanks to @gleloup
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TPGOV-2187[TPGOV-2187]: [Daikon] Update DatasetSchema object in order to handle nullable arrays (link:https://github.com/Talend/daikon/pull/985[#985])
+- link:https://jira.talendforge.org/browse/TPGOV-2187[TPGOV-2187]: [Daikon] Update DatasetSchema object in order to handle nullable arrays (link:https://github.com/Talend/daikon/pull/982[#982])
