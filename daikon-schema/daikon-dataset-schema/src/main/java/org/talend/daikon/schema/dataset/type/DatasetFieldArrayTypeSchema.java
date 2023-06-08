@@ -3,10 +3,14 @@ package org.talend.daikon.schema.dataset.type;
 import java.util.List;
 
 import org.talend.daikon.schema.dataset.DatasetFieldSchema;
+import org.talend.daikon.schema.dataset.mapper.SchemaTypesDeserializer;
+import org.talend.daikon.schema.dataset.mapper.SchemaTypesSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
@@ -22,51 +26,8 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatasetFieldArrayTypeSchema extends AbstractDatasetFieldTypeSchema {
 
-    DatasetFieldTypeSchema items;
-
-    @JsonIgnore
-    public String getLogicalType() {
-        return items.getLogicalType();
-    }
-
-    @JsonIgnore
-    public String getNamespace() {
-        return items.getNamespace();
-    }
-
-    @JsonIgnore
-    public String getDqType() {
-        return items.getDqType();
-    }
-
-    @JsonIgnore
-    public String getDqTypeId() {
-        return items.getDqTypeId();
-    }
-
-    @JsonIgnore
-    public String getDqNativeType() {
-        return items.getDqNativeType();
-    }
-
-    @JsonIgnore
-    public Boolean getForced() {
-        return items.getForced();
-    }
-
-    @JsonIgnore
-    public Boolean getDatetime() {
-        return items.getDatetime();
-    }
-
-    @JsonIgnore
-    public Boolean getNativeForced() {
-        return items.getNativeForced();
-    }
-
-    @JsonIgnore
-    public List<DatasetFieldSchema> getFields() {
-        return items.getFields();
-    }
+    @JsonSerialize(using = SchemaTypesSerializer.class)
+    @JsonDeserialize(using = SchemaTypesDeserializer.class)
+    List<DatasetFieldTypeSchema> items;
 
 }

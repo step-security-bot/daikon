@@ -150,37 +150,36 @@
     },
     {
       "name": "age",
-      "type":
-        {
-          "type": "int",
-          "dqType": "",
-          "dqTypeId": "",
-          "isForced": false,
-          "dqNativeType": "INTEGER",
-          "isNativeForced": false,
-          "dqSemanticTypeDistribution": {
-            "total": 8,
-            "matchings": [
+      "type": {
+        "type": "int",
+        "dqType": "",
+        "dqTypeId": "",
+        "isForced": false,
+        "dqNativeType": "INTEGER",
+        "isNativeForced": false,
+        "dqSemanticTypeDistribution": {
+          "total": 8,
+          "matchings": [
 
-            ]
-          },
-          "dqNativeTypeDistribution": {
-            "total": 8,
-            "matchings": [
-              {
-                "score": 100.0,
-                "total": 8,
-                "id": "INTEGER"
-              }
-            ]
-          },
-          "dqQualityAggregate": {
-            "0": 0,
-            "1": 8,
-            "total": 8,
-            "-1": 0
-          }
+          ]
+        },
+        "dqNativeTypeDistribution": {
+          "total": 8,
+          "matchings": [
+            {
+              "score": 100.0,
+              "total": 8,
+              "id": "INTEGER"
+            }
+          ]
+        },
+        "dqQualityAggregate": {
+          "0": 0,
+          "1": 8,
+          "total": 8,
+          "-1": 0
         }
+      }
 
     },
     {
@@ -241,41 +240,44 @@
       "name": "emails",
       "type": {
         "type": "array",
-        "items": {
-          "type": "string",
-          "dqType": "Email",
-          "dqTypeId": "EMAIL",
-          "isForced": false,
-          "dqNativeType": "STRING",
-          "isNativeForced": false,
-          "dqSemanticTypeDistribution": {
-            "total": 20,
-            "matchings": [
-              {
-                "score": 70.0,
-                "total": 14,
-                "name": "Email",
-                "id": "EMAIL"
-              }
-            ]
-          },
-          "dqNativeTypeDistribution": {
-            "total": 20,
-            "matchings": [
-              {
-                "score": 100.0,
-                "total": 20,
-                "id": "STRING"
-              }
-            ]
-          },
-          "dqQualityAggregate": {
-            "0": 0,
-            "1": 14,
-            "total": 20,
-            "-1": 6
+        "items": [
+          "null",
+          {
+            "type": "string",
+            "dqType": "Email",
+            "dqTypeId": "EMAIL",
+            "isForced": false,
+            "dqNativeType": "STRING",
+            "isNativeForced": false,
+            "dqSemanticTypeDistribution": {
+              "total": 20,
+              "matchings": [
+                {
+                  "score": 70.0,
+                  "total": 14,
+                  "name": "Email",
+                  "id": "EMAIL"
+                }
+              ]
+            },
+            "dqNativeTypeDistribution": {
+              "total": 20,
+              "matchings": [
+                {
+                  "score": 100.0,
+                  "total": 20,
+                  "id": "STRING"
+                }
+              ]
+            },
+            "dqQualityAggregate": {
+              "0": 0,
+              "1": 14,
+              "total": 20,
+              "-1": 6
+            }
           }
-        }
+        ]
       }
     },
     {
