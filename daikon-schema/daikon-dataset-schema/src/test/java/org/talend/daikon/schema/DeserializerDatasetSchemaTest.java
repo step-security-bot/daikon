@@ -20,8 +20,8 @@ public class DeserializerDatasetSchemaTest {
 
     @Test
     public void givenValidDatasetInput_whenDeserialize_thenNoError() throws IOException {
-        DatasetSchema data = OBJECT_MAPPER.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid.json"),
-                DatasetSchema.class);
+        DatasetSchema data = OBJECT_MAPPER.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid.json"), DatasetSchema.class);
 
         assertNotNull(data);
         assertEquals("record", data.getType());
@@ -31,8 +31,8 @@ public class DeserializerDatasetSchemaTest {
     @Test
     public void givenValidDatasetInput2_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetSchema data = OBJECT_MAPPER.readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid2.json"),
-                DatasetSchema.class);
+        DatasetSchema data = OBJECT_MAPPER.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid2.json"), DatasetSchema.class);
 
         assertNotNull(data);
     }
@@ -40,7 +40,8 @@ public class DeserializerDatasetSchemaTest {
     @Test
     public void givenValidDatasetInput3_whenDeserialize_thenNoError() throws IOException {
         DatasetSchema data = OBJECT_MAPPER.readValue(
-                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_metadata.json"), DatasetSchema.class);
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_valid_JDBC_metadata.json"),
+                DatasetSchema.class);
 
         assertNotNull(data);
         assertEquals("record", data.getType());
@@ -77,8 +78,8 @@ public class DeserializerDatasetSchemaTest {
     @Test
     public void givenValidDatasetInputWithDatetimeField_whenDeserialize_thenNoError() throws IOException {
 
-        DatasetSchema data = OBJECT_MAPPER
-                .readValue(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_datetime.json"), DatasetSchema.class);
+        DatasetSchema data = OBJECT_MAPPER.readValue(
+                DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset_datetime.json"), DatasetSchema.class);
 
         assertNotNull(data);
         assertTrue((data.getFields().get(8).getType().get(1)).getDatetime());
