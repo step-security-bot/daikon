@@ -119,12 +119,11 @@
         <yaml.codegen.maven.plugin.version>0.0.6</yaml.codegen.maven.plugin.version>
         <maven.enforcer.plugin.version>3.0.0</maven.enforcer.plugin.version>
 
-
         <testcontainers.version>1.17.6</testcontainers.version>
-
 
         <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
         <kafka-confluent>7.3.3</kafka-confluent>
+        <everit-json-schema.version>1.14.2</everit-json-schema.version>
 
     </properties>
     <modules>
@@ -353,6 +352,12 @@
                 <groupId>io.confluent</groupId>
                 <artifactId>kafka-json-schema-serializer</artifactId>
                 <version>${kafka-confluent}</version>
+            </dependency>
+            <!-- TPRUN-TODO CVE-2022-45688 This is to force library version to a safe one. To be removed when all libraries that includes it are updated to the below version or newest -->
+            <dependency>
+                <groupId>com.github.erosb</groupId>
+                <artifactId>everit-json-schema</artifactId>
+                <version>${everit-json-schema.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.confluent</groupId>
