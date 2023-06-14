@@ -118,4 +118,20 @@ public class UserDetailsConverterTest {
                                                           () -> UserDetailsConverter.convert(introspectionResult));
         assertEquals("Client name not found", exception.getMessage());
     }
+
+    @Test
+    @SneakyThrows
+    public void convertSATJwtClaimsSuccess() {
+        InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-sat-claims-success.json");
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+
+        AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
+
+        assertEquals("10cJdfBOdv7TJlO4aw7ukfsiQ3YNEWmS", result.getId());
+        assertEquals("MySa  - Service Account", result.getUsername());
+        assertEquals(new HashSet<>(Arrays.asList("AUDIT_LOGS_VIEW", "TMC_GROUP_MANAGEMENT", "TMC_USER_MANAGEMENT")),
+                result.getEntitlements());
+        assertEquals("7beeb6a2-f250-4c87-9178-facec3350bdd", result.getTenantId());
+        assertEquals("jhervy.talend.com", result.getTenantName());
+    }
 }
