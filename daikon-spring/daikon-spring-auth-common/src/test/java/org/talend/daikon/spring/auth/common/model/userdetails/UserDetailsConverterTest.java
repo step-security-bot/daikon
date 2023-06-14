@@ -25,7 +25,8 @@ public class UserDetailsConverterTest {
     @SneakyThrows
     public void convertPatIntrospectionSuccess() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/pat-introspection-success.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
 
@@ -35,18 +36,19 @@ public class UserDetailsConverterTest {
         assertEquals("user@yopmails.com", result.getEmail());
         assertEquals("9133741e-d49d-4cd8-a09e-9791fead2583", result.getTenantId());
         assertEquals("mbutko01.us.talend.com", result.getTenantName());
-        assertEquals(new HashSet<>(Arrays.asList("CRAWLING_CREATE", "TMC_OPERATOR", "DATASET_READ")),
-                     result.getEntitlements());
+        assertEquals(new HashSet<>(Arrays.asList("CRAWLING_CREATE", "TMC_OPERATOR", "DATASET_READ")), result.getEntitlements());
         assertEquals(Arrays.asList("48e38a59-ce6f-497a-84b9-63598ff8304b", "914413da-6a86-4a5f-b753-a963d1916179"),
-                            result.getGroupIds());
+                result.getGroupIds());
         assertNull(result.getMiddleName());
     }
 
     @Test
     @SneakyThrows
     public void convertPatIntrospectionWithMiddleName() {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/converter/pat-introspection-success-with-middle-name.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        InputStream resourceAsStream = getClass()
+                .getResourceAsStream("/converter/pat-introspection-success-with-middle-name.json");
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
 
@@ -57,17 +59,17 @@ public class UserDetailsConverterTest {
         assertEquals("user@yopmails.com", result.getEmail());
         assertEquals("9133741e-d49d-4cd8-a09e-9791fead2583", result.getTenantId());
         assertEquals("mbutko01.us.talend.com", result.getTenantName());
-        assertEquals(new HashSet<>(Arrays.asList("CRAWLING_CREATE", "TMC_OPERATOR", "DATASET_READ")),
-                     result.getEntitlements());
+        assertEquals(new HashSet<>(Arrays.asList("CRAWLING_CREATE", "TMC_OPERATOR", "DATASET_READ")), result.getEntitlements());
         assertEquals(Arrays.asList("48e38a59-ce6f-497a-84b9-63598ff8304b", "914413da-6a86-4a5f-b753-a963d1916179"),
-                            result.getGroupIds());
+                result.getGroupIds());
     }
 
     @Test
     @SneakyThrows
     public void convertJwtClaimsSuccess() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-claims-success.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
 
@@ -86,10 +88,11 @@ public class UserDetailsConverterTest {
     @SneakyThrows
     public void convertPatIntrospectionWithoutUsernameClaimsFail() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/pat-introspection-fail.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                                                          () -> UserDetailsConverter.convert(introspectionResult));
+                () -> UserDetailsConverter.convert(introspectionResult));
         assertEquals("Username not found", exception.getMessage());
     }
 
@@ -97,14 +100,15 @@ public class UserDetailsConverterTest {
     @SneakyThrows
     public void convertClientCredentialsJwtClaimsSuccess() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-cc-claims-success.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
 
         assertEquals("qa-provisioner-client-id", result.getId());
         assertEquals("QA Provisioner - Client Credentials Flow", result.getUsername());
         assertEquals(new HashSet<>(Arrays.asList("TC_ACCOUNT_CREATE", "TC_ACCOUNT_READ", "TC_ACCOUNT_STATUS_READ")),
-                     result.getEntitlements());
+                result.getEntitlements());
         assertNull(result.getTenantId());
     }
 
@@ -112,10 +116,11 @@ public class UserDetailsConverterTest {
     @SneakyThrows
     public void convertClientCredentialsJwtWithoutClientNameFails() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-cc-claims-no-name.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                                                          () -> UserDetailsConverter.convert(introspectionResult));
+                () -> UserDetailsConverter.convert(introspectionResult));
         assertEquals("Client name not found", exception.getMessage());
     }
 
@@ -123,7 +128,8 @@ public class UserDetailsConverterTest {
     @SneakyThrows
     public void convertSATJwtClaimsSuccess() {
         InputStream resourceAsStream = getClass().getResourceAsStream("/converter/jwt-sat-claims-success.json");
-        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> introspectionResult = mapper.readValue(resourceAsStream, new TypeReference<Map<String, Object>>() {
+        });
 
         AuthUserDetails result = UserDetailsConverter.convert(introspectionResult);
 
