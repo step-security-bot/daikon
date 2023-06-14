@@ -26,6 +26,18 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
+            <exclusions>
+                <!-- exclusion required for CVE fix, remove when we migrate to SB 2.7.x -->
+                <exclusion>
+                    <groupId>com.nimbusds</groupId>
+                    <artifactId>nimbus-jose-jwt</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- override required for CVE fix, remove when we migrate to SB 2.7.x -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
         </dependency>
 
         <dependency>
