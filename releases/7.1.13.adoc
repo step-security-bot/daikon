@@ -1,0 +1,6 @@
+= Daikon Release Notes (7.1.13) - 06/14/2023
+
+Thanks to @gleloup
+
+== Work Item
+- link:https://jira.talendforge.org/browse/TCKPROXY-47[TCKPROXY-47]: Fix issue with dependency nimbus.jose (link:https://github.com/Talend/daikon/pull/989[#989])
