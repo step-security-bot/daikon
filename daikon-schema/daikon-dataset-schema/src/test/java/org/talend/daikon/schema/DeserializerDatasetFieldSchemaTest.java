@@ -2,6 +2,7 @@ package org.talend.daikon.schema;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 
@@ -82,7 +83,8 @@ public class DeserializerDatasetFieldSchemaTest {
         assertNotNull(data);
         assertEquals(DatasetFieldArrayTypeSchema.class, data.getType().get(0).getClass());
         assertEquals(DatasetFieldType.ARRAY, data.getType().get(0).getType());
-        assertEquals(DatasetFieldType.STRING, ((DatasetFieldArrayTypeSchema) data.getType().get(0)).getItems().getType());
+        assertNull(((DatasetFieldArrayTypeSchema) data.getType().get(0)).getItems().get(0));
+        assertEquals(DatasetFieldType.STRING, ((DatasetFieldArrayTypeSchema) data.getType().get(0)).getItems().get(1).getType());
 
     }
 

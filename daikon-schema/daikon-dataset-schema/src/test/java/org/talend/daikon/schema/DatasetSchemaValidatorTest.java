@@ -22,7 +22,7 @@ import com.networknt.schema.ValidationMessage;
 
 public class DatasetSchemaValidatorTest {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static SchemaValidatorsConfig config;
 
@@ -47,7 +47,7 @@ public class DatasetSchemaValidatorTest {
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
                 .getSchema(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset/datasetFieldSchema.json"), config);
 
-        JsonNode data = objectMapper.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
+        JsonNode data = OBJECT_MAPPER.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
         Set<ValidationMessage> result = jsonSchema.validate(data);
 
         for (ValidationMessage validationMessage : result) {
@@ -64,7 +64,7 @@ public class DatasetSchemaValidatorTest {
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
                 .getSchema(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset/datasetSchema.json"), config);
 
-        JsonNode data = objectMapper.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
+        JsonNode data = OBJECT_MAPPER.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
         Set<ValidationMessage> result = jsonSchema.validate(data);
 
         for (ValidationMessage validationMessage : result) {
@@ -81,7 +81,7 @@ public class DatasetSchemaValidatorTest {
         JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
                 .getSchema(DatasetSchemaValidatorTest.class.getResourceAsStream("/dataset/datasetSchema.json"), config);
 
-        JsonNode data = objectMapper.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
+        JsonNode data = OBJECT_MAPPER.readTree(DatasetSchemaValidatorTest.class.getResourceAsStream(jsonFile));
         Set<ValidationMessage> result = jsonSchema.validate(data);
 
         assertTrue(result.size() > 0);
