@@ -131,6 +131,7 @@ public class UserDetailsConverter {
         authUserDetails.setTenantId(tenantId);
         authUserDetails.setTenantName(tenantName != null ? tenantName : tenantId);
         authUserDetails.setId(clientId);
+        authUserDetails.setAttributes(jwtClaims);
         return authUserDetails;
     }
 
