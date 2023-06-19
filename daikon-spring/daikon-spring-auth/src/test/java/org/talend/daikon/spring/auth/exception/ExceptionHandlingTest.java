@@ -50,7 +50,7 @@ public class ExceptionHandlingTest {
     @WithMockUser(authorities = "INSUFFICIENT")
     public void testGetForbidden() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/auth/test")).andExpect(MockMvcResultMatchers.status().isForbidden())
-                .andExpect(MockMvcResultMatchers.content().json("{\"detail\":\"Access is denied\",\"status\":403}"));
+                .andExpect(MockMvcResultMatchers.content().json("{\"detail\":\"Access Denied\",\"status\":403}"));
     }
 
 }

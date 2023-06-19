@@ -35,8 +35,8 @@ public class AppTestConfig extends AuditLogAutoConfiguration {
 
     @Bean
     public SecurityWebFilterChain publicApiSecurityWebFilterChain(ServerHttpSecurity http) {
-        return http.csrf().disable() // we can disable CSRF because this service only use JWT token through Authorization header
-                .authorizeExchange().anyExchange().permitAll().and().build();
+        return http.csrf(ServerHttpSecurity.CsrfSpec::disable) // we can disable CSRF because this service only use JWT token
+                                                               // through Authorization header
+                .authorizeExchange(a -> a.anyExchange().permitAll()).build();
     }
-
 }

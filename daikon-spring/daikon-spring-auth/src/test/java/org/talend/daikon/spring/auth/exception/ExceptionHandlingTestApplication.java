@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class ExceptionHandlingTestApplication {
 
     @AutoConfiguration
     @EnableWebSecurity
-    @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+    @EnableMethodSecurity(proxyTargetClass = true)
     public class CustomWebSecurityConfigurerAdapter {
 
         @Autowired
@@ -36,10 +37,10 @@ public class ExceptionHandlingTestApplication {
 
         @Bean("securityFilterChain.oauth2Configuration")
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.csrf().disable()
+            http.csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").authenticated().anyRequest().permitAll())
-                    .oauth2ResourceServer().authenticationManagerResolver(authenticationManagerResolver)
-                    .authenticationEntryPoint(tokenAuthenticationEntryPoint);
+                    .oauth2ResourceServer(o -> o.authenticationManagerResolver(authenticationManagerResolver)
+                            .authenticationEntryPoint(tokenAuthenticationEntryPoint));
             return http.build();
         }
     }

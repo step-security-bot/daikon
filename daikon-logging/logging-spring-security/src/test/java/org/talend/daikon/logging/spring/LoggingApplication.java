@@ -18,8 +18,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,7 +60,8 @@ public class LoggingApplication {
 
         @Bean("securityFilterChain.basic")
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.csrf().disable().authorizeHttpRequests().anyRequest().authenticated().and().httpBasic();
+            http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(a -> a.anyRequest().authenticated())
+                    .httpBasic(Customizer.withDefaults());
             return http.build();
         }
 
