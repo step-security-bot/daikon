@@ -1,0 +1,17 @@
+{
+  "https://talend.cloud/permissions": [
+    "AUDIT_LOGS_VIEW",
+    "TMC_GROUP_MANAGEMENT",
+    "TMC_USER_MANAGEMENT"
+  ],
+  "https://talend.cloud/tenantId": "7beeb6a2-f250-4c87-9178-facec3350bdd",
+  "https://talend.cloud/tenantName": "jhervy.talend.com",
+  "https://talend.cloud/serviceAccountName": "MySa",
+  "iss": "https://iam.int.cloud.talend.com/oidc",
+  "sub": "10cJdfBOdv7TJlO4aw7ukfsiQ3YNEWmS@clients",
+  "aud": "https://api.int.cloud.talend.com",
+  "iat": 1686586146,
+  "exp": 1686587946,
+  "azp": "10cJdfBOdv7TJlO4aw7ukfsiQ3YNEWmS",
+  "gty": "client-credentials"
+}

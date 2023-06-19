@@ -1,32 +1,6 @@
 package org.talend.daikon.spring.auth.common.model.userdetails;
 
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.APPLICATIONS_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.CLIENT_ID_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.CLIENT_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.EMAIL_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.ENTITLEMENTS_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.FAMILY_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GIVEN_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GRANT_TYPE_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.GROUP_IDS_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.IPC_ENABLED;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.LOGIN_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.MIDDLE_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_COMPANY_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_DATACENTER_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PENDO_USER_ID_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PERMISSIONS_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PREFERRED_LANGUAGE_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.PREFERRED_USERNAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SALES_FORCE_ACCOUNT_ID;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SALES_FORCE_CONTACT_ID;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SUBJECT_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.SUBSCRIPTION_TYPE;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TENANT_ID_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TENANT_NAME_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.TIMEZONE_CLAIM;
-import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.USERNAME_CLAIM;
+import static org.talend.daikon.spring.auth.common.model.userdetails.JwtClaims.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,7 +28,12 @@ public class UserDetailsConverter {
 
     private static final List<String> USERNAME_CLAIMS = Arrays.asList(LOGIN_CLAIM, USERNAME_CLAIM, PREFERRED_USERNAME_CLAIM);
 
+    private static final List<String> MANDATORY_SAT_CLAIMS_LIST = Arrays.asList(SAT_PERMISSIONS_CLAIM, SAT_TENANT_ID_CLAIM,
+            SAT_TENANT_NAME_CLAIM, SAT_SA_NAME_CLAIM);
+
     private static final String CLIENT_CREDENTIALS_GRANT = "client_credentials";
+
+    private static final String USER_DETAILS_NAME_SA_SUFFIX = " - Service Account";
 
     private static Map<String, BiConsumer<AuthUserDetails, Object>> claimToPropertySetter = new HashMap<>();
     static {
@@ -86,7 +65,9 @@ public class UserDetailsConverter {
     }
 
     public static AuthUserDetails convert(Map<String, Object> jwtClaims) {
-        if (CLIENT_CREDENTIALS_GRANT.equals(jwtClaims.get(GRANT_TYPE_CLAIM))) {
+        if (jwtClaims.keySet().containsAll(MANDATORY_SAT_CLAIMS_LIST)) {
+            return convertForSAT(jwtClaims);
+        } else if (CLIENT_CREDENTIALS_GRANT.equals(jwtClaims.get(GRANT_TYPE_CLAIM))) {
             return convertForCCGrant(jwtClaims);
         } else {
             AuthUserDetails authUserDetails = new AuthUserDetails(extractUserName(jwtClaims), "N/A",
@@ -133,14 +114,29 @@ public class UserDetailsConverter {
             throw new IllegalArgumentException("Client name not found");
         }
         AuthUserDetails authUserDetails = new AuthUserDetails(clientName + " - Client Credentials Flow", "N/A",
-                extractPermissionsForCCFlow(jwtClaims));
+                extractPermissions(jwtClaims, PERMISSIONS_CLAIM));
         authUserDetails.setAttributes(jwtClaims);
         authUserDetails.setId((String) jwtClaims.get(CLIENT_ID_CLAIM));
         return authUserDetails;
     }
 
-    private static Collection<GrantedAuthority> extractPermissionsForCCFlow(Map<String, Object> jwtClaims) {
-        Object permissionsClaim = jwtClaims.get(PERMISSIONS_CLAIM);
+    private static AuthUserDetails convertForSAT(Map<String, Object> jwtClaims) {
+        String saName = (String) jwtClaims.get(SAT_SA_NAME_CLAIM);
+        String tenantId = (String) jwtClaims.get(SAT_TENANT_ID_CLAIM);
+        String tenantName = (String) jwtClaims.get(SAT_TENANT_NAME_CLAIM);
+        String clientId = ((String) jwtClaims.get(SUBJECT_CLAIM)).split("@")[0];
+
+        AuthUserDetails authUserDetails = new AuthUserDetails(saName + USER_DETAILS_NAME_SA_SUFFIX, "",
+                extractPermissions(jwtClaims, SAT_PERMISSIONS_CLAIM));
+        authUserDetails.setTenantId(tenantId);
+        authUserDetails.setTenantName(tenantName != null ? tenantName : tenantId);
+        authUserDetails.setId(clientId);
+        authUserDetails.setAttributes(jwtClaims);
+        return authUserDetails;
+    }
+
+    private static Collection<GrantedAuthority> extractPermissions(Map<String, Object> jwtClaims, String permissionClaimName) {
+        Object permissionsClaim = jwtClaims.get(permissionClaimName);
         if (permissionsClaim instanceof Collection) {
             return ((Collection<String>) permissionsClaim).stream().map(String::trim).filter(StringUtils::hasText)
                     .map(SimpleGrantedAuthority::new).collect(Collectors.toList());

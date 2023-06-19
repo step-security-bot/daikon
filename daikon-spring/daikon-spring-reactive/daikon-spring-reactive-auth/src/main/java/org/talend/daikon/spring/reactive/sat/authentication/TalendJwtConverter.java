@@ -19,11 +19,16 @@ public class TalendJwtConverter implements Converter<Jwt, Collection<GrantedAuth
 
     public static final String TALEND_PERMISSIONS_FIELD = "permissions";
 
+    public static final String TALEND_SAT_PERMISSIONS_FIELD = "https://talend.cloud/permissions";
+
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         List<String> ents = Arrays.asList(((String) jwt.getClaims().getOrDefault(TALEND_ENTITLEMENTS_FIELD, "")).split(","));
         List<String> permsList = ((JSONArray) jwt.getClaims().getOrDefault(TALEND_PERMISSIONS_FIELD, new JSONArray())).stream()
                 .map(Object::toString).toList();
-        List<String> authorities = Stream.concat(permsList.stream(), ents.stream()).filter(s -> !s.isEmpty()).toList();
+        List<String> satPerms = ((JSONArray) jwt.getClaims().getOrDefault(TALEND_SAT_PERMISSIONS_FIELD, new JSONArray())).stream()
+                .map(Object::toString).toList();
+        List<String> authorities = Stream.of(permsList.stream(), ents.stream(), satPerms.stream()).flatMap(i -> i)
+                .filter(s -> !s.isEmpty()).toList();
         return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 }
