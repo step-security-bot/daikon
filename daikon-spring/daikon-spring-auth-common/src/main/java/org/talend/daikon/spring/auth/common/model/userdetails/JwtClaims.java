@@ -72,4 +72,12 @@ public class JwtClaims {
 
     public static final String GRANT_TYPE_CLAIM = "grant_type";
 
+    public static final String SAT_TENANT_ID_CLAIM = "https://talend.cloud/tenantId";
+
+    public static final String SAT_TENANT_NAME_CLAIM = "https://talend.cloud/tenantName";
+
+    public static final String SAT_SA_NAME_CLAIM = "https://talend.cloud/serviceAccountName";
+
+    public static final String SAT_PERMISSIONS_CLAIM = "https://talend.cloud/permissions";
+
 }
