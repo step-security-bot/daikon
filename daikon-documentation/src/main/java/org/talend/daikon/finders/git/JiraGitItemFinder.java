@@ -63,9 +63,15 @@ public class JiraGitItemFinder extends AbstractGitItemFinder implements ItemFind
                                     .map(s -> "\"" + s.getJiraIdMatcher().group(1) + "\"") //
                                     .collect(Collectors.joining(", "));
                             final String jql = "id IN (" + idList + ")";
-                            final SearchResult results = client.getSearchClient().searchJql(jql, jiraIds.size(), 0, null).claim();
-                            for (Issue issue : results.getIssues()) {
-                                issueCache.put(issue.getKey(), issue);
+                            try {
+                                final SearchResult results = client.getSearchClient().searchJql(jql, jiraIds.size(), 0, null)
+                                        .claim();
+                                for (Issue issue : results.getIssues()) {
+                                    issueCache.put(issue.getKey(), issue);
+                                }
+                            } catch (RestClientException ex) {
+                                // Log a warning but proceed (see https://jira.talendforge.org/browse/TDKN-349)
+                                LOGGER.warn("Error looking for issues from JIRA", ex);
                             }
                         }
                         return jiraIds;
