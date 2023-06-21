@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /daikon-tql/daikon-tql-client
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /daikon-tql/daikon-tql-core/src/main/resources/tql
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /daikon-tql
+    schedule:
+      interval: daily
+
+  - package-ecosystem: maven
+    directory: /
+    schedule:
+      interval: daily
